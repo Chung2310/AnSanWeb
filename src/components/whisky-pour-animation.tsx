@@ -13,17 +13,19 @@ export default function WhiskyPourAnimation() {
 
     const bottleGroup = svgRef.current.querySelector('#bottle_group');
     const pourStream = svgRef.current.querySelector('#pour_stream');
-    const liquidInGlass = svgRef.current.querySelector('#liquid_in_glass');
-    const glassClipPath = svgRef.current.querySelector('#glass_clip rect');
+    const liquidInGlass = svgRef.current.querySelector('#liquid_in_glass_path');
+    const liquidClipPath = svgRef.current.querySelector('#liquid_clip_rect');
 
-    if (!bottleGroup || !pourStream || !liquidInGlass || !glassClipPath) return;
+    if (!bottleGroup || !pourStream || !liquidInGlass || !liquidClipPath) return;
 
-    gsap.set(bottleGroup, { transformOrigin: '50% 90%' });
+    gsap.set(bottleGroup, { transformOrigin: 'bottom center', x: -20, y: -20});
     gsap.set(pourStream, {
       strokeDasharray: 500,
       strokeDashoffset: 500,
+      opacity: 0
     });
-    gsap.set(glassClipPath, { attr: { y: 290, height: 0 } });
+    gsap.set(liquidClipPath, { attr: { y: 298, height: 0 } });
+    gsap.set(liquidInGlass, { opacity: 0 });
 
     const masterTimeline = gsap.timeline({
       repeat: -1,
@@ -31,17 +33,23 @@ export default function WhiskyPourAnimation() {
     });
 
     masterTimeline
-      // Tilt bottle
       .to(
         bottleGroup,
         {
           duration: 2,
-          rotation: -40,
+          rotation: -60,
           ease: 'power1.inOut',
         },
         'pour'
       )
-      // Start pour stream
+      .to(
+        pourStream,
+        {
+          duration: 0.1,
+          opacity: 1
+        },
+        'pour+=0.5'
+      )
       .to(
         pourStream,
         {
@@ -51,17 +59,23 @@ export default function WhiskyPourAnimation() {
         },
         'pour+=0.5'
       )
-      // Fill glass
       .to(
-        glassClipPath,
+        liquidInGlass,
         {
-          duration: 4.5,
-          attr: { y: 200, height: 90 },
-          ease: 'power2.out',
+          duration: 0.1,
+          opacity: 1
         },
         'pour+=1'
       )
-      // Stop pour stream
+      .to(
+        liquidClipPath,
+        {
+          duration: 4.5,
+          attr: { y: 260, height: 40 },
+          ease: 'power1.out',
+        },
+        'pour+=1'
+      )
       .to(
         pourStream,
         {
@@ -71,7 +85,14 @@ export default function WhiskyPourAnimation() {
         },
         'pour+=4.5'
       )
-      // Return bottle to upright
+       .to(
+        pourStream,
+        {
+          duration: 0.1,
+          opacity: 0
+        },
+        'pour+=5.5'
+      )
       .to(
         bottleGroup,
         {
@@ -81,90 +102,106 @@ export default function WhiskyPourAnimation() {
         },
         'pour+=5'
       )
-      // Empty glass
-      .to(
-        glassClipPath,
+       .to(
+        liquidClipPath,
         {
           duration: 1.5,
-          attr: { y: 290, height: 0 },
+          attr: { y: 298, height: 0 },
           ease: 'power1.in',
         },
         'pour+=5.5'
+      )
+      .to(
+        liquidInGlass,
+        {
+          duration: 0.1,
+          opacity: 0,
+        },
+        'pour+=7'
       );
 
   }, []);
 
   return (
     <svg
-      ref={svgRef}
-      viewBox="0 0 400 400"
-      className="w-full max-w-sm h-auto"
-      aria-labelledby="animationTitle animationDesc"
-      role="img"
+        ref={svgRef}
+        viewBox="0 0 400 400"
+        className="w-full max-w-sm h-auto"
+        aria-labelledby="animationTitle animationDesc"
+        role="img"
     >
       <title id="animationTitle">Whisky Pouring Animation</title>
       <desc id="animationDesc">
-        An animation of a dark whisky bottle tilting and pouring amber liquid into
+        A hand-drawn style animation of a whisky bottle tilting and pouring brown liquid into
         a Glencairn glass, which then fills up.
       </desc>
       <defs>
-        <linearGradient id="whiskyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#C19A6B' }} />
-          <stop offset="100%" style={{ stopColor: '#8B5A2B' }} />
-        </linearGradient>
-        <clipPath id="glass_clip">
-          <rect x="235" y="290" width="100" height="0" />
+        <clipPath id="liquid_clip">
+            <rect id="liquid_clip_rect" x="220" y="298" width="80" height="0" />
         </clipPath>
       </defs>
 
+      <style>
+        {`
+            .whisky-color { fill: #8B5A2B; }
+            .stroke-color { stroke: #000; }
+            .label-text { font-family: 'DangTau', serif; font-size: 20px; text-anchor: middle; }
+        `}
+      </style>
+      
       {/* Glass */}
-      <g id="glass_group" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5">
-        <path d="M250,300 C245,250 315,250 310,300" />
-        <path d="M250,300 L260,320 Q280,330 300,320 L310,300" />
-        <path d="M280,328 V 340 L 270,350 H 290 L 280, 340" />
-        <path d="M252,192 C252,192 312,192 312,210 C312,228 252,228 252,210 C252,192 252,192 252,192 Z" fill="rgba(255,255,255,0.1)" stroke="none" />
+      <g id="glass_group" className="stroke-color" strokeWidth="2" fill="none">
+        <path d="M 233.6,298.5 C 230,280 290,280 286.4,298.5" />
+        <path d="M 233.6,298.5 L 240,310 C 240,310 255,325 270,320 L 286.4,298.5" />
+        <path d="M 241,310 C 250,305 240,320 260,323" />
+        <path d="M 260,323 C 260,323 250,335 255,340 L 245,350 H 275 L 265,340 C 270,335 260,323 260,323" />
+        <path d="M 247,348 L 273,348" />
+        <path d="M 249,345 L 271,345" />
       </g>
       
       {/* Liquid in Glass */}
-      <g clipPath="url(#glass_clip)">
+      <g clipPath="url(#liquid_clip)">
         <path 
-            id="liquid_in_glass"
-            d="M250,300 C245,250 315,250 310,300 L300,320 Q280,330 260,320 Z"
-            fill="url(#whiskyGradient)"
+            id="liquid_in_glass_path"
+            className="whisky-color"
+            d="M 235,298 C 232,285 288,285 285,298 L 270,320 C 270,320 250,320 250,320 L 235,298 Z"
         />
       </g>
-
+      
       {/* Bottle */}
       <g id="bottle_group">
-        <path
-          d="M 100,150 L 100,330 C 100,340 110,350 120,350 H 180 C 190,350 200,340 200,330 L 200,150"
-          fill="#1a0e04"
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth="1"
-        />
-        <path
-          d="M 120,150 L 130,120 H 170 L 180,150 Z"
-          fill="#1a0e04"
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth="1"
-        />
-        <rect
-          x="135"
-          y="100"
-          width="30"
-          height="20"
-          fill="#2d1a0a"
-        />
-        <path d="M105,160 Q 110,250 105,340" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" fill="none"/>
-      </g>
+        <g className="stroke-color" strokeWidth="2" fill="none">
+            {/* Bottle liquid */}
+            <path className="whisky-color" d="M 83,293 C 90,230 140,225 152,190 L 158,168 L 118,172 L 105,195 C 90,220 80,240 83,293 Z" />
+            
+            {/* Bottle outline */}
+            <path d="M 158,168 C 160,150 162,130 158,118 L 140,105 L 125,108 L 112,125 C 108,135 110,155 118,172" />
+            <path d="M 83,293 C 80,310 90,320 105,320 L 175,315 C 190,315 200,305 197,290 C 190,230 145,220 152,190 L 158,168" />
+            <path d="M 118,172 L 105,195 C 90,220 80,240 83,293" />
+            <path d="M 108,318 L 172,313" />
 
+            {/* Bottle neck shading */}
+            <path d="M 116,128 L 122,168" />
+            <path d="M 120,127 L 126,168" />
+            <path d="M 124,126 L 130,168" />
+            
+            {/* Label */}
+            <path d="M 100,220 C 95,250 95,270 100,290 L 180,285 C 185,265 185,245 180,225 L 100,220 Z" />
+            <path d="M 105,225 C 102,250 102,265 105,285" />
+            <path d="M 175,228 C 178,250 178,265 175,282" />
+            <path d="M 107,283 C 120,288 160,289 173,280" />
+            <path d="M 107,227 C 120,222 160,221 173,229" />
+        </g>
+        <text className="label-text" x="140" y="265" transform="rotate(-12, 140, 260)">WHISKY</text>
+      </g>
+      
       {/* Pour Stream */}
       <path
         id="pour_stream"
-        d="M135,110 C 155,160 230,170 280,215"
+        d="M 112,125 C 140,150 200,180 260,265"
         fill="none"
-        stroke="url(#whiskyGradient)"
-        strokeWidth="6"
+        stroke="#8B5A2B"
+        strokeWidth="12"
         strokeLinecap="round"
       />
     </svg>
