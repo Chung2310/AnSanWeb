@@ -17,7 +17,8 @@ const heroSlides = [
         titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI AnSan',
         titleAccent: '',
         description: 'Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!',
-        bgColor: 'bg-primary'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
     {
         imageId: 'hero-sale',
@@ -27,7 +28,8 @@ const heroSlides = [
         titleLine1: 'AnSan OUTLET',
         titleAccent: 'SALE 10% OFF',
         description: 'Tri ân khách hàng với chương trình giảm giá đặc biệt 10% cho các sản phẩm outlet. Đây là cơ hội vàng để bạn sở hữu những chai whisky chất lượng với mức giá cực kỳ hấp dẫn. Khám phá ngay để không bỏ lỡ!',
-        bgColor: 'bg-primary'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
     {
         imageId: 'hero-armagnac',
@@ -37,7 +39,8 @@ const heroSlides = [
         titleLine1: 'ARMAGNAC RƯỢU MẠNH',
         titleAccent: 'PHÁP LỊCH SỬ 700 NĂM',
         description: 'Khám phá Armagnac, loại rượu brandy hay còn gọi là Eau-De-Vie lâu đời nhất của Pháp, với lịch sử hơn 700 năm - có trước cả Cognac hơn 150 năm từ năm 1310. Armagnac là đặc trưng của vùng Gascony, nằm ở phía Tây Nam Bordeaux, nơi nổi tiếng với kỷ lục người dân sống thọ nhất nước Pháp.',
-        bgColor: 'bg-[#987d4f]'
+        bgColor: 'bg-white',
+        textColor: 'text-black'
     },
     {
         imageId: 'hero-smws',
@@ -47,7 +50,8 @@ const heroSlides = [
         titleLine1: 'WHISKY NGUYÊN CHẤT',
         titleAccent: '100% CASK STRENGTH',
         description: 'Hiệp hội đóng chai độc lập này mang đến những chai Scotch Whisky nguyên chất 100%, được tuyển chọn kỹ lưỡng từ những thùng rượu hảo hạng nhất. SMWS không chỉ đơn thuần là nơi để thưởng thức Whisky, mà còn là nơi thay đổi hoàn toàn trải nghiệm thẩm Whisky, đưa bạn về với bản chất đích thực của việc thưởng thức Whisky: hương vị.',
-        bgColor: 'bg-primary'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
     {
         imageId: 'hero-wine',
@@ -57,7 +61,8 @@ const heroSlides = [
         titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
         titleAccent: 'AnSan CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
         description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
-        bgColor: 'bg-primary'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
     {
         imageId: 'hero-lakes',
@@ -67,7 +72,8 @@ const heroSlides = [
         titleLine1: 'ANH EM HỌ CỦA',
         titleAccent: 'THE LAKES NO.7 BỚT CAY THÊM ÊM ÁI',
         description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
-        bgColor: 'bg-primary'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
 ];
 
@@ -97,7 +103,7 @@ export default function HeroSection() {
     const image = PlaceHolderImages.find(img => img.id === currentSlide.imageId);
 
     return (
-        <section className="relative w-full text-white font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
+        <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full">
                 <AnimatePresence initial={false} mode="wait">
                     <motion.div
@@ -110,7 +116,7 @@ export default function HeroSection() {
                         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                             {/* Left Column: Text */}
                             <motion.div 
-                                className={cn("flex flex-col justify-center items-center text-center p-8", currentSlide.bgColor)}
+                                className={cn("flex flex-col justify-center items-center text-center p-8", currentSlide.bgColor, currentSlide.textColor)}
                                 variants={containerVariants}
                             >
                                <div className="max-w-md">
@@ -120,11 +126,20 @@ export default function HeroSection() {
                                      <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
                                          {currentSlide.titleLine1} <span className="text-accent">{currentSlide.titleAccent}</span>
                                      </motion.h1>
-                                     <motion.p variants={textItemVariants} className="mt-6 font-light text-white/80 text-sm max-w-xl mx-auto">
+                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-sm max-w-xl mx-auto", currentSlide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                          {currentSlide.description}
                                      </motion.p>
                                      <motion.div variants={textItemVariants}>
-                                        <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-none px-10 py-6 transition-all hover:scale-105">
+                                        <Button 
+                                            asChild 
+                                            variant="outline" 
+                                            className={cn(
+                                                "mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105",
+                                                currentSlide.textColor === 'text-white' 
+                                                    ? "border-white text-white hover:bg-white hover:text-black" 
+                                                    : "border-black text-black hover:bg-black hover:text-white"
+                                            )}
+                                        >
                                             <Link href={currentSlide.href} target="_blank" rel="noopener noreferrer">TÌM HIỂU THÊM</Link>
                                         </Button>
                                      </motion.div>
