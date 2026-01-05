@@ -13,6 +13,7 @@ interface PriceCategory {
   imageId: string;
   title: string;
   href: string;
+  bgColor: string;
 }
 
 const priceCategories: PriceCategory[] = [
@@ -20,21 +21,25 @@ const priceCategories: PriceCategory[] = [
     imageId: 'price-category-20',
     title: 'WHISKY DƯỚI 20 TRIỆU',
     href: '/danh-muc/duoi-20-trieu',
+    bgColor: '#987d4f'
   },
   {
     imageId: 'price-category-10',
     title: 'WHISKY DƯỚI 10 TRIỆU',
     href: '/danh-muc/duoi-10-trieu',
+    bgColor: '#3a3a3a'
   },
   {
     imageId: 'price-category-5',
     title: 'WHISKY DƯỚI 5 TRIỆU',
     href: '/danh-muc/duoi-5-trieu',
+    bgColor: '#5a5a5a'
   },
   {
     imageId: 'price-category-under-5',
     title: 'WHISKY DƯỚI 4 TRIỆU',
     href: '/danh-muc/duoi-4-trieu',
+    bgColor: '#8a7d6a'
   }
 ];
 
@@ -68,22 +73,28 @@ export default function PriceCategoryShowcase() {
           plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
           opts={{ loop: true, align: 'start' }}
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="-ml-0">
             {priceCategories.map((category, index) => {
               const image = getImage(category.imageId);
               if (!image) return null;
 
               return (
-                <CarouselItem key={index} className="pl-4">
-                  <div className="relative h-[450px] flex items-start justify-start p-8 overflow-hidden">
-                     <Image 
-                        src={image.imageUrl}
-                        alt={category.title}
-                        fill
-                        className="object-cover"
-                        data-ai-hint={image.imageHint}
-                     />
-                    <div className="relative z-10 text-left text-white">
+                <CarouselItem key={index} className="pl-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 h-[450px] overflow-hidden">
+                    <div className="relative h-full w-full">
+                      <Image 
+                          src={image.imageUrl}
+                          alt={category.title}
+                          fill
+                          className="object-cover"
+                          data-ai-hint={image.imageHint}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                    <div 
+                      className="flex flex-col items-center justify-center text-center p-8 text-white"
+                      style={{ backgroundColor: category.bgColor }}
+                    >
                       <h3 className="font-headline text-4xl font-black uppercase">
                         {category.title}
                       </h3>
