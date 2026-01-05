@@ -13,7 +13,6 @@ interface PriceCategory {
   imageId: string;
   title: string;
   href: string;
-  bgColor: string;
 }
 
 const priceCategories: PriceCategory[] = [
@@ -21,25 +20,21 @@ const priceCategories: PriceCategory[] = [
     imageId: 'price-category-20',
     title: 'WHISKY DƯỚI 20 TRIỆU',
     href: '/danh-muc/duoi-20-trieu',
-    bgColor: '#982c24'
   },
   {
     imageId: 'price-category-10',
     title: 'WHISKY DƯỚI 10 TRIỆU',
     href: '/danh-muc/duoi-10-trieu',
-    bgColor: '#8a7d6a'
   },
   {
     imageId: 'price-category-5',
     title: 'WHISKY DƯỚI 5 TRIỆU',
     href: '/danh-muc/duoi-5-trieu',
-    bgColor: '#3a3a3a'
   },
-    {
+  {
     imageId: 'price-category-under-5',
     title: 'WHISKY DƯỚI 4 TRIỆU',
     href: '/danh-muc/duoi-4-trieu',
-    bgColor: '#6a5d4d'
   }
 ];
 
@@ -80,16 +75,14 @@ export default function PriceCategoryShowcase() {
 
               return (
                 <CarouselItem key={index} className="pl-4">
-                  <div className="relative h-[450px] flex items-start justify-start p-8 overflow-hidden" style={{backgroundColor: category.bgColor}}>
-                     <div className="absolute inset-0 z-0">
-                         <Image 
-                            src={image.imageUrl}
-                            alt={category.title}
-                            fill
-                            className="object-contain"
-                            data-ai-hint={image.imageHint}
-                         />
-                     </div>
+                  <div className="relative h-[450px] flex items-start justify-start p-8 overflow-hidden">
+                     <Image 
+                        src={image.imageUrl}
+                        alt={category.title}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={image.imageHint}
+                     />
                     <div className="relative z-10 text-left text-white">
                       <h3 className="font-headline text-4xl font-black uppercase">
                         {category.title}
