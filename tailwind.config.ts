@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['"Roboto"', 'sans-serif'],
-        headline: ['"Roboto"', 'sans-serif'],
+        body: ['"SaaSeriesVN"', 'sans-serif'],
+        headline: ['"SaaSeriesVN"', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

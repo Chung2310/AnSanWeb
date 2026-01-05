@@ -58,11 +58,11 @@ export default function HeroSection() {
                      <div className="flex items-center">
                          {productBadges.map((badge, index) => (
                              <React.Fragment key={badge.label}>
-                                <Button variant="outline" className="bg-transparent text-white border-white/50 rounded-none px-4 py-2 text-xs font-semibold hover:bg-white hover:text-primary">
+                                <Button variant="outline" className="bg-transparent text-white border-white rounded-none px-4 py-2 text-base font-semibold hover:bg-white hover:text-primary">
                                     <Link href={badge.href}>{badge.label}</Link>
                                 </Button>
                                 {index < productBadges.length - 1 && (
-                                <div className="flex-grow h-px bg-white/30 mx-2 w-16"></div>
+                                <div className="flex-grow h-px bg-white/50 mx-2 w-16"></div>
                                 )}
                             </React.Fragment>
                          ))}
