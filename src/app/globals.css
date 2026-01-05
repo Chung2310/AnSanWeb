@@ -89,3 +89,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .text-header-nav {
+    color: #666666d9;
+  }
+  .hover\\:text-header-nav-hover:hover {
+    color: #333333;
+  }
+}

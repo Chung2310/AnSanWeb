@@ -66,12 +66,12 @@ const categoryNavLinks = [
 export default function Header() {
   const pathname = usePathname();
 
-  const NavLink = ({ href, label, sublinks }: { href: string; label: string; sublinks?: {href: string, label: string}[] }) => {
+  const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
     if (sublinks) {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-1 text-sm font-medium uppercase text-foreground hover:bg-transparent hover:text-foreground/80 p-0 h-auto">
+            <Button variant="ghost" className={cn("flex items-center gap-1 text-sm font-medium uppercase p-0 h-auto", className)}>
               {label}
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -90,8 +90,9 @@ export default function Header() {
       <Link
         href={href}
         className={cn(
-          'transition-colors text-sm font-medium uppercase text-foreground hover:text-foreground/80',
-          pathname === href ? 'text-foreground' : 'text-foreground'
+          'transition-colors text-sm font-medium uppercase',
+          pathname === href ? 'text-foreground' : '',
+          className
         )}
       >
         {label}
@@ -132,7 +133,7 @@ export default function Header() {
             </div>
 
             <nav className="flex items-center gap-6">
-                {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
+                {mainNavLinks.map((link) => <NavLink key={link.href} {...link} className="text-header-nav hover:text-header-nav-hover" />)}
             </nav>
         </div>
       </div>
@@ -141,7 +142,7 @@ export default function Header() {
       <div className="bg-secondary text-secondary-foreground border-t border-border">
           <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
               <nav className="flex items-center gap-8">
-                  {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
+                  {categoryNavLinks.map((link) => <NavLink key={link.href} {...link} className="text-header-nav hover:text-header-nav-hover"/>)}
               </nav>
           </div>
       </div>
