@@ -16,20 +16,20 @@ const heroSlides = [
         label: 'Macallan 84', 
         href: 'https://youtu.be/hBG0J3qLLuA?si=B5h9_53jgFCKnIAP',
         tag: 'Macallan 84',
-        titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI ANSAN',
+        titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI AnSan',
         titleAccent: '',
         description: 'Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!',
-        bgColor: 'bg-[#822a1a]'
+        bgColor: 'bg-primary'
     },
     { 
         imageId: 'hero-sale', 
         label: '10% OFF', 
         href: '/collection/sales-10/',
         tag: '10% OFF',
-        titleLine1: 'ANSAN OUTLET',
+        titleLine1: 'AnSan OUTLET',
         titleAccent: 'SALE 10% OFF',
         description: 'Tri ân khách hàng với chương trình giảm giá đặc biệt 10% cho các sản phẩm outlet. Đây là cơ hội vàng để bạn sở hữu những chai whisky chất lượng với mức giá cực kỳ hấp dẫn. Khám phá ngay để không bỏ lỡ!',
-        bgColor: 'bg-[#822a1a]'
+        bgColor: 'bg-primary'
     },
     { 
         imageId: 'hero-armagnac', 
@@ -49,7 +49,7 @@ const heroSlides = [
         titleLine1: 'WHISKY NGUYÊN CHẤT',
         titleAccent: '100% CASK STRENGTH',
         description: 'Hiệp hội đóng chai độc lập này mang đến những chai Scotch Whisky nguyên chất 100%, được tuyển chọn kỹ lưỡng từ những thùng rượu hảo hạng nhất. SMWS không chỉ đơn thuần là nơi để thưởng thức Whisky, mà còn là nơi thay đổi hoàn toàn trải nghiệm thẩm Whisky, đưa bạn về với bản chất đích thực của việc thưởng thức Whisky: hương vị.',
-        bgColor: 'bg-[#822a1a]'
+        bgColor: 'bg-primary'
     },
     { 
         imageId: 'hero-wine', 
@@ -57,9 +57,9 @@ const heroSlides = [
         href: '/wine/',
         tag: 'WINE',
         titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
-        titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
+        titleAccent: 'AnSan CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
         description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
-        bgColor: 'bg-[#822a1a]'
+        bgColor: 'bg-primary'
     },
     { 
         imageId: 'hero-lakes', 
@@ -69,15 +69,15 @@ const heroSlides = [
         titleLine1: 'ANH EM HỌ CỦA',
         titleAccent: 'THE LAKES NO.7 BỚT CAY THÊM ÊM ÁI',
         description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
-        bgColor: 'bg-[#822a1a]'
+        bgColor: 'bg-primary'
     },
 ];
 
 const textVariants = {
-  initial: { y: 30, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  exit: { y: -30, opacity: 0 },
-};
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
 
 export default function HeroSection() {
     const [api, setApi] = useState<CarouselApi>()
@@ -107,22 +107,26 @@ export default function HeroSection() {
                 opts={{ loop: true, draggable: false }}
             >
                 <CarouselContent className="h-full -ml-0">
-                    {heroSlides.map((slide, index) => {
-                        const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                        if (!image) return null;
-                        return (
-                            <CarouselItem key={index} className="relative h-full p-0">
-                                <AnimatePresence mode="wait">
-                                {current === index && (
-                                    <motion.div
-                                        key={current}
-                                        variants={textVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                        className="grid grid-cols-1 md:grid-cols-2 h-full"
-                                    >
+                    <AnimatePresence initial={false}>
+                        {heroSlides.map((slide, index) => {
+                            const image = PlaceHolderImages.find(img => img.id === slide.imageId);
+                            if (!image) return null;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    className="w-full h-full flex-shrink-0"
+                                    initial="initial"
+                                    animate={current === index ? "animate" : "exit"}
+                                    exit="exit"
+                                    variants={textVariants}
+                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                    style={{
+                                        flexBasis: '100%',
+                                        position: 'absolute',
+                                        left: `${(index - current) * 100}%`,
+                                    }}
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                                         {/* Left Column: Text */}
                                         <div className={cn(
                                             "flex flex-col justify-center items-center text-center p-8",
@@ -155,24 +159,23 @@ export default function HeroSection() {
                                                 data-ai-hint={image.imageHint}
                                             />
                                         </div>
-                                    </motion.div>
-                                )}
-                                </AnimatePresence>
-                                <div className="absolute inset-0 md:hidden">
-                                     <Image
-                                        src={image.imageUrl}
-                                        alt={image.description}
-                                        fill
-                                        className="object-cover -z-10"
-                                        sizes="100vw"
-                                        priority={index === 0}
-                                        data-ai-hint={image.imageHint}
-                                    />
-                                    <div className="absolute inset-0 bg-black/50 -z-10" />
-                                </div>
-                            </CarouselItem>
-                        );
-                    })}
+                                    </div>
+                                    <div className="absolute inset-0 md:hidden">
+                                        <Image
+                                            src={image.imageUrl}
+                                            alt={image.description}
+                                            fill
+                                            className="object-cover -z-10"
+                                            sizes="100vw"
+                                            priority={index === 0}
+                                            data-ai-hint={image.imageHint}
+                                        />
+                                        <div className="absolute inset-0 bg-black/50 -z-10" />
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </AnimatePresence>
                 </CarouselContent>
             </Carousel>
             
