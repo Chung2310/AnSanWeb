@@ -13,33 +13,28 @@ interface PriceCategory {
   imageId: string;
   title: string;
   href: string;
-  bgColor: string;
 }
 
 const priceCategories: PriceCategory[] = [
   {
     imageId: 'price-category-20',
-    title: 'WHISKY DƯỚI 20 TRIỆU',
+    title: 'WHISKY DƯỚI 50 TRIỆU',
     href: '/danh-muc/duoi-20-trieu',
-    bgColor: '#987d4f'
   },
   {
     imageId: 'price-category-10',
-    title: 'WHISKY DƯỚI 10 TRIỆU',
+    title: 'WHISKY DƯỚI 20 TRIỆU',
     href: '/danh-muc/duoi-10-trieu',
-    bgColor: '#3a3a3a'
   },
   {
     imageId: 'price-category-5',
-    title: 'WHISKY DƯỚI 5 TRIỆU',
+    title: 'WHISKY DƯỚI 10 TRIỆU',
     href: '/danh-muc/duoi-5-trieu',
-    bgColor: '#5a5a5a'
   },
   {
     imageId: 'price-category-under-5',
-    title: 'WHISKY DƯỚI 4 TRIỆU',
+    title: 'WHISKY DƯỚI 5 TRIỆU',
     href: '/danh-muc/duoi-4-trieu',
-    bgColor: '#8a7d6a'
   }
 ];
 
@@ -80,29 +75,26 @@ export default function PriceCategoryShowcase() {
 
               return (
                 <CarouselItem key={index} className="pl-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 h-[450px] overflow-hidden">
-                    <div className="relative h-full w-full">
-                      <Image 
-                          src={image.imageUrl}
-                          alt={category.title}
-                          fill
-                          className="object-cover"
-                          data-ai-hint={image.imageHint}
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </div>
-                    <div 
-                      className="flex flex-col items-center justify-center text-center p-8 text-white"
-                      style={{ backgroundColor: category.bgColor }}
-                    >
-                      <h3 className="font-headline text-4xl font-black uppercase">
-                        {category.title}
-                      </h3>
-                      <Button asChild variant="outline" className="mt-6 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-8 py-5 transition-all text-xs font-bold tracking-widest">
-                        <Link href={category.href}>KHÁM PHÁ SẢN PHẨM</Link>
-                      </Button>
-                    </div>
-                  </div>
+                    <Link href={category.href}>
+                        <div className="relative h-[400px] md:h-[450px] w-full text-white">
+                            <Image 
+                                src={image.imageUrl}
+                                alt={category.title}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={image.imageHint}
+                                sizes="100vw"
+                            />
+                            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-r from-black/30 to-transparent">
+                                <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
+                                    {category.title}
+                                </h3>
+                                <Button asChild variant="outline" className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest">
+                                    <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
+                                </Button>
+                            </div>
+                        </div>
+                    </Link>
                 </CarouselItem>
               );
             })}
