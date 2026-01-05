@@ -17,9 +17,9 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <FeaturedProduct />
       <FamousBrands />
       <InfluenceSection />
+      <FeaturedProduct />
       <ProductSection
         title="Sản Phẩm Nổi Bật"
         description="Khám phá những chai vang được yêu thích và đánh giá cao nhất bởi các chuyên gia và khách hàng của chúng tôi."
