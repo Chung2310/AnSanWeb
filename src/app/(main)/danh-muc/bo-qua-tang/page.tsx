@@ -2,6 +2,7 @@
 import WineCard from "@/components/wine-card";
 import { sampleWines } from "@/lib/placeholder-data";
 import { Button } from "@/components/ui/button";
+import ProductCategoryNav from "@/components/layout/product-category-nav";
 
 const filters = {
   "THƯƠNG HIỆU": [
@@ -58,40 +59,43 @@ export default function ProductsPage() {
   const products = sampleWines.filter(wine => wine.tags?.includes('gift-set'));
 
   return (
-    <div className="container py-12 bg-white text-black">
-      <div className="text-left mb-4">
-        <h1 className="font-headline text-xl font-bold uppercase tracking-wider">Bộ Quà Tặng</h1>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Filters Column */}
-        <div className="lg:col-span-1">
-          <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
-          {Object.entries(filters).map(([title, options]) => (
-            <FilterGroup key={title} title={title} options={options} />
-          ))}
+    <div className="bg-white text-black">
+      <ProductCategoryNav />
+      <div className="container py-12">
+        <div className="text-left mb-4">
+          <h1 className="font-headline text-xl font-bold uppercase tracking-wider">Bộ Quà Tặng</h1>
         </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Filters Column */}
+          <div className="lg:col-span-1">
+            <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
+            {Object.entries(filters).map(([title, options]) => (
+              <FilterGroup key={title} title={title} options={options} />
+            ))}
+          </div>
 
-        {/* Products Grid */}
-        <div className="lg:col-span-3">
-          <div className="flex justify-between items-center mb-6 text-sm">
-            <p>HIỂN THỊ {products.length} CỦA {products.length} KẾT QUẢ</p>
-            <div className="flex items-center gap-2">
-              <span className="uppercase">Sắp xếp theo</span>
-              {sortingOptions.map((opt, i) => (
-                 <Button
-                    key={opt}
-                    variant={i === 0 ? "outline" : "ghost"}
-                    className={`text-xs h-auto py-1 px-3 rounded-none ${i === 0 ? 'border-black' : 'border-transparent'}`}
-                >
-                    {opt}
-                </Button>
+          {/* Products Grid */}
+          <div className="lg:col-span-3">
+            <div className="flex justify-between items-center mb-6 text-sm">
+              <p>HIỂN THỊ {products.length} CỦA {products.length} KẾT QUẢ</p>
+              <div className="flex items-center gap-2">
+                <span className="uppercase">Sắp xếp theo</span>
+                {sortingOptions.map((opt, i) => (
+                  <Button
+                      key={opt}
+                      variant={i === 0 ? "outline" : "ghost"}
+                      className={`text-xs h-auto py-1 px-3 rounded-none ${i === 0 ? 'border-black' : 'border-transparent'}`}
+                  >
+                      {opt}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((wine) => (
+                <WineCard key={wine.id} wine={wine} />
               ))}
             </div>
-          </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((wine) => (
-              <WineCard key={wine.id} wine={wine} />
-            ))}
           </div>
         </div>
       </div>
