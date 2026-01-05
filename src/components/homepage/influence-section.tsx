@@ -119,8 +119,7 @@ export default function InfluenceSection() {
                 </Link>
               </div>
             </motion.div>
-            <motion.div variants={itemVariants} className="border-t border-gray-300 my-10" />
-            <motion.div variants={itemVariants} className="grid grid-cols-2 gap-8">
+            <motion.div variants={itemVariants} className="mt-10 grid grid-cols-2 gap-8">
               <div>
                 {isInView && <AnimatedNumber to={110000} />}
                 <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT THEO DÕI</p>
