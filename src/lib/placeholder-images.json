@@ -3,37 +3,37 @@
     {
       "id": "hero-macallan",
       "description": "Man holding a Macallan 84 whisky case",
-      "imageUrl": "https://images.unsplash.com/photo-1581827925742-c62582885f93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGlza3l8ZW58MHx8fHwxNzE3MTA0ODc2fDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-macallan.jpg",
       "imageHint": "whisky launch"
     },
     {
       "id": "hero-sale",
       "description": "Special offer on whisky",
-      "imageUrl": "https://images.unsplash.com/photo-1619166299189-5f2f51523313?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aGlza3klMjBvZmZlcnxlbnwwfHx8fDE3Njc2NTg5ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-sale.jpg",
       "imageHint": "whisky offer"
     },
     {
       "id": "hero-armagnac",
       "description": "Bottle of Armagnac",
-      "imageUrl": "https://images.unsplash.com/photo-1626965301859-7a32d184f4a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcm1hZ25hY3xlbnwwfHx8fDE3Njc2NTg5ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-armagnac.jpg",
       "imageHint": "armagnac bottle"
     },
     {
       "id": "hero-smws",
       "description": "The Scotch Malt Whisky Society bottle",
-      "imageUrl": "https://images.unsplash.com/photo-1589252509939-51b1456d6551?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWNvdGNoJTIwbWFsdCUyMHdoaXNreSUyMHNvY2lldHl8ZW58MHx8fHwxNzY3NjU4OTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-smws.jpg",
       "imageHint": "scotch whisky"
     },
     {
       "id": "hero-wine",
       "description": "Elegant arrangement of wine bottles",
-      "imageUrl": "https://images.unsplash.com/photo-1556442281-77c90134c61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3aW5lJTIwYm90dGxlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-wine.jpg",
       "imageHint": "wine bottles"
     },
     {
       "id": "hero-lakes",
       "description": "The Lakes Distillery whisky bottle",
-      "imageUrl": "https://images.unsplash.com/photo-1617094254884-63a633193c8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkaXN0aWxsZXJ5fGVufDB8fHx8fDE3Njc2NTg5ODN8MA&ixlibrb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/banner/hero-lakes.jpg",
       "imageHint": "whisky distillery"
     },
     {
@@ -105,7 +105,7 @@
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1703016402712-66f78754d16b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1703016402712-66f78754d16b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
@@ -123,19 +123,19 @@
     {
       "id": "brand-story",
       "description": "Interior of an old wine cellar",
-      "imageUrl": "https://images.unsplash.com/photo-1554598286-ed7bfd1dedca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1554598286-ed7bfd1dedca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine cellar"
     },
     {
       "id": "blog-1",
       "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1598306442837-613a3def54ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZSUyMHRhc3Rpbmd8ZW58MHx8fHwxNzY3NDY1NDAwfDA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1598306442837-613a3def54ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZSUyMHRhc3Rpbmd8ZW58MHx8fHwxNzY3NDY1NDAwfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "wine tasting"
     },
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1622122266559-3d4ed61e5cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1622122266559-3d4ed61e5cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
