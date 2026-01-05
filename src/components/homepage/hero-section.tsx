@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -56,14 +57,14 @@ export default function HeroSection() {
                  <div className="container max-w-screen-2xl">
                      <div className="flex items-center">
                          {productBadges.map((badge, index) => (
-                             <>
-                                <Button key={badge.label} variant="outline" className="bg-transparent text-white border-white rounded-none px-4 py-2 text-xs font-semibold hover:bg-white hover:text-primary">
+                             <React.Fragment key={badge.label}>
+                                <Button variant="outline" className="bg-transparent text-white border-white rounded-none px-4 py-2 text-xs font-semibold hover:bg-white hover:text-primary">
                                     <Link href={badge.href}>{badge.label}</Link>
                                 </Button>
                                 {index < productBadges.length - 1 && (
                                 <div className="flex-grow h-px bg-white/50 mx-2 w-16"></div>
                                 )}
-                            </>
+                            </React.Fragment>
                          ))}
                      </div>
                  </div>
