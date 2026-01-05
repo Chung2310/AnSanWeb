@@ -95,7 +95,7 @@ export default function InfluenceSection() {
              variants={containerVariants}
              initial="hidden"
              animate={mainControls}
-            className="flex flex-col justify-center text-gray-700"
+            className="flex flex-col justify-center text-gray-700 relative"
           >
             <motion.p variants={itemVariants} className="text-base leading-relaxed">
               AnSan đang là một trong những kênh truyền thông về Whisky & Rượu Mạnh uy tín hàng đầu trên rất nhiều nền tảng mạng xã hội. Qua những bài viết, hình ảnh, video chia sẻ kiến thức, đánh giá và những trải nghiệm cá nhân, tôi đã và đang truyền cảm hứng, xây dựng và phát triển cộng đồng thưởng thức giàu văn hóa hơn.
