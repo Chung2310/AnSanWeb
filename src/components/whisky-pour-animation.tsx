@@ -9,6 +9,40 @@ export default function WhiskyPourAnimation() {
   useEffect(() => {
     if (!svgRef.current) return;
 
+    // This is a workaround for a bug in GSAP's DrawSVGPlugin in some environments.
+    // We manually initialize the plugin if it hasn't been already.
+    if (typeof (gsap as any)._plugins.drawSVG === 'undefined' && typeof window !== 'undefined') {
+        (function (gsap) {
+            gsap.registerPlugin({
+            name: 'drawSVG',
+            init(target: any, value: any) {
+                const path = target.get(0);
+                if (!path.getBBox) return;
+                const length = path.getTotalLength();
+                (this as any).svg = path;
+                (this as any).length = length;
+                (this as any).style = path.style;
+                (this as any).style.strokeDasharray = length;
+                let start, end;
+                if (typeof value === 'string') {
+                [start, end] = value.split(' ').map(parseFloat);
+                } else {
+                start = 0;
+                end = value;
+                }
+                (this as any).start = start || 0;
+                (this as any).end = end || 100;
+            },
+            render(ratio: number, { svg, length, style, start, end }: any) {
+                const seg = [length * (start / 100), length * (end / 100)];
+                const S = seg[0] + (seg[1] - seg[0]) * ratio;
+                style.strokeDashoffset = -S;
+            },
+            });
+        })(gsap);
+    }
+
+
     const bottle = svgRef.current.querySelector('#bottle-group');
     const stream = svgRef.current.querySelector('#stream');
     const liquid = svgRef.current.querySelector('#liquid');
@@ -61,9 +95,6 @@ export default function WhiskyPourAnimation() {
         ease: 'power1.out',
       }, '<');
 
-    // Add this to make GSAP work with GSDEVTools
-    // (window as any).gsap = gsap;
-
   }, []);
 
   return (
@@ -89,7 +120,7 @@ export default function WhiskyPourAnimation() {
         </g>
 
         {/* Bottle */}
-        <g id="bottle-group" transform-origin="center">
+        <g id="bottle-group" transformOrigin="center">
           <path
             id="bottle"
             d="M 100 300 L 100 120 C 100 100, 140 100, 140 120 L 140 300 Z M 110 120 L 110 90 L 130 90 L 130 120 M 115 90 L 115 80 L 125 80 L 125 90"
@@ -111,35 +142,3 @@ export default function WhiskyPourAnimation() {
     </div>
   );
 }
-
-// Helper plugin for GSAP to animate drawSVG
-(function (gsap) {
-  if (typeof window !== 'undefined') {
-    gsap.registerPlugin({
-      name: 'drawSVG',
-      init(target, value) {
-        const path = target.get(0);
-        if (!path.getBBox) return;
-        const length = path.getTotalLength();
-        this.svg = path;
-        this.length = length;
-        this.style = path.style;
-        this.style.strokeDasharray = length;
-        let start, end;
-        if (typeof value === 'string') {
-          [start, end] = value.split(' ').map(parseFloat);
-        } else {
-          start = 0;
-          end = value;
-        }
-        this.start = start || 0;
-        this.end = end || 100;
-      },
-      render(ratio, { svg, length, style, start, end }) {
-        const seg = [length * (start / 100), length * (end / 100)];
-        const S = seg[0] + (seg[1] - seg[0]) * ratio;
-        style.strokeDashoffset = -S;
-      },
-    });
-  }
-})(gsap);
