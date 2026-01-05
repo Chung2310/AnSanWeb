@@ -7,6 +7,7 @@ import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake } from "
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import ProductInfoSection from "@/components/product-info-section";
 
 const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -34,79 +35,83 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   return (
     <div className="bg-white text-black">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        {/* Image Column */}
-        <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
-            <Image
-              src={wine.image.imageUrl}
-              alt={wine.nameVN}
-              width={800}
-              height={1000}
-              className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
-              data-ai-hint={wine.image.imageHint}
-              priority
-            />
-        </div>
-        {/* Details Column */}
-        <div className="md:col-span-1 container py-12 md:py-20">
-          <div className="max-w-2xl">
-            <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
-                <Link href="/" className="hover:text-primary">Trang chủ</Link>
-                <ChevronRight className="h-4 w-4 mx-1" />
-                <Link href="/danh-muc-san-pham" className="hover:text-primary">{wine.type}</Link>
-            </div>
-            <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{wine.nameVN}</h1>
-            <p className="mt-6 text-base text-foreground/80 leading-relaxed">{wine.description}</p>
-            
-            <Separator className="my-8" />
-            
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 text-center">
-              <div>
-                <p className="text-xs uppercase text-muted-foreground tracking-widest">Độ tuổi</p>
-                <p className="mt-1 font-bold text-lg">{wine.age ? `${wine.age}` : 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground tracking-widest">Nồng độ cồn</p>
-                <p className="mt-1 font-bold text-lg">{wine.alcohol}%</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground tracking-widest">Dung tích</p>
-                <p className="mt-1 font-bold text-lg">700ml</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground tracking-widest">Tình trạng</p>
-                <p className="mt-1 font-bold text-lg">Còn hàng</p>
-              </div>
-            </div>
-
-            <Separator className="my-8" />
-
-            <div>
-              <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Liên hệ để nhận tư vấn</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><Phone className="h-4 w-4"/> ĐIỆN THOẠI</Button>
-                <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> MESSENGER</Button>
-                <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><ZaloIcon className="h-4 w-4"/> ZALO</Button>
-                <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> WHATSAPP</Button>
-              </div>
-            </div>
-
-            <Separator className="my-8" />
-            
-            <div>
-              <h3 className="font-bold text-sm tracking-wider uppercase mb-6">Giá độc quyền trên website</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-                {perks.map((perk, index) => (
-                    <div key={index} className="flex items-center gap-4">
-                        <perk.icon className="h-7 w-7 text-primary/80 shrink-0" />
-                        <p className="text-sm text-foreground/70">{perk.text}</p>
+        <div className="bg-white">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Image Column */}
+                <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
+                    <Image
+                    src={wine.image.imageUrl}
+                    alt={wine.nameVN}
+                    width={800}
+                    height={1000}
+                    className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
+                    data-ai-hint={wine.image.imageHint}
+                    priority
+                    />
+                </div>
+                {/* Details Column */}
+                <div className="md:col-span-1 container py-12 md:py-20">
+                <div className="max-w-2xl">
+                    <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
+                        <Link href="/" className="hover:text-primary">Trang chủ</Link>
+                        <ChevronRight className="h-4 w-4 mx-1" />
+                        <Link href="/danh-muc-san-pham" className="hover:text-primary">{wine.type}</Link>
                     </div>
-                ))}
-              </div>
+                    <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{wine.nameVN}</h1>
+                    <p className="mt-6 text-base text-foreground/80 leading-relaxed">{wine.description}</p>
+                    
+                    <Separator className="my-8" />
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 text-center">
+                    <div>
+                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Độ tuổi</p>
+                        <p className="mt-1 font-bold text-lg">{wine.age ? `${wine.age}` : 'N/A'}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Nồng độ cồn</p>
+                        <p className="mt-1 font-bold text-lg">{wine.alcohol}%</p>
+                    </div>
+                    <div>
+                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Dung tích</p>
+                        <p className="mt-1 font-bold text-lg">700ml</p>
+                    </div>
+                    <div>
+                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Tình trạng</p>
+                        <p className="mt-1 font-bold text-lg">Còn hàng</p>
+                    </div>
+                    </div>
+
+                    <Separator className="my-8" />
+
+                    <div>
+                    <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Liên hệ để nhận tư vấn</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><Phone className="h-4 w-4"/> ĐIỆN THOẠI</Button>
+                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> MESSENGER</Button>
+                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><ZaloIcon className="h-4 w-4"/> ZALO</Button>
+                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> WHATSAPP</Button>
+                    </div>
+                    </div>
+
+                    <Separator className="my-8" />
+                    
+                    <div>
+                    <h3 className="font-bold text-sm tracking-wider uppercase mb-6">Giá độc quyền trên website</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                        {perks.map((perk, index) => (
+                            <div key={index} className="flex items-center gap-4">
+                                <perk.icon className="h-7 w-7 text-primary/80 shrink-0" />
+                                <p className="text-sm text-foreground/70">{perk.text}</p>
+                            </div>
+                        ))}
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+      
+      {wine.tastingNotes && <ProductInfoSection notes={wine.tastingNotes} />}
       
       {relatedWines.length > 0 && (
         <div className="bg-white">

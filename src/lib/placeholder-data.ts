@@ -150,6 +150,16 @@ export const sampleWines: Wine[] = [
     age: 15,
     cask: 'Sherry',
     nonChillFiltered: true,
+    tastingNotes: {
+      brand: 'Springbank',
+      chillFiltered: 'Không lọc lạnh',
+      region: 'Campbeltown',
+      caskType: 'Sherry',
+      nose: 'Sô cô la đen, chà là, nho khô, kẹo bơ cứng. Phảng phất hương hạnh nhân và gỗ sồi.',
+      palate: 'Đậm đà và béo ngậy, với hương kem, nho khô, sô cô la đen, quả sung và bánh hạnh nhân.',
+      finish: 'Kéo dài, ấm áp với hương gỗ sồi và gia vị sherry dai dẳng.',
+      color: 'Vàng hổ phách đậm.',
+    }
   },
   {
     id: '11',
@@ -166,6 +176,16 @@ export const sampleWines: Wine[] = [
     age: 10,
     cask: 'Bourbon',
     nonChillFiltered: true,
+    tastingNotes: {
+      brand: 'Glen Scotia',
+      chillFiltered: 'Không lọc lạnh',
+      region: 'Campbeltown',
+      caskType: 'Thùng gỗ sồi cháy sâu',
+      nose: 'Trái cây đậm, crème brûlée, caramel, và một chút hương biển đặc trưng của Campbeltown.',
+      palate: 'Đầy đặn với vị ngọt của gỗ sồi, trái cây hầm, và một chút gia vị cay.',
+      finish: 'Ấm áp và kéo dài với dư vị của ca cao và một chút khói.',
+      color: 'Vàng đồng.',
+    }
   },
   {
     id: '12',
@@ -213,6 +233,16 @@ export const sampleWines: Wine[] = [
     age: 25,
     cask: 'Sherry',
     nonChillFiltered: false,
+    tastingNotes: {
+      brand: 'The Macallan',
+      chillFiltered: 'Có lọc lạnh',
+      region: 'Speyside',
+      caskType: 'Sherry Oak',
+      nose: 'Hương cam quýt, quế, sherry và khói gỗ.',
+      palate: 'Đậm đà vị trái cây khô và một chút khói gỗ.',
+      finish: 'Kéo dài với hương trái cây khô, khói gỗ và gia vị.',
+      color: 'Gỗ gụ đậm.'
+    }
   },
   {
     id: '15',
@@ -259,6 +289,15 @@ export const sampleWines: Wine[] = [
     image: getImage('hero-armagnac'),
     tags: ['armagnac'],
     age: 20,
+    tastingNotes: {
+        brand: 'Baron de Sigognac',
+        region: 'Bas-Armagnac',
+        caskType: 'French Oak',
+        nose: 'Hương thơm của mận khô, bánh gừng và một chút hương thuốc lá.',
+        palate: 'Mềm mại và tròn vị với hương vani, quả óc chó và gia vị ngọt ngào.',
+        finish: 'Dài và thanh lịch với dư vị của gỗ sồi và trái cây khô.',
+        color: 'Màu hổ phách.',
+    }
   },
   {
     id: '18',

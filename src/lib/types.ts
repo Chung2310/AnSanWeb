@@ -1,5 +1,16 @@
 import type { ImagePlaceholder } from './placeholder-images';
 
+export type TastingNotes = {
+  brand?: string;
+  chillFiltered?: string;
+  region?: string;
+  caskType?: string;
+  nose: string;
+  palate: string;
+  finish: string;
+  color: string;
+};
+
 export type Wine = {
   id: string;
   nameVN: string;
@@ -11,6 +22,7 @@ export type Wine = {
   alcohol: number;
   description: string;
   image: ImagePlaceholder;
+  tastingNotes?: TastingNotes;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
