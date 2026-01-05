@@ -41,8 +41,8 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
           <span>dt@AnSan.co.uk</span>
-          <span>31 NGUYỄN GIA THIỀU, Q. HOÀN KIẾM, HÀ NỘI</span>
-          <span>(+84) 909 29 3636</span>
+          <span>Khu Quy Chế, Từ Sơn, Bắc Ninh</span>
+          <span>0933.333.313</span>
         </div>
 
         <div className="mt-8 text-xs text-black/60 max-w-4xl mx-auto">

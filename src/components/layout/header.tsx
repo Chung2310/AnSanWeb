@@ -135,7 +135,7 @@ export default function Header() {
                 </div>
                 <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4" />
-                    <span>090 929 3636</span>
+                    <span>0933.333.313</span>
                 </div>
             </div>
         </div>
