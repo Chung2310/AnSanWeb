@@ -3,9 +3,6 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
 import Logo from '@/components/logo';
-import { motion, useAnimation, useInView } from 'framer-motion';
-import { useEffect, useRef } from 'react';
-import { useHydration } from '@/hooks/use-hydration';
 
 const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -16,35 +13,8 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function Footer() {
-  const ref = useRef(null);
-  const isHydrated = useHydration();
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const mainControls = useAnimation();
-
-  useEffect(() => {
-    if (isHydrated && isInView) {
-      mainControls.start("visible");
-    }
-  }, [isHydrated, isInView, mainControls]);
-
-  if (!isHydrated) {
-    return (
-      <footer className="bg-[#f7f7f7] text-black opacity-0">
-         {/* Render a static, hidden footer for SSR to prevent hydration mismatch */}
-      </footer>
-    );
-  }
-
   return (
-    <motion.footer 
-      ref={ref}
-      variants={{
-        hidden: { opacity: 0, y: 75 },
-        visible: { opacity: 1, y: 0 },
-      }}
-      initial="hidden"
-      animate={mainControls}
-      transition={{ duration: 1.2, delay: 0.5 }}
+    <footer 
       className="bg-[#f7f7f7] text-black">
       <div className="container mx-auto max-w-screen-xl px-4 py-12 text-center">
         <div className="flex justify-center">
@@ -96,6 +66,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }
