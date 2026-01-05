@@ -71,10 +71,16 @@ const heroSlides = [
     },
 ];
 
-const textVariants = {
+const containerVariants = {
+    initial: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
+    animate: { transition: { staggerChildren: 0.1, delayChildren: 0.2, staggerDirection: 1 } },
+    exit: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
+};
+
+const textItemVariants = {
     initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: 'easeIn' } },
 };
 
 export default function HeroSection() {
@@ -93,43 +99,44 @@ export default function HeroSection() {
     return (
         <section className="relative w-full text-white font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full">
-                <AnimatePresence initial={false}>
+                <AnimatePresence initial={false} mode="wait">
                     <motion.div
                         key={current}
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        variants={{
-                            initial: { opacity: 0 },
-                            animate: { opacity: 1 },
-                            exit: { opacity: 0 },
-                        }}
-                        transition={{ duration: 0.7, ease: 'easeInOut' }}
                         className="absolute inset-0"
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                             {/* Left Column: Text */}
-                            <div className={cn(
-                                "flex flex-col justify-center items-center text-center p-8",
-                                currentSlide.bgColor
-                            )}>
+                            <motion.div 
+                                className={cn("flex flex-col justify-center items-center text-center p-8", currentSlide.bgColor)}
+                                variants={containerVariants}
+                            >
                                <div className="max-w-md">
-                                     <p className="font-semibold tracking-widest uppercase text-sm text-accent font-headline">
+                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-accent font-headline">
                                          {currentSlide.tag}
-                                     </p>
-                                     <h1 className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
+                                     </motion.p>
+                                     <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
                                          {currentSlide.titleLine1} <span className="text-accent">{currentSlide.titleAccent}</span>
-                                     </h1>
-                                     <p className="mt-6 font-light text-white/80 text-sm max-w-xl mx-auto">
+                                     </motion.h1>
+                                     <motion.p variants={textItemVariants} className="mt-6 font-light text-white/80 text-sm max-w-xl mx-auto">
                                          {currentSlide.description}
-                                     </p>
-                                     <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-none px-10 py-6 transition-all hover:scale-105">
-                                         <Link href={currentSlide.href} target="_blank" rel="noopener noreferrer">TÌM HIỂU THÊM</Link>
-                                     </Button>
+                                     </motion.p>
+                                     <motion.div variants={textItemVariants}>
+                                        <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-none px-10 py-6 transition-all hover:scale-105">
+                                            <Link href={currentSlide.href} target="_blank" rel="noopener noreferrer">TÌM HIỂU THÊM</Link>
+                                        </Button>
+                                     </motion.div>
                                  </div>
-                            </div>
+                            </motion.div>
                             {/* Right Column: Image */}
-                            <div className="relative h-full hidden md:block">
+                            <motion.div 
+                                className="relative h-full hidden md:block"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1, transition: { duration: 0.7, ease: 'easeInOut' } }}
+                                exit={{ opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } }}
+                            >
                                 {image && (
                                     <Image
                                         src={image.imageUrl}
@@ -141,26 +148,36 @@ export default function HeroSection() {
                                         data-ai-hint={image.imageHint}
                                     />
                                 )}
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 md:hidden -z-10">
-                             {image && (
-                                <Image
-                                    src={image.imageUrl}
-                                    alt={image.description}
-                                    fill
-                                    className="object-cover"
-                                    sizes="100vw"
-                                    priority
-                                    data-ai-hint={image.imageHint}
-                                />
-                             )}
-                             <div className="absolute inset-0 bg-black/50" />
+                            </motion.div>
                         </div>
                     </motion.div>
                 </AnimatePresence>
             </div>
             
+             {/* Mobile background image */}
+             <AnimatePresence>
+                <motion.div
+                    key={`mobile-bg-${current}`}
+                    className="absolute inset-0 md:hidden -z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, transition: { duration: 0.7 } }}
+                    exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                >
+                    {image && (
+                        <Image
+                            src={image.imageUrl}
+                            alt={image.description}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority
+                            data-ai-hint={image.imageHint}
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-black/50" />
+                </motion.div>
+            </AnimatePresence>
+
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-xl px-4">
                      <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
@@ -186,3 +203,4 @@ export default function HeroSection() {
         </section>
     );
 }
+    
