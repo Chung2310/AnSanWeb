@@ -44,11 +44,33 @@ export default function HeroSection() {
     return (
         <div className="w-full bg-primary text-primary-foreground font-body">
              <div className="container mx-auto max-w-screen-2xl">
-                <div className="flex min-h-[700px] flex-col justify-between py-12">
+                <div className="flex flex-col">
+                    {/* Top Bar: Controls */}
+                    <div className="w-full bg-primary/50 backdrop-blur-sm py-4 border-b border-white/20">
+                        <div className="flex items-center justify-center md:justify-start">
+                            {heroSlides.map((badge, index) => (
+                                <React.Fragment key={badge.label}>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => scrollTo(index)}
+                                        className={cn(
+                                            "bg-transparent text-white/80 border-white/50 rounded-none px-3 py-1.5 md:px-4 md:py-2 text-xs font-semibold hover:bg-white hover:text-primary transition-all text-center",
+                                            current === index && "bg-white text-primary border-white"
+                                        )}>
+                                        {badge.label}
+                                    </Button>
+                                    {index < heroSlides.length - 1 && (
+                                        <div className="flex-grow h-px bg-white/50 mx-1 md:mx-2 w-4 md:w-16"></div>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Main content: 2 columns */}
-                    <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                    <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
                         {/* Left Column: Text */}
-                        <div className="flex flex-col justify-center text-center md:text-left">
+                        <div className="flex flex-col justify-center text-center md:text-left py-12 px-4 md:px-0">
                             <div className="max-w-md mx-auto md:mx-0">
                                 <p className="font-semibold tracking-widest uppercase text-sm text-amber-400 font-headline">
                                     ROMANEE-CONTI 1982
@@ -83,37 +105,16 @@ export default function HeroSection() {
                                                     src={image.imageUrl}
                                                     alt={image.description}
                                                     fill
-                                                    className="object-cover rounded-lg"
+                                                    className="object-cover"
                                                     sizes="(max-width: 768px) 100vw, 50vw"
                                                     priority={index === 0}
+                                                    data-ai-hint={image.imageHint}
                                                 />
                                             </CarouselItem>
                                         );
                                     })}
                                 </CarouselContent>
                             </Carousel>
-                        </div>
-                    </div>
-                    
-                    {/* Bottom Bar: Controls */}
-                    <div className="w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20 mt-8">
-                        <div className="flex items-center justify-center md:justify-start">
-                            {heroSlides.map((badge, index) => (
-                                <React.Fragment key={badge.label}>
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => scrollTo(index)}
-                                        className={cn(
-                                            "bg-transparent text-white/80 border-white/50 rounded-none px-3 py-1.5 md:px-4 md:py-2 text-xs font-semibold hover:bg-white hover:text-primary transition-all text-center",
-                                            current === index && "bg-white text-primary border-white"
-                                        )}>
-                                        {badge.label}
-                                    </Button>
-                                    {index < heroSlides.length - 1 && (
-                                        <div className="flex-grow h-px bg-white/50 mx-1 md:mx-2 w-4 md:w-16"></div>
-                                    )}
-                                </React.Fragment>
-                            ))}
                         </div>
                     </div>
                 </div>
