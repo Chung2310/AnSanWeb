@@ -1,13 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
-import Autoplay from "embla-carousel-autoplay";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const heroSlides = [
     { imageId: 'hero-macallan', label: 'MACALLAN 84', href: '#' },
@@ -28,10 +25,13 @@ export default function HeroSection() {
         }
 
         const onSelect = () => {
+            // We need to use the real API to get the selected snap
             setCurrent(api.selectedScrollSnap())
         }
 
         api.on("select", onSelect)
+        // Set the initial value.
+        onSelect();
 
         return () => {
             api.off("select", onSelect)
@@ -43,16 +43,16 @@ export default function HeroSection() {
     }, [api]);
 
     return (
-        <div className="w-full bg-primary text-primary-foreground font-body">
-             <div className="container mx-auto max-w-screen-2xl relative">
-                <div className="flex flex-col md:flex-row min-h-[700px]">
-                    {/* Left Column: Text Content */}
+        <div className="w-full bg-primary text-primary-foreground font-body relative">
+             <div className="container mx-auto max-w-screen-2xl">
+                <div className="flex flex-col min-h-[700px] justify-between py-12">
+                    {/* Top Text Content */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left py-12 md:py-0">
                         <div className="max-w-md mx-auto md:mx-0">
                             <p className="font-semibold tracking-widest uppercase text-sm text-amber-400 font-headline">
                                 ROMANEE-CONTI 1982
                             </p>
-                            <h1 className="mt-2 text-4xl lg:text-5xl font-extrabold leading-none tracking-tight uppercase font-headline">
+                            <h1 className="mt-2 text-4xl lg:text-5xl font-black leading-none tracking-tight uppercase font-headline">
                                 SIÊU PHẨM RƯỢU VANG <span className="text-amber-400">GIÀ NHẤT THẾ GIỚI</span>
                             </h1>
                             <p className="mt-6 font-light text-white/80 text-sm">
@@ -63,43 +63,9 @@ export default function HeroSection() {
                             </Button>
                         </div>
                     </div>
-
-                    {/* Right Column: Image Carousel */}
-                    <div className="w-full md:w-1/2 flex items-center justify-center p-0">
-                         <Carousel
-                            setApi={setApi}
-                            className="w-full h-full"
-                            plugins={[ Autoplay({ delay: 5000, stopOnInteraction: true }) ]}
-                            opts={{ loop: true }}
-                        >
-                            <CarouselContent className="h-full -ml-0">
-                                {heroSlides.map((slide, index) => {
-                                    const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                                    if (!image) return null;
-                                    return (
-                                        <CarouselItem key={index} className="pl-0 h-full">
-                                            <div className="relative w-full h-full">
-                                                <Image
-                                                    src={image.imageUrl}
-                                                    alt={image.description}
-                                                    fill
-                                                    priority={index === 0}
-                                                    className="w-full h-full object-cover"
-                                                    data-ai-hint={image.imageHint}
-                                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                                />
-                                            </div>
-                                        </CarouselItem>
-                                    )
-                                })}
-                            </CarouselContent>
-                        </Carousel>
-                    </div>
-                </div>
-                
-                {/* Bottom Bar: Controls */}
-                <div className="absolute z-10 bottom-0 left-0 right-0 w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20">
-                    <div className="container max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    {/* Bottom Bar: Controls */}
+                    <div className="w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20">
                         <div className="flex items-center justify-center md:justify-start">
                             {heroSlides.map((badge, index) => (
                                 <React.Fragment key={badge.label}>
