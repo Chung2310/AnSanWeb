@@ -51,37 +51,37 @@
     {
       "id": "brand-macallan",
       "description": "The Macallan Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1638552903142-d4323d81eb8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYWNhbGxhbiUyMGxvZ298ZW58MHx8fHwxNzY3NTc5MzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/brands/macallan.png",
       "imageHint": "macallan logo"
     },
     {
       "id": "brand-lakes",
       "description": "The Lakes Distillery Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1641831063387-db3ef36218d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGFrZXMlMjBkaXN0aWxsZXJ5fGVufDB8fHx8MTc2NzU3OTMyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/brands/lakes.png",
       "imageHint": "lakes distillery"
     },
     {
       "id": "brand-ichiros",
       "description": "Ichiro's Malt Logo",
-      "imageUrl": "https://picsum.photos/seed/b-ichiros/150/80",
+      "imageUrl": "/images/brands/ichiros.png",
       "imageHint": "ichiros malt"
     },
     {
       "id": "brand-springbank",
       "description": "Springbank Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1653512747715-7ed1cc191042?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3ByaW5nYmFuayUyMGxvZ298ZW58MHx8fHwxNzY3NTc5MzIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/brands/springbank.png",
       "imageHint": "springbank logo"
     },
     {
       "id": "brand-yamazaki",
       "description": "The Yamazaki Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1687580712203-9bd34a4f133d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8eWFtYXpha2klMjBsb2dvfGVufDB8fHx8MTc2NzU3OTMyMXww&ixlibrb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/brands/yamazaki.png",
       "imageHint": "yamazaki logo"
     },
     {
       "id": "brand-glenfiddich",
       "description": "Glenfiddich Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1746422029200-51af8d27a0da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbGVuZmlkZGljaCUyMGxvZ298ZW58MHx8fHwxNzY3NTc5MzIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/images/brands/glenfiddich.png",
       "imageHint": "glenfiddich logo"
     },
     {
@@ -117,7 +117,7 @@
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
@@ -183,13 +183,13 @@
     {
       "id": "blog-3",
       "description": "A winemaker checking barrels",
-      "imageUrl": "https://images.unsplash.com/photo-1727063137470-0cc4389eeb59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1727063137470-0cc4389eeb59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "wine making"
     },
     {
       "id": "avatar-1",
       "description": "Smiling man",
-      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "man smiling"
     },
     {
