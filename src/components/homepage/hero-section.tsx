@@ -66,7 +66,7 @@ export default function HeroSection() {
                             </div>
                         </div>
 
-                        <div className="w-1/2 h-full">
+                        <div className="w-1/2 h-full relative">
                              <Carousel
                                 setApi={setApi}
                                 className="w-full h-full"
