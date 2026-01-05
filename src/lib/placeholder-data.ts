@@ -609,6 +609,23 @@ export const sampleWines: Wine[] = [
     isNew: true,
     isFeatured: true,
     createdAt: '2024-08-04',
+  },
+  {
+    id: '29',
+    nameVN: 'Chateau Ma Seguala (MS.3)',
+    nameEN: 'Chateau Ma Seguala (MS.3)',
+    slug: 'chateau-ma-seguala-ms3',
+    price: 800000,
+    origin: 'Roussillon, Pháp',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ tinh tế từ vùng Roussillon, Pháp, mang đến hương vị đậm đà và đặc trưng.',
+    image: getImage('chateau-ma-seguala'),
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-05',
   }
 ];
 
@@ -736,5 +753,7 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
+
+    
 
     
