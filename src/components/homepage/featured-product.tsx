@@ -7,21 +7,11 @@ import Link from 'next/link';
 
 export default function FeaturedProduct() {
   const featuredImage = PlaceHolderImages.find((img) => img.id === 'featured-macallan-25');
-  const backgroundImage = PlaceHolderImages.find((img) => img.id === 'featured-backdrop');
 
-  if (!featuredImage || !backgroundImage) return null;
+  if (!featuredImage) return null;
 
   return (
-    <section className="relative py-20 text-white overflow-hidden">
-        <Image
-          src={backgroundImage.imageUrl}
-          alt={backgroundImage.description}
-          fill
-          className="object-cover"
-          data-ai-hint={backgroundImage.imageHint}
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/60" />
+    <section className="py-20 text-white bg-background overflow-hidden">
       <div className="container mx-auto max-w-screen-xl relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Column: Text */}
