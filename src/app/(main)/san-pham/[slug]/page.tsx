@@ -34,17 +34,16 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     <div className="bg-white text-black">
       <div className="grid grid-cols-1 md:grid-cols-3">
         {/* Image Column */}
-        <div className="md:col-span-1 bg-secondary flex items-center justify-center py-12 px-4 min-h-screen">
-          <div className="max-w-md w-full">
+        <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
             <Image
               src={wine.image.imageUrl}
               alt={wine.nameVN}
               width={800}
               height={1000}
-              className="w-full h-auto object-contain drop-shadow-2xl"
+              className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
               data-ai-hint={wine.image.imageHint}
+              priority
             />
-          </div>
         </div>
         {/* Details Column */}
         <div className="md:col-span-2 container py-12 md:py-20">
