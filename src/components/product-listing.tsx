@@ -120,8 +120,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
 
       if (group === "THƯƠNG HIỆU") {
         products = products.filter(p => {
-          const brand = p.nameVN.split(' ')[0].toUpperCase();
-          return values.some(v => brand.includes(v));
+          return values.some(v => p.nameVN.toUpperCase().includes(v));
         });
       }
       if (group === "KHOẢNG GIÁ") {
