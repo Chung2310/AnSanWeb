@@ -58,9 +58,14 @@ export default function InfluenceSection() {
         },
     };
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    const fromLeftVariants = {
+        hidden: { opacity: 0, x: -50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    };
+
+    const fromRightVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
     };
 
 
@@ -74,7 +79,7 @@ export default function InfluenceSection() {
       <div className="container mx-auto max-w-screen-xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
-          <motion.div variants={itemVariants} className="text-center lg:text-left">
+          <motion.div variants={fromLeftVariants} className="text-center lg:text-left">
             <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA<br />CỦA AnSan
@@ -92,15 +97,13 @@ export default function InfluenceSection() {
           </motion.div>
           {/* Right Column */}
           <motion.div 
-             variants={containerVariants}
-             initial="hidden"
-             animate={mainControls}
+             variants={fromRightVariants}
             className="flex flex-col justify-center text-gray-700 relative"
           >
-            <motion.p variants={itemVariants} className="text-base leading-relaxed">
+            <p className="text-base leading-relaxed">
               AnSan đang là một trong những kênh truyền thông về Whisky & Rượu Mạnh uy tín hàng đầu trên rất nhiều nền tảng mạng xã hội. Qua những bài viết, hình ảnh, video chia sẻ kiến thức, đánh giá và những trải nghiệm cá nhân, tôi đã và đang truyền cảm hứng, xây dựng và phát triển cộng đồng thưởng thức giàu văn hóa hơn.
-            </motion.p>
-            <motion.div variants={itemVariants} className="mt-12">
+            </p>
+            <div className="mt-12">
               <h3 className="font-bold text-lg tracking-wider uppercase text-gray-800">
                 ĐÁNH DẤU SỰ PHÁT TRIỂN MẠNH MẼ TRÊN<br/>FACEBOOK, INSTAGRAM, TIKTOK & YOUTUBE
               </h3>
@@ -118,8 +121,8 @@ export default function InfluenceSection() {
                     <Youtube className="h-5 w-5" />
                 </Link>
               </div>
-            </motion.div>
-            <motion.div variants={itemVariants} className="mt-10 grid grid-cols-2 gap-8">
+            </div>
+            <div className="mt-10 grid grid-cols-2 gap-8">
               <div>
                 {isInView && <AnimatedNumber to={110000} />}
                 <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT THEO DÕI</p>
@@ -128,7 +131,7 @@ export default function InfluenceSection() {
                 {isInView && <AnimatedNumber to={18000000} />}
                 <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT XEM</p>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>
