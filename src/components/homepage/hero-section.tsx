@@ -74,9 +74,9 @@ const heroSlides = [
 ];
 
 const textVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
   };
 
 export default function HeroSection() {
@@ -98,41 +98,55 @@ export default function HeroSection() {
         };
     }, [api]);
     
+    const currentSlide = heroSlides[current];
+
     return (
         <section className="relative w-full text-white font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <Carousel 
                 setApi={setApi} 
                 className="w-full h-full"
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: true }) ]}
-                opts={{ loop: true, draggable: false }}
+                opts={{ loop: true }}
             >
                 <CarouselContent className="h-full -ml-0">
-                    <AnimatePresence initial={false}>
-                        {heroSlides.map((slide, index) => {
-                            const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                            if (!image) return null;
-                            return (
-                                <motion.div
-                                    key={index}
-                                    className="w-full h-full flex-shrink-0"
-                                    initial="initial"
-                                    animate={current === index ? "animate" : "exit"}
-                                    exit="exit"
-                                    variants={textVariants}
-                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                    style={{
-                                        flexBasis: '100%',
-                                        position: 'absolute',
-                                        left: `${(index - current) * 100}%`,
-                                    }}
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                                        {/* Left Column: Text */}
-                                        <div className={cn(
-                                            "flex flex-col justify-center items-center text-center p-8",
-                                            slide.bgColor
-                                        )}>
-                                            <div className="max-w-md">
+                    {heroSlides.map((slide, index) => {
+                        const image = PlaceHolderImages.find(img => img.id === slide.imageId);
+                        if (!image) return null;
+                        return (
+                             <motion.div
+                                key={index}
+                                className="w-full h-full flex-shrink-0"
+                                initial="initial"
+                                animate={current === index ? "animate" : "exit"}
+                                exit="exit"
+                                variants={{
+                                    initial: { opacity: 0 },
+                                    animate: { opacity: 1 },
+                                    exit: { opacity: 0 },
+                                }}
+                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                style={{
+                                    flexBasis: '100%',
+                                    position: 'absolute',
+                                    left: `${(index - current) * 100}%`,
+                                }}
+                            >
+                                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                                    {/* Left Column: Text */}
+                                    <div className={cn(
+                                        "flex flex-col justify-center items-center text-center p-8",
+                                        slide.bgColor
+                                    )}>
+                                        <AnimatePresence initial={false}>
+                                            <motion.div
+                                                key={current}
+                                                variants={textVariants}
+                                                initial="initial"
+                                                animate="animate"
+                                                exit="exit"
+                                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                                className="max-w-md"
+                                            >
                                                 <p className="font-semibold tracking-widest uppercase text-sm text-accent font-headline">
                                                     {slide.tag}
                                                 </p>
@@ -145,22 +159,23 @@ export default function HeroSection() {
                                                 <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-none px-10 py-6 transition-all hover:scale-105">
                                                     <Link href={slide.href} target="_blank" rel="noopener noreferrer">XEM NGAY</Link>
                                                 </Button>
-                                            </div>
-                                        </div>
-                                        {/* Right Column: Image */}
-                                        <div className="relative h-full hidden md:block">
-                                            <Image
-                                                src={image.imageUrl}
-                                                alt={image.description}
-                                                fill
-                                                className="object-cover"
-                                                sizes="50vw"
-                                                priority={index === 0}
-                                                data-ai-hint={image.imageHint}
-                                            />
-                                        </div>
+                                            </motion.div>
+                                        </AnimatePresence>
                                     </div>
-                                    <div className="absolute inset-0 md:hidden">
+                                    {/* Right Column: Image */}
+                                    <div className="relative h-full hidden md:block">
+                                        <Image
+                                            src={image.imageUrl}
+                                            alt={image.description}
+                                            fill
+                                            className="object-cover"
+                                            sizes="50vw"
+                                            priority={index === 0}
+                                            data-ai-hint={image.imageHint}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="absolute inset-0 md:hidden">
                                         <Image
                                             src={image.imageUrl}
                                             alt={image.description}
@@ -172,10 +187,9 @@ export default function HeroSection() {
                                         />
                                         <div className="absolute inset-0 bg-black/50 -z-10" />
                                     </div>
-                                </motion.div>
-                            );
-                        })}
-                    </AnimatePresence>
+                            </motion.div>
+                        );
+                    })}
                 </CarouselContent>
             </Carousel>
             
