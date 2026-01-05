@@ -21,6 +21,11 @@ const heroSlides = [
 export default function HeroSection() {
     const [api, setApi] = useState<CarouselApi>()
     const [current, setCurrent] = useState(0)
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         if (!api) {
@@ -42,6 +47,10 @@ export default function HeroSection() {
         api?.scrollTo(index);
     }, [api]);
 
+
+    if (!mounted) {
+        return <div className="h-[656px] w-full bg-primary"></div>; 
+    }
 
     return (
         <div className="relative w-full text-white bg-primary">
@@ -77,13 +86,12 @@ export default function HeroSection() {
                                     const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                                     if (!image) return null;
                                     return (
-                                        <CarouselItem key={index} className="pl-0">
+                                        <CarouselItem key={index} className="pl-0 h-full">
                                             <div className="relative w-full h-full">
                                                 <Image
                                                     src={image.imageUrl}
                                                     alt={image.description}
-                                                    width={800}
-                                                    height={600}
+                                                    fill
                                                     priority={index === 0}
                                                     className="w-full h-full object-cover object-center"
                                                     data-ai-hint={image.imageHint}
