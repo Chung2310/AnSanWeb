@@ -79,7 +79,7 @@ export default function HeroSection() {
                                         if (!image) return null;
                                         return (
                                             <CarouselItem key={slide.imageId} className="h-full">
-                                                <div className="relative w-full h-[450px]">
+                                                <div className="relative w-full h-full">
                                                     <Image
                                                         src={image.imageUrl}
                                                         alt={image.description}
