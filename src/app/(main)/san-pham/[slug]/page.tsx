@@ -5,6 +5,8 @@ import ProductSection from "@/components/homepage/product-section";
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -32,7 +34,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   return (
     <div className="bg-white text-black">
-      <div className="grid grid-cols-1 md:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2">
         {/* Image Column */}
         <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
             <Image
@@ -46,8 +48,13 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             />
         </div>
         {/* Details Column */}
-        <div className="md:col-span-2 container py-12 md:py-20">
+        <div className="md:col-span-1 container py-12 md:py-20">
           <div className="max-w-2xl">
+            <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
+                <Link href="/" className="hover:text-primary">Trang chủ</Link>
+                <ChevronRight className="h-4 w-4 mx-1" />
+                <Link href="/danh-muc-san-pham" className="hover:text-primary">{wine.type}</Link>
+            </div>
             <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{wine.nameVN}</h1>
             <p className="mt-6 text-base text-foreground/80 leading-relaxed">{wine.description}</p>
             
