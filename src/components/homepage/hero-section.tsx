@@ -18,7 +18,7 @@ const heroSlides = [
         tag: 'ROMANEE-CONTI 1982',
         titleLine1: 'SIÊU PHẨM RƯỢU VANG',
         titleAccent: 'GIÀ NHẤT THẾ GIỚI',
-        description: 'ĐÃ CÓ MẶT TẠI DANGTAU WHISKY – HÃY CHỜ ĐÓN VIDEO BẬT MÍ SIÊU PHẨM NÀY TRÊN YOUTUBE!',
+        description: 'ĐÃ CÓ MẶT TẠI ANSAN – HÃY CHỜ ĐÓN VIDEO BẬT MÍ SIÊU PHẨM NÀY TRÊN YOUTUBE!',
     },
     { 
         imageId: 'hero-sale', 

@@ -23,9 +23,9 @@ export default function InfluenceSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <div className="text-center lg:text-left">
-            <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>DANGTAU WHISKY'S INFLUENCE</p>
+            <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan'S INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
-              SỨC ẢNH HƯỞNG VÀ LAN TỎA<br />CỦA DANGTAU WHISKY
+              SỨC ẢNH HƯỞNG VÀ LAN TỎA<br />CỦA AnSan
             </h2>
             <div className="mt-8 aspect-w-4 aspect-h-3">
               <Image
@@ -41,7 +41,7 @@ export default function InfluenceSection() {
           {/* Right Column */}
           <div className="flex flex-col justify-center text-gray-700">
             <p className="text-base leading-relaxed">
-              Dang Tau Whisky đang là một trong những kênh truyền thông về Whisky & Rượu Mạnh uy tín hàng đầu trên rất nhiều nền tảng mạng xã hội. Qua những bài viết, hình ảnh, video chia sẻ kiến thức, đánh giá và những trải nghiệm cá nhân, tôi đã và đang truyền cảm hứng, xây dựng và phát triển cộng đồng thưởng thức giàu văn hóa hơn.
+              AnSan đang là một trong những kênh truyền thông về Whisky & Rượu Mạnh uy tín hàng đầu trên rất nhiều nền tảng mạng xã hội. Qua những bài viết, hình ảnh, video chia sẻ kiến thức, đánh giá và những trải nghiệm cá nhân, tôi đã và đang truyền cảm hứng, xây dựng và phát triển cộng đồng thưởng thức giàu văn hóa hơn.
             </p>
             <div className="mt-12">
               <h3 className="font-bold text-lg tracking-wider uppercase text-gray-800">

@@ -40,14 +40,14 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
-          <span>DT@DANGTAUWHISKY.CO.UK</span>
+          <span>CONTACT@ANSAN.COM</span>
           <span>31 NGUYỄN GIA THIỀU, Q. HOÀN KIẾM, HÀ NỘI</span>
           <span>(+84) 909 29 3636</span>
         </div>
 
         <div className="mt-8 text-xs text-black/60 max-w-4xl mx-auto">
           <p>
-            CHẤP HÀNH NGHỊ ĐỊNH SỐ 105/2017/NĐ-CP CỦA CHÍNH PHỦ VỀ KINH DOANH RƯỢU VÀ CÁC QUY ĐỊNH VỀ QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ, DANGTAU WHISKY KHÔNG KINH DOANH QUA MẠNG INTERNET CÁC LOẠI RƯỢU, BIA, ĐỒ UỐNG CÓ CỒN VÀ KHÔNG BÁN SẢN PHẨM CHỨA CỒN CHO NGƯỜI DƯỚI 18 TUỔI. WEBSITE CHỈ MANG TÍNH THAM KHẢO VÀ CUNG CẤP THÔNG TIN VỀ SẢN PHẨM.
+            CHẤP HÀNH NGHỊ ĐỊNH SỐ 105/2017/NĐ-CP CỦA CHÍNH PHỦ VỀ KINH DOANH RƯỢU VÀ CÁC QUY ĐỊNH VỀ QUẢN LÝ THƯƠNG MẠI ĐIỆN TỬ, ANSAN KHÔNG KINH DOANH QUA MẠNG INTERNET CÁC LOẠI RƯỢU, BIA, ĐỒ UỐNG CÓ CỒN VÀ KHÔNG BÁN SẢN PHẨM CHỨA CỒN CHO NGƯỜI DƯỚI 18 TUỔI. WEBSITE CHỈ MANG TÍNH THAM KHẢO VÀ CUNG CẤP THÔNG TIN VỀ SẢN PHẨM.
           </p>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function Footer() {
         <div className="container mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <p className="text-center text-xs text-black/60">
-              2026 &copy; DANGTAU WHISKY. MỌI QUYỀN ĐÃ ĐƯỢC BẢO LƯU.
+              2026 &copy; ANSAN. MỌI QUYỀN ĐÃ ĐƯỢC BẢO LƯU.
             </p>
 
             <div className="mt-4 flex justify-center text-xs text-black/60 sm:mt-0 sm:justify-start">
