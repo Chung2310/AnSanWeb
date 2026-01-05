@@ -36,6 +36,7 @@ const mainNavLinks = [
     label: 'Kiến thức Whisky',
     sublinks: [
       { href: '/kien-thuc/distilleries', label: 'Distilleries' },
+      { href: '/kien-thuc/news', label: 'News' },
       { href: '/kien-thuc/spirits', label: 'Spirits' },
       { href: '/kien-thuc/whisky-basics', label: 'Whisky Basics' },
       { href: '/kien-thuc/whisky-review', label: 'Whisky Review' },
