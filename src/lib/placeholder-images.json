@@ -159,7 +159,7 @@
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
@@ -171,7 +171,7 @@
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -376,6 +376,12 @@
       "id": "chateau-sergant-pomerol",
       "description": "Bottle of Chateau Sergant – Pomerol (Nhãn Giấy)",
       "imageUrl": "/product/Chateau Sergant – Pomerol (Nhãn Giấy).png",
+      "imageHint": "red wine"
+    },
+    {
+      "id": "chateau-sergant-pomerol-tin",
+      "description": "Bottle of Chateau Sergant – Pomerol (Nhãn Thiếc)",
+      "imageUrl": "/product/Chateau Sergant – Pomerol (Nhãn Thiếc).png",
       "imageHint": "red wine"
     }
   ]
