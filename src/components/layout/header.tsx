@@ -154,23 +154,25 @@ export default function Header() {
       
       {/* Main Header */}
       <div className="bg-secondary text-secondary-foreground">
-        <div className="container flex h-20 max-w-screen-2xl items-center justify-between px-4">
-            <div className="relative w-1/3 lg:w-1/4">
-                <Input type="text" placeholder="Tìm kiếm" className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" />
-                <Search className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-foreground/80" />
+        <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
+            <div className="flex-1 flex justify-start">
+                <div className="relative w-full max-w-xs">
+                    <Input type="text" placeholder="Tìm kiếm" className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" />
+                    <Search className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-foreground/80" />
+                </div>
             </div>
 
-            <div className="absolute left-1/2 -translate-x-1/2">
+            <div className="flex-1 flex justify-center">
                 <Link href="/">
                     <Logo />
                 </Link>
             </div>
 
-            <nav className="hidden lg:flex items-center gap-6">
+            <nav className="hidden lg:flex flex-1 justify-end items-center gap-6">
                 {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
             </nav>
 
-            <div className="lg:hidden">
+            <div className="lg:hidden flex-1 flex justify-end">
               <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon">
