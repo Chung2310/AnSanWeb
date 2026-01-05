@@ -86,7 +86,7 @@ export default function PriceCategoryShowcase() {
                             src={image.imageUrl}
                             alt={category.title}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                             data-ai-hint={image.imageHint}
                          />
                      </div>
