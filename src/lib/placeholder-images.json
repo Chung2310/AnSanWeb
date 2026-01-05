@@ -37,6 +37,42 @@
       "imageHint": "whisky distillery"
     },
     {
+      "id": "brand-macallan",
+      "description": "The Macallan Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=The+Macallan&font=raleway",
+      "imageHint": "macallan logo"
+    },
+    {
+      "id": "brand-lakes",
+      "description": "The Lakes Distillery Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=The+Lakes&font=raleway",
+      "imageHint": "lakes distillery"
+    },
+    {
+      "id": "brand-ichiros",
+      "description": "Ichiro's Malt Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=Ichiro's+Malt&font=raleway",
+      "imageHint": "ichiros malt"
+    },
+    {
+      "id": "brand-springbank",
+      "description": "Springbank Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=Springbank&font=raleway",
+      "imageHint": "springbank logo"
+    },
+    {
+      "id": "brand-yamazaki",
+      "description": "The Yamazaki Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=Yamazaki&font=raleway",
+      "imageHint": "yamazaki logo"
+    },
+    {
+      "id": "brand-glenfiddich",
+      "description": "Glenfiddich Logo",
+      "imageUrl": "https://placehold.co/150x80/ffffff/000000?text=Glenfiddich&font=raleway",
+      "imageHint": "glenfiddich logo"
+    },
+    {
       "id": "hero-1",
       "description": "Lush vineyard at sunset",
       "imageUrl": "https://images.unsplash.com/photo-1761489179799-c8ecad6ec719?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3aW5lJTIwdmluZXlhcmR8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -81,13 +117,13 @@
     {
       "id": "wine-5",
       "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1745943585965-b6b1f8b34e8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1745943585965-b6b1f8b34e8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dessert wine"
     },
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1655979281323-a72e7b04060a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1655979281323-a72e7b04060a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -99,7 +135,7 @@
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1519324196372-3d8b3037929f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1519324196372-3d8b3037929f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
@@ -117,7 +153,7 @@
     {
       "id": "category-dessert",
       "description": "Pouring a sweet dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1767114916329-9b5649724379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzd2VldCUyMHdpbmV8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib_rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1767114916329-9b5649724379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzd2VldCUyMHdpbmV8ZW58MHx8fHwxNzY3NTczyMjF8MA&ixlib_rb-4.1.0&q=80&w=1080",
       "imageHint": "sweet wine"
     },
     {
@@ -129,13 +165,13 @@
     {
       "id": "blog-1",
       "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1598306442837-613a3def54ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZSUyMHRhc3Rpbmd8ZW58MHx8fHwxNzY3NDY1NDAwfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1598306442837-613a3def54ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZSUyMHRhc3Rpbmd8ZW58MHx8fHwxNzY3NDY1NDAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine tasting"
     },
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1622122266559-3d4ed61e5cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1622122266559-3d4ed61e5cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
@@ -147,7 +183,7 @@
     {
       "id": "avatar-1",
       "description": "Smiling man",
-      "imageUrl": "https://images.unsplash.com/photo-1623184663110-89ba5b565eb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYW4lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU2NzI4Mnww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1623184663110-89ba5b565eb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYW4lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU2NzI4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "man smiling"
     },
     {

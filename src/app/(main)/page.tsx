@@ -1,7 +1,8 @@
+import BrandStory from '@/components/homepage/brand-story';
+import CategoryShowcase from '@/components/homepage/category-showcase';
+import FamousBrands from '@/components/homepage/famous-brands';
 import HeroSection from '@/components/homepage/hero-section';
 import ProductSection from '@/components/homepage/product-section';
-import CategoryShowcase from '@/components/homepage/category-showcase';
-import BrandStory from '@/components/homepage/brand-story';
 import Testimonials from '@/components/homepage/testimonials';
 import { sampleWines } from '@/lib/placeholder-data';
 
@@ -12,6 +13,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <FamousBrands />
       <ProductSection
         title="Sản Phẩm Nổi Bật"
         description="Khám phá những chai vang được yêu thích và đánh giá cao nhất bởi các chuyên gia và khách hàng của chúng tôi."
