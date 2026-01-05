@@ -70,7 +70,14 @@ const categoryNavLinks = [
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isActive = pathname.startsWith(href);
+  
+  // This hook is essential for client-side logic to prevent hydration errors.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isActive = mounted ? pathname.startsWith(href) : false;
 
   const linkClasses = cn(
     'transition-colors text-sm font-medium uppercase',
@@ -82,14 +89,15 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
     return (
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <div 
-            onMouseEnter={() => setOpen(true)} 
+          <Button
+            variant="ghost"
+            onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
-            className={cn("flex items-center gap-1 p-0 h-auto cursor-pointer", linkClasses)}
+            className={cn("p-0 h-auto", linkClasses)}
           >
-            <span>{label}</span>
-            <ChevronDown className="h-4 w-4" />
-          </div>
+            {label}
+            <ChevronDown className="h-4 w-4 ml-1" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
           onMouseEnter={() => setOpen(true)} 
@@ -103,8 +111,9 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-    )
+    );
   }
+
   return (
     <Link
       href={href}
@@ -112,8 +121,8 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
     >
       {label}
     </Link>
-  )
-}
+  );
+};
 
 
 export default function Header() {
