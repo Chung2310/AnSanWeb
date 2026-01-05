@@ -39,8 +39,8 @@ const heroSlides = [
         titleLine1: 'ARMAGNAC RƯỢU MẠNH',
         titleAccent: 'PHÁP LỊCH SỬ 700 NĂM',
         description: 'Khám phá Armagnac, loại rượu brandy hay còn gọi là Eau-De-Vie lâu đời nhất của Pháp, với lịch sử hơn 700 năm - có trước cả Cognac hơn 150 năm từ năm 1310. Armagnac là đặc trưng của vùng Gascony, nằm ở phía Tây Nam Bordeaux, nơi nổi tiếng với kỷ lục người dân sống thọ nhất nước Pháp.',
-        bgColor: 'bg-white',
-        textColor: 'text-black'
+        bgColor: 'bg-primary',
+        textColor: 'text-white'
     },
     {
         imageId: 'hero-smws',
