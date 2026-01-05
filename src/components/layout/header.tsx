@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu, X } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,7 @@ import {
 import { Input } from '../ui/input';
 import { useEffect, useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { useHydration } from '@/hooks/use-hydration';
 
 
 const mainNavLinks = [
@@ -76,11 +77,7 @@ const categoryNavLinks = [
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  
-  useEffect(() => {
-    setIsActive(pathname.startsWith(href));
-  }, [pathname, href]);
+  const isActive = pathname.startsWith(href);
 
   const linkClasses = cn(
     'transition-colors text-sm font-medium uppercase',
@@ -130,6 +127,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const isHydrated = useHydration();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -165,49 +163,55 @@ export default function Header() {
                     <Logo />
                 </Link>
             </div>
+            
+            {isHydrated && (
+              <>
+                <nav className="hidden lg:flex flex-1 justify-end items-center gap-6">
+                    {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
+                </nav>
 
-            <nav className="hidden lg:flex flex-1 justify-end items-center gap-6">
-                {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
-            </nav>
-
-            <div className="lg:hidden flex-1 flex justify-end">
-              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-full bg-white p-6">
-                  <div className="flex flex-col space-y-6">
-                    <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
-                    <nav className="flex flex-col space-y-4">
-                      {mainNavLinks.map(link => (
-                        <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-lg font-medium uppercase">{link.label}</Link>
-                      ))}
-                    </nav>
-                    <div className="border-t pt-4">
-                      <h3 className="font-bold uppercase mb-4">Danh mục</h3>
-                       <nav className="flex flex-col space-y-3">
-                        {categoryNavLinks.map(link => (
-                           <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-md uppercase">{link.label}</Link>
-                        ))}
-                      </nav>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+                <div className="lg:hidden flex-1 flex justify-end">
+                  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Menu className="h-6 w-6" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-full bg-white p-6">
+                      <div className="flex flex-col space-y-6">
+                        <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
+                        <nav className="flex flex-col space-y-4">
+                          {mainNavLinks.map(link => (
+                            <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-lg font-medium uppercase">{link.label}</Link>
+                          ))}
+                        </nav>
+                        <div className="border-t pt-4">
+                          <h3 className="font-bold uppercase mb-4">Danh mục</h3>
+                           <nav className="flex flex-col space-y-3">
+                            {categoryNavLinks.map(link => (
+                               <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-md uppercase">{link.label}</Link>
+                            ))}
+                          </nav>
+                        </div>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
+              </>
+            )}
         </div>
       </div>
 
       {/* Category Nav */}
-      <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
-          <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
-              <nav className="flex items-center gap-8">
-                  {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
-              </nav>
-          </div>
-      </div>
+      {isHydrated && (
+        <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
+            <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
+                <nav className="flex items-center gap-8">
+                    {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
+                </nav>
+            </div>
+        </div>
+      )}
     </header>
   );
 }
