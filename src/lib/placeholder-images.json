@@ -81,14 +81,20 @@
     {
       "id": "brand-glenfiddich",
       "description": "Glenfiddich Logo",
-      "imageUrl": "https://images.unsplash.com/photo-1746422029200-51af8d27a0da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbGVuZmlkZGljaCUyMGxvZ298ZW58MHx8fHwxNzY3NTc5MzIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1746422029200-51af8d27a0da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbGVuZmlkZGljaCUyMGxvZ298ZW58MHx8fHwxNzY3NTc5MzIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "glenfiddich logo"
     },
     {
       "id": "influence-image",
       "description": "Two men discussing whisky in a bar",
-      "imageUrl": "https://images.unsplash.com/photo-1696254792135-5c0fceb27d4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZW4lMjBkaXNjdXNzaW9ufGVufDB8fHx8MTc2NzU3OTc0NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1696254792135-5c0fceb27d4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZW4lMjBkaXNjdXNzaW9ufGVufDB8fHx8MTc2NzU3OTc0NXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "men discussion"
+    },
+    {
+      "id": "featured-macallan-25",
+      "description": "The Macallan 25 Year Old Sherry Oak Single Malt Scotch Whisky with its wooden box on a white pedestal against a red-brown background.",
+      "imageUrl": "/images/featured-product.jpg",
+      "imageHint": "macallan whisky"
     },
     {
       "id": "wine-1",
@@ -105,7 +111,7 @@
     {
       "id": "wine-3",
       "description": "Bottle of elegant rosé wine",
-      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose wine"
     },
     {
@@ -129,13 +135,13 @@
     {
       "id": "category-red",
       "description": "Grapes for red wine",
-      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "red grapes"
     },
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
@@ -165,13 +171,13 @@
     {
       "id": "blog-1",
       "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine tasting"
     },
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
@@ -183,19 +189,19 @@
     {
       "id": "avatar-1",
       "description": "Smiling man",
-      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "man smiling"
     },
     {
       "id": "avatar-2",
       "description": "Smiling woman",
-      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "woman smiling"
     },
     {
       "id": "avatar-3",
       "description": "Smiling person",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "person smiling"
     }
   ]

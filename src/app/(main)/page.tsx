@@ -3,6 +3,7 @@
 import BrandStory from '@/components/homepage/brand-story';
 import CategoryShowcase from '@/components/homepage/category-showcase';
 import FamousBrands from '@/components/homepage/famous-brands';
+import FeaturedProduct from '@/components/homepage/featured-product';
 import HeroSection from '@/components/homepage/hero-section';
 import InfluenceSection from '@/components/homepage/influence-section';
 import ProductSection from '@/components/homepage/product-section';
@@ -16,6 +17,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <FeaturedProduct />
       <FamousBrands />
       <InfluenceSection />
       <ProductSection
