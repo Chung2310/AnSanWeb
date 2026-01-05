@@ -18,12 +18,13 @@ const heroSlides = [
         titleAccent: '',
         description: 'Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!',
         bgColor: 'bg-primary',
-        textColor: 'text-white'
+        textColor: 'text-white',
+        external: true
     },
     {
         imageId: 'hero-sale',
         label: '10% OFF',
-        href: '/collection/sales-10/',
+        href: '/collection/sales-10',
         tag: '10% OFF',
         titleLine1: 'AnSan OUTLET',
         titleAccent: 'SALE 10% OFF',
@@ -34,7 +35,7 @@ const heroSlides = [
     {
         imageId: 'hero-armagnac',
         label: 'ARMAGNAC',
-        href: '/product-category/armagnac',
+        href: '/danh-muc/armagnac',
         tag: 'ARMAGNAC',
         titleLine1: 'ARMAGNAC RƯỢU MẠNH',
         titleAccent: 'PHÁP LỊCH SỬ 700 NĂM',
@@ -45,18 +46,19 @@ const heroSlides = [
     {
         imageId: 'hero-smws',
         label: 'SMWS',
-        href: '/blog/5-dieu-ban-khong-biet-ve-smws/',
+        href: '/blog/5-dieu-ban-khong-biet-ve-smws',
         tag: 'SMWS',
         titleLine1: 'WHISKY NGUYÊN CHẤT',
         titleAccent: '100% CASK STRENGTH',
         description: 'Hiệp hội đóng chai độc lập này mang đến những chai Scotch Whisky nguyên chất 100%, được tuyển chọn kỹ lưỡng từ những thùng rượu hảo hạng nhất. SMWS không chỉ đơn thuần là nơi để thưởng thức Whisky, mà còn là nơi thay đổi hoàn toàn trải nghiệm thẩm Whisky, đưa bạn về với bản chất đích thực của việc thưởng thức Whisky: hương vị.',
         bgColor: 'bg-primary',
-        textColor: 'text-white'
+        textColor: 'text-white',
+        external: true
     },
     {
         imageId: 'hero-wine',
         label: 'WINE',
-        href: '/wine/',
+        href: '/danh-muc/wine',
         tag: 'WINE',
         titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
         titleAccent: 'AnSan CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
@@ -67,7 +69,7 @@ const heroSlides = [
     {
         imageId: 'hero-lakes',
         label: 'LAKES MỚI',
-        href: '/wine/',
+        href: '/danh-muc/world-whisky/whisky-the-lakes',
         tag: 'LAKES MỚI',
         titleLine1: 'ANH EM HỌ CỦA',
         titleAccent: 'THE LAKES NO.7 BỚT CAY THÊM ÊM ÁI',
@@ -101,6 +103,8 @@ export default function HeroSection() {
     
     const currentSlide = heroSlides[current];
     const image = PlaceHolderImages.find(img => img.id === currentSlide.imageId);
+
+    const linkProps = currentSlide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
     return (
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
@@ -140,7 +144,7 @@ export default function HeroSection() {
                                                     : "border-black text-black hover:bg-black hover:text-white"
                                             )}
                                         >
-                                            <Link href={currentSlide.href} target="_blank" rel="noopener noreferrer">TÌM HIỂU THÊM</Link>
+                                            <Link href={currentSlide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
                                         </Button>
                                      </motion.div>
                                  </div>
