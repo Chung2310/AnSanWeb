@@ -38,11 +38,11 @@ export default function HeroSection() {
             <div className="container flex-1 flex items-center max-w-screen-2xl">
                 <div className="w-1/2 bg-primary h-full flex flex-col justify-center items-start p-8">
                     <div className="max-w-md">
-                        <p className="text-sm font-semibold tracking-widest uppercase">MACALLAN 84</p>
+                        <p className="font-semibold tracking-widest uppercase text-sm">MACALLAN 84</p>
                         <h1 className="mt-2 text-5xl font-black leading-none tracking-tight uppercase">
                         CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI DANGTAU WHISKY
                         </h1>
-                        <p className="mt-6 text-sm font-light text-white/80">
+                        <p className="mt-6 font-light text-white/80 text-sm">
                         Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!
                         </p>
                         <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-primary rounded-none px-10 py-6">
@@ -58,11 +58,11 @@ export default function HeroSection() {
                      <div className="flex items-center">
                          {productBadges.map((badge, index) => (
                              <React.Fragment key={badge.label}>
-                                <Button variant="outline" className="bg-transparent text-white border-white rounded-none px-4 py-2 text-base font-semibold hover:bg-white hover:text-primary">
+                                <Button variant="outline" className="bg-transparent text-white border-white/80 rounded-none px-4 py-2 text-base font-semibold hover:bg-white hover:text-primary">
                                     <Link href={badge.href}>{badge.label}</Link>
                                 </Button>
                                 {index < productBadges.length - 1 && (
-                                <div className="flex-grow h-px bg-white/50 mx-2 w-16"></div>
+                                <div className="flex-grow h-px bg-white/80 mx-2 w-16"></div>
                                 )}
                             </React.Fragment>
                          ))}
