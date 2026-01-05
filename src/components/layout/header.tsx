@@ -30,9 +30,15 @@ const mainNavLinks = [
         { href: '/gioi-thieu/nha-sang-lap', label: 'Về nhà sáng lập' },
     ]
   },
-  { 
-    href: '/tin-tuc', 
-    label: 'Kiến thức',
+  {
+    href: '/tin-tuc',
+    label: 'Kiến thức Whisky',
+    sublinks: [
+      { href: '/kien-thuc/distilleries', label: 'Distilleries' },
+      { href: '/kien-thuc/spirits', label: 'Spirits' },
+      { href: '/kien-thuc/whisky-basics', label: 'Whisky Basics' },
+      { href: '/kien-thuc/whisky-review', label: 'Whisky Review' },
+    ],
   },
 ];
 
@@ -71,7 +77,6 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   
-  // This hook is essential for client-side logic to prevent hydration errors.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
