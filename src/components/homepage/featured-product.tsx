@@ -32,16 +32,14 @@ export default function FeaturedProduct() {
 
           {/* Right Column: Image */}
           <div className="relative h-[500px] md:h-[600px] w-full">
-            <div className="absolute bottom-0 left-0 right-0 h-2/3 md:h-1/2 w-full flex items-end justify-center">
-               <Image
-                src={featuredImage.imageUrl}
-                alt={featuredImage.description}
-                fill
-                className="object-contain"
-                data-ai-hint={featuredImage.imageHint}
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
+            <Image
+              src={featuredImage.imageUrl}
+              alt={featuredImage.description}
+              fill
+              className="object-contain"
+              data-ai-hint={featuredImage.imageHint}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
         </div>
       </div>
