@@ -76,13 +76,11 @@ const categoryNavLinks = [
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   
-  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isActive = mounted ? pathname.startsWith(href) : false;
+    setIsActive(pathname.startsWith(href));
+  }, [pathname, href]);
 
   const linkClasses = cn(
     'transition-colors text-sm font-medium uppercase',
