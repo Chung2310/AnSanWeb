@@ -1,5 +1,6 @@
 'use client';
 
+import EngravingSection from '@/components/homepage/engraving-section';
 import FamousBrands from '@/components/homepage/famous-brands';
 import FeaturedProduct from '@/components/homepage/featured-product';
 import GiftSetsSection from '@/components/homepage/gift-sets-section';
@@ -16,6 +17,9 @@ export default function HomePage() {
       <FeaturedProduct />
       <PriceCategoryShowcase />
       <GiftSetsSection />
+      <EngravingSection />
     </>
   );
 }
+
+    
