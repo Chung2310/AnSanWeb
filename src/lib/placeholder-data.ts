@@ -694,6 +694,23 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-09',
+  },
+  {
+    id: '34',
+    nameVN: 'La Petite Gargotte',
+    nameEN: 'La Petite Gargotte',
+    slug: 'la-petite-gargotte',
+    price: 380000,
+    origin: 'Languedoc–Roussillon – Pháp',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ thân thiện, dễ uống từ vùng Languedoc-Roussillon, Pháp.',
+    image: getImage('la-petite-gargotte'),
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-10',
   }
 ];
 
@@ -828,4 +845,5 @@ export const sampleTestimonials: Testimonial[] = [
 
     
 
+    
     
