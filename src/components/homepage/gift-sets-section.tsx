@@ -20,9 +20,9 @@ const giftCards: GiftSetCardProps[] = [
     href: '/danh-muc/set-thu-ruou',
   },
   {
-    imageId: 'gift-set-lakes',
+    imageId: 'gift-set-lakes-tet',
     category: 'Gift Set',
-    title: 'BỘ QUÀ TẾT THE LAKES SINGLE MALT',
+    title: 'BỘ QUÀ TẶNG WHISKY TẾT 2025',
     href: '/danh-muc/bo-qua-tang',
   },
 ];

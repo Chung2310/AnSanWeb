@@ -123,13 +123,13 @@
     {
       "id": "gift-set-tasting",
       "description": "Hands holding The Lakes Whiskymaker's Editions tasting set box.",
-      "imageUrl": "/images/gift/tasting-set.jpg",
+      "imageUrl": "/images/gift/tasting_set_banner.webp",
       "imageHint": "whisky tasting set"
     },
     {
-      "id": "gift-set-lakes",
+      "id": "gift-set-lakes-tet",
       "description": "The Lakes Single Malt whisky gift set with a red box.",
-      "imageUrl": "/images/gift/gift-set.jpg",
+      "imageUrl": "/images/gift/gift-set.webp",
       "imageHint": "whisky gift set"
     },
     {
@@ -141,7 +141,7 @@
     {
       "id": "wine-2",
       "description": "Bottle of crisp white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "white wine"
     },
     {
@@ -153,7 +153,7 @@
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
