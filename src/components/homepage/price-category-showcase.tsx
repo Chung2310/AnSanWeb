@@ -66,26 +66,26 @@ export default function PriceCategoryShowcase() {
         <Carousel
           setApi={setApi}
           plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
-          opts={{ loop: true, align: 'start' }}
+          opts={{ loop: true, align: 'start', dragFree: true }}
         >
-          <CarouselContent className="-ml-0">
+          <CarouselContent className="items-center">
             {priceCategories.map((category, index) => {
               const image = getImage(category.imageId);
               if (!image) return null;
 
               return (
-                <CarouselItem key={index} className="pl-0">
+                <CarouselItem key={index} className="basis-full md:basis-4/5 pl-4 md:pl-6">
                     <Link href={category.href}>
-                        <div className="relative h-[400px] md:h-[450px] w-full text-white">
+                        <div className="relative h-[400px] md:h-[450px] w-full text-white rounded-lg overflow-hidden">
                             <Image 
                                 src={image.imageUrl}
                                 alt={category.title}
                                 fill
                                 className="object-cover"
                                 data-ai-hint={image.imageHint}
-                                sizes="100vw"
+                                sizes="(max-width: 768px) 100vw, 80vw"
                             />
-                            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-r from-black/30 to-transparent">
+                            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-r from-black/40 to-transparent">
                                 <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
                                     {category.title}
                                 </h3>
