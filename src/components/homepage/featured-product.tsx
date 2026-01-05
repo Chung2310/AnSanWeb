@@ -7,12 +7,22 @@ import Link from 'next/link';
 
 export default function FeaturedProduct() {
   const featuredImage = PlaceHolderImages.find((img) => img.id === 'featured-macallan-25');
+  const backgroundImage = PlaceHolderImages.find((img) => img.id === 'featured-backdrop');
 
-  if (!featuredImage) return null;
+  if (!featuredImage || !backgroundImage) return null;
 
   return (
-    <section style={{ backgroundColor: '#8B3A3A' }} className="py-20 text-white overflow-hidden">
-      <div className="container mx-auto max-w-screen-xl">
+    <section className="relative py-20 text-white overflow-hidden">
+        <Image
+          src={backgroundImage.imageUrl}
+          alt={backgroundImage.description}
+          fill
+          className="object-cover"
+          data-ai-hint={backgroundImage.imageHint}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+      <div className="container mx-auto max-w-screen-xl relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Column: Text */}
           <div className="text-center md:text-left">
@@ -36,7 +46,7 @@ export default function FeaturedProduct() {
               src={featuredImage.imageUrl}
               alt={featuredImage.description}
               fill
-              className="object-contain mix-blend-multiply"
+              className="object-contain"
               data-ai-hint={featuredImage.imageHint}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
