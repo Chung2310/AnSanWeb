@@ -1,0 +1,377 @@
+{
+  "entities": {
+    "Wine": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Wine",
+      "type": "object",
+      "description": "Represents a wine product.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Wine entity."
+        },
+        "nameVN": {
+          "type": "string",
+          "description": "Wine name in Vietnamese."
+        },
+        "nameEN": {
+          "type": "string",
+          "description": "Wine name in English."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly slug for the wine."
+        },
+        "descriptionVN": {
+          "type": "string",
+          "description": "Wine description in Vietnamese."
+        },
+        "descriptionEN": {
+          "type": "string",
+          "description": "Wine description in English."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the wine."
+        },
+        "origin": {
+          "type": "string",
+          "description": "Origin country of the wine."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of wine (e.g., Red, White, Rosé)."
+        },
+        "vintage": {
+          "type": "number",
+          "description": "Vintage year of the wine."
+        },
+        "alcohol": {
+          "type": "number",
+          "description": "Alcohol percentage of the wine."
+        },
+        "volume": {
+          "type": "number",
+          "description": "Volume of the wine bottle (in ml)."
+        },
+        "images": {
+          "type": "array",
+          "description": "Array of image URLs for the wine.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rating": {
+          "type": "number",
+          "description": "Customer rating of the wine."
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "Indicates if the wine is featured."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the wine was created.",
+          "format": "date-time"
+        },
+        "categoryIds": {
+          "type": "array",
+          "description": "References to Categories. (Relationship: Category N:N Wine)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "nameVN",
+        "nameEN",
+        "slug",
+        "descriptionVN",
+        "descriptionEN",
+        "price",
+        "origin",
+        "type",
+        "vintage",
+        "alcohol",
+        "volume",
+        "images",
+        "rating",
+        "isFeatured",
+        "createdAt"
+      ]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a category of wine.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Category entity."
+        },
+        "nameVN": {
+          "type": "string",
+          "description": "Category name in Vietnamese."
+        },
+        "nameEN": {
+          "type": "string",
+          "description": "Category name in English."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly slug for the category."
+        },
+        "description": {
+          "type": "string",
+          "description": "Category description."
+        },
+        "image": {
+          "type": "string",
+          "description": "URL of the category image."
+        }
+      },
+      "required": [
+        "id",
+        "nameVN",
+        "nameEN",
+        "slug",
+        "description",
+        "image"
+      ]
+    },
+    "BlogPost": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BlogPost",
+      "type": "object",
+      "description": "Represents a blog post or article.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BlogPost entity."
+        },
+        "titleVN": {
+          "type": "string",
+          "description": "Blog post title in Vietnamese."
+        },
+        "titleEN": {
+          "type": "string",
+          "description": "Blog post title in English."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly slug for the blog post."
+        },
+        "contentVN": {
+          "type": "string",
+          "description": "Blog post content in Vietnamese."
+        },
+        "contentEN": {
+          "type": "string",
+          "description": "Blog post content in English."
+        },
+        "image": {
+          "type": "string",
+          "description": "URL of the blog post image."
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the blog post."
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of the blog post.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "titleVN",
+        "titleEN",
+        "slug",
+        "contentVN",
+        "contentEN",
+        "image",
+        "author",
+        "date"
+      ]
+    },
+    "Contact": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Contact",
+      "type": "object",
+      "description": "Represents a contact form submission.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Contact entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the contact person."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the contact person.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the contact person."
+        },
+        "message": {
+          "type": "string",
+          "description": "Message from the contact person."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the contact form was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "phone",
+        "message",
+        "createdAt"
+      ]
+    },
+    "NewsletterSubscription": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "NewsletterSubscription",
+      "type": "object",
+      "description": "Represents a newsletter subscription.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the NewsletterSubscription entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the subscriber.",
+          "format": "email"
+        },
+        "subscribedAt": {
+          "type": "string",
+          "description": "Timestamp of when the user subscribed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "subscribedAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/wines/{wineId}",
+        "definition": {
+          "entityName": "Wine",
+          "schema": {
+            "$ref": "#/backend/entities/Wine"
+          },
+          "description": "Stores wine product information. Publicly readable.",
+          "params": [
+            {
+              "name": "wineId",
+              "description": "Unique identifier for the wine."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/categories/{categoryId}",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Stores wine category information. Publicly readable.",
+          "params": [
+            {
+              "name": "categoryId",
+              "description": "Unique identifier for the category."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/blogPosts/{blogPostId}",
+        "definition": {
+          "entityName": "BlogPost",
+          "schema": {
+            "$ref": "#/backend/entities/BlogPost"
+          },
+          "description": "Stores blog post information. Publicly readable.",
+          "params": [
+            {
+              "name": "blogPostId",
+              "description": "Unique identifier for the blog post."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/contacts/{contactId}",
+        "definition": {
+          "entityName": "Contact",
+          "schema": {
+            "$ref": "#/backend/entities/Contact"
+          },
+          "description": "Stores contact form submissions. Write-only for unauthenticated users.",
+          "params": [
+            {
+              "name": "contactId",
+              "description": "Unique identifier for the contact message."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/newsletterSubscriptions/{subscriptionId}",
+        "definition": {
+          "entityName": "NewsletterSubscription",
+          "schema": {
+            "$ref": "#/backend/entities/NewsletterSubscription"
+          },
+          "description": "Stores newsletter subscription information.",
+          "params": [
+            {
+              "name": "subscriptionId",
+              "description": "Unique identifier for the subscription."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{uid}",
+        "definition": {
+          "entityName": "role",
+          "schema": {
+            "$ref": "#/backend/entities/NewsletterSubscription"
+          },
+          "description": "Stores admin role information. Existence of a document grants admin access.",
+          "params": [
+            {
+              "name": "uid",
+              "description": "User ID of the admin."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support a wine showcase application with a blog and admin dashboard. It prioritizes security, scalability, and ease of debugging. The key principle is Authorization Independence achieved through denormalization where necessary.  \n\n**Authorization Independence (Denormalization):**\n*   No `get()` calls in security rules are needed because authorization data is denormalized. For example, if roles were added they would need to be denormalized into each document.\n\n**Structural Segregation:**\n*   Collections are segregated based on their security needs. Publicly readable data (wines, categories, blog posts) resides in separate collections from sensitive data (contacts, admin roles).\n\n**Access Modeling:**\n*   Wines, Categories, and BlogPosts collections use simple path-based access with public read permissions.\n*   Contacts collection allows unauthenticated writes but should be monitored.\n*   Admin roles are managed using existence checks in a dedicated collection.\n\n**QAPs (Rules are not Filters):**\n*   The structure enables secure `list` operations because each collection has a homogeneous security posture. For example, listing wines is allowed for everyone.\n*   Admin access is controlled by the existence of a document in the `roles_admin` collection, preventing unauthorized modifications.\n\n**Invariants:**\n*   Timestamps (createdAt, date, subscribedAt) can be enforced via rules to ensure data integrity.\n*   Data consistency between the categoryIds array in `wines` and the `categories` collection is managed at the application level.\n\nThis structure allows for simple, robust, and debuggable security rules, reducing complexity and potential security vulnerabilities."
+  }
+}

@@ -1,0 +1,126 @@
+/**
+ * Core Philosophy: This ruleset supports a public-facing content website (e.g., a wine showcase or blog) with a secure, admin-only backend for content management. The primary security model is role-based access control, where "Admin" users have full control over public data, while general visitors have read-only access.
+ *
+ * Data Structure: The data is organized into flat, top-level collections. Public content collections like `wines`, `categories`, and `blogPosts` are separate from sensitive, write-only collections like `contacts` and `newsletterSubscriptions`. Administrator privileges are managed by the existence of a document in the `roles_admin` collection.
+ *
+ * Key Security Decisions:
+ * - Public Read, Admin Write: Core content collections (`wines`, `categories`, `blogPosts`) are publicly readable by anyone but can only be created, updated, or deleted by authenticated users who are designated as admins.
+ * - Write-Only Mailbox: The `contacts` and `newsletterSubscriptions` collections are designed as secure dropboxes. Anyone can submit (create) data, but no one—not even the submitter—can read, update, or delete it from the client. This prevents data leakage and spam.
+ * - Admin Role Management: A user is considered an admin if a document with their UID exists in the `/roles_admin` collection. This provides a simple and secure way to manage roles. Admins can manage other admins, but listing all admins is prohibited to prevent user enumeration.
+ * - Default Deny: All paths not explicitly matched are denied access by default.
+ *
+ * Denormalization for Authorization: Admin roles are managed via the `/roles_admin/{uid}` collection. This avoids slow or impossible lookups within user profile documents. An `isAdmin()` function checks for the existence of a document in this collection, making authorization checks fast and efficient.
+ *
+ * Structural Segregation: The ruleset leverages separate collections for data with different security requirements. Publicly readable content (`wines`) is completely separate from private, write-only user submissions (`contacts`), which simplifies rules and enhances security for list operations.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for DRY and readable rules
+    /**
+     * isSignedIn
+     * @description Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * isAdmin
+     * @description Checks if the authenticated user is an administrator by verifying the existence of their UID in the roles_admin collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * @description Stores wine product information. Publicly readable by anyone, but writable only by administrators.
+     * @path /wines/{wineId}
+     * @allow (get) Any user, signed in or not, can retrieve a specific wine document.
+     * @allow (create) An authenticated admin user can create a new wine document.
+     * @deny (update) A regular authenticated user attempts to change the price of a wine.
+     * @principle Implements a "Public Read, Admin Write" model for catalogue data.
+     */
+    match /wines/{wineId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Stores wine category information. Publicly readable by anyone, but writable only by administrators.
+     * @path /categories/{categoryId}
+     * @allow (list) Any client can list all available categories.
+     * @allow (create) An authenticated admin user can create a new category.
+     * @deny (delete) A non-admin user attempts to delete a category.
+     * @principle Implements a "Public Read, Admin Write" model for content organization.
+     */
+    match /categories/{categoryId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Stores blog post articles. Publicly readable by anyone, but writable only by administrators.
+     * @path /blogPosts/{blogPostId}
+     * @allow (get) An unauthenticated visitor can read a blog post.
+     * @allow (update) An authenticated admin user can edit an existing blog post.
+     * @deny (create) An anonymous user attempts to publish a new blog post.
+     * @principle Implements a "Public Read, Admin Write" model for editorial content.
+     */
+    match /blogPosts/{blogPostId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description A write-only "mailbox" for contact form submissions. Anyone can create a message, but no one can read, update, or delete them via the client.
+     * @path /contacts/{contactId}
+     * @allow (create) An anonymous user can submit a contact form.
+     * @deny (get) Any user attempts to read a previously submitted contact message.
+     * @deny (list) Any user attempts to list all contact messages.
+     * @principle Secures sensitive user-submitted data by making the collection a write-only dropbox.
+     */
+    match /contacts/{contactId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description A write-only "mailbox" for newsletter signups. Anyone can subscribe, but subscriptions cannot be read or modified from the client.
+     * @path /newsletterSubscriptions/{subscriptionId}
+     * @allow (create) Any visitor can submit their email to subscribe to the newsletter.
+     * @deny (get) A user attempts to see if a specific email is already subscribed.
+     * @deny (update) A user attempts to change a subscription email address.
+     * @principle Protects user privacy by making the collection a write-only dropbox.
+     */
+    match /newsletterSubscriptions/{subscriptionId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Manages administrator roles. Only existing admins can view or modify roles. Listing all admins is disallowed to prevent user enumeration.
+     * @path /roles_admin/{uid}
+     * @allow (create) An existing admin grants admin rights to another user by creating a document with their UID.
+     * @deny (list) Any user, including an admin, attempts to get a list of all administrators.
+     * @deny (delete) A non-admin user attempts to revoke their own or someone else's admin rights.
+     * @principle Enforces hierarchical role management and prevents enumeration of privileged users.
+     */
+    match /roles_admin/{uid} {
+      allow get: if isAdmin();
+      allow list: if false;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin() && resource != null;
+    }
+  }
+}
