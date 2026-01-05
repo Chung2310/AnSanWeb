@@ -9,6 +9,41 @@ const getImage = (id: string) => {
   return img;
 };
 
+const genericTastingNotes = {
+  brand: 'N/A',
+  chillFiltered: 'N/A',
+  region: 'N/A',
+  caskType: 'N/A',
+  nose: 'Hương thơm phức hợp của trái cây chín và gỗ sồi.',
+  palate: 'Vị rượu đậm đà, cân bằng với một chút gia vị.',
+  finish: 'Hậu vị kéo dài, ấm áp và êm dịu.',
+  color: 'Màu vàng hổ phách.',
+};
+
+const genericProductDetails = {
+    title: "Thông tin chi tiết về sản phẩm",
+    paragraphs: [
+        "Đây là một sản phẩm tinh túy, là kết quả của quá trình chưng cất và ủ rượu công phu. Nhà sản xuất đã lựa chọn những nguyên liệu tốt nhất và áp dụng những kỹ thuật truyền thống để tạo ra một loại rượu độc đáo.",
+        "Quá trình trưởng thành trong thùng gỗ sồi đã mang lại cho sản phẩm này những lớp hương vị phức tạp, từ hương trái cây ban đầu đến những nốt hương gỗ và gia vị sâu lắng theo thời gian."
+    ],
+    details: [
+        { label: "Tên Gọi", value: "Đang cập nhật" },
+        { label: "Nhà Sản Xuất/Chưng Cất", value: "Đang cập nhật" },
+        { label: "Quốc Gia", value: "Đang cập nhật" },
+        { label: "Tuổi Rượu", value: "Đang cập nhật" },
+        { label: "Loại Thùng Ủ", value: "Đang cập nhật" },
+        { label: "Nồng Độ Cồn", value: "Đang cập nhật" },
+        { label: "Dung Tích", value: "700 ml" }
+    ],
+    tastingNote: {
+        nose: "Hương thơm phong phú với các nốt hương của trái cây, hoa và gia vị.",
+        palate: "Vị rượu mượt mà, cấu trúc tốt và cân bằng hoàn hảo.",
+        finish: "Hậu vị dài, đáng nhớ và để lại ấn tượng sâu sắc."
+    },
+    conclusion: "Đây là một chai rượu xuất sắc, phù hợp cho những dịp đặc biệt hoặc để làm phong phú thêm bộ sưu tập của bạn. Nó thể hiện rõ nét đặc trưng của vùng sản xuất và tay nghề của người làm rượu."
+};
+
+
 export const sampleWines: Wine[] = [
   {
     id: '1',
@@ -22,7 +57,9 @@ export const sampleWines: Wine[] = [
     description: 'Một biểu tượng của Bordeaux, loại rượu này mang đến sự phức hợp đáng kinh ngạc với hương hoa violet, dâu đen và gỗ tuyết tùng.',
     image: getImage('wine-1'),
     isFeatured: true,
-    tags: ['wine']
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '2',
@@ -36,7 +73,9 @@ export const sampleWines: Wine[] = [
     description: 'Loại rượu vang trắng được săn lùng nhất thế giới, thể hiện sự cân bằng hoàn hảo giữa sự đậm đà, khoáng chất và độ chua.',
     image: getImage('wine-2'),
     isFeatured: true,
-    tags: ['wine', 'old-rare']
+    tags: ['wine', 'old-rare'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '3',
@@ -50,7 +89,9 @@ export const sampleWines: Wine[] = [
     description: 'Loại vang hồng tinh tế từ Provence với hương thơm của dâu tây, đào và một chút hương hoa.',
     image: getImage('wine-3'),
     isNew: true,
-    tags: ['wine']
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '4',
@@ -64,7 +105,9 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Champagne sang trọng với sự phức hợp của hương bánh mì nướng, các loại hạt và trái cây họ cam quýt.',
     image: getImage('wine-4'),
     isFeatured: true,
-    tags: ['wine']
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '5',
@@ -78,7 +121,9 @@ export const sampleWines: Wine[] = [
     description: 'Vua của các loại rượu vang ngọt, với các lớp hương mật ong, mơ, và hạnh nhân.',
     image: getImage('wine-5'),
     isNew: true,
-    tags: ['wine', 'old-rare']
+    tags: ['wine', 'old-rare'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '6',
@@ -92,7 +137,9 @@ export const sampleWines: Wine[] = [
     description: 'Biểu tượng của Úc, một loại Shiraz đậm đà và mạnh mẽ với hương vị của mận, sô cô la và gia vị.',
     image: getImage('wine-6'),
     isFeatured: true,
-    tags: ['wine', 'world']
+    tags: ['wine', 'world'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '7',
@@ -106,6 +153,8 @@ export const sampleWines: Wine[] = [
     description: 'Bộ sản phẩm khám phá hương vị đa dạng từ nhà The Lakes, bao gồm các phiên bản giới hạn.',
     image: getImage('gift-set-tasting-product'),
     tags: ['tasting-set'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '8',
@@ -119,6 +168,8 @@ export const sampleWines: Wine[] = [
     description: 'Bộ quà tặng sang trọng từ The Lakes, lựa chọn hoàn hảo cho những dịp đặc biệt.',
     image: getImage('gift-set-lakes-tet-product'),
     tags: ['gift-set'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '9',
@@ -134,6 +185,8 @@ export const sampleWines: Wine[] = [
     tags: ['engraving', 'spirits'],
     nonChillFiltered: false,
     cask: 'Cognac Cask',
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '10',
@@ -159,7 +212,8 @@ export const sampleWines: Wine[] = [
       palate: 'Đậm đà và béo ngậy, với hương kem, nho khô, sô cô la đen, quả sung và bánh hạnh nhân.',
       finish: 'Kéo dài, ấm áp với hương gỗ sồi và gia vị sherry dai dẳng.',
       color: 'Vàng hổ phách đậm.',
-    }
+    },
+    productDetails: genericProductDetails
   },
   {
     id: '11',
@@ -185,7 +239,8 @@ export const sampleWines: Wine[] = [
       palate: 'Đầy đặn với vị ngọt của gỗ sồi, trái cây hầm, và một chút gia vị cay.',
       finish: 'Ấm áp và kéo dài với dư vị của ca cao và một chút khói.',
       color: 'Vàng đồng.',
-    }
+    },
+    productDetails: genericProductDetails
   },
   {
     id: '12',
@@ -202,6 +257,8 @@ export const sampleWines: Wine[] = [
     age: 12,
     cask: 'Mizunara',
     nonChillFiltered: false,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '13',
@@ -217,6 +274,8 @@ export const sampleWines: Wine[] = [
     tags: ['world', 'england'],
     cask: 'Sherry',
     nonChillFiltered: true,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '14',
@@ -242,7 +301,8 @@ export const sampleWines: Wine[] = [
       palate: 'Đậm đà vị trái cây khô và một chút khói gỗ.',
       finish: 'Kéo dài với hương trái cây khô, khói gỗ và gia vị.',
       color: 'Gỗ gụ đậm.'
-    }
+    },
+    productDetails: genericProductDetails
   },
   {
     id: '15',
@@ -259,6 +319,8 @@ export const sampleWines: Wine[] = [
     age: 12,
     cask: 'Bourbon',
     nonChillFiltered: false,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '16',
@@ -275,6 +337,8 @@ export const sampleWines: Wine[] = [
     age: 10,
     cask: 'Bourbon',
     nonChillFiltered: true,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '17',
@@ -293,6 +357,7 @@ export const sampleWines: Wine[] = [
         brand: 'Baron de Sigognac',
         region: 'Bas-Armagnac',
         caskType: 'French Oak',
+        chillFiltered: 'N/A',
         nose: 'Hương thơm của mận khô, bánh gừng và một chút hương thuốc lá.',
         palate: 'Mềm mại và tròn vị với hương vani, quả óc chó và gia vị ngọt ngào.',
         finish: 'Dài và thanh lịch với dư vị của gỗ sồi và trái cây khô.',
@@ -343,6 +408,8 @@ export const sampleWines: Wine[] = [
     age: 21,
     cask: 'Mizunara',
     nonChillFiltered: false,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '19',
@@ -358,6 +425,8 @@ export const sampleWines: Wine[] = [
     tags: ['scotch', 'highland'],
     cask: 'Port',
     nonChillFiltered: false,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '20',
@@ -374,6 +443,8 @@ export const sampleWines: Wine[] = [
     age: 12,
     cask: 'Sherry',
     nonChillFiltered: true,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
   {
     id: '21',
@@ -390,6 +461,8 @@ export const sampleWines: Wine[] = [
     age: 18,
     cask: 'Bourbon',
     nonChillFiltered: false,
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails
   },
 ];
 
