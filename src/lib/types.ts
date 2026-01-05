@@ -58,6 +58,7 @@ export type BlogPost = {
   excerpt: string;
   date: string;
   image: ImagePlaceholder;
+  categories: string[];
 };
 
 export type Testimonial = {

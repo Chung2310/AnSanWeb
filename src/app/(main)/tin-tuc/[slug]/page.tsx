@@ -9,11 +9,15 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     notFound();
   }
 
+  // Formatting date for display
+  const date = new Date(post.date);
+  const formattedDate = `${date.getDate()} Tháng ${date.getMonth() + 1}, ${date.getFullYear()}`;
+
   return (
     <div className="container py-12">
       <article className="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
         <div className="mb-8 text-center">
-            <p className="text-muted-foreground">{post.date}</p>
+            <p className="text-muted-foreground">{formattedDate}</p>
             <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2">{post.title}</h1>
         </div>
         <Image 
