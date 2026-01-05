@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from '../ui/input';
+import { useEffect, useState } from 'react';
 
 
 const mainNavLinks = [
@@ -65,9 +66,23 @@ const categoryNavLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
     if (sublinks) {
+      if (!mounted) {
+        // Render a placeholder or null on the server and initial client render
+        return (
+          <Button variant="ghost" className={cn("flex items-center gap-1 text-sm font-medium uppercase p-0 h-auto", className)} disabled>
+            {label}
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        );
+      }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
