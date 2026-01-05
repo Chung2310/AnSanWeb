@@ -660,6 +660,23 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-07',
+  },
+  {
+    id: '32',
+    nameVN: 'Cotes Rocheuses (MS.4)',
+    nameEN: 'Cotes Rocheuses (MS.4)',
+    slug: 'cotes-rocheuses-ms4',
+    price: 1450000,
+    origin: 'Saint-Émilion, Pháp',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ từ Saint-Émilion, Pháp, mang đến hương vị đậm đà và phức hợp.',
+    image: getImage('cotes-rocheuses'),
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-08',
   }
 ];
 
