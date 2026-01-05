@@ -4,7 +4,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Image from 'next/image';
+import Autoplay from "embla-carousel-autoplay";
 
 const heroSlides = [
     { imageId: 'hero-macallan', label: 'MACALLAN 84', href: '#' },
@@ -20,52 +23,82 @@ export default function HeroSection() {
     const [current, setCurrent] = useState(0)
 
     useEffect(() => {
-        if (!api) {
-            return
-        }
-
+        if (!api) return;
+        
         const onSelect = () => {
-            // We need to use the real API to get the selected snap
             setCurrent(api.selectedScrollSnap())
-        }
+        };
 
-        api.on("select", onSelect)
-        // Set the initial value.
-        onSelect();
+        api.on("select", onSelect);
+        onSelect(); // Set initial value
 
         return () => {
-            api.off("select", onSelect)
-        }
-    }, [api])
+            api.off("select", onSelect);
+        };
+    }, [api]);
 
     const scrollTo = useCallback((index: number) => {
         api?.scrollTo(index);
     }, [api]);
 
     return (
-        <div className="w-full bg-primary text-primary-foreground font-body relative">
+        <div className="w-full bg-primary text-primary-foreground font-body">
              <div className="container mx-auto max-w-screen-2xl">
                 <div className="flex flex-col min-h-[700px] justify-between py-12">
-                    {/* Top Text Content */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left py-12 md:py-0">
-                        <div className="max-w-md mx-auto md:mx-0">
-                            <p className="font-semibold tracking-widest uppercase text-sm text-amber-400 font-headline">
-                                ROMANEE-CONTI 1982
-                            </p>
-                            <h1 className="mt-2 text-4xl lg:text-5xl font-black leading-none tracking-tight uppercase font-headline">
-                                SIÊU PHẨM RƯỢU VANG <span className="text-amber-400">GIÀ NHẤT THẾ GIỚI</span>
-                            </h1>
-                            <p className="mt-6 font-light text-white/80 text-sm">
-                                ĐÃ CÓ MẶT TẠI DANGTAU WHISKY – HÃY CHỜ ĐÓN VIDEO BẬT MÍ SIÊU PHẨM NÀY TRÊN YOUTUBE!
-                            </p>
-                            <Button asChild variant="outline" className="mt-8 bg-amber-500 border-amber-500 text-primary-foreground hover:bg-amber-600 hover:border-amber-600 rounded-none px-10 py-6 transition-transform hover:scale-105">
-                                <Link href="#">XEM NGAY</Link>
-                            </Button>
+                    {/* Main content: 2 columns */}
+                    <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        {/* Left Column: Text */}
+                        <div className="flex flex-col justify-center text-center md:text-left">
+                            <div className="max-w-md mx-auto md:mx-0">
+                                <p className="font-semibold tracking-widest uppercase text-sm text-amber-400 font-headline">
+                                    ROMANEE-CONTI 1982
+                                </p>
+                                <h1 className="mt-2 text-4xl lg:text-5xl font-black leading-none tracking-tight uppercase font-headline">
+                                    SIÊU PHẨM RƯỢU VANG <span className="text-amber-400">GIÀ NHẤT THẾ GIỚI</span>
+                                </h1>
+                                <p className="mt-6 font-light text-white/80 text-sm">
+                                    ĐÃ CÓ MẶT TẠI DANGTAU WHISKY – HÃY CHỜ ĐÓN VIDEO BẬT MÍ SIÊU PHẨM NÀY TRÊN YOUTUBE!
+                                </p>
+                                <Button asChild variant="outline" className="mt-8 bg-amber-500 border-amber-500 text-primary-foreground hover:bg-amber-600 hover:border-amber-600 rounded-none px-10 py-6 transition-transform hover:scale-105">
+                                    <Link href="#">XEM NGAY</Link>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Right Column: Carousel */}
+                        <div className="w-full h-full">
+                            <Carousel 
+                                setApi={setApi} 
+                                className="w-full h-full"
+                                plugins={[ Autoplay({ delay: 4000, stopOnInteraction: true }) ]}
+                                opts={{ loop: true }}
+                            >
+                                <CarouselContent className="h-full">
+                                    {heroSlides.map((slide) => {
+                                        const image = PlaceHolderImages.find(img => img.id === slide.imageId);
+                                        if (!image) return null;
+                                        return (
+                                            <CarouselItem key={slide.imageId} className="h-full">
+                                                <div className="relative w-full h-[450px]">
+                                                    <Image
+                                                        src={image.imageUrl}
+                                                        alt={image.description}
+                                                        fill
+                                                        className="object-cover rounded-lg"
+                                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                                        priority
+                                                    />
+                                                </div>
+                                            </CarouselItem>
+                                        );
+                                    })}
+                                </CarouselContent>
+                            </Carousel>
                         </div>
                     </div>
                     
                     {/* Bottom Bar: Controls */}
-                    <div className="w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20">
+                    <div className="w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20 mt-8">
                         <div className="flex items-center justify-center md:justify-start">
                             {heroSlides.map((badge, index) => (
                                 <React.Fragment key={badge.label}>
