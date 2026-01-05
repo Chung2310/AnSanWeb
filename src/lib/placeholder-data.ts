@@ -509,7 +509,7 @@ export const sampleWines: Wine[] = [
     nameEN: 'Zolotoe Russian Sparkling Wine (Best seller)',
     slug: 'vang-no-nga-zolotoe',
     price: 280000,
-    origin: 'Hungary',
+    origin: 'Hungary (Sản xuất theo phong cách Nga)',
     type: 'Vang Sủi',
     alcohol: 12,
     description: 'Vang nổ Zolotoe, một sản phẩm bán chạy nhất, sản xuất tại Hungary theo phong cách Nga, mang đến hương vị tươi mát và sảng khoái.',
@@ -555,6 +555,24 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-01',
+  },
+  {
+    id: '26',
+    nameVN: 'Chateau La Grace Dieu 2010',
+    nameEN: 'Chateau La Grace Dieu 2010',
+    slug: 'chateau-la-grace-dieu-2010',
+    price: 3800000,
+    origin: 'Pháp – Saint-Émilion',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ Pháp tuyệt vời từ Saint-Émilion, niên vụ 2010, với hương vị đậm đà và cấu trúc tốt.',
+    image: getImage('chateau-la-grace-dieu-2010'),
+    tags: ['wine', 'old-rare'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    isFeatured: true,
+    createdAt: '2024-08-02',
   }
 ];
 
@@ -682,3 +700,5 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
+
+    
