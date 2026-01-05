@@ -70,29 +70,15 @@ const categoryNavLinks = [
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const isActive = pathname.startsWith(href);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const linkClasses = cn(
     'transition-colors text-sm font-medium uppercase',
-    isActive ? 'text-foreground' : '',
+    isActive ? 'text-foreground' : 'text-header-nav hover:text-header-nav-hover',
     className
   );
 
   if (sublinks) {
-    if (!mounted) {
-      // Render a placeholder or null on the server and initial client render
-      return (
-        <div className={cn("flex items-center gap-1 p-0 h-auto", linkClasses)}>
-          {label}
-          <ChevronDown className="h-4 w-4" />
-        </div>
-      );
-    }
     return (
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
@@ -167,7 +153,7 @@ export default function Header() {
             </div>
 
             <nav className="hidden lg:flex items-center gap-6">
-                {mainNavLinks.map((link) => <NavLink key={link.href} {...link} className="text-header-nav hover:text-header-nav-hover" />)}
+                {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
             </nav>
 
             <div className="lg:hidden">
@@ -204,7 +190,7 @@ export default function Header() {
       <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
           <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
               <nav className="flex items-center gap-8">
-                  {categoryNavLinks.map((link) => <NavLink key={link.href} {...link} className="text-header-nav hover:text-header-nav-hover"/>)}
+                  {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
               </nav>
           </div>
       </div>
