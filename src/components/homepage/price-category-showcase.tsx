@@ -79,7 +79,7 @@ export default function PriceCategoryShowcase() {
               if (!image) return null;
 
               return (
-                <CarouselItem key={index} className="pl-4 md:basis-1/2">
+                <CarouselItem key={index} className="pl-4">
                   <div className="relative h-[450px] flex items-start justify-start p-8 overflow-hidden" style={{backgroundColor: category.bgColor}}>
                      <div className="absolute inset-0 z-0">
                          <Image 
