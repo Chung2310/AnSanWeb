@@ -53,6 +53,7 @@ export type Category = {
 
 export type BlogPost = {
   id: string;
+  author: string;
   title: string;
   slug: string;
   excerpt: string;
