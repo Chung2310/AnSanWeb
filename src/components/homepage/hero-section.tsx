@@ -47,8 +47,7 @@ const heroSlides = [
         titleAccent: 'QUÝ HIẾM NHẤT',
         description: 'Khám phá các phiên bản đóng chai độc quyền từ The Scotch Malt Whisky Society (SMWS).',
     },
-    { 
-        imageId: 'hero-wine', 
+    { imageId: 'hero-wine', 
         label: 'WINE', 
         href: '#',
         tag: 'BỘ SƯU TẬP VANG',
