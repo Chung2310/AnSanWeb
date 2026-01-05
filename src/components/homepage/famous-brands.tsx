@@ -19,7 +19,7 @@ const brandLogos = [
 export default function FamousBrands() {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [count, setCount] = useState(0)
   
   const plugin = useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
@@ -29,17 +29,18 @@ export default function FamousBrands() {
     if (!api) {
       return
     }
-    setScrollSnaps(api.scrollSnaps());
+
+    setCount(api.scrollSnapList().length)
     setCurrent(api.selectedScrollSnap())
 
-    const onSelect = () => {
-        setCurrent(api.selectedScrollSnap())
+    const onSelect = (api: CarouselApi) => {
+      setCurrent(api.selectedScrollSnap())
     }
 
     api.on("select", onSelect)
     
     return () => {
-        api.off("select", onSelect)
+      api.off("select", onSelect)
     }
   }, [api])
 
@@ -80,7 +81,7 @@ export default function FamousBrands() {
             })}
           </CarouselContent>
           <div className="flex justify-center mt-8 space-x-2">
-            {scrollSnaps.map((_, index) => (
+            {Array.from({ length: count }).map((_, index) => (
                 <button
                     key={index}
                     onClick={() => api?.scrollTo(index)}
