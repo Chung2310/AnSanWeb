@@ -68,9 +68,9 @@ export default function HeroSection() {
                     </div>
 
                     {/* Main content: 2 columns */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
+                    <div className="grid grid-cols-1 md:grid-cols-2">
                         {/* Left Column: Text */}
-                        <div className="flex flex-col justify-center text-center md:text-left py-12 px-4 md:px-0">
+                        <div className="flex flex-col justify-center text-center md:text-left py-12 px-4 md:px-0 min-h-[600px]">
                             <div className="max-w-md mx-auto md:mx-0">
                                 <p className="font-semibold tracking-widest uppercase text-sm text-amber-400 font-headline">
                                     ROMANEE-CONTI 1982
@@ -88,7 +88,7 @@ export default function HeroSection() {
                         </div>
 
                         {/* Right Column: Carousel */}
-                        <div className="w-full h-full">
+                        <div className="w-full h-full min-h-[600px]">
                             <Carousel 
                                 setApi={setApi} 
                                 className="w-full h-full"
