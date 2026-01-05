@@ -23,22 +23,6 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
-        <style dangerouslySetInnerHTML={{ __html: `
-          @font-face {
-            font-family: 'SaaSeriesVN';
-            src: url('/fonts/SaaSeriesVN-Regular.woff2') format('woff2'),
-                 url('/fonts/SaaSeriesVN-Regular.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-          }
-          @font-face {
-            font-family: 'SaaSeriesVN';
-            src: url('/fonts/SaaSeriesVN-Bold.woff2') format('woff2'),
-                 url('/fonts/SaaSeriesVN-Bold.woff') format('woff');
-            font-weight: bold;
-            font-style: normal;
-          }
-        `}} />
       </head>
       <body
         className={cn(
