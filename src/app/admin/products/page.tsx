@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
   Table,
   TableBody,
   TableCell,
@@ -35,10 +46,14 @@ import type { Wine } from '@/lib/types';
 
 export default function AdminProductsPage() {
   const { onOpen } = useProductDialog();
-  const products = sampleWines.sort(
-    (a, b) =>
-      new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+  const [products, setProducts] = useState<Wine[]>(() =>
+    sampleWines.sort(
+      (a, b) =>
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+    )
   );
+
+  const [deleteCandidate, setDeleteCandidate] = useState<Wine | null>(null);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -60,10 +75,38 @@ export default function AdminProductsPage() {
   const handleEdit = (product: Wine) => {
     onOpen(product.id, product);
   };
+  
+  const handleDelete = (product: Wine) => {
+    setDeleteCandidate(product);
+  }
+
+  const confirmDelete = () => {
+    if (!deleteCandidate) return;
+    // In a real app, you'd call an API to delete the product
+    // For now, we'll just filter it out from the local state
+    setProducts(prev => prev.filter(p => p.id !== deleteCandidate.id));
+    setDeleteCandidate(null);
+  }
+
 
   return (
     <>
       <ProductForm />
+       <AlertDialog open={!!deleteCandidate} onOpenChange={(open) => !open && setDeleteCandidate(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Hành động này không thể được hoàn tác. Sản phẩm "{deleteCandidate?.nameVN}" sẽ bị xóa vĩnh viễn.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDeleteCandidate(null)}>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Tiếp tục</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="flex flex-col gap-4">
         <div className="flex items-center">
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
@@ -142,7 +185,7 @@ export default function AdminProductsPage() {
                           <DropdownMenuItem onClick={() => handleEdit(product)}>
                             Chỉnh sửa
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Xóa</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDelete(product)}>Xóa</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
