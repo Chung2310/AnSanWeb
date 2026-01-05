@@ -75,12 +75,12 @@ export default function PriceCategoryShowcase() {
     <motion.section 
       ref={ref}
       variants={{
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 75 },
         visible: { opacity: 1, y: 0 },
       }}
       initial="hidden"
       animate={mainControls}
-      transition={{ duration: 0.8, delay: 0.3 }}
+      transition={{ duration: 1, delay: 0.4 }}
       className="py-12" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
         <Carousel

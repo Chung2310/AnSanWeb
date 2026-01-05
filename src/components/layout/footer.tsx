@@ -29,12 +29,12 @@ export default function Footer() {
     <motion.footer 
       ref={ref}
       variants={{
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 75 },
         visible: { opacity: 1, y: 0 },
       }}
       initial="hidden"
       animate={mainControls}
-      transition={{ duration: 0.8, delay: 0.2 }}
+      transition={{ duration: 1, delay: 0.3 }}
       className="bg-[#f7f7f7] text-black">
       <div className="container mx-auto max-w-screen-xl px-4 py-12 text-center">
         <div className="flex justify-center">

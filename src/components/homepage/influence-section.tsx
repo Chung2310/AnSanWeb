@@ -57,13 +57,13 @@ export default function InfluenceSection() {
         hidden: { opacity: 0 },
         visible: { 
             opacity: 1, 
-            transition: { staggerChildren: 0.3, delayChildren: 0.4 } 
+            transition: { staggerChildren: 0.5, delayChildren: 0.5 } 
         },
     };
 
     const itemVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        hidden: { opacity: 0, y: 75 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
     };
 
 
