@@ -297,6 +297,35 @@ export const sampleWines: Wine[] = [
         palate: 'Mềm mại và tròn vị với hương vani, quả óc chó và gia vị ngọt ngào.',
         finish: 'Dài và thanh lịch với dư vị của gỗ sồi và trái cây khô.',
         color: 'Màu hổ phách.',
+    },
+    productDetails: {
+      title: "Foursquare 17 Năm 2005 Barrel Soho Selection: Tuyệt Tác Rum Barbados Dành Cho Người Sành Điệu",
+      paragraphs: [
+        "Trong thế giới rum cao cấp, Foursquare từ Barbados luôn là một cái tên được nhắc đến với sự ngưỡng mộ và tôn trọng. Khi một phiên bản đặc biệt như Foursquare 17 Year Old 2005 Barrel Soho Selection xuất hiện, đó không chỉ là một chai rum, mà là một tuyên ngôn về chất lượng, truyền thống và nghệ thuật trưởng thành. Với 17 năm ủ trong thùng gỗ sồi và được lựa chọn riêng cho “Barrel Soho Selection”, chai rum này chắc chắn mang đến một hành trình hương vị khó quên.",
+        "Foursquare Rum Distillery, tọa lạc trên hòn đảo Barbados, là một nhà máy chưng cất thuộc sở hữu gia đình, hiện được điều hành bởi Richard Seale – một trong những nhân vật có ảnh hưởng và được kính trọng nhất trong ngành công nghiệp rum toàn cầu. Foursquare nổi tiếng với cam kết tuyệt đối về sự thuần khiết và chất lượng: không thêm đường, không hương liệu, không màu nhân tạo.",
+        "Họ sử dụng cả nồi chưng cất pot still truyền thống và cột chưng cất column still hiện đại, sau đó phối trộn (blend) rượu từ cả hai loại để tạo ra những dòng rum “single blended” có sự cân bằng hoàn hảo giữa hương vị đậm đà, phức hợp từ pot still và sự tinh tế, nhẹ nhàng từ column still. Triết lý này, kết hợp với việc kiểm soát chặt chẽ quá trình lên men và trưởng thành, đã giúp Foursquare tạo ra những chai rum liên tục được giới chuyên môn và người tiêu dùng đánh giá cao nhất.",
+        "17 năm trưởng thành hoàn toàn tại vùng khí hậu nhiệt đới của Barbados là một yếu tố cực kỳ quan trọng. Nhiệt độ cao và độ ẩm lớn đẩy nhanh quá trình tương tác giữa rượu và gỗ sồi, đồng thời cũng làm tăng tỷ lệ rượu bay hơi (angel’s share) hàng năm. Kết quả là rượu phát triển hương vị đậm đà, phức hợp và cô đọng hơn nhiều so với việc ủ cùng thời gian ở khí hậu ôn đới.",
+        "Phong cách đặc trưng của Foursquare là sự pha trộn giữa rượu pot still và column still, tạo nên một cấu trúc cân bằng, vừa mạnh mẽ vừa tinh tế. Sau 17 năm, những đặc tính này càng trở nên hài hòa và sâu sắc.",
+        "Thùng gỗ sồi Mỹ từng ủ bourbon (Ex-Bourbon Casks) là lựa chọn phổ biến và được yêu thích tại Foursquare. Qua 17 năm, những thùng này truyền cho rượu các nốt hương vani, καραμέλα, dừa, mật ong, cùng với các loại gia vị ngọt ngào như quế, nhục đậu khấu và một chút hương gỗ sồi nướng. Chúng giúp làm nổi bật vị ngọt tự nhiên của mật mía và sự phức hợp của quá trình lên men mà không lấn át đi đặc trưng của rượu.",
+        "Sự tuyển chọn “Barrel Soho Selection” thường ngụ ý rằng đây là một thùng rượu đơn (single cask) hoặc một lô rất nhỏ được lựa chọn cẩn thận vì chất lượng vượt trội và hương vị độc đáo, mang đến một trải nghiệm riêng biệt so với các dòng sản phẩm phổ thông."
+      ],
+      details: [
+        { label: "Tên Gọi", value: "Foursquare 17 Year Old 2005 Barrel Soho Selection" },
+        { label: "Nhà Sản Xuất/Chưng Cất", value: "Foursquare Rum Distillery" },
+        { label: "Quốc Gia", value: "Barbados" },
+        { label: "Năm Chưng Cất", value: "2005" },
+        { label: "Năm Đóng Chai", value: "2022" },
+        { label: "Tuổi Rượu", value: "17 năm tuổi" },
+        { label: "Loại Thùng Ủ", value: "Ex-Bourbon Casks" },
+        { label: "Nồng Độ Cồn", value: "61%" },
+        { label: "Dung Tích", value: "700 ml" }
+      ],
+      tastingNote: {
+        nose: "Một sự bùng nổ hương thơm phức hợp và quyến rũ. Mở đầu là các nốt hương đậm đà của trái cây sấy khô như chà là, nho khô, mận, quyện với hương καραμέλα đậm, vani Madagascar, mật đường và một chút hương gỗ sồi cháy. Theo sau là các lớp hương của sô cô la đen, cà phê rang, vỏ cam nướng, và các loại gia vị ấm như quế, đinh hương, nhục đậu khấu.",
+        palate: "Đầy đặn, mạnh mẽ nhưng vẫn vô cùng mượt mà và cân bằng trên vòm miệng, đúng với phong cách Foursquare. Vị ngọt tự nhiên của mật mía, trái cây chín (chuối, dứa nướng), và vani được nâng đỡ bởi cấu trúc gỗ sồi vững chắc và vị cay ấm của gia vị. Các nốt hương của bánh hạnh nhân, καρύδα rang, da thuộc và một chút καπνός từ thùng gỗ sồi cháy có thể xuất hiện, tạo nên sự đa chiều.",
+        finish: "Kéo dài vô tận, ấm áp và phức tạp. Dư vị của gỗ sồi cay, sô cô la đen, trái cây sấy và một chút vị ngọt đắng của mật đường còn lưu luyến. Một kết thúc mạnh mẽ, thỏa mãn và vô cùng đáng nhớ."
+      },
+      conclusion: "Foursquare 17 Year Old 2005 Barrel Soho Selection là một viên ngọc quý trong thế giới rum, một minh chứng cho nghệ thuật làm rum đỉnh cao của nhà Foursquare và gu thẩm định tinh tế của những người thực hiện “Barrel Soho Selection”. Với tuổi đời ấn tượng, quá trình trưởng thành hoàn toàn tại Barbados, sự thuần khiết không pha tạp và sức mạnh của một phiên bản cask strength, chai rum này mang đến một trải nghiệm mãnh liệt và sâu sắc. Tính đến ngày 14 tháng 5 năm 2025, đây chắc chắn là một chai rượu được săn đón bởi những người sưu tầm và những tín đồ rum thực thụ, những người tìm kiếm sự phức hợp, chân thật và đẳng cấp trong từng giọt rượu."
     }
   },
   {

@@ -11,6 +11,18 @@ export type TastingNotes = {
   color: string;
 };
 
+export type ProductDetails = {
+  title: string;
+  paragraphs: string[];
+  details: { label: string; value: string }[];
+  tastingNote: {
+    nose: string;
+    palate: string;
+    finish: string;
+  };
+  conclusion: string;
+};
+
 export type Wine = {
   id: string;
   nameVN: string;
@@ -23,6 +35,7 @@ export type Wine = {
   description: string;
   image: ImagePlaceholder;
   tastingNotes?: TastingNotes;
+  productDetails?: ProductDetails;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];

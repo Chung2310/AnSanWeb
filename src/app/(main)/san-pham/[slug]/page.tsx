@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import ProductInfoSection from "@/components/product-info-section";
+import ProductDetailDescription from "@/components/product-detail-description";
 
 const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -112,6 +113,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         </div>
       
       {wine.tastingNotes && <ProductInfoSection notes={wine.tastingNotes} />}
+
+      {wine.productDetails && <ProductDetailDescription details={wine.productDetails} />}
       
       {relatedWines.length > 0 && (
         <div className="bg-white">
