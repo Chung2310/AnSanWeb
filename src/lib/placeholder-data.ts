@@ -477,15 +477,17 @@ export const sampleCategories: Category[] = [
 export const sampleBlogPosts: BlogPost[] = [
   {
     id: '1',
+    author: 'AnSan',
     title: 'NHÀ CHƯNG CẤT WHISKY LỚN NHẤT THẾ GIỚI',
     slug: 'nha-chung-cat-whisky-lon-nhat-the-gioi',
     excerpt: 'Khám phá những gã khổng lồ đứng sau những chai whisky trứ danh, tìm hiểu về quy mô và sản lượng đáng kinh ngạc của họ.',
     date: '2024-02-14',
     image: getImage('blog-distillery'),
-    categories: ['DISTILLERIES'],
+    categories: ['DISTILLERIES', 'NEWS'],
   },
   {
     id: '2',
+    author: 'AnSan',
     title: '5 ĐIỀU BẠN KHÔNG BIẾT VỀ SMWS',
     slug: '5-dieu-ban-khong-biet-ve-smws',
     excerpt: 'The Scotch Malt Whisky Society không chỉ là một hiệp hội, đó là một thế giới riêng. Cùng khám phá 5 bí mật thú vị về tổ chức này.',
@@ -495,6 +497,7 @@ export const sampleBlogPosts: BlogPost[] = [
   },
   {
     id: '3',
+    author: 'AnSan',
     title: '8 ĐIỀU BẠN CHƯA BIẾT VỀ NHÀ CHƯNG CẤT GLENTURRET',
     slug: '8-dieu-ban-chua-biet-ve-glenturret',
     excerpt: 'Đi sâu vào lịch sử và những câu chuyện ít người biết về Glenturret, một trong những nhà chưng cất lâu đời nhất Scotland.',
@@ -504,6 +507,7 @@ export const sampleBlogPosts: BlogPost[] = [
   },
   {
     id: '4',
+    author: 'AnSan',
     title: 'ĐÁNH GIÁ CHI TIẾT: THE MACALLAN 18 SHERRY OAK',
     slug: 'review-macallan-18-sherry-oak',
     excerpt: 'Một trong những chai single malt được yêu thích nhất. Liệu The Macallan 18 có xứng đáng với danh tiếng của mình? Cùng AnSan tìm hiểu.',
@@ -513,6 +517,7 @@ export const sampleBlogPosts: BlogPost[] = [
   },
   {
     id: '5',
+    author: 'AnSan',
     title: 'SPIRITS LÀ GÌ? PHÂN BIỆT CÁC LOẠI RƯỢU MẠNH CƠ BẢN',
     slug: 'what-is-spirits',
     excerpt: 'Từ Gin, Vodka đến Rum và Tequila, bài viết này sẽ giúp bạn phân biệt và hiểu rõ hơn về thế giới đa dạng của rượu mạnh (spirits).',
@@ -522,6 +527,7 @@ export const sampleBlogPosts: BlogPost[] = [
   },
   {
     id: '6',
+    author: 'AnSan',
     title: 'KHÁM PHÁ HƯƠNG VỊ WHISKY: CÁC BƯỚC NẾM THỬ CHO NGƯỜI MỚI',
     slug: 'whisky-tasting-guide-for-beginners',
     excerpt: 'Học cách nếm thử whisky như một chuyên gia. Hướng dẫn chi tiết từ màu sắc, hương thơm đến hậu vị để bạn có trải nghiệm trọn vẹn nhất.',
@@ -531,12 +537,33 @@ export const sampleBlogPosts: BlogPost[] = [
   },
   {
     id: '7',
+    author: 'AnSan',
     title: 'SO SÁNH WHISKY: ARDBEG 10 VS LAGAVULIN 16',
     slug: 'review-ardbeg-10-vs-lagavulin-16',
     excerpt: 'Hai gã khổng lồ của vùng Islay, Scotland. Cuộc đối đầu kinh điển giữa hai phong cách khói than bùn khác biệt. Ai sẽ là người chiến thắng?',
     date: '2024-06-01',
     image: getImage('wine-6'),
     categories: ['WHISKY REVIEW'],
+  },
+   {
+    id: '8',
+    author: 'AnSan',
+    title: 'THÁI LAN TẠO DẤU MỐC LỊCH SỬ VỚI WHISKY SINGLE MALT ĐẦU TIÊN',
+    slug: 'thai-lan-tao-dau-moc-lich-su-voi-whisky-single-malt-dau-tien',
+    excerpt: 'PRAKAAN, whisky single malt đầu tiên của Thái Lan, đã chính thức ra mắt toàn cầu, đánh dấu một bước tiến lớn cho ngành công nghiệp rượu mạnh của đất nước này.',
+    date: '2025-06-25',
+    image: getImage('hero-lakes'),
+    categories: ['NEWS'],
+  },
+  {
+    id: '9',
+    author: 'AnSan',
+    title: 'LAPHROAIG RA MẮT ARCHIVE COLLECTION 38 NĂM TUỔI',
+    slug: 'laphroaig-ra-mat-archive-collection-38-nam-tuoi',
+    excerpt: 'Laphroaig vừa công bố phiên bản thứ hai trong dòng Archive Collection – một chai single malt 38 năm tuổi, chưng cất vào năm 1985.',
+    date: '2025-06-25',
+    image: getImage('hero-macallan'),
+    categories: ['NEWS'],
   },
 ];
 
