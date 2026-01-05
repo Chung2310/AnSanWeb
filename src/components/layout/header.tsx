@@ -71,16 +71,23 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const isActive = pathname.startsWith(href);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const linkClasses = cn(
+    'transition-colors text-sm font-medium uppercase',
+    isActive ? 'text-foreground' : '',
+    className
+  );
+
   if (sublinks) {
     if (!mounted) {
       // Render a placeholder or null on the server and initial client render
       return (
-        <div className={cn("flex items-center gap-1 text-sm font-medium uppercase p-0 h-auto", className)}>
+        <div className={cn("flex items-center gap-1 p-0 h-auto", linkClasses)}>
           {label}
           <ChevronDown className="h-4 w-4" />
         </div>
@@ -92,9 +99,9 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
           <div 
             onMouseEnter={() => setOpen(true)} 
             onMouseLeave={() => setOpen(false)}
-            className={cn("flex items-center gap-1 text-sm font-medium uppercase p-0 h-auto cursor-pointer", className)}
+            className={cn("flex items-center gap-1 p-0 h-auto cursor-pointer", linkClasses)}
           >
-            <Link href={href}>{label}</Link>
+            <span>{label}</span>
             <ChevronDown className="h-4 w-4" />
           </div>
         </DropdownMenuTrigger>
@@ -115,11 +122,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
   return (
     <Link
       href={href}
-      className={cn(
-        'transition-colors text-sm font-medium uppercase',
-        pathname === href ? 'text-foreground' : '',
-        className
-      )}
+      className={linkClasses}
     >
       {label}
     </Link>
