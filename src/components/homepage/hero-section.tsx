@@ -95,7 +95,8 @@ export default function HeroSection() {
         };
 
         api.on("select", onSelect);
-        onSelect();
+        // Initial call
+        onSelect(); 
 
         return () => {
             api.off("select", onSelect);
@@ -163,9 +164,9 @@ export default function HeroSection() {
                                 </motion.div>
                             </AnimatePresence>
                         </div>
-
+                        
                         {/* Right Column: Carousel */}
-                         <div className="w-full min-h-[600px]">
+                        <div className="w-full min-h-[600px] relative">
                             <Carousel 
                                 setApi={setApi} 
                                 className="w-full h-full"
@@ -177,7 +178,7 @@ export default function HeroSection() {
                                         const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                                         if (!image) return null;
                                         return (
-                                            <CarouselItem key={slide.imageId} className="relative h-full">
+                                            <CarouselItem key={index} className="relative h-full">
                                                 <Image
                                                     src={image.imageUrl}
                                                     alt={image.description}
