@@ -80,7 +80,7 @@ export default function PriceCategoryShowcase() {
 
               return (
                 <CarouselItem key={index} className="pl-4 md:basis-1/2">
-                  <div className="relative h-[450px] flex items-center justify-center p-8 overflow-hidden" style={{backgroundColor: category.bgColor}}>
+                  <div className="relative h-[450px] flex items-start justify-start p-8 overflow-hidden" style={{backgroundColor: category.bgColor}}>
                      <div className="absolute inset-0 z-0">
                          <Image 
                             src={image.imageUrl}
@@ -90,7 +90,7 @@ export default function PriceCategoryShowcase() {
                             data-ai-hint={image.imageHint}
                          />
                      </div>
-                    <div className="relative z-10 text-center text-white">
+                    <div className="relative z-10 text-left text-white">
                       <h3 className="font-headline text-4xl font-black uppercase">
                         {category.title}
                       </h3>
