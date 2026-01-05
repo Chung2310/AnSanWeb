@@ -18,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['"Roboto"', 'sans-serif'],
-        headline: ['"Roboto"', 'sans-serif'],
+        headline: ['"DangTau"', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

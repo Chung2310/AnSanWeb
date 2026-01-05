@@ -23,6 +23,20 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              @font-face {
+                font-family: 'DangTau';
+                src: url('/fonts/DangTau.woff2') format('woff2'),
+                     url('/fonts/DangTau.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+              }
+            `,
+          }}
+        />
       </head>
       <body
         className={cn(
