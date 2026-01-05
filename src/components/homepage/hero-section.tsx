@@ -112,23 +112,23 @@ export default function HeroSection() {
                         if (!image) return null;
                         return (
                             <CarouselItem key={index} className="relative h-full p-0">
-                                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                                    {/* Left Column: Text */}
-                                    <div className={cn(
-                                        "flex flex-col justify-center items-center text-center p-8",
-                                        slide.bgColor
-                                    )}>
-                                        <AnimatePresence mode="wait">
-                                        {current === index && (
-                                            <motion.div
-                                                key={current}
-                                                variants={textVariants}
-                                                initial="initial"
-                                                animate="animate"
-                                                exit="exit"
-                                                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                                className="max-w-md"
-                                            >
+                                <AnimatePresence mode="wait">
+                                {current === index && (
+                                    <motion.div
+                                        key={current}
+                                        variants={textVariants}
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                        className="grid grid-cols-1 md:grid-cols-2 h-full"
+                                    >
+                                        {/* Left Column: Text */}
+                                        <div className={cn(
+                                            "flex flex-col justify-center items-center text-center p-8",
+                                            slide.bgColor
+                                        )}>
+                                            <div className="max-w-md">
                                                 <p className="font-semibold tracking-widest uppercase text-sm text-accent font-headline">
                                                     {slide.tag}
                                                 </p>
@@ -141,23 +141,23 @@ export default function HeroSection() {
                                                 <Button asChild variant="outline" className="mt-8 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-none px-10 py-6 transition-all hover:scale-105">
                                                     <Link href={slide.href} target="_blank" rel="noopener noreferrer">XEM NGAY</Link>
                                                 </Button>
-                                            </motion.div>
-                                        )}
-                                        </AnimatePresence>
-                                    </div>
-                                    {/* Right Column: Image */}
-                                    <div className="relative h-full hidden md:block">
-                                        <Image
-                                            src={image.imageUrl}
-                                            alt={image.description}
-                                            fill
-                                            className="object-cover"
-                                            sizes="50vw"
-                                            priority={index === 0}
-                                            data-ai-hint={image.imageHint}
-                                        />
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
+                                        {/* Right Column: Image */}
+                                        <div className="relative h-full hidden md:block">
+                                            <Image
+                                                src={image.imageUrl}
+                                                alt={image.description}
+                                                fill
+                                                className="object-cover"
+                                                sizes="50vw"
+                                                priority={index === 0}
+                                                data-ai-hint={image.imageHint}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                )}
+                                </AnimatePresence>
                                 <div className="absolute inset-0 md:hidden">
                                      <Image
                                         src={image.imageUrl}
