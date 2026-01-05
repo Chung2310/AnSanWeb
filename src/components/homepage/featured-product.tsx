@@ -38,7 +38,6 @@ export default function FeaturedProduct() {
         data-ai-hint={featuredImage.imageHint}
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
       
       <div className="container mx-auto max-w-screen-xl relative z-10">
         <motion.div
