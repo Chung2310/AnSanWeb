@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { DollarSign, Package, Users, Mail } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminDashboard() {
   return (
@@ -16,16 +17,18 @@ export default function AdminDashboard() {
             <p className="text-xs text-muted-foreground">+20.1% so với tháng trước</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sản phẩm</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">6</div>
-            <p className="text-xs text-muted-foreground">Tổng số sản phẩm trong kho</p>
-          </CardContent>
-        </Card>
+        <Link href="/admin/products">
+            <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Sản phẩm</CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">34</div>
+                <p className="text-xs text-muted-foreground">Tổng số sản phẩm trong kho</p>
+            </CardContent>
+            </Card>
+        </Link>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Người dùng đăng ký</CardTitle>
@@ -36,16 +39,18 @@ export default function AdminDashboard() {
             <p className="text-xs text-muted-foreground">+15% so với tháng trước</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tin nhắn liên hệ</CardTitle>
-            <Mail className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+5</div>
-            <p className="text-xs text-muted-foreground">Các tin nhắn chưa đọc</p>
-          </CardContent>
-        </Card>
+        <Link href="/admin/contacts">
+            <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Tin nhắn liên hệ</CardTitle>
+                <Mail className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">+5</div>
+                <p className="text-xs text-muted-foreground">Các tin nhắn chưa đọc</p>
+            </CardContent>
+            </Card>
+        </Link>
       </div>
 
       <div className="mt-8">
