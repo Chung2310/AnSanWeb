@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import ProductCategoryNav from "@/components/layout/product-category-nav";
 import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const filtersData = {
     "THƯƠNG HIỆU": [
@@ -212,28 +212,26 @@ export default function ProductListing({ initialProducts, title }: ProductListin
             </div>
 
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-4 mt-12">
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="h-8 w-8"
-                    >
-                        <ChevronLeft className="h-5 w-5" />
-                    </Button>
-                    <span className="text-sm">
-                        Trang {currentPage} của {totalPages}
-                    </span>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
+                <div className="flex justify-center items-center gap-6 mt-12 text-lg" style={{color: '#8a7d6a'}}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
+                        <button
+                            key={pageNumber}
+                            onClick={() => handlePageChange(pageNumber)}
+                            className={cn(
+                                "font-headline font-bold transition-colors hover:text-black",
+                                currentPage === pageNumber ? "text-black underline underline-offset-4" : ""
+                            )}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                    <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="h-8 w-8"
+                        className="transition-colors hover:text-black disabled:text-gray-400 disabled:cursor-not-allowed"
                     >
-                        <ChevronRight className="h-5 w-5" />
-                    </Button>
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
                 </div>
             )}
           </div>
