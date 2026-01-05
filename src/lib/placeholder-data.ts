@@ -520,6 +520,24 @@ export const sampleWines: Wine[] = [
     isNew: true,
     isFeatured: true,
     createdAt: '2024-07-30',
+  },
+  {
+    id: '24',
+    nameVN: 'Chateau La Grace Dieu 2005',
+    nameEN: 'Chateau La Grace Dieu 2005',
+    slug: 'chateau-la-grace-dieu-2005',
+    price: 4200000,
+    origin: 'Pháp – Saint-Émilion',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ Pháp từ vùng Saint-Émilion danh tiếng, niên vụ 2005, hứa hẹn một trải nghiệm hương vị phức hợp và tinh tế.',
+    image: getImage('chateau-la-grace-dieu-2005'),
+    tags: ['wine', 'old-rare'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    isFeatured: true,
+    createdAt: '2024-07-31',
   }
 ];
 
