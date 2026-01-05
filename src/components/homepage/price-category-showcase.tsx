@@ -17,24 +17,24 @@ interface PriceCategory {
 
 const priceCategories: PriceCategory[] = [
   {
-    imageId: 'price-category-20',
+    imageId: 'price-category-50',
     title: 'WHISKY DƯỚI 50 TRIỆU',
+    href: '/danh-muc/duoi-50-trieu',
+  },
+  {
+    imageId: 'price-category-20',
+    title: 'WHISKY DƯỚI 20 TRIỆU',
     href: '/danh-muc/duoi-20-trieu',
   },
   {
     imageId: 'price-category-10',
-    title: 'WHISKY DƯỚI 20 TRIỆU',
+    title: 'WHISKY DƯỚI 10 TRIỆU',
     href: '/danh-muc/duoi-10-trieu',
   },
   {
     imageId: 'price-category-5',
-    title: 'WHISKY DƯỚI 10 TRIỆU',
-    href: '/danh-muc/duoi-5-trieu',
-  },
-  {
-    imageId: 'price-category-under-5',
     title: 'WHISKY DƯỚI 5 TRIỆU',
-    href: '/danh-muc/duoi-4-trieu',
+    href: '/danh-muc/duoi-5-trieu',
   }
 ];
 

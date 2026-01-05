@@ -97,25 +97,25 @@
       "imageHint": "macallan whisky"
     },
     {
-      "id": "price-category-20",
-      "description": "Whisky bottle and box for under 20 million category",
+      "id": "price-category-50",
+      "description": "Whisky bottle and box for under 50 million category",
       "imageUrl": "/images/whisky/whisky_duoi_20_banner_1.webp",
       "imageHint": "hibiki whisky"
     },
     {
-      "id": "price-category-10",
-      "description": "Whisky bottle on a pedestal for under 10 million category",
+      "id": "price-category-20",
+      "description": "Whisky bottle on a pedestal for under 20 million category",
       "imageUrl": "/images/whisky/whisky_duoi_10_banner_1.webp",
       "imageHint": "whisky bottle"
     },
     {
-      "id": "price-category-5",
-      "description": "A different whisky bottle for under 5 million category",
+      "id": "price-category-10",
+      "description": "A different whisky bottle for under 10 million category",
       "imageUrl": "/images/whisky/whisky_duoi_6_banner_1.webp",
       "imageHint": "premium whisky"
     },
     {
-      "id": "price-category-under-5",
+      "id": "price-category-5",
       "description": "A whisky bottle for a lower price category",
       "imageUrl": "/images/whisky/whisky_duoi_4_banner-1.webp",
       "imageHint": "affordable whisky"
@@ -147,31 +147,31 @@
     {
       "id": "wine-2",
       "description": "Bottle of crisp white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "white wine"
     },
     {
       "id": "wine-3",
       "description": "Bottle of elegant rosé wine",
-      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose wine"
     },
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
       "id": "wine-5",
       "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "dessert wine"
     },
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -183,19 +183,19 @@
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
       "id": "category-sparkling",
       "description": "Champagne flutes being filled",
-      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "champagne flutes"
     },
     {
@@ -207,19 +207,19 @@
     {
       "id": "brand-story",
       "description": "Interior of an old wine cellar",
-      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "wine cellar"
     },
     {
       "id": "blog-1",
       "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "wine tasting"
     },
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
@@ -245,6 +245,24 @@
       "description": "Smiling person",
       "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "person smiling"
+    },
+    {
+      "id": "gift-set-tasting-product",
+      "description": "The Lakes Whiskymaker's Editions tasting set product shot.",
+      "imageUrl": "/images/products/tasting-set.jpg",
+      "imageHint": "whisky tasting"
+    },
+    {
+      "id": "gift-set-lakes-tet-product",
+      "description": "The Lakes Single Malt whisky gift set product shot.",
+      "imageUrl": "/images/products/gift-set.jpg",
+      "imageHint": "whisky gift"
+    },
+    {
+      "id": "engraving-product",
+      "description": "Bottle of Hennessy V.S.O.P. that can be engraved.",
+      "imageUrl": "/images/products/engraving.jpg",
+      "imageHint": "hennessy bottle"
     }
   ]
 }

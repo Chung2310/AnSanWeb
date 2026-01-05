@@ -7,12 +7,13 @@ export type Wine = {
   slug: string;
   price: number;
   origin: string;
-  type: 'Vang Đỏ' | 'Vang Trắng' | 'Vang Hồng' | 'Vang Sủi' | 'Vang Tráng Miệng';
+  type: 'Vang Đỏ' | 'Vang Trắng' | 'Vang Hồng' | 'Vang Sủi' | 'Vang Tráng Miệng' | 'Whisky' | 'Gift Set' | 'Tasting Set';
   alcohol: number;
   description: string;
   image: ImagePlaceholder;
   isFeatured?: boolean;
   isNew?: boolean;
+  tags?: string[];
 };
 
 export type Category = {
