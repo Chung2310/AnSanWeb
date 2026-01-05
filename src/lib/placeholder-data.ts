@@ -475,17 +475,29 @@ export const sampleWines: Wine[] = [
     type: 'Vang Sủi',
     alcohol: 12,
     description: 'Một loại vang sủi phổ biến từ Belarus, hoàn hảo cho những dịp ăn mừng và tụ họp.',
-    image: {
-      id: 'minskoye-shampanskoye',
-      description: 'Bottle of Minskoye Shampanskoye',
-      imageUrl: '/product/Minskoye Shampanskoye1.png',
-      imageHint: 'sparkling wine'
-    },
+    image: getImage('minskoye-shampanskoye'),
     tags: ['wine', 'sparkling'],
     tastingNotes: genericTastingNotes,
     productDetails: genericProductDetails,
     isNew: true,
   },
+  {
+    id: '23',
+    nameVN: 'Vang nổ Nga Zolotoe (Best seller)',
+    nameEN: 'Zolotoe Russian Sparkling Wine (Best seller)',
+    slug: 'vang-no-nga-zolotoe',
+    price: 280000,
+    origin: 'Hungary',
+    type: 'Vang Sủi',
+    alcohol: 12,
+    description: 'Vang nổ Zolotoe, một sản phẩm bán chạy nhất, sản xuất tại Hungary theo phong cách Nga, mang đến hương vị tươi mát và sảng khoái.',
+    image: getImage('zolotoe-wine'),
+    tags: ['wine', 'sparkling', 'bestseller'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    isFeatured: true,
+  }
 ];
 
 export const sampleCategories: Category[] = [
@@ -612,4 +624,3 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
-
