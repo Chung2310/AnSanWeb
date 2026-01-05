@@ -30,7 +30,7 @@ export default function HeroSection() {
         };
 
         api.on("select", onSelect);
-        onSelect(); // Set initial value
+        onSelect();
 
         return () => {
             api.off("select", onSelect);
@@ -44,7 +44,7 @@ export default function HeroSection() {
     return (
         <div className="w-full bg-primary text-primary-foreground font-body">
              <div className="container mx-auto max-w-screen-2xl">
-                <div className="flex flex-col min-h-[700px] justify-between py-12">
+                <div className="flex min-h-[700px] flex-col justify-between py-12">
                     {/* Main content: 2 columns */}
                     <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                         {/* Left Column: Text */}
@@ -66,7 +66,7 @@ export default function HeroSection() {
                         </div>
 
                         {/* Right Column: Carousel */}
-                        <div className="w-full h-full min-h-[450px]">
+                        <div className="w-full h-full">
                             <Carousel 
                                 setApi={setApi} 
                                 className="w-full h-full"
@@ -74,21 +74,19 @@ export default function HeroSection() {
                                 opts={{ loop: true }}
                             >
                                 <CarouselContent className="h-full">
-                                    {heroSlides.map((slide) => {
+                                    {heroSlides.map((slide, index) => {
                                         const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                                         if (!image) return null;
                                         return (
-                                            <CarouselItem key={slide.imageId} className="h-full">
-                                                <div className="relative w-full h-full">
-                                                    <Image
-                                                        src={image.imageUrl}
-                                                        alt={image.description}
-                                                        fill
-                                                        className="object-cover rounded-lg"
-                                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                                        priority
-                                                    />
-                                                </div>
+                                            <CarouselItem key={slide.imageId} className="relative h-full">
+                                                <Image
+                                                    src={image.imageUrl}
+                                                    alt={image.description}
+                                                    fill
+                                                    className="object-cover rounded-lg"
+                                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                                    priority={index === 0}
+                                                />
                                             </CarouselItem>
                                         );
                                     })}
