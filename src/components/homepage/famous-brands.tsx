@@ -61,12 +61,12 @@ export default function FamousBrands() {
     <motion.section 
         ref={ref}
         variants={{
-            hidden: { opacity: 0, y: 50 },
+            hidden: { opacity: 0, y: 75 },
             visible: { opacity: 1, y: 0 },
         }}
         initial="hidden"
         animate={mainControls}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 1, delay: 0.3 }}
         className="py-16 bg-white">
       <div className="container">
         <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#3a3a3a'}}>
