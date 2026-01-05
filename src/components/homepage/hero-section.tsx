@@ -46,7 +46,7 @@ export default function HeroSection() {
              <div className="container mx-auto max-w-screen-2xl">
                 <div className="flex flex-col min-h-[700px] justify-between py-12">
                     {/* Main content: 2 columns */}
-                    <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                         {/* Left Column: Text */}
                         <div className="flex flex-col justify-center text-center md:text-left">
                             <div className="max-w-md mx-auto md:mx-0">
@@ -66,7 +66,7 @@ export default function HeroSection() {
                         </div>
 
                         {/* Right Column: Carousel */}
-                        <div className="w-full h-full">
+                        <div className="w-full h-full min-h-[450px]">
                             <Carousel 
                                 setApi={setApi} 
                                 className="w-full h-full"
