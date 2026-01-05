@@ -97,6 +97,24 @@
       "imageHint": "macallan whisky"
     },
     {
+      "id": "price-category-50",
+      "description": "Hibiki 21 whisky bottle and box",
+      "imageUrl": "/images/whisky/dt_cate_1.webp",
+      "imageHint": "hibiki whisky"
+    },
+    {
+      "id": "price-category-20",
+      "description": "Whisky bottle on a pedestal",
+      "imageUrl": "/images/whisky/dt_cate_2.webp",
+      "imageHint": "whisky bottle"
+    },
+    {
+      "id": "price-category-10",
+      "description": "A different whisky bottle",
+      "imageUrl": "/images/whisky/dt_cate_3.webp",
+      "imageHint": "premium whisky"
+    },
+    {
       "id": "wine-1",
       "description": "Bottle of premium red wine",
       "imageUrl": "https://images.unsplash.com/photo-1621644894301-cd6b2eaca610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZWQlMjB3aW5lfGVufDB8fHx8MTc2NzQ2MTQyNnww&ixlib=rb-4.1.0&q=80&w=1080",

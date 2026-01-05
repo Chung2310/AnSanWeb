@@ -4,6 +4,7 @@ import FamousBrands from '@/components/homepage/famous-brands';
 import FeaturedProduct from '@/components/homepage/featured-product';
 import HeroSection from '@/components/homepage/hero-section';
 import InfluenceSection from '@/components/homepage/influence-section';
+import PriceCategoryShowcase from '@/components/homepage/price-category-showcase';
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <FamousBrands />
       <InfluenceSection />
       <FeaturedProduct />
+      <PriceCategoryShowcase />
     </>
   );
 }
