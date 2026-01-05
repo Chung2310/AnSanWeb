@@ -1,7 +1,6 @@
 import { sampleWines } from "@/lib/placeholder-data";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import ProductSection from "@/components/homepage/product-section";
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -31,8 +30,6 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   if (!wine) {
     notFound();
   }
-  
-  const relatedWines = sampleWines.filter(w => w.type === wine.type && w.id !== wine.id).slice(0, 4);
 
   return (
     <div className="bg-white text-black">
@@ -116,15 +113,6 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
       {wine.productDetails && <ProductDetailDescription details={wine.productDetails} />}
       
-      {relatedWines.length > 0 && (
-        <div className="bg-white">
-            <ProductSection
-                title="Sản Phẩm Tương Tự"
-                description="Những chai vang khác cùng loại có thể bạn sẽ thích."
-                wines={relatedWines}
-            />
-        </div>
-      )}
     </div>
   );
 }
