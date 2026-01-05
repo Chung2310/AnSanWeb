@@ -1,3 +1,130 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "Lush vineyard at sunset",
+      "imageUrl": "https://images.unsplash.com/photo-1761489179799-c8ecad6ec719?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3aW5lJTIwdmluZXlhcmR8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine vineyard"
+    },
+    {
+      "id": "hero-2",
+      "description": "Elegant arrangement of wine bottles",
+      "imageUrl": "https://images.unsplash.com/photo-1556442281-77c90134c61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3aW5lJTIwYm90dGxlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine bottles"
+    },
+    {
+      "id": "hero-3",
+      "description": "Friends toasting with glasses of red wine",
+      "imageUrl": "https://images.unsplash.com/photo-1602025433815-fbf568355dee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3aW5lJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine glasses"
+    },
+    {
+      "id": "wine-1",
+      "description": "Bottle of premium red wine",
+      "imageUrl": "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyZWQlMjB3aW5lfGVufDB8fHx8MTc2NzQ2MTQyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red wine"
+    },
+    {
+      "id": "wine-2",
+      "description": "Bottle of crisp white wine",
+      "imageUrl": "https://images.unsplash.com/photo-1579721333016-b58535cc0dc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3aGl0ZSUyMHdpbmV8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "white wine"
+    },
+    {
+      "id": "wine-3",
+      "description": "Bottle of elegant rosé wine",
+      "imageUrl": "https://images.unsplash.com/photo-1541971897566-308cf7ad0934?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rose wine"
+    },
+    {
+      "id": "wine-4",
+      "description": "Bottle of celebratory sparkling wine",
+      "imageUrl": "https://images.unsplash.com/photo-1623073284793-84dc366d4798?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3BhcmtsaW5nJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sparkling wine"
+    },
+    {
+      "id": "wine-5",
+      "description": "Bottle of rich dessert wine",
+      "imageUrl": "https://images.unsplash.com/photo-1745943585965-b6b1f8b34e8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dessert wine"
+    },
+    {
+      "id": "wine-6",
+      "description": "Bottle of a vintage collection wine",
+      "imageUrl": "https://images.unsplash.com/photo-1655979281323-a72e7b04060a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "vintage wine"
+    },
+    {
+      "id": "category-red",
+      "description": "Grapes for red wine",
+      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red grapes"
+    },
+    {
+      "id": "category-white",
+      "description": "Grapes for white wine",
+      "imageUrl": "https://images.unsplash.com/photo-1519324196372-3d8b3037929f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "white grapes"
+    },
+    {
+      "id": "category-rose",
+      "description": "Glass of rose wine outdoors",
+      "imageUrl": "https://images.unsplash.com/photo-1703016402712-66f78754d16b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rose glass"
+    },
+    {
+      "id": "category-sparkling",
+      "description": "Champagne flutes being filled",
+      "imageUrl": "https://images.unsplash.com/photo-1625062084544-a0f93d639b93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "champagne flutes"
+    },
+    {
+      "id": "category-dessert",
+      "description": "Pouring a sweet dessert wine",
+      "imageUrl": "https://images.unsplash.com/photo-1767114916329-9b5649724379?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzd2VldCUyMHdpbmV8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sweet wine"
+    },
+    {
+      "id": "brand-story",
+      "description": "Interior of an old wine cellar",
+      "imageUrl": "https://images.unsplash.com/photo-1554598286-ed7bfd1dedca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine cellar"
+    },
+    {
+      "id": "blog-1",
+      "description": "People at a wine tasting event",
+      "imageUrl": "https://images.unsplash.com/photo-1598306442837-613a3def54ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2luZSUyMHRhc3Rpbmd8ZW58MHx8fHwxNzY3NDY1NDAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine tasting"
+    },
+    {
+      "id": "blog-2",
+      "description": "Cheese board and wine pairing",
+      "imageUrl": "https://images.unsplash.com/photo-1622122266559-3d4ed61e5cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "food pairing"
+    },
+    {
+      "id": "blog-3",
+      "description": "A winemaker checking barrels",
+      "imageUrl": "https://images.unsplash.com/photo-1600492847790-80d2daa56c40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine making"
+    },
+    {
+      "id": "avatar-1",
+      "description": "Smiling man",
+      "imageUrl": "https://images.unsplash.com/photo-1623184663110-89ba5b565eb6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYW4lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU2NzI4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man smiling"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Smiling woman",
+      "imageUrl": "https://images.unsplash.com/photo-1554727242-741c14fa561c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Person looking happy",
+      "imageUrl": "https://images.unsplash.com/photo-1542353436-312f0e1f67ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBoYXBweXxlbnwwfHx8fDE3Njc0ODc0MjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person happy"
+    }
+  ]
 }
