@@ -85,9 +85,10 @@ export default function HeroSection() {
                                                     <Image
                                                         src={image.imageUrl}
                                                         alt={image.description}
-                                                        fill
+                                                        width={800}
+                                                        height={600}
                                                         priority={index === 0}
-                                                        className="object-cover object-center"
+                                                        className="w-full h-full object-cover object-center"
                                                         data-ai-hint={image.imageHint}
                                                     />
                                                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/30 to-transparent" />
