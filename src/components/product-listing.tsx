@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
-import ProductCategoryNav from "@/components/layout/product-category-nav";
 import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
@@ -196,7 +195,6 @@ export default function ProductListing({ initialProducts, title }: ProductListin
 
   return (
     <div className="bg-white text-black">
-      <ProductCategoryNav />
       <div className="container py-12">
         <div className="text-left mb-4">
           <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
