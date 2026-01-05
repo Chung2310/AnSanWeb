@@ -175,18 +175,18 @@ export default function HeroSection() {
                                         />
                                     </div>
                                 </div>
-                                <div className="absolute inset-0 md:hidden">
-                                        <Image
-                                            src={image.imageUrl}
-                                            alt={image.description}
-                                            fill
-                                            className="object-cover -z-10"
-                                            sizes="100vw"
-                                            priority={index === 0}
-                                            data-ai-hint={image.imageHint}
-                                        />
-                                        <div className="absolute inset-0 bg-black/50 -z-10" />
-                                    </div>
+                                <div className="absolute inset-0 md:hidden -z-10">
+                                    <Image
+                                        src={image.imageUrl}
+                                        alt={image.description}
+                                        fill
+                                        className="object-cover"
+                                        sizes="100vw"
+                                        priority={index === 0}
+                                        data-ai-hint={image.imageHint}
+                                    />
+                                    <div className="absolute inset-0 bg-black/50" />
+                                </div>
                             </motion.div>
                         );
                     })}
