@@ -120,11 +120,11 @@ export default function HeroSection() {
                                 variants={containerVariants}
                             >
                                <div className="max-w-md">
-                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-accent font-headline">
+                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80 font-headline">
                                          {currentSlide.tag}
                                      </motion.p>
                                      <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
-                                         {currentSlide.titleLine1} <span className="text-accent">{currentSlide.titleAccent}</span>
+                                         {currentSlide.titleLine1} <span className="text-white">{currentSlide.titleAccent}</span>
                                      </motion.h1>
                                      <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-sm max-w-xl mx-auto", currentSlide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                          {currentSlide.description}
