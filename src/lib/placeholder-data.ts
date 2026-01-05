@@ -677,6 +677,23 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-08',
+  },
+  {
+    id: '33',
+    nameVN: 'Cuvee Les Naiades Languedoc',
+    nameEN: 'Cuvee Les Naiades Languedoc',
+    slug: 'cuvee-les-naiades-languedoc',
+    price: 500000,
+    origin: 'Languedoc – Pháp',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ từ Languedoc, Pháp, mang đến hương vị trái cây và cấu trúc cân bằng.',
+    image: getImage('cuvee-les-naiades'),
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-09',
   }
 ];
 
@@ -804,6 +821,8 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
+
+    
 
     
 

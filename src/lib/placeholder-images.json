@@ -159,25 +159,25 @@
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
       "id": "wine-5",
       "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dessert wine"
     },
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
       "id": "category-red",
       "description": "Grapes for red wine",
-      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "red grapes"
     },
     {
@@ -189,7 +189,7 @@
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
@@ -237,7 +237,7 @@
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
@@ -255,7 +255,7 @@
     {
       "id": "avatar-2",
       "description": "Smiling woman",
-      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "woman smiling"
     },
     {
@@ -285,7 +285,7 @@
     {
       "id": "quiz-flavor-fruit",
       "description": "Colorful display of various fruits.",
-      "imageUrl": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcnVpdHN8ZW58MHx8fHwxNzY3NjAwMTQ2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcnVpdHN8ZW58MHx8fHwxNzY3NjAwMTQ2fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "fruits"
     },
     {
@@ -351,19 +351,19 @@
     {
       "id": "chateau-la-grace-dieu-2010",
       "description": "Bottle of Chateau La Grace Dieu 2010",
-      "imageUrl": "/product/Chateau La Grace Dieu 2010.png",
+      "imageUrl": "/public/product/Chateau La Grace Dieu 2010.png",
       "imageHint": "red wine"
     },
     {
       "id": "chateau-la-grace-dieu-2015",
       "description": "Bottle of Chateau La Grace Dieu 2015",
-      "imageUrl": "/product/Chateau La Grace Dieu 2015.png",
+      "imageUrl": "/public/product/Chateau La Grace Dieu 2015.png",
       "imageHint": "red wine"
     },
     {
       "id": "chateau-la-grace-dieu-2018",
       "description": "Bottle of Chateau La Grace Dieu 2018",
-      "imageUrl": "/product/Chateau La Grace Dieu 2018.png",
+      "imageUrl": "/public/product/Chateau La Grace Dieu 2018.png",
       "imageHint": "red wine"
     },
     {
@@ -387,7 +387,13 @@
     {
       "id": "cotes-rocheuses",
       "description": "Bottle of Cotes Rocheuses (MS.4)",
-      "imageUrl": "/product/Cotes Rocheuses.png",
+      "imageUrl": "/public/product/Cotes Rocheuses.png",
+      "imageHint": "red wine"
+    },
+    {
+      "id": "cuvee-les-naiades",
+      "description": "Bottle of Cuvee Les Naiades Languedoc",
+      "imageUrl": "/product/Cuvee Les Naiades Languedoc.jpg",
       "imageHint": "red wine"
     }
   ]
