@@ -44,7 +44,7 @@ export default function HeroSection() {
 
     return (
         <div className="w-full bg-primary text-primary-foreground font-body">
-             <div className="container mx-auto max-w-screen-2xl">
+             <div className="container mx-auto max-w-screen-2xl relative">
                 <div className="flex flex-col md:flex-row min-h-[700px]">
                     {/* Left Column: Text Content */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left py-12 md:py-0">
@@ -65,20 +65,20 @@ export default function HeroSection() {
                     </div>
 
                     {/* Right Column: Image Carousel */}
-                    <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+                    <div className="w-full md:w-1/2 flex items-center justify-center p-0">
                          <Carousel
                             setApi={setApi}
                             className="w-full h-full"
                             plugins={[ Autoplay({ delay: 5000, stopOnInteraction: true }) ]}
                             opts={{ loop: true }}
                         >
-                            <CarouselContent className="h-full -ml-4">
+                            <CarouselContent className="h-full -ml-0">
                                 {heroSlides.map((slide, index) => {
                                     const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                                     if (!image) return null;
                                     return (
-                                        <CarouselItem key={index} className="pl-4 h-full">
-                                            <div className="relative w-full h-[500px] md:h-full">
+                                        <CarouselItem key={index} className="pl-0 h-full">
+                                            <div className="relative w-full h-full">
                                                 <Image
                                                     src={image.imageUrl}
                                                     alt={image.description}
@@ -96,28 +96,28 @@ export default function HeroSection() {
                         </Carousel>
                     </div>
                 </div>
-            </div>
-            
-            {/* Bottom Bar: Controls */}
-             <div className="relative z-10 w-full bg-primary/90 backdrop-blur-sm py-4 border-t border-white/20">
-                <div className="container max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-center md:justify-start">
-                        {heroSlides.map((badge, index) => (
-                            <React.Fragment key={badge.label}>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => scrollTo(index)}
-                                    className={cn(
-                                        "bg-transparent text-white/80 border-white/50 rounded-none px-3 py-1.5 md:px-4 md:py-2 text-xs font-semibold hover:bg-white hover:text-primary transition-all text-center",
-                                        current === index && "bg-white text-primary border-white"
-                                    )}>
-                                    {badge.label}
-                                </Button>
-                                {index < heroSlides.length - 1 && (
-                                    <div className="flex-grow h-px bg-white/50 mx-1 md:mx-2 w-4 md:w-16"></div>
-                                )}
-                            </React.Fragment>
-                        ))}
+                
+                {/* Bottom Bar: Controls */}
+                <div className="absolute z-10 bottom-0 left-0 right-0 w-full bg-primary/50 backdrop-blur-sm py-4 border-t border-white/20">
+                    <div className="container max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex items-center justify-center md:justify-start">
+                            {heroSlides.map((badge, index) => (
+                                <React.Fragment key={badge.label}>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => scrollTo(index)}
+                                        className={cn(
+                                            "bg-transparent text-white/80 border-white/50 rounded-none px-3 py-1.5 md:px-4 md:py-2 text-xs font-semibold hover:bg-white hover:text-primary transition-all text-center",
+                                            current === index && "bg-white text-primary border-white"
+                                        )}>
+                                        {badge.label}
+                                    </Button>
+                                    {index < heroSlides.length - 1 && (
+                                        <div className="flex-grow h-px bg-white/50 mx-1 md:mx-2 w-4 md:w-16"></div>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
