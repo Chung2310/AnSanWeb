@@ -170,7 +170,11 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         products.sort((a, b) => b.price - a.price);
         break;
       case "MỚI NHẤT":
-        products.sort((a, b) => (b.isNew ? 1 : -1) - (a.isNew ? 1 : -1)); // Simple logic, needs refinement
+        products.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return dateB - dateA;
+        });
         break;
       default: // MẶC ĐỊNH
         // No sort or sort by a default criteria

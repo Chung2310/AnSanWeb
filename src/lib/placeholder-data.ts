@@ -60,7 +60,8 @@ export const sampleWines: Wine[] = [
     isFeatured: true,
     tags: ['wine'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-01',
   },
   {
     id: '2',
@@ -76,7 +77,8 @@ export const sampleWines: Wine[] = [
     isFeatured: true,
     tags: ['wine', 'old-rare'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-02',
   },
   {
     id: '3',
@@ -92,7 +94,8 @@ export const sampleWines: Wine[] = [
     isNew: true,
     tags: ['wine'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-03',
   },
   {
     id: '4',
@@ -108,7 +111,8 @@ export const sampleWines: Wine[] = [
     isFeatured: true,
     tags: ['wine'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-04',
   },
   {
     id: '5',
@@ -124,7 +128,8 @@ export const sampleWines: Wine[] = [
     isNew: true,
     tags: ['wine', 'old-rare'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-05',
   },
   {
     id: '6',
@@ -140,7 +145,8 @@ export const sampleWines: Wine[] = [
     isFeatured: true,
     tags: ['wine', 'world'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-06',
   },
   {
     id: '7',
@@ -155,7 +161,8 @@ export const sampleWines: Wine[] = [
     image: getImage('gift-set-tasting-product'),
     tags: ['tasting-set'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-07',
   },
   {
     id: '8',
@@ -170,7 +177,8 @@ export const sampleWines: Wine[] = [
     image: getImage('gift-set-lakes-tet-product'),
     tags: ['gift-set'],
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-08',
   },
   {
     id: '9',
@@ -187,7 +195,8 @@ export const sampleWines: Wine[] = [
     nonChillFiltered: false,
     cask: 'Cognac Cask',
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-09',
   },
   {
     id: '10',
@@ -214,7 +223,8 @@ export const sampleWines: Wine[] = [
       finish: 'Kéo dài, ấm áp với hương gỗ sồi và gia vị sherry dai dẳng.',
       color: 'Vàng hổ phách đậm.',
     },
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-10',
   },
   {
     id: '11',
@@ -241,7 +251,8 @@ export const sampleWines: Wine[] = [
       finish: 'Ấm áp và kéo dài với dư vị của ca cao và một chút khói.',
       color: 'Vàng đồng.',
     },
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-11',
   },
   {
     id: '12',
@@ -259,7 +270,8 @@ export const sampleWines: Wine[] = [
     cask: 'Mizunara',
     nonChillFiltered: false,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-12',
   },
   {
     id: '13',
@@ -276,7 +288,8 @@ export const sampleWines: Wine[] = [
     cask: 'Sherry',
     nonChillFiltered: true,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-13',
   },
   {
     id: '14',
@@ -303,7 +316,8 @@ export const sampleWines: Wine[] = [
       finish: 'Kéo dài với hương trái cây khô, khói gỗ và gia vị.',
       color: 'Gỗ gụ đậm.'
     },
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-14',
   },
   {
     id: '15',
@@ -321,7 +335,8 @@ export const sampleWines: Wine[] = [
     cask: 'Bourbon',
     nonChillFiltered: false,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-15',
   },
   {
     id: '16',
@@ -339,7 +354,8 @@ export const sampleWines: Wine[] = [
     cask: 'Bourbon',
     nonChillFiltered: true,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-16',
   },
   {
     id: '17',
@@ -392,7 +408,8 @@ export const sampleWines: Wine[] = [
         finish: "Kéo dài vô tận, ấm áp và phức tạp. Dư vị của gỗ sồi cay, sô cô la đen, trái cây sấy và một chút vị ngọt đắng của mật đường còn lưu luyến. Một kết thúc mạnh mẽ, thỏa mãn và vô cùng đáng nhớ."
       },
       conclusion: "Foursquare 17 Year Old 2005 Barrel Soho Selection là một viên ngọc quý trong thế giới rum, một minh chứng cho nghệ thuật làm rum đỉnh cao của nhà Foursquare và gu thẩm định tinh tế của những người thực hiện “Barrel Soho Selection”. Với tuổi đời ấn tượng, quá trình trưởng thành hoàn toàn tại Barbados, sự thuần khiết không pha tạp và sức mạnh của một phiên bản cask strength, chai rum này mang đến một trải nghiệm mãnh liệt và sâu sắc. Tính đến ngày 14 tháng 5 năm 2025, đây chắc chắn là một chai rượu được săn đón bởi những người sưu tầm và những tín đồ rum thực thụ, những người tìm kiếm sự phức hợp, chân thật và đẳng cấp trong từng giọt rượu."
-    }
+    },
+    createdAt: '2023-01-17',
   },
   {
     id: '18',
@@ -410,7 +427,8 @@ export const sampleWines: Wine[] = [
     cask: 'Mizunara',
     nonChillFiltered: false,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-18',
   },
   {
     id: '19',
@@ -427,7 +445,8 @@ export const sampleWines: Wine[] = [
     cask: 'Port',
     nonChillFiltered: false,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-19',
   },
   {
     id: '20',
@@ -445,7 +464,8 @@ export const sampleWines: Wine[] = [
     cask: 'Sherry',
     nonChillFiltered: true,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-20',
   },
   {
     id: '21',
@@ -463,7 +483,8 @@ export const sampleWines: Wine[] = [
     cask: 'Bourbon',
     nonChillFiltered: false,
     tastingNotes: genericTastingNotes,
-    productDetails: genericProductDetails
+    productDetails: genericProductDetails,
+    createdAt: '2023-01-21',
   },
   {
     id: '22',
@@ -480,6 +501,7 @@ export const sampleWines: Wine[] = [
     tastingNotes: genericTastingNotes,
     productDetails: genericProductDetails,
     isNew: true,
+    createdAt: '2024-07-29',
   },
   {
     id: '23',
@@ -497,6 +519,7 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     isFeatured: true,
+    createdAt: '2024-07-30',
   }
 ];
 

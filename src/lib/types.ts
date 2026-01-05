@@ -42,6 +42,7 @@ export type Wine = {
   age?: number;
   cask?: string;
   nonChillFiltered?: boolean;
+  createdAt?: string;
 };
 
 export type Category = {
