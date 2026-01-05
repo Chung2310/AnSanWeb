@@ -14,6 +14,9 @@ export type Wine = {
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
+  age?: number;
+  cask?: string;
+  nonChillFiltered?: boolean;
 };
 
 export type Category = {

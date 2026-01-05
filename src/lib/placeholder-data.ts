@@ -132,6 +132,8 @@ export const sampleWines: Wine[] = [
     description: 'Cá nhân hóa món quà của bạn với dịch vụ khắc tên tinh xảo trên chai Hennessy V.S.O.P nổi tiếng.',
     image: getImage('engraving-product'),
     tags: ['engraving', 'spirits'],
+    nonChillFiltered: false,
+    cask: 'Cognac Cask',
   },
   {
     id: '10',
@@ -145,6 +147,9 @@ export const sampleWines: Wine[] = [
     description: 'Một chai Campbeltown single malt cổ điển, phức hợp với hương sherry, trái cây sẫm màu và một chút khói than bùn.',
     image: getImage('wine-1'),
     tags: ['scotch', 'campbeltown'],
+    age: 15,
+    cask: 'Sherry',
+    nonChillFiltered: true,
   },
   {
     id: '11',
@@ -158,6 +163,9 @@ export const sampleWines: Wine[] = [
     description: 'Lấy cảm hứng từ thời Victoria, loại whisky này mạnh mẽ và đậm đà, được ủ trong thùng gỗ sồi cháy kỹ.',
     image: getImage('wine-2'),
     tags: ['scotch', 'campbeltown'],
+    age: 10,
+    cask: 'Bourbon',
+    nonChillFiltered: true,
   },
   {
     id: '12',
@@ -171,6 +179,9 @@ export const sampleWines: Wine[] = [
     description: 'Loại single malt tiên phong của Nhật Bản, tinh tế và phức hợp với hương trái cây nhiệt đới, gỗ đàn hương và trầm hương.',
     image: getImage('wine-3'),
     tags: ['world', 'japan'],
+    age: 12,
+    cask: 'Mizunara',
+    nonChillFiltered: false,
   },
   {
     id: '13',
@@ -184,6 +195,8 @@ export const sampleWines: Wine[] = [
     description: 'Phiên bản thứ bảy trong sê-ri được đánh giá cao, một loại single malt đậm đà hương sherry, phức hợp và cân bằng.',
     image: getImage('wine-4'),
     tags: ['world', 'england'],
+    cask: 'Sherry',
+    nonChillFiltered: true,
   },
   {
     id: '14',
@@ -197,6 +210,9 @@ export const sampleWines: Wine[] = [
     description: 'Một loại single malt whisky quý hiếm và sang trọng, được ủ trong những thùng gỗ sồi Sherry Oloroso chọn lọc từ Jerez, Tây Ban Nha.',
     image: getImage('featured-macallan-25'),
     tags: ['old-rare', 'scotch', 'speyside'],
+    age: 25,
+    cask: 'Sherry',
+    nonChillFiltered: false,
   },
   {
     id: '15',
@@ -210,6 +226,9 @@ export const sampleWines: Wine[] = [
     description: 'Một trong những loại single malt bán chạy nhất thế giới, đặc trưng bởi hương lê tươi và gỗ sồi tinh tế.',
     image: getImage('wine-5'),
     tags: ['scotch', 'speyside'],
+    age: 12,
+    cask: 'Bourbon',
+    nonChillFiltered: false,
   },
   {
     id: '16',
@@ -223,6 +242,9 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Islay single malt cổ điển, cực kỳ đậm vị khói than bùn, i-ốt và một chút vị ngọt của mạch nha.',
     image: getImage('wine-6'),
     tags: ['scotch', 'islay'],
+    age: 10,
+    cask: 'Bourbon',
+    nonChillFiltered: true,
   },
   {
     id: '17',
@@ -236,6 +258,7 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Bas-Armagnac tinh tế, thể hiện sự phức hợp tuyệt vời của trái cây khô, gia vị và hương gỗ sồi lâu năm.',
     image: getImage('hero-armagnac'),
     tags: ['armagnac'],
+    age: 20,
   },
   {
     id: '18',
@@ -249,6 +272,9 @@ export const sampleWines: Wine[] = [
     description: 'Một trong những loại blended whisky được trao giải nhiều nhất thế giới. Cực kỳ êm dịu với hương gỗ sồi Mizunara, cam và mật ong.',
     image: getImage('price-category-50'),
     tags: ['world', 'japan', 'old-rare'],
+    age: 21,
+    cask: 'Mizunara',
+    nonChillFiltered: false,
   },
   {
     id: '19',
@@ -262,6 +288,8 @@ export const sampleWines: Wine[] = [
     description: 'Loại single malt duy nhất trên thế giới được ủ trong 6 loại thùng khác nhau, tạo ra một hương vị phức hợp độc đáo.',
     image: getImage('price-category-10'),
     tags: ['scotch', 'highland'],
+    cask: 'Port',
+    nonChillFiltered: false,
   },
   {
     id: '20',
@@ -275,6 +303,9 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Irish pot still whiskey mạnh mẽ, không lọc lạnh, mang đến hương vị đậm đà của trái cây và gia vị.',
     image: getImage('price-category-5'),
     tags: ['world', 'ireland'],
+    age: 12,
+    cask: 'Sherry',
+    nonChillFiltered: true,
   },
   {
     id: '21',
@@ -288,6 +319,9 @@ export const sampleWines: Wine[] = [
     description: 'Một loại single malt tuyệt vời từ đảo Skye, cân bằng giữa vị khói, tiêu và vị ngọt của trái cây.',
     image: getImage('price-category-20'),
     tags: ['scotch', 'islands', 'old-rare'],
+    age: 18,
+    cask: 'Bourbon',
+    nonChillFiltered: false,
   },
 ];
 

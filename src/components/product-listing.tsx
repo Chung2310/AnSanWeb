@@ -25,19 +25,19 @@ const filtersData = {
       { label: "REDBREAST", count: 1 },
     ],
     "ĐỘ TUỔI": [
-      { label: "DƯỚI 12 NĂM", value: [0, 12] },
+      { label: "DƯỚI 12 NĂM", value: [0, 11] },
       { label: "12-18 NĂM", value: [12, 18] },
-      { label: "18-30 NĂM", value: [18, 30] },
-      { label: "TRÊN 30 NĂM", value: [30, 999] },
+      { label: "18-30 NĂM", value: [19, 30] },
+      { label: "TRÊN 30 NĂM", value: [31, 999] },
     ],
     "LOẠI THÙNG": [
-      { label: "BOURBON", count: 10 },
-      { label: "PORT", count: 1 },
-      { label: "SHERRY", count: 3 },
+      { label: "BOURBON" },
+      { label: "PORT" },
+      { label: "SHERRY" },
     ],
     "LỌC LẠNH": [
-      { label: "CÓ LỌC LẠNH", count: 3 },
-      { label: "KHÔNG CÓ LỌC LẠNH", count: 11 },
+      { label: "CÓ LỌC LẠNH" },
+      { label: "KHÔNG CÓ LỌC LẠNH" },
     ],
     "KHOẢNG GIÁ": [
         { label: "DƯỚI 5 TRIỆU", value: [0, 5000000] },
@@ -130,7 +130,28 @@ export default function ProductListing({ initialProducts, title }: ProductListin
               priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
           );
       }
-       // Add other filter logic here (e.g., ĐỘ TUỔI, LOẠI THÙNG)
+      if (group === "ĐỘ TUỔI") {
+        const ageRanges = values.map(v => filtersData["ĐỘ TUỔI"].find(opt => opt.label === v)?.value);
+        products = products.filter(p => 
+            p.age !== undefined && ageRanges.some(range => range && p.age >= range[0] && p.age <= range[1])
+        );
+      }
+      if (group === "LOẠI THÙNG") {
+        products = products.filter(p =>
+            p.cask && values.some(v => p.cask?.toUpperCase().includes(v))
+        );
+      }
+      if (group === "LỌC LẠNH") {
+        products = products.filter(p => {
+            if (values.includes("CÓ LỌC LẠNH")) {
+                return p.nonChillFiltered === false;
+            }
+            if (values.includes("KHÔNG CÓ LỌC LẠNH")) {
+                return p.nonChillFiltered === true;
+            }
+            return true;
+        });
+      }
     });
 
     // Sorting logic
