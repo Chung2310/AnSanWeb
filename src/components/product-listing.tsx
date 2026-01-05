@@ -8,22 +8,7 @@ import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 
-const filtersData = {
-    "THƯƠNG HIỆU": [
-      { label: "GLEN SCOTIA", count: 2 },
-      { label: "HAZELBURN", count: 1 },
-      { label: "LONGROW", count: 1 },
-      { label: "SPRINGBANK", count: 10 },
-      { label: "THE MACALLAN", count: 1 },
-      { label: "GLENFIDDICH", count: 1 },
-      { label: "ARDBEG", count: 1 },
-      { label: "DALMORE", count: 1 },
-      { label: "TALISKER", count: 1 },
-      { label: "YAMAZAKI", count: 1 },
-      { label: "HIBIKI", count: 1 },
-      { label: "THE LAKES", count: 1 },
-      { label: "REDBREAST", count: 1 },
-    ],
+const staticFiltersData = {
     "ĐỘ TUỔI": [
       { label: "DƯỚI 12 NĂM", value: [0, 11] },
       { label: "12-18 NĂM", value: [12, 18] },
@@ -48,6 +33,12 @@ const filtersData = {
         { label: "TRÊN 100 TRIỆU", value: [100000000, Infinity] },
     ],
 };
+
+const allBrands = [
+  "GLEN SCOTIA", "HAZELBURN", "LONGROW", "SPRINGBANK", "THE MACALLAN",
+  "GLENFIDDICH", "ARDBEG", "DALMORE", "TALISKER", "YAMAZAKI", "HIBIKI",
+  "THE LAKES", "REDBREAST", "HENNESSY", "BARON DE SIGOGNAC"
+];
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -75,6 +66,8 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
         const displayLabel = typeof option === 'object' && option.count ? `${option.label} (${option.count})` : label;
         const isActive = activeFilters.includes(label);
         
+        if (option.count === 0) return null;
+
         return (
           <Button
             key={index}
@@ -98,6 +91,19 @@ export default function ProductListing({ initialProducts, title }: ProductListin
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
+
+  const filtersData = useMemo(() => {
+    const brandsInProducts = allBrands.map(brand => {
+      const count = initialProducts.filter(product => product.nameVN.toUpperCase().includes(brand)).length;
+      return { label: brand, count: count };
+    }).filter(brand => brand.count > 0);
+
+    return {
+      "THƯƠNG HIỆU": brandsInProducts,
+      ...staticFiltersData
+    }
+  }, [initialProducts]);
+
 
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -130,7 +136,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
           );
       }
       if (group === "ĐỘ TUỔI") {
-        const ageRanges = values.map(v => filtersData["ĐỘ TUỔI"].find(opt => opt.label === v)?.value);
+        const ageRanges = values.map(v => staticFiltersData["ĐỘ TUỔI"].find(opt => opt.label === v)?.value);
         products = products.filter(p => 
             p.age !== undefined && ageRanges.some(range => range && p.age >= range[0] && p.age <= range[1])
         );
@@ -142,6 +148,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
       }
       if (group === "LỌC LẠNH") {
         products = products.filter(p => {
+            if (values.length === 2 || values.length === 0) return true;
             if (values.includes("CÓ LỌC LẠNH")) {
                 return p.nonChillFiltered === false;
             }
@@ -162,7 +169,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
         products.sort((a, b) => b.price - a.price);
         break;
       case "MỚI NHẤT":
-        products.sort((a, b) => (b.isNew ? 1 : -1)); // Simple logic, needs refinement
+        products.sort((a, b) => (b.isNew ? 1 : -1) - (a.isNew ? 1 : -1)); // Simple logic, needs refinement
         break;
       default: // MẶC ĐỊNH
         // No sort or sort by a default criteria
@@ -170,7 +177,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
     }
 
     return products;
-  }, [initialProducts, activeFilters, activeSort]);
+  }, [initialProducts, activeFilters, activeSort, filtersData]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
@@ -210,7 +217,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
 
           <div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6 text-sm">
-              <p>HIỂN THỊ {firstItemIndex}-{lastItemIndex} CỦA {filteredAndSortedProducts.length} KẾT QUẢ</p>
+              <p>HIỂN THỊ {paginatedProducts.length > 0 ? firstItemIndex : 0}-{lastItemIndex} CỦA {filteredAndSortedProducts.length} KẾT QUẢ</p>
               <div className="flex items-center gap-2">
                 <span className="uppercase">Sắp xếp theo</span>
                 {sortingOptions.map((opt) => (
@@ -225,11 +232,18 @@ export default function ProductListing({ initialProducts, title }: ProductListin
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {paginatedProducts.map((wine) => (
-                <WineCard key={wine.id} wine={wine} />
-              ))}
-            </div>
+            {paginatedProducts.length > 0 ? (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {paginatedProducts.map((wine) => (
+                        <WineCard key={wine.id} wine={wine} />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-20">
+                    <p className="text-lg text-muted-foreground">Không tìm thấy sản phẩm nào phù hợp.</p>
+                </div>
+            )}
+
 
             {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-6 mt-12 text-lg" style={{color: '#8a7d6a'}}>
