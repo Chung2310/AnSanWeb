@@ -51,37 +51,37 @@
     {
       "id": "brand-macallan",
       "description": "The Macallan Logo",
-      "imageUrl": "/images/brands/macallan.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_13.webp",
       "imageHint": "macallan logo"
     },
     {
       "id": "brand-lakes",
       "description": "The Lakes Distillery Logo",
-      "imageUrl": "/images/brands/lakes.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_9.webp",
       "imageHint": "lakes distillery"
     },
     {
       "id": "brand-ichiros",
       "description": "Ichiro's Malt Logo",
-      "imageUrl": "/images/brands/ichiros.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_14.webp",
       "imageHint": "ichiros malt"
     },
     {
       "id": "brand-springbank",
       "description": "Springbank Logo",
-      "imageUrl": "/images/brands/springbank.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_5.webp",
       "imageHint": "springbank logo"
     },
     {
       "id": "brand-yamazaki",
       "description": "The Yamazaki Logo",
-      "imageUrl": "/images/brands/yamazaki.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_17.webp",
       "imageHint": "yamazaki logo"
     },
     {
       "id": "brand-glenfiddich",
       "description": "Glenfiddich Logo",
-      "imageUrl": "/images/brands/glenfiddich.png",
+      "imageUrl": "/images/thuonghieu/dt_brand_logo_8.webp",
       "imageHint": "glenfiddich logo"
     },
     {
@@ -129,7 +129,7 @@
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -183,13 +183,13 @@
     {
       "id": "blog-3",
       "description": "A winemaker checking barrels",
-      "imageUrl": "https://images.unsplash.com/photo-1727063137470-0cc4389eeb59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1727063137470-0cc4389eeb59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine making"
     },
     {
       "id": "avatar-1",
       "description": "Smiling man",
-      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "man smiling"
     },
     {

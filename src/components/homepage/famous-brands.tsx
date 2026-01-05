@@ -34,7 +34,7 @@ export default function FamousBrands() {
   return (
     <section className="py-16 bg-white">
       <div className="container">
-        <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#8a7d6a'}}>
+        <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#3a3a3a'}}>
           Những Thương Hiệu Nổi Tiếng
         </h2>
         <Carousel
@@ -81,5 +81,3 @@ export default function FamousBrands() {
     </section>
   );
 }
-
-    
