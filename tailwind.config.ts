@@ -12,13 +12,13 @@ export default {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px',
+        '2xl': '1280px',
       },
     },
     extend: {
       fontFamily: {
-        body: ['"PT Sans"', 'sans-serif'],
-        headline: ['"Playfair Display"', 'serif'],
+        body: ['"Roboto"', 'sans-serif'],
+        headline: ['"Roboto"', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

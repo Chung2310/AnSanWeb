@@ -1,6 +1,12 @@
 {
   "placeholderImages": [
     {
+      "id": "hero-main",
+      "description": "Man holding a Macallan 84 whisky case",
+      "imageUrl": "https://images.unsplash.com/photo-1581827925742-c62582885f93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGlza3l8ZW58MHx8fHwxNzE3MTA0ODc2fDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "whisky launch"
+    },
+    {
       "id": "hero-1",
       "description": "Lush vineyard at sunset",
       "imageUrl": "https://images.unsplash.com/photo-1761489179799-c8ecad6ec719?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3aW5lJTIwdmluZXlhcmR8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",

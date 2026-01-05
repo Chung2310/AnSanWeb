@@ -1,4 +1,4 @@
-import HeroSlider from '@/components/homepage/hero-slider';
+import HeroSection from '@/components/homepage/hero-section';
 import ProductSection from '@/components/homepage/product-section';
 import CategoryShowcase from '@/components/homepage/category-showcase';
 import BrandStory from '@/components/homepage/brand-story';
@@ -11,7 +11,7 @@ export default function HomePage() {
 
   return (
     <>
-      <HeroSlider />
+      <HeroSection />
       <ProductSection
         title="Sản Phẩm Nổi Bật"
         description="Khám phá những chai vang được yêu thích và đánh giá cao nhất bởi các chuyên gia và khách hàng của chúng tôi."
