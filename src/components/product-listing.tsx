@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import ProductCategoryNav from "@/components/layout/product-category-nav";
 import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const filtersData = {
     "THƯƠNG HIỆU": [
@@ -95,6 +96,8 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
 export default function ProductListing({ initialProducts, title }: ProductListingProps) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 18;
 
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -105,6 +108,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
         
         return { ...prev, [group]: newGroupFilters };
     });
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
   const filteredAndSortedProducts = useMemo(() => {
@@ -148,6 +152,21 @@ export default function ProductListing({ initialProducts, title }: ProductListin
     return products;
   }, [initialProducts, activeFilters, activeSort]);
 
+  const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
+  const paginatedProducts = filteredAndSortedProducts.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  }
+
+  const firstItemIndex = (currentPage - 1) * productsPerPage + 1;
+  const lastItemIndex = Math.min(currentPage * productsPerPage, filteredAndSortedProducts.length);
+
   return (
     <div className="bg-white text-black">
       <ProductCategoryNav />
@@ -171,7 +190,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
 
           <div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6 text-sm">
-              <p>HIỂN THỊ {filteredAndSortedProducts.length} CỦA {initialProducts.length} KẾT QUẢ</p>
+              <p>HIỂN THỊ {firstItemIndex}-{lastItemIndex} CỦA {filteredAndSortedProducts.length} KẾT QUẢ</p>
               <div className="flex items-center gap-2">
                 <span className="uppercase">Sắp xếp theo</span>
                 {sortingOptions.map((opt) => (
@@ -187,10 +206,36 @@ export default function ProductListing({ initialProducts, title }: ProductListin
               </div>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredAndSortedProducts.map((wine) => (
+              {paginatedProducts.map((wine) => (
                 <WineCard key={wine.id} wine={wine} />
               ))}
             </div>
+
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-12">
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="h-8 w-8"
+                    >
+                        <ChevronLeft className="h-5 w-5" />
+                    </Button>
+                    <span className="text-sm">
+                        Trang {currentPage} của {totalPages}
+                    </span>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="h-8 w-8"
+                    >
+                        <ChevronRight className="h-5 w-5" />
+                    </Button>
+                </div>
+            )}
           </div>
         </div>
       </div>
