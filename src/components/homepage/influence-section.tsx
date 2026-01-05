@@ -17,28 +17,31 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const AnimatedNumber = ({ to }: { to: number }) => {
     const ref = useRef<HTMLParagraphElement>(null);
+    const isInView = useInView(ref, { once: true });
 
     useEffect(() => {
+        if (!isInView) return;
         const node = ref.current;
         if (!node) return;
 
         const controls = animate(0, to, {
             duration: 2.5,
+            ease: "easeOut",
             onUpdate(value) {
                 node.textContent = new Intl.NumberFormat('vi-VN').format(Math.round(value));
             }
         });
 
         return () => controls.stop();
-    }, [to]);
+    }, [to, isInView]);
 
-    return <p ref={ref} className="text-5xl font-black" style={{ color: '#8a7d6a' }} />;
+    return <p ref={ref} className="text-5xl font-black" style={{ color: '#8a7d6a' }} >0</p>;
 };
 
 export default function InfluenceSection() {
     const influenceImage = PlaceHolderImages.find(img => img.id === 'influence-image');
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, amount: 0.3 });
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
     const mainControls = useAnimation();
 
     useEffect(() => {
@@ -54,18 +57,13 @@ export default function InfluenceSection() {
         hidden: { opacity: 0 },
         visible: { 
             opacity: 1, 
-            transition: { staggerChildren: 0.4, delayChildren: 0.3 } 
+            transition: { staggerChildren: 0.2, delayChildren: 0.2 } 
         },
     };
 
-    const fromLeftVariants = {
-        hidden: { opacity: 0, x: -50 },
-        visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
-    };
-
-    const fromRightVariants = {
-        hidden: { opacity: 0, x: 50 },
-        visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
     };
 
 
@@ -79,12 +77,12 @@ export default function InfluenceSection() {
       <div className="container mx-auto max-w-screen-xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
-          <motion.div variants={fromLeftVariants} className="text-center lg:text-left">
+          <motion.div variants={itemVariants} className="text-center lg:text-left">
             <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA<br />CỦA AnSan
             </h2>
-            <div className="mt-8 aspect-w-4 aspect-h-3">
+            <motion.div variants={itemVariants} className="mt-8 aspect-w-4 aspect-h-3">
               <Image
                 src={influenceImage.imageUrl}
                 alt={influenceImage.description}
@@ -93,17 +91,17 @@ export default function InfluenceSection() {
                 className="w-full h-full object-cover rounded-lg shadow-lg"
                 data-ai-hint={influenceImage.imageHint}
               />
-            </div>
+            </motion.div>
           </motion.div>
           {/* Right Column */}
           <motion.div 
-             variants={fromRightVariants}
+            variants={containerVariants}
             className="flex flex-col justify-center text-gray-700 relative"
           >
-            <p className="text-base leading-relaxed">
+            <motion.p variants={itemVariants} className="text-base leading-relaxed">
               AnSan đang là một trong những kênh truyền thông về Whisky & Rượu Mạnh uy tín hàng đầu trên rất nhiều nền tảng mạng xã hội. Qua những bài viết, hình ảnh, video chia sẻ kiến thức, đánh giá và những trải nghiệm cá nhân, tôi đã và đang truyền cảm hứng, xây dựng và phát triển cộng đồng thưởng thức giàu văn hóa hơn.
-            </p>
-            <div className="mt-12">
+            </motion.p>
+            <motion.div variants={itemVariants} className="mt-12">
               <h3 className="font-bold text-lg tracking-wider uppercase text-gray-800">
                 ĐÁNH DẤU SỰ PHÁT TRIỂN MẠNH MẼ TRÊN<br/>FACEBOOK, INSTAGRAM, TIKTOK & YOUTUBE
               </h3>
@@ -121,17 +119,17 @@ export default function InfluenceSection() {
                     <Youtube className="h-5 w-5" />
                 </Link>
               </div>
-            </div>
-            <div className="mt-10 grid grid-cols-2 gap-8">
-              <div>
-                {isInView && <AnimatedNumber to={110000} />}
+            </motion.div>
+            <motion.div variants={containerVariants} className="mt-10 grid grid-cols-2 gap-8">
+              <motion.div variants={itemVariants}>
+                <AnimatedNumber to={110000} />
                 <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT THEO DÕI</p>
-              </div>
-              <div>
-                {isInView && <AnimatedNumber to={18000000} />}
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <AnimatedNumber to={18000000} />
                 <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT XEM</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
