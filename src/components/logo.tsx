@@ -1,28 +1,15 @@
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn('flex items-center', className)}>
-      <svg
-        width="200"
-        height="40"
-        viewBox="0 0 200 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="object-contain"
-        aria-label="AnSan Logo"
-      >
-        <text
-          x="100"
-          y="28"
-          fontFamily="DangTau, sans-serif"
-          fontSize="30"
-          fill="currentColor"
-          textAnchor="middle"
-        >
-          AnSan
-        </text>
-      </svg>
+    <div className={cn('relative', className)} style={{ width: '200px', height: '40px' }}>
+      <Image
+        src="/logo.png"
+        alt="AnSan Logo"
+        layout="fill"
+        objectFit="contain"
+      />
     </div>
   );
 }
