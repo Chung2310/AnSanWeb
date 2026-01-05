@@ -22,6 +22,7 @@ export const sampleWines: Wine[] = [
     description: 'Một biểu tượng của Bordeaux, loại rượu này mang đến sự phức hợp đáng kinh ngạc với hương hoa violet, dâu đen và gỗ tuyết tùng.',
     image: getImage('wine-1'),
     isFeatured: true,
+    tags: ['wine']
   },
   {
     id: '2',
@@ -35,6 +36,7 @@ export const sampleWines: Wine[] = [
     description: 'Loại rượu vang trắng được săn lùng nhất thế giới, thể hiện sự cân bằng hoàn hảo giữa sự đậm đà, khoáng chất và độ chua.',
     image: getImage('wine-2'),
     isFeatured: true,
+    tags: ['wine', 'old-rare']
   },
   {
     id: '3',
@@ -48,6 +50,7 @@ export const sampleWines: Wine[] = [
     description: 'Loại vang hồng tinh tế từ Provence với hương thơm của dâu tây, đào và một chút hương hoa.',
     image: getImage('wine-3'),
     isNew: true,
+    tags: ['wine']
   },
   {
     id: '4',
@@ -61,6 +64,7 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Champagne sang trọng với sự phức hợp của hương bánh mì nướng, các loại hạt và trái cây họ cam quýt.',
     image: getImage('wine-4'),
     isFeatured: true,
+    tags: ['wine']
   },
   {
     id: '5',
@@ -74,6 +78,7 @@ export const sampleWines: Wine[] = [
     description: 'Vua của các loại rượu vang ngọt, với các lớp hương mật ong, mơ, và hạnh nhân.',
     image: getImage('wine-5'),
     isNew: true,
+    tags: ['wine', 'old-rare']
   },
   {
     id: '6',
@@ -87,6 +92,7 @@ export const sampleWines: Wine[] = [
     description: 'Biểu tượng của Úc, một loại Shiraz đậm đà và mạnh mẽ với hương vị của mận, sô cô la và gia vị.',
     image: getImage('wine-6'),
     isFeatured: true,
+    tags: ['wine', 'world']
   },
   {
     id: '7',
@@ -125,7 +131,7 @@ export const sampleWines: Wine[] = [
     alcohol: 40,
     description: 'Cá nhân hóa món quà của bạn với dịch vụ khắc tên tinh xảo trên chai Hennessy V.S.O.P nổi tiếng.',
     image: getImage('engraving-product'),
-    tags: ['engraving'],
+    tags: ['engraving', 'spirits'],
   },
   {
     id: '10',
@@ -230,6 +236,58 @@ export const sampleWines: Wine[] = [
     description: 'Một loại Bas-Armagnac tinh tế, thể hiện sự phức hợp tuyệt vời của trái cây khô, gia vị và hương gỗ sồi lâu năm.',
     image: getImage('hero-armagnac'),
     tags: ['armagnac'],
+  },
+  {
+    id: '18',
+    nameVN: 'Hibiki 21 Year Old',
+    nameEN: 'Hibiki 21 Year Old',
+    slug: 'hibiki-21',
+    price: 45000000,
+    origin: 'Nhật Bản',
+    type: 'Whisky',
+    alcohol: 43,
+    description: 'Một trong những loại blended whisky được trao giải nhiều nhất thế giới. Cực kỳ êm dịu với hương gỗ sồi Mizunara, cam và mật ong.',
+    image: getImage('price-category-50'),
+    tags: ['world', 'japan', 'old-rare'],
+  },
+  {
+    id: '19',
+    nameVN: 'Dalmore King Alexander III',
+    nameEN: 'Dalmore King Alexander III',
+    slug: 'dalmore-king-alexander-iii',
+    price: 9800000,
+    origin: 'Highland, Scotland',
+    type: 'Whisky',
+    alcohol: 40,
+    description: 'Loại single malt duy nhất trên thế giới được ủ trong 6 loại thùng khác nhau, tạo ra một hương vị phức hợp độc đáo.',
+    image: getImage('price-category-10'),
+    tags: ['scotch', 'highland'],
+  },
+  {
+    id: '20',
+    nameVN: 'Redbreast 12 Year Old Cask Strength',
+    nameEN: 'Redbreast 12 Year Old Cask Strength',
+    slug: 'redbreast-12-cs',
+    price: 3900000,
+    origin: 'Ireland',
+    type: 'Whisky',
+    alcohol: 58.6,
+    description: 'Một loại Irish pot still whiskey mạnh mẽ, không lọc lạnh, mang đến hương vị đậm đà của trái cây và gia vị.',
+    image: getImage('price-category-5'),
+    tags: ['world', 'ireland'],
+  },
+  {
+    id: '21',
+    nameVN: 'Talisker 18 Year Old',
+    nameEN: 'Talisker 18 Year Old',
+    slug: 'talisker-18',
+    price: 12500000,
+    origin: 'Islands, Scotland',
+    type: 'Whisky',
+    alcohol: 45.8,
+    description: 'Một loại single malt tuyệt vời từ đảo Skye, cân bằng giữa vị khói, tiêu và vị ngọt của trái cây.',
+    image: getImage('price-category-20'),
+    tags: ['scotch', 'islands', 'old-rare'],
   },
 ];
 
