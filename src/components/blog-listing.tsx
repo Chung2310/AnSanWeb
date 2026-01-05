@@ -78,52 +78,57 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
     const filteredPosts = activeCategory
         ? sampleBlogPosts.filter(post => post.categories.includes(activeCategory))
         : sampleBlogPosts;
-    
-    const showCategories = !defaultCategory;
+
+    const handleCategoryClick = (category: string | null) => {
+        // If we are on a page with a default category, clicking should not change the filter.
+        // Instead, this will be used on the main blog page.
+        // For this version, we will just allow filtering visually on all pages.
+        setActiveCategory(category);
+    };
 
     return (
         <div className="container py-12 bg-white text-black">
-            {showCategories && (
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-10">
-                    <h1 className="font-headline text-xl font-black uppercase text-neutral-700 mb-4 md:mb-0">
-                        Danh mục bài viết
-                    </h1>
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-widest">
-                        <button 
-                            onClick={() => setActiveCategory(null)}
-                            className={cn(
-                                "hover:text-black transition-colors",
-                                activeCategory === null ? "text-black" : "text-neutral-500"
-                            )}
-                        >
-                            TẤT CẢ
-                        </button>
-                        {allCategories.map(category => {
-                            const count = getCategoryCount(category);
-                            if (count === 0) return null;
-                            return (
-                                <button 
-                                    key={category}
-                                    onClick={() => setActiveCategory(category)}
-                                    className={cn(
-                                        "hover:text-black transition-colors",
-                                        activeCategory === category ? "text-black" : "text-neutral-500"
-                                    )}
-                                >
-                                    {category} ({count})
-                                </button>
-                            )
-                        })}
-                    </div>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-10">
+                <h1 className="font-headline text-xl font-black uppercase text-neutral-700 mb-4 md:mb-0">
+                    Danh mục bài viết
+                </h1>
+                <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-widest">
+                    <button 
+                        onClick={() => handleCategoryClick(null)}
+                        className={cn(
+                            "hover:text-black transition-colors",
+                            activeCategory === null ? "text-black" : "text-neutral-500"
+                        )}
+                    >
+                        TẤT CẢ
+                    </button>
+                    {allCategories.map(category => {
+                        const count = getCategoryCount(category);
+                        if (count === 0) return null;
+                        return (
+                            <button 
+                                key={category}
+                                onClick={() => handleCategoryClick(category)}
+                                className={cn(
+                                    "hover:text-black transition-colors",
+                                    activeCategory === category ? "text-black" : "text-neutral-500"
+                                )}
+                            >
+                                {category} ({count})
+                            </button>
+                        )
+                    })}
                 </div>
-            )}
-             {!showCategories && (
-                 <div className="text-center border-b pb-4 mb-10">
+            </div>
+            
+            {defaultCategory && !activeCategory && (
+                 <div className="text-center mb-10">
                      <h1 className="font-headline text-4xl font-bold uppercase text-neutral-800">
-                         Kiến thức {defaultCategory && defaultCategory.toLowerCase().replace(/^\w/, c => c.toUpperCase())}
+                         Kiến thức {defaultCategory.toLowerCase().replace(/^\w/, c => c.toUpperCase())}
                      </h1>
                  </div>
             )}
+            
             <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
                 {filteredPosts.map(post => (
                     <BlogCard key={post.id} post={post} />
