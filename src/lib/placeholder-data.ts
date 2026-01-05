@@ -626,6 +626,23 @@ export const sampleWines: Wine[] = [
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-05',
+  },
+  {
+    id: '30',
+    nameVN: 'Chateau Sergant – Pomerol (Nhãn Giấy)',
+    nameEN: 'Chateau Sergant – Pomerol (Paper Label)',
+    slug: 'chateau-sergant-pomerol',
+    price: 1350000,
+    origin: 'Pháp – Pomerol',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ thanh lịch từ vùng Pomerol danh tiếng của Pháp, phiên bản nhãn giấy độc đáo.',
+    image: getImage('chateau-sergant-pomerol'),
+    tags: ['wine'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-06',
   }
 ];
 
@@ -753,6 +770,8 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
+
+    
 
     
 
