@@ -202,7 +202,7 @@ export default function HeroSection() {
                                     onClick={() => setCurrent(index)}
                                     className={cn(
                                         "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 text-xs font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20",
-                                        current === index && "border-accent bg-accent text-accent-foreground"
+                                        current === index && "border-white bg-white text-black"
                                     )}
                                 >
                                     {slide.label}
