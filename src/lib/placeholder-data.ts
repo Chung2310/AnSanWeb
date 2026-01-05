@@ -591,6 +591,24 @@ export const sampleWines: Wine[] = [
     isNew: true,
     isFeatured: true,
     createdAt: '2024-08-03',
+  },
+  {
+    id: '28',
+    nameVN: 'Chateau La Grace Dieu 2018',
+    nameEN: 'Chateau La Grace Dieu 2018',
+    slug: 'chateau-la-grace-dieu-2018',
+    price: 3800000,
+    origin: 'Pháp – Saint-Émilion',
+    type: 'Vang Đỏ',
+    alcohol: 13.5,
+    description: 'Một chai vang đỏ Pháp tuyệt vời từ Saint-Émilion, niên vụ 2018, với hương vị đậm đà và cấu trúc tốt.',
+    image: getImage('chateau-la-grace-dieu-2018'),
+    tags: ['wine', 'old-rare'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    isFeatured: true,
+    createdAt: '2024-08-04',
   }
 ];
 
