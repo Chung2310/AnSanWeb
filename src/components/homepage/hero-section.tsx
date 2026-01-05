@@ -51,6 +51,7 @@ export default function HeroSection() {
 
                 <div className="relative h-full flex flex-col">
                     <div className="container flex-1 flex items-center max-w-screen-2xl">
+                        {/* Left Column: Text Content */}
                         <div className="w-1/2 h-full flex flex-col justify-center items-start p-8">
                             <div className="max-w-md">
                                 <p className="font-semibold tracking-widest uppercase text-sm">MACALLAN 84</p>
@@ -66,6 +67,7 @@ export default function HeroSection() {
                             </div>
                         </div>
 
+                        {/* Right Column: Image Carousel */}
                         <div className="w-1/2 h-full relative">
                              <Carousel
                                 setApi={setApi}
@@ -98,6 +100,7 @@ export default function HeroSection() {
                         </div>
                     </div>
 
+                    {/* Bottom Bar: Controls */}
                     <div className="w-full bg-primary py-4">
                         <div className="container max-w-screen-2xl">
                             <div className="flex items-center">
