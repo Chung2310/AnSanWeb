@@ -49,13 +49,13 @@ export default function HeroSection() {
 
 
     if (!mounted) {
-        return <div className="h-[656px] w-full bg-primary"></div>; 
+        return <div className="h-[600px] w-full bg-primary"></div>; 
     }
 
     return (
         <div className="relative w-full text-white bg-primary">
+            {/* Main Content + Carousel */}
             <div className="flex flex-col h-[600px]">
-                 {/* Main Content: Text + Carousel */}
                 <div className="container flex-1 flex max-w-screen-2xl">
                     {/* Left Column: Text Content */}
                     <div className="w-1/2 flex flex-col justify-center items-start p-8">
