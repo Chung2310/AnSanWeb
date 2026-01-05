@@ -25,6 +25,10 @@ const mainNavLinks = [
   { 
     href: '/gioi-thieu', 
     label: 'Về chúng tôi',
+    sublinks: [
+        { href: '/gioi-thieu', label: 'Về AnSan' },
+        { href: '/gioi-thieu/nha-sang-lap', label: 'Về nhà sáng lập' },
+    ]
   },
   { 
     href: '/tin-tuc', 
@@ -90,7 +94,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
             onMouseLeave={() => setOpen(false)}
             className={cn("flex items-center gap-1 text-sm font-medium uppercase p-0 h-auto cursor-pointer", className)}
           >
-            {label}
+            <Link href={href}>{label}</Link>
             <ChevronDown className="h-4 w-4" />
           </div>
         </DropdownMenuTrigger>
