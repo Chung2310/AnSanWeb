@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages } from './placeholder-images';
 import type { Wine, Category, BlogPost, Testimonial } from './types';
 
@@ -464,6 +465,27 @@ export const sampleWines: Wine[] = [
     tastingNotes: genericTastingNotes,
     productDetails: genericProductDetails
   },
+  {
+    id: '22',
+    nameVN: 'Minskoye Shampanskoye',
+    nameEN: 'Minskoye Shampanskoye',
+    slug: 'minskoye-shampanskoye',
+    price: 240000,
+    origin: 'Belarus',
+    type: 'Vang Sủi',
+    alcohol: 12,
+    description: 'Một loại vang sủi phổ biến từ Belarus, hoàn hảo cho những dịp ăn mừng và tụ họp.',
+    image: {
+      id: 'minskoye-shampanskoye',
+      description: 'Bottle of Minskoye Shampanskoye',
+      imageUrl: '/product/Minskoye Shampanskoye1.png',
+      imageHint: 'sparkling wine'
+    },
+    tags: ['wine', 'sparkling'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+  },
 ];
 
 export const sampleCategories: Category[] = [
@@ -590,3 +612,4 @@ export const sampleTestimonials: Testimonial[] = [
     avatar: getImage('avatar-3'),
   },
 ];
+
