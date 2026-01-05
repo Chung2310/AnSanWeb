@@ -36,7 +36,7 @@ export default function FeaturedProduct() {
               src={featuredImage.imageUrl}
               alt={featuredImage.description}
               fill
-              className="object-contain"
+              className="object-contain mix-blend-multiply"
               data-ai-hint={featuredImage.imageHint}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
