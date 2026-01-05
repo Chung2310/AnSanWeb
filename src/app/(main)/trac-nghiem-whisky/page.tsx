@@ -1,11 +1,11 @@
 'use client';
 
-import WhiskyPourAnimation from '@/components/whisky-pour-animation';
+import { GlassWater } from 'lucide-react';
 
 export default function WhiskyQuizPage() {
     return (
         <div className="bg-black text-white min-h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center p-4">
-            <WhiskyPourAnimation />
+            <GlassWater className="h-20 w-20 text-white/30" />
             <h1 className="font-headline text-5xl font-bold mt-8 text-white">Khám Phá Gu Whisky Của Bạn</h1>
             <p className="mt-4 text-xl max-w-2xl mx-auto text-white/70">
                 Tính năng đang được phát triển.
