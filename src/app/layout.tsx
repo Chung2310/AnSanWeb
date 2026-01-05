@@ -19,24 +19,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Oswald:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
         <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              @font-face {
-                font-family: 'DangTau';
-                src: url('/fonts/DangTau.woff2') format('woff2'),
-                     url('/fonts/DangTau.woff') format('woff');
-                font-weight: normal;
-                font-style: normal;
-                font-display: swap;
-              }
-            `,
-          }}
-        />
       </head>
       <body
         className={cn(
