@@ -23,7 +23,7 @@ export default function InfluenceSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <div className="text-center lg:text-left">
-            <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan'S INFLUENCE</p>
+            <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA<br />CỦA AnSan
             </h2>

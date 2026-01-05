@@ -19,22 +19,24 @@ import { useEffect, useState } from 'react';
 const mainNavLinks = [
   { 
     href: '/trac-nghiem-whisky', 
-    label: 'TRẮC NGHIỆM WHISKY',
+    label: 'Trắc nghiệm Whisky',
   },
   { 
     href: '/ve-chung-toi', 
-    label: 'VỀ CHÚNG TÔI',
+    label: 'Về chúng tôi',
     sublinks: [
-      { href: '/ve-chung-toi/cau-chuyen', label: 'Câu chuyện' },
-      { href: '/ve-chung-toi/lien-he', label: 'Liên hệ' },
+      { href: '/ve-chung-toi/ve-ansan', label: 'Về AnSan' },
+      { href: '/ve-chung-toi/ve-nha-sang-lap', label: 'Về nhà sáng lập' },
     ]
   },
   { 
     href: '/kien-thuc-whisky', 
-    label: 'KIẾN THỨC WHISKY',
+    label: 'Kiến thức Whisky',
     sublinks: [
-      { href: '/kien-thuc-whisky/lich-su', label: 'Lịch sử' },
-      { href: '/kien-thuc-whisky/loai-whisky', label: 'Các loại whisky' },
+        { href: '/danh-muc/distilleries', label: 'Distilleries' },
+        { href: '/danh-muc/spirits', label: 'Spirits' },
+        { href: '/danh-muc/whisky-basics', label: 'Whisky Basics' },
+        { href: '/danh-muc/whisky-review', label: 'Whisky Review' },
     ]
   },
 ];
@@ -42,26 +44,32 @@ const mainNavLinks = [
 const categoryNavLinks = [
     { 
         href: '/danh-muc/scotch-whisky', 
-        label: 'SCOTCH WHISKY',
+        label: 'Scotch Whisky',
         sublinks: [
-            { href: '/danh-muc/scotch-whisky/single-malt', label: 'Single Malt' },
-            { href: '/danh-muc/scotch-whisky/blended', label: 'Blended' },
+            { href: '/danh-muc/scotch-whisky/whisky-campbeltown', label: 'Whisky Campbeltown' },
+            { href: '/danh-muc/scotch-whisky/whisky-highland', label: 'Whisky Highland' },
+            { href: '/danh-muc/scotch-whisky/whisky-islay', label: 'Whisky Islay' },
+            { href: '/danh-muc/scotch-whisky/whisky-lowland', label: 'Whisky Lowland' },
+            { href: '/danh-muc/scotch-whisky/whisky-speyside', label: 'Whisky Speyside' },
+            { href: '/danh-muc/scotch-whisky/whisky-islands', label: 'Whisky Islands' },
         ]
     },
     { 
         href: '/danh-muc/world-whisky', 
-        label: 'WORLD WHISKY',
+        label: 'World Whisky',
         sublinks: [
-            { href: '/danh-muc/world-whisky/japanese', label: 'Japanese' },
-            { href: '/danh-muc/world-whisky/american', label: 'American' },
+            { href: '/danh-muc/world-whisky/whisky-ireland', label: 'Whiskey Ireland' },
+            { href: '/danh-muc/world-whisky/whisky-nhat', label: 'Whisky Nhật' },
+            { href: '/danh-muc/world-whisky/whisky-the-lakes', label: 'Whisky The Lakes' },
+            { href: '/danh-muc/world-whisky/whisky-khac', label: 'Bourbon Whiskey' },
         ]
     },
-    { href: '/danh-muc/old-rare', label: 'OLD & RARE' },
-    { href: '/danh-muc/armagnac', label: 'ARMAGNAC' },
-    { href: '/danh-muc/wine', label: 'WINE' },
-    { href: '/danh-muc/bo-qua-tang', label: 'BỘ QUÀ TẶNG' },
-    { href: '/danh-muc/set-thu-ruou', label: 'SET THỬ RƯỢU' },
-    { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
+    { href: '/danh-muc/old-rare', label: 'Old & Rare' },
+    { href: '/danh-muc/armagnac', label: 'Armagnac' },
+    { href: '/danh-muc/wine', label: 'Wine' },
+    { href: '/danh-muc/bo-qua-tang', label: 'Bộ quà tặng' },
+    { href: '/danh-muc/set-thu-ruou', label: 'Set thử rượu' },
+    { href: '/danh-muc/khac-ten-len-chai', label: 'Khắc Tên Lên Chai' },
 ];
 
 export default function Header() {
@@ -137,7 +145,7 @@ export default function Header() {
       <div className="bg-secondary text-secondary-foreground">
         <div className="container flex h-20 max-w-screen-2xl items-center justify-between">
             <div className="relative w-1/4">
-                <Input type="text" placeholder="TÌM KIẾM SẢN PHẨM" className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" />
+                <Input type="text" placeholder="Tìm kiếm sản phẩm" className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" />
                 <Search className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-foreground/80" />
             </div>
 
