@@ -67,7 +67,7 @@ export default function FamousBrands() {
               const logo = PlaceHolderImages.find(img => img.id === logoId);
               if (!logo) return null;
               return (
-                <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/6 pl-4 flex justify-center">
+                <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/5 pl-4 flex justify-center">
                   <Image
                     src={logo.imageUrl}
                     alt={logo.description}
