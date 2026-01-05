@@ -538,6 +538,23 @@ export const sampleWines: Wine[] = [
     isNew: true,
     isFeatured: true,
     createdAt: '2024-07-31',
+  },
+  {
+    id: '25',
+    nameVN: 'Sâm panh Nga Đỏ',
+    nameEN: 'Russian Red Champagne',
+    slug: 'sam-panh-nga-do',
+    price: 240000,
+    origin: 'Hungary (Phong cách Nga)',
+    type: 'Vang Sủi',
+    alcohol: 12,
+    description: 'Một loại vang nổ đỏ theo phong cách Nga, sản xuất tại Hungary, mang đến hương vị độc đáo và mới lạ.',
+    image: getImage('sampanh-nga-do'),
+    tags: ['wine', 'sparkling'],
+    tastingNotes: genericTastingNotes,
+    productDetails: genericProductDetails,
+    isNew: true,
+    createdAt: '2024-08-01',
   }
 ];
 
