@@ -9,48 +9,17 @@ export default function WhiskyPourAnimation() {
   useEffect(() => {
     if (!svgRef.current) return;
 
-    // This is a workaround for a bug in GSAP's DrawSVGPlugin in some environments.
-    // We manually initialize the plugin if it hasn't been already.
-    if (typeof (gsap as any)._plugins.drawSVG === 'undefined' && typeof window !== 'undefined') {
-        (function (gsap) {
-            gsap.registerPlugin({
-            name: 'drawSVG',
-            init(target: any, value: any) {
-                const path = target.get(0);
-                if (!path.getBBox) return;
-                const length = path.getTotalLength();
-                (this as any).svg = path;
-                (this as any).length = length;
-                (this as any).style = path.style;
-                (this as any).style.strokeDasharray = length;
-                let start, end;
-                if (typeof value === 'string') {
-                [start, end] = value.split(' ').map(parseFloat);
-                } else {
-                start = 0;
-                end = value;
-                }
-                (this as any).start = start || 0;
-                (this as any).end = end || 100;
-            },
-            render(ratio: number, { svg, length, style, start, end }: any) {
-                const seg = [length * (start / 100), length * (end / 100)];
-                const S = seg[0] + (seg[1] - seg[0]) * ratio;
-                style.strokeDashoffset = -S;
-            },
-            });
-        })(gsap);
-    }
-
-
     const bottle = svgRef.current.querySelector('#bottle-group');
     const stream = svgRef.current.querySelector('#stream');
     const liquid = svgRef.current.querySelector('#liquid');
     const liquidClip = svgRef.current.querySelector('#liquid-clip-rect');
     
-    if (!bottle || !stream || !liquid || !liquidClip) return;
+    if (!stream) return;
+    const streamLength = (stream as SVGPathElement).getTotalLength();
 
-    gsap.set(stream, { drawSVG: '0% 0%' });
+    if (!bottle || !liquid || !liquidClip) return;
+
+    gsap.set(stream, { strokeDasharray: streamLength, strokeDashoffset: streamLength });
     gsap.set(liquidClip, { attr: { y: 200 } });
 
     const masterTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
@@ -66,7 +35,7 @@ export default function WhiskyPourAnimation() {
       // Start pouring
       .to(stream, {
         duration: 2.5,
-        drawSVG: '0% 100%',
+        strokeDashoffset: 0,
         ease: 'power1.out',
       }, '-=0.5')
        // Fill the glass
@@ -78,7 +47,7 @@ export default function WhiskyPourAnimation() {
       // Stop pouring
       .to(stream, {
         duration: 0.5,
-        drawSVG: '100% 100%',
+        strokeDashoffset: -streamLength,
         ease: 'power1.in',
       }, '+=0.5')
       // Reset bottle
