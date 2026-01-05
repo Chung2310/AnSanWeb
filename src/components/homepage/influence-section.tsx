@@ -9,7 +9,7 @@ import { motion, useInView, useAnimation, animate } from 'framer-motion';
 
 const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M21 8.15c-1.33 0-2.4 1.07-2.4 2.4v5.3c0 1.33-1.07 2.4-2.4 2.4H8.15c-1.33 0-2.4-1.07-2.4-2.4V8.15c0-1.33-1.07-2.4-2.4-2.4H3" />
+        <path d="M21 8.15c-1.33 0-2.4 1.07-2.4 2.4v5.3c0 1.33-1.07 2.4-2.4 2.4H8.15c-1.33 0-2.4-1.07-2.4-2.4V8.15c0-1.33-1.07 2.4-2.4 2.4H3" />
         <path d="M12 18.25V3" />
         <path d="M12 3a4 4 0 1 1 4 4" />
     </svg>
@@ -23,7 +23,7 @@ const AnimatedNumber = ({ to }: { to: number }) => {
         if (!node) return;
 
         const controls = animate(0, to, {
-            duration: 2,
+            duration: 2.5,
             onUpdate(value) {
                 node.textContent = new Intl.NumberFormat('vi-VN').format(Math.round(value));
             }
@@ -54,18 +54,18 @@ export default function InfluenceSection() {
         hidden: { opacity: 0 },
         visible: { 
             opacity: 1, 
-            transition: { staggerChildren: 0.3, delayChildren: 0.2 } 
+            transition: { staggerChildren: 0.4, delayChildren: 0.3 } 
         },
     };
 
     const fromLeftVariants = {
         hidden: { opacity: 0, x: -50 },
-        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
     };
 
     const fromRightVariants = {
         hidden: { opacity: 0, x: 50 },
-        visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } },
     };
 
 

@@ -66,7 +66,7 @@ export default function FamousBrands() {
         }}
         initial="hidden"
         animate={mainControls}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
         className="py-16 bg-white">
       <div className="container">
         <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#3a3a3a'}}>

@@ -80,7 +80,7 @@ export default function PriceCategoryShowcase() {
       }}
       initial="hidden"
       animate={mainControls}
-      transition={{ duration: 0.5, delay: 0.2 }}
+      transition={{ duration: 0.8, delay: 0.3 }}
       className="py-12" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
         <Carousel
