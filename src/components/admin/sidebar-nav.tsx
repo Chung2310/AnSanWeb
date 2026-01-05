@@ -11,11 +11,13 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Mail, Settings, LifeBuoy } from 'lucide-react';
+import { LayoutDashboard, Mail, Settings, LifeBuoy, Package, MessageSquare } from 'lucide-react';
 import Logo from '@/components/logo';
 
 const links = [
   { href: '/admin', label: 'Bảng điều khiển', icon: LayoutDashboard },
+  { href: '/admin/products', label: 'Sản phẩm', icon: Package },
+  { href: '/admin/contacts', label: 'Tin nhắn', icon: MessageSquare },
   { href: '/admin/newsletters', label: 'Bản tin', icon: Mail },
   // Add other admin links here
 ];
