@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
+import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -49,6 +50,7 @@ type ActiveFilters = {
 interface ProductListingProps {
     initialProducts: Wine[];
     title: string;
+    bannerData?: CategoryBannerProps;
 }
 
 const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
@@ -85,7 +87,7 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
   </div>
 );
 
-export default function ProductListing({ initialProducts, title }: ProductListingProps) {
+export default function ProductListing({ initialProducts, title, bannerData }: ProductListingProps) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
@@ -195,6 +197,7 @@ export default function ProductListing({ initialProducts, title }: ProductListin
 
   return (
     <div className="bg-white text-black">
+      {bannerData && <CategoryBanner {...bannerData} />}
       <div className="container py-12">
         <div className="text-left mb-4">
           <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
