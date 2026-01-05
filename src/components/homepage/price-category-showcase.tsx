@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
@@ -8,6 +8,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/com
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Autoplay from "embla-carousel-autoplay";
+import { motion, useInView, useAnimation } from 'framer-motion';
 
 interface PriceCategory {
   imageId: string;
@@ -46,6 +47,16 @@ export default function PriceCategoryShowcase() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
 
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const mainControls = useAnimation();
+
+  useEffect(() => {
+      if (isInView) {
+          mainControls.start("visible");
+      }
+  }, [isInView, mainControls]);
+
   useEffect(() => {
     if (!api) return;
     
@@ -61,7 +72,16 @@ export default function PriceCategoryShowcase() {
   }, [api]);
 
   return (
-    <section className="py-12" style={{ backgroundColor: '#fdfaf5' }}>
+    <motion.section 
+      ref={ref}
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0 },
+      }}
+      initial="hidden"
+      animate={mainControls}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="py-12" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
         <Carousel
           setApi={setApi}
@@ -114,6 +134,6 @@ export default function PriceCategoryShowcase() {
           </div>
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 }

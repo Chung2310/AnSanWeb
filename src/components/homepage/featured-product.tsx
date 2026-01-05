@@ -4,7 +4,8 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -25,11 +26,20 @@ const itemVariants = {
 
 export default function FeaturedProduct() {
   const featuredImage = PlaceHolderImages.find((img) => img.id === 'featured-macallan-25');
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const mainControls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      mainControls.start("visible");
+    }
+  }, [isInView, mainControls]);
 
   if (!featuredImage) return null;
 
   return (
-    <section className="relative py-20 text-white bg-background overflow-hidden min-h-[600px] flex items-center">
+    <section ref={ref} className="relative py-20 text-white bg-background overflow-hidden min-h-[600px] flex items-center">
       <Image
         src={featuredImage.imageUrl}
         alt={featuredImage.description}
@@ -42,10 +52,9 @@ export default function FeaturedProduct() {
       <div className="container mx-auto max-w-screen-xl relative z-10">
         <motion.div
             className="text-left md:w-1/2"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
             variants={containerVariants}
+            initial="hidden"
+            animate={mainControls}
         >
           <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80">
             PHIÊN BẢN GIỚI HẠN

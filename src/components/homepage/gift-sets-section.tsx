@@ -4,6 +4,8 @@ import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-imag
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import { useRef, useEffect } from 'react';
 
 interface GiftSetCardProps {
   imageId: string;
@@ -61,23 +63,53 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
 }
 
 export default function GiftSetsSection() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
+    const mainControls = useAnimation();
+
+    useEffect(() => {
+        if (isInView) {
+            mainControls.start("visible");
+        }
+    }, [isInView, mainControls]);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.3 }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+    };
+
   return (
-    <section className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
+    <motion.section
+        ref={ref}
+        variants={containerVariants}
+        initial="hidden"
+        animate={mainControls}
+        className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
-        <div className="text-center">
+        <motion.div variants={itemVariants} className="text-center">
           <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>
             GIFT & ACCESSORIES
           </p>
           <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>
             NHỮNG SET THỬ & QUÀ TẶNG Ý NGHĨA
           </h2>
-        </div>
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+        </motion.div>
+        <motion.div variants={containerVariants} className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
           {giftCards.map((card) => (
-            <GiftCard key={card.imageId} card={card} />
+            <motion.div key={card.imageId} variants={itemVariants}>
+              <GiftCard card={card} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -6,6 +6,8 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from '@/lib/utils';
 import Autoplay from "embla-carousel-autoplay";
+import { motion, useInView, useAnimation } from 'framer-motion';
+
 
 const brandLogos = [
   'brand-macallan',
@@ -24,6 +26,16 @@ export default function FamousBrands() {
   const plugin = useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
   )
+
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const mainControls = useAnimation();
+
+  useEffect(() => {
+      if (isInView) {
+          mainControls.start("visible");
+      }
+  }, [isInView, mainControls]);
 
   useEffect(() => {
     if (!api) {
@@ -46,7 +58,16 @@ export default function FamousBrands() {
 
 
   return (
-    <section className="py-16 bg-white">
+    <motion.section 
+        ref={ref}
+        variants={{
+            hidden: { opacity: 0, y: 50 },
+            visible: { opacity: 1, y: 0 },
+        }}
+        initial="hidden"
+        animate={mainControls}
+        transition={{ duration: 0.5 }}
+        className="py-16 bg-white">
       <div className="container">
         <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#3a3a3a'}}>
           Những Thương Hiệu Nổi Tiếng
@@ -95,6 +116,6 @@ export default function FamousBrands() {
           </div>
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 }
