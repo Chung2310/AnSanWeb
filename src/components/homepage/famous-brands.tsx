@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
@@ -19,15 +19,28 @@ const brandLogos = [
 export default function FamousBrands() {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  
+  const plugin = useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true })
+  )
 
   useEffect(() => {
     if (!api) {
       return
     }
-    setCurrent(api.selectedScrollSnap() + 1)
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1)
-    })
+    setScrollSnaps(api.scrollSnaps());
+    setCurrent(api.selectedScrollSnap())
+
+    const onSelect = () => {
+        setCurrent(api.selectedScrollSnap())
+    }
+
+    api.on("select", onSelect)
+    
+    return () => {
+        api.off("select", onSelect)
+    }
   }, [api])
 
 
@@ -40,7 +53,9 @@ export default function FamousBrands() {
         <Carousel
           setApi={setApi}
           className="w-full mt-12"
-          plugins={[ Autoplay({ delay: 3000, stopOnInteraction: true }) ]}
+          plugins={[plugin.current]}
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
           opts={{
             align: "start",
             loop: true,
@@ -51,7 +66,7 @@ export default function FamousBrands() {
               const logo = PlaceHolderImages.find(img => img.id === logoId);
               if (!logo) return null;
               return (
-                <CarouselItem key={index} className="basis-1/4 md:basis-1/5 lg:basis-1/6 pl-4 flex justify-center">
+                <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/6 pl-4 flex justify-center">
                   <Image
                     src={logo.imageUrl}
                     alt={logo.description}
@@ -65,14 +80,15 @@ export default function FamousBrands() {
             })}
           </CarouselContent>
           <div className="flex justify-center mt-8 space-x-2">
-            {Array.from({ length: Math.ceil(brandLogos.length / 5) }).map((_, index) => (
+            {scrollSnaps.map((_, index) => (
                 <button
                     key={index}
-                    onClick={() => api?.scrollTo(index * 5)}
+                    onClick={() => api?.scrollTo(index)}
                     className={cn(
                         "w-2 h-2 rounded-full",
-                        Math.ceil(current / 5) -1 === index ? "bg-stone-800" : "bg-stone-300"
+                        current === index ? "bg-stone-800" : "bg-stone-300"
                     )}
+                    aria-label={`Go to slide ${index + 1}`}
                 />
             ))}
           </div>
