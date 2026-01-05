@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn('relative', className)} style={{ width: '150px', height: '100px' }}>
+    <div className={cn('relative', className)} style={{ width: '120px', height: '80px' }}>
       <Image
         src="/logo.png"
         alt="AnSan Logo"
