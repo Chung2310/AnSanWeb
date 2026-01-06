@@ -2,6 +2,15 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import {
+  collection,
+  doc,
+  deleteDoc,
+  query,
+  orderBy,
+  Firestore,
+} from 'firebase/firestore';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -40,18 +49,26 @@ import {
 import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import { useProductDialog } from '@/components/admin/products/use-product-dialog';
 import { ProductForm } from '@/components/admin/products/product-form';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { deleteDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
-import { sampleWines } from '@/lib/placeholder-data';
 import type { Wine } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminProductsPage() {
   const { onOpen } = useProductDialog();
-  const [products, setProducts] = useState<Wine[]>(() =>
-    sampleWines.sort(
-      (a, b) =>
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-    )
+  const firestore = useFirestore();
+
+  const winesCollection = useMemoFirebase(
+    () => collection(firestore, 'wines'),
+    [firestore]
   );
+  const winesQuery = useMemoFirebase(
+    () => winesCollection && query(winesCollection, orderBy('createdAt', 'desc')),
+    [winesCollection]
+  );
+  
+  const { data: products, isLoading } = useCollection<Wine>(winesQuery);
 
   const [deleteCandidate, setDeleteCandidate] = useState<Wine | null>(null);
 
@@ -64,8 +81,13 @@ export default function AdminProductsPage() {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN');
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Ngày không hợp lệ';
+      return date.toLocaleDateString('vi-VN');
+    } catch (e) {
+      return 'Ngày không hợp lệ';
+    }
   };
 
   const handleCreate = () => {
@@ -75,31 +97,38 @@ export default function AdminProductsPage() {
   const handleEdit = (product: Wine) => {
     onOpen(product.id, product);
   };
-  
+
   const handleDelete = (product: Wine) => {
     setDeleteCandidate(product);
-  }
+  };
 
   const confirmDelete = () => {
-    if (!deleteCandidate) return;
-    setProducts(prev => prev.filter(p => p.id !== deleteCandidate.id));
-  }
-
+    if (!deleteCandidate || !firestore) return;
+    const docRef = doc(firestore, 'wines', deleteCandidate.id);
+    deleteDocumentNonBlocking(docRef);
+    setDeleteCandidate(null);
+  };
 
   return (
     <>
       <ProductForm />
-       <AlertDialog open={!!deleteCandidate} onOpenChange={(open) => !open && setDeleteCandidate(null)}>
+      <AlertDialog
+        open={!!deleteCandidate}
+        onOpenChange={(open) => !open && setDeleteCandidate(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
             <AlertDialogDescription>
-              Hành động này không thể được hoàn tác. Sản phẩm "{deleteCandidate?.nameVN}" sẽ bị xóa vĩnh viễn.
+              Hành động này không thể được hoàn tác. Sản phẩm "
+              {deleteCandidate?.nameVN}" sẽ bị xóa vĩnh viễn.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>Tiếp tục</AlertDialogAction>
+            <AlertDialogAction onClick={confirmDelete}>
+              Tiếp tục
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -144,14 +173,28 @@ export default function AdminProductsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => (
+                {isLoading && Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="hidden sm:table-cell">
+                       <Skeleton className="h-16 w-16 rounded-md" />
+                    </TableCell>
+                    <TableCell><Skeleton className="h-4 w-[250px]" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
+                    <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-[100px]" /></TableCell>
+                    <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-[100px]" /></TableCell>
+                    <TableCell>
+                      <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {!isLoading && products?.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt={product.nameVN}
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src={product.image.imageUrl}
+                        src={product.image?.imageUrl || '/placeholder.svg'}
                         width="64"
                       />
                     </TableCell>
@@ -182,7 +225,11 @@ export default function AdminProductsPage() {
                           <DropdownMenuItem onClick={() => handleEdit(product)}>
                             Chỉnh sửa
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDelete(product)}>Xóa</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(product)}
+                          >
+                            Xóa
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -193,8 +240,8 @@ export default function AdminProductsPage() {
           </CardContent>
           <CardFooter>
             <div className="text-xs text-muted-foreground">
-              Hiển thị <strong>1-{products.length}</strong> trên{' '}
-              <strong>{products.length}</strong> sản phẩm
+              Hiển thị <strong>1-{products?.length ?? 0}</strong> trên{' '}
+              <strong>{products?.length ?? 0}</strong> sản phẩm
             </div>
           </CardFooter>
         </Card>

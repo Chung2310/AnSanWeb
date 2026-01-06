@@ -24,7 +24,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { sampleWines } from '@/lib/placeholder-data';
 import {
   Select,
   SelectContent,
@@ -32,6 +31,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useFirestore } from '@/firebase';
+import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { sampleWines } from '@/lib/placeholder-data';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const formSchema = z.object({
   nameVN: z.string().min(1, 'Tên tiếng Việt là bắt buộc'),
@@ -52,11 +56,11 @@ const formSchema = z.object({
   ]),
   alcohol: z.coerce.number().min(0).max(100),
   description: z.string().min(1, 'Mô tả là bắt buộc'),
-  // We'll handle image separately, for now just a string
 });
 
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
+  const firestore = useFirestore();
 
   const isEditMode = !!id;
 
@@ -79,15 +83,31 @@ export function ProductForm() {
         description: '',
       });
     }
-  }, [defaultValues, form]);
+  }, [defaultValues, form, isOpen]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isEditMode) {
-      // TODO: Implement update logic
-      console.log('Updating product:', id, values);
+    if (!firestore) return;
+
+    const winesCollectionRef = collection(firestore, 'wines');
+    
+    // For now, let's use a placeholder image if not provided
+    const image = defaultValues?.image || PlaceHolderImages.find(p => p.id === 'wine-1');
+
+    const dataToSave = {
+        ...values,
+        image,
+    };
+
+    if (isEditMode && id) {
+      const docRef = doc(winesCollectionRef, id);
+      updateDocumentNonBlocking(docRef, dataToSave);
     } else {
-      // TODO: Implement create logic
-      console.log('Creating product:', values);
+      addDocumentNonBlocking(winesCollectionRef, {
+          ...dataToSave,
+          createdAt: new Date().toISOString(), // Use client-side timestamp for simplicity
+          isFeatured: false,
+          isNew: true,
+      });
     }
     onClose();
   };
