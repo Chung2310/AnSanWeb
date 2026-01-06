@@ -97,4 +97,7 @@
   .hover\\:text-header-nav-hover:hover {
     color: #000;
   }
+  .no-focus-border:focus-visible {
+    box-shadow: none !important;
+  }
 }
