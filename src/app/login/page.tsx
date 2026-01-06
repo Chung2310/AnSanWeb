@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useAuth } from '@/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, redirect } from 'next/navigation';
 
@@ -67,14 +67,30 @@ export default function LoginPage() {
       });
       router.push('/admin');
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Đăng nhập thất bại',
-        description: error.message.includes('auth/invalid-credential') 
-          ? 'Email hoặc mật khẩu không chính xác.'
-          : 'Đã có lỗi xảy ra. Vui lòng thử lại.',
-      });
-      console.error('Login error:', error);
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+        // If user does not exist, try to create a new user
+        try {
+          await createUserWithEmailAndPassword(auth, values.email, values.password);
+          toast({
+            title: 'Tài khoản admin đã được tạo!',
+            description: 'Chào mừng bạn đến với trang quản trị.',
+          });
+          router.push('/admin');
+        } catch (creationError: any) {
+          toast({
+            variant: 'destructive',
+            title: 'Lỗi tạo tài khoản',
+            description: creationError.message || 'Đã có lỗi xảy ra khi tạo tài khoản admin.',
+          });
+        }
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Đăng nhập thất bại',
+          description: 'Đã có lỗi xảy ra. Vui lòng thử lại.',
+        });
+        console.error('Login error:', error);
+      }
     }
   };
 
