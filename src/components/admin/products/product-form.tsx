@@ -24,17 +24,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
-import { sampleWines } from '@/lib/placeholder-data';
 import FileUploader from '@/components/admin/products/file-uploader';
 import type { ImageInfo, ProductAttribute } from '@/lib/types';
 
@@ -48,11 +40,11 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
-  }),
+  }).nullable(),
   detailImage: z.object({
       url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
       path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
-  }),
+  }).nullable(),
   attributes: z.array(z.object({
     label: z.string(),
     value: z.string()
@@ -97,8 +89,8 @@ export function ProductForm() {
         if (defaultValues) {
             form.reset({
                 ...defaultValues,
-                image: defaultValues.image || { url: '', path: '' },
-                detailImage: defaultValues.detailImage || { url: '', path: '' },
+                image: defaultValues.image || null,
+                detailImage: defaultValues.detailImage || null,
                 attributes: defaultValues.attributes || [],
             });
         } else {
@@ -108,8 +100,8 @@ export function ProductForm() {
                 slug: '',
                 price: 0,
                 description: '',
-                image: { url: '', path: '' },
-                detailImage: { url: '', path: '' },
+                image: null,
+                detailImage: null,
                 attributes: [],
             });
         }
@@ -126,12 +118,19 @@ export function ProductForm() {
 
     const winesCollectionRef = collection(firestore, 'wines');
     
+    // Create a new data object for submission, ensuring attributes are handled correctly.
+    const submissionData = {
+        ...values,
+        // Ensure attributes is always an array, even if it's not provided in the form.
+        attributes: values.attributes || [], 
+    };
+
     if (isEditMode && id) {
       const docRef = doc(winesCollectionRef, id);
-      updateDocumentNonBlocking(docRef, values);
+      updateDocumentNonBlocking(docRef, submissionData);
     } else {
       addDocumentNonBlocking(winesCollectionRef, {
-          ...values,
+          ...submissionData,
           createdAt: new Date().toISOString(),
           isFeatured: false,
           isNew: true,
