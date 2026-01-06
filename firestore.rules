@@ -56,7 +56,8 @@ service cloud.firestore {
      */
     match /wines/{wineId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow create: if request.auth != null; // Allow any authenticated user to create
+      allow update, delete: if isAdmin();
     }
 
     /**
