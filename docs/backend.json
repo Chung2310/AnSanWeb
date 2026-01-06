@@ -8,15 +8,15 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Wine entity."
+          "description": "Unique identifier for the wine product."
         },
         "nameVN": {
           "type": "string",
-          "description": "Wine name in Vietnamese."
+          "description": "Name of the wine in Vietnamese."
         },
         "nameEN": {
           "type": "string",
-          "description": "Wine name in English."
+          "description": "Name of the wine in English."
         },
         "slug": {
           "type": "string",
@@ -24,11 +24,11 @@
         },
         "descriptionVN": {
           "type": "string",
-          "description": "Wine description in Vietnamese."
+          "description": "Description of the wine in Vietnamese."
         },
         "descriptionEN": {
           "type": "string",
-          "description": "Wine description in English."
+          "description": "Description of the wine in English."
         },
         "price": {
           "type": "number",
@@ -36,7 +36,7 @@
         },
         "origin": {
           "type": "string",
-          "description": "Origin country of the wine."
+          "description": "Origin of the wine (e.g., France, Italy)."
         },
         "type": {
           "type": "string",
@@ -63,7 +63,7 @@
         },
         "rating": {
           "type": "number",
-          "description": "Customer rating of the wine."
+          "description": "Rating of the wine (e.g., out of 5)."
         },
         "isFeatured": {
           "type": "boolean",
@@ -105,19 +105,19 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
-      "description": "Represents a category of wine.",
+      "description": "Represents a category of wines.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Category entity."
+          "description": "Unique identifier for the category."
         },
         "nameVN": {
           "type": "string",
-          "description": "Category name in Vietnamese."
+          "description": "Name of the category in Vietnamese."
         },
         "nameEN": {
           "type": "string",
-          "description": "Category name in English."
+          "description": "Name of the category in English."
         },
         "slug": {
           "type": "string",
@@ -125,11 +125,11 @@
         },
         "description": {
           "type": "string",
-          "description": "Category description."
+          "description": "Description of the category."
         },
         "image": {
           "type": "string",
-          "description": "URL of the category image."
+          "description": "Image URL for the category."
         }
       },
       "required": [
@@ -145,19 +145,19 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "BlogPost",
       "type": "object",
-      "description": "Represents a blog post or article.",
+      "description": "Represents a blog post.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the BlogPost entity."
+          "description": "Unique identifier for the blog post."
         },
         "titleVN": {
           "type": "string",
-          "description": "Blog post title in Vietnamese."
+          "description": "Title of the blog post in Vietnamese."
         },
         "titleEN": {
           "type": "string",
-          "description": "Blog post title in English."
+          "description": "Title of the blog post in English."
         },
         "slug": {
           "type": "string",
@@ -165,15 +165,15 @@
         },
         "contentVN": {
           "type": "string",
-          "description": "Blog post content in Vietnamese."
+          "description": "Content of the blog post in Vietnamese."
         },
         "contentEN": {
           "type": "string",
-          "description": "Blog post content in English."
+          "description": "Content of the blog post in English."
         },
         "image": {
           "type": "string",
-          "description": "URL of the blog post image."
+          "description": "Image URL for the blog post."
         },
         "author": {
           "type": "string",
@@ -201,32 +201,32 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Contact",
       "type": "object",
-      "description": "Represents a contact form submission.",
+      "description": "Represents a contact message.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Contact entity."
+          "description": "Unique identifier for the contact message."
         },
         "name": {
           "type": "string",
-          "description": "Name of the contact person."
+          "description": "Name of the person sending the message."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the contact person.",
+          "description": "Email address of the person sending the message.",
           "format": "email"
         },
         "phone": {
           "type": "string",
-          "description": "Phone number of the contact person."
+          "description": "Phone number of the person sending the message."
         },
         "message": {
           "type": "string",
-          "description": "Message from the contact person."
+          "description": "The contact message."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the contact form was submitted.",
+          "description": "Timestamp of when the message was created.",
           "format": "date-time"
         }
       },
@@ -247,11 +247,11 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the NewsletterSubscription entity."
+          "description": "Unique identifier for the newsletter subscription."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the subscriber.",
+          "description": "Email address for the newsletter subscription.",
           "format": "email"
         },
         "subscribedAt": {
@@ -282,11 +282,11 @@
           "schema": {
             "$ref": "#/backend/entities/Wine"
           },
-          "description": "Stores wine product information. Publicly readable.",
+          "description": "Stores wine product information.",
           "params": [
             {
               "name": "wineId",
-              "description": "Unique identifier for the wine."
+              "description": "Unique identifier for the wine product."
             }
           ]
         }
@@ -298,7 +298,7 @@
           "schema": {
             "$ref": "#/backend/entities/Category"
           },
-          "description": "Stores wine category information. Publicly readable.",
+          "description": "Stores wine categories.",
           "params": [
             {
               "name": "categoryId",
@@ -314,7 +314,7 @@
           "schema": {
             "$ref": "#/backend/entities/BlogPost"
           },
-          "description": "Stores blog post information. Publicly readable.",
+          "description": "Stores blog post content.",
           "params": [
             {
               "name": "blogPostId",
@@ -330,7 +330,7 @@
           "schema": {
             "$ref": "#/backend/entities/Contact"
           },
-          "description": "Stores contact form submissions. Write-only for unauthenticated users.",
+          "description": "Stores contact form submissions. Only accessible to admins.",
           "params": [
             {
               "name": "contactId",
@@ -340,7 +340,7 @@
         }
       },
       {
-        "path": "/newsletterSubscriptions/{subscriptionId}",
+        "path": "/newsletterSubscriptions/{newsletterSubscriptionId}",
         "definition": {
           "entityName": "NewsletterSubscription",
           "schema": {
@@ -349,29 +349,29 @@
           "description": "Stores newsletter subscription information.",
           "params": [
             {
-              "name": "subscriptionId",
-              "description": "Unique identifier for the subscription."
+              "name": "newsletterSubscriptionId",
+              "description": "Unique identifier for the newsletter subscription."
             }
           ]
         }
       },
       {
-        "path": "/roles_admin/{uid}",
+        "path": "/roles_admin/{userId}",
         "definition": {
-          "entityName": "role",
+          "entityName": "roles_admin",
           "schema": {
             "$ref": "#/backend/entities/NewsletterSubscription"
           },
-          "description": "Stores admin role information. Existence of a document grants admin access.",
+          "description": "Admin role management.  Document existence grants admin access. This supports DBAC (Database-Based Access Control).",
           "params": [
             {
-              "name": "uid",
-              "description": "User ID of the admin."
+              "name": "userId",
+              "description": "User ID for whom the admin role is assigned."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support a wine showcase application with a blog and admin dashboard. It prioritizes security, scalability, and ease of debugging. The key principle is Authorization Independence achieved through denormalization where necessary.  \n\n**Authorization Independence (Denormalization):**\n*   No `get()` calls in security rules are needed because authorization data is denormalized. For example, if roles were added they would need to be denormalized into each document.\n\n**Structural Segregation:**\n*   Collections are segregated based on their security needs. Publicly readable data (wines, categories, blog posts) resides in separate collections from sensitive data (contacts, admin roles).\n\n**Access Modeling:**\n*   Wines, Categories, and BlogPosts collections use simple path-based access with public read permissions.\n*   Contacts collection allows unauthenticated writes but should be monitored.\n*   Admin roles are managed using existence checks in a dedicated collection.\n\n**QAPs (Rules are not Filters):**\n*   The structure enables secure `list` operations because each collection has a homogeneous security posture. For example, listing wines is allowed for everyone.\n*   Admin access is controlled by the existence of a document in the `roles_admin` collection, preventing unauthorized modifications.\n\n**Invariants:**\n*   Timestamps (createdAt, date, subscribedAt) can be enforced via rules to ensure data integrity.\n*   Data consistency between the categoryIds array in `wines` and the `categories` collection is managed at the application level.\n\nThis structure allows for simple, robust, and debuggable security rules, reducing complexity and potential security vulnerabilities."
+    "reasoning": "The Firestore structure is designed to support a wine showcase website with a blog and admin dashboard. It prioritizes security, scalability, and ease of debugging. The key principle is Authorization Independence achieved through denormalization where necessary.  \n\n**Authorization Independence (Denormalization):**\n*   Admin access is controlled via the existence of a document in `/roles_admin/{uid}`. This eliminates the need for custom claims or complex role-based logic within the security rules.\n\n**Structural Segregation:**\n*   Each top-level collection (`wines`, `categories`, `blogPosts`, `contacts`, `newsletterSubscriptions`, `roles_admin`) serves a distinct purpose and has its own security posture. This simplifies security rules.\n*   The structure uses path-based ownership for admin roles, which provides a straightforward and secure method for access control.\n\n**Access Modeling:**\n*   Admin role is determined by document existence in `/roles_admin/{uid}`. This provides a simple and scalable way to manage admin privileges without relying on complex data structures or custom claims.\n\n**QAPs (Rules are not Filters):**\n*   `list` operations are secured by ensuring that public data is stored separately from private data. Only authorized admins can read the `contacts` collection.\n\n**Invariants:**\n*   Timestamps (e.g., `createdAt` in `wines`, `contacts`, and `newsletterSubscriptions`) can be enforced using security rules to ensure data integrity.\n\n\nThis structure facilitates simple and robust security rules, making the application easier to maintain and debug.  The denormalization of the admin role eliminates the need for complex `get()` calls in the rules, enhancing performance and security."
   }
 }
