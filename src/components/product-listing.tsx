@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Wine } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
+import { useProducts } from "@/hooks/use-products";
+import { sampleWines } from "@/lib/placeholder-data";
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -93,9 +95,17 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 
+  const [clientProducts, setClientProducts] = useState(initialProducts);
+
+  // When initialProducts changes (from Firestore fetch), update the state
+  useEffect(() => {
+    setClientProducts(initialProducts);
+  }, [initialProducts]);
+
+
   const filtersData = useMemo(() => {
     const brandsInProducts = allBrands.map(brand => {
-      const count = initialProducts.filter(product => product.nameVN.toUpperCase().includes(brand)).length;
+      const count = clientProducts.filter(product => product.nameVN.toUpperCase().includes(brand)).length;
       return { label: brand, count: count };
     }).filter(brand => brand.count > 0);
 
@@ -103,7 +113,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       "THƯƠNG HIỆU": brandsInProducts,
       ...staticFiltersData
     }
-  }, [initialProducts]);
+  }, [clientProducts]);
 
 
   const handleFilterChange = (group: string, value: string) => {
@@ -119,7 +129,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   };
 
   const filteredAndSortedProducts = useMemo(() => {
-    let products = [...initialProducts];
+    let products = [...clientProducts];
 
     // Filtering logic
     Object.entries(activeFilters).forEach(([group, values]) => {
@@ -182,7 +192,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [initialProducts, activeFilters, activeSort, filtersData]);
+  }, [clientProducts, activeFilters, activeSort, filtersData]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
