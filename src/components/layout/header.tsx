@@ -94,7 +94,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
             variant="ghost"
             onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
-            className={cn("p-0 h-auto", linkClasses)}
+            className={cn("p-0 h-auto no-focus-border", linkClasses)}
           >
             {label}
             <ChevronDown className="h-4 w-4 ml-1" />
