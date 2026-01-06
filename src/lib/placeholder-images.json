@@ -401,6 +401,24 @@
       "description": "Bottle of La Petite Gargotte",
       "imageUrl": "/product/La Petite Gargotte.png",
       "imageHint": "red wine"
+    },
+    {
+      "id": "prod-detail-1",
+      "description": "Bottle of product 1 for detail page",
+      "imageUrl": "https://images.unsplash.com/photo-1610631787813-9eeb1a2386cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aW5lJTIwYm90dGxlfGVufDB8fHx8MTc2NzY2NzkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wine bottle"
+    },
+    {
+      "id": "prod-detail-2",
+      "description": "Bottle of product 2 for detail page",
+      "imageUrl": "https://images.unsplash.com/photo-1580537922571-ca7180cd700e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGlza3klMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "whisky bottle"
+    },
+    {
+      "id": "prod-detail-3",
+      "description": "Bottle of product 3 for detail page",
+      "imageUrl": "https://images.unsplash.com/photo-1633219662092-32ec511159fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcGlyaXQlMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spirit bottle"
     }
   ]
 }
