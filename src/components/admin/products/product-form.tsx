@@ -29,6 +29,7 @@ import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/no
 import { collection, doc } from 'firebase/firestore';
 import FileUploader from '@/components/admin/products/file-uploader';
 import type { ImageInfo, ProductAttribute } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
 
 const formSchema = z.object({
@@ -67,6 +68,8 @@ function generateSlug(name: string) {
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
   const firestore = useFirestore();
+  const [isUploading, setIsUploading] = useState(false);
+
 
   const isEditMode = !!id;
 
@@ -75,9 +78,12 @@ export function ProductForm() {
   });
   
   const nameVNValue = form.watch('nameVN');
+  const { isSubmitting } = form.formState;
+
 
   useEffect(() => {
-    if (nameVNValue && !form.formState.isDirty) {
+    // Only auto-generate slug for new products, not when editing
+    if (nameVNValue && !isEditMode) {
       const slug = generateSlug(nameVNValue);
       form.setValue('slug', slug, { shouldValidate: true });
     }
@@ -215,12 +221,14 @@ export function ProductForm() {
                     label="Ảnh bìa (listing)"
                     onUploadComplete={handleImageUploadComplete}
                     defaultUrl={form.getValues('image.url')}
+                    onUploadStateChange={setIsUploading}
                 />
                 <FileUploader
                     fieldName="detailImage"
                     label="Ảnh trang chi tiết"
                     onUploadComplete={handleImageUploadComplete}
                     defaultUrl={form.getValues('detailImage.url')}
+                    onUploadStateChange={setIsUploading}
                 />
             </div>
             
@@ -247,7 +255,10 @@ export function ProductForm() {
               <Button type="button" variant="outline" onClick={onClose}>
                 Hủy
               </Button>
-              <Button type="submit">Lưu Thay Đổi</Button>
+              <Button type="submit" disabled={isSubmitting || isUploading}>
+                {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Lưu Thay Đổi
+              </Button>
             </DialogFooter>
           </form>
         </Form>
