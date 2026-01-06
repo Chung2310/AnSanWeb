@@ -82,10 +82,7 @@ export default function AdminProductsPage() {
 
   const confirmDelete = () => {
     if (!deleteCandidate) return;
-    // In a real app, you'd call an API to delete the product
-    // For now, we'll just filter it out from the local state
     setProducts(prev => prev.filter(p => p.id !== deleteCandidate.id));
-    setDeleteCandidate(null);
   }
 
 
@@ -101,7 +98,7 @@ export default function AdminProductsPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteCandidate(null)}>Hủy</AlertDialogCancel>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete}>Tiếp tục</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
