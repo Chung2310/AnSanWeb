@@ -68,6 +68,19 @@ const formSchema = z.object({
   }),
 });
 
+function generateSlug(name: string) {
+  if (!name) return '';
+  return name
+    .toLowerCase()
+    .normalize('NFD') // Decompose combined graphemes into base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+    .replace(/đ/g, 'd') // Replace đ with d
+    .replace(/[^a-z0-9\s-]/g, '') // Remove invalid chars
+    .replace(/\s+/g, '-') // Collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // Collapse dashes
+}
+
+
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
   const firestore = useFirestore();
@@ -77,6 +90,16 @@ export function ProductForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  
+  const nameVNValue = form.watch('nameVN');
+
+  useEffect(() => {
+    if (nameVNValue && !isEditMode) {
+      const slug = generateSlug(nameVNValue);
+      form.setValue('slug', slug, { shouldValidate: true });
+    }
+  }, [nameVNValue, form, isEditMode]);
+
 
   useEffect(() => {
     if (isOpen) {
@@ -104,7 +127,7 @@ export function ProductForm() {
   }, [defaultValues, form, isOpen]);
   
   const handleImageUploadComplete = useCallback((imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => {
-    form.setValue(fieldName, imageInfo);
+    form.setValue(fieldName, imageInfo, { shouldValidate: true });
   }, [form]);
 
 
