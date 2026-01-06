@@ -192,7 +192,7 @@ export default function AdminProductsPage() {
                         alt={product.nameVN}
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src={product.image?.imageUrl || '/placeholder.svg'}
+                        src={product.image?.url || '/placeholder.svg'}
                         width="64"
                       />
                     </TableCell>

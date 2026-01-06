@@ -16,12 +16,11 @@ export default function WineCard({ wine }: WineCardProps) {
       <Link href={`/san-pham/${wine.slug}`} className="text-black hover:text-black">
         <div className="bg-secondary p-4">
           <Image
-            src={wine.image.imageUrl}
+            src={wine.image.url}
             alt={wine.nameVN}
             width={600}
             height={800}
             className="h-64 w-full object-contain transition-transform duration-500 group-hover:scale-105"
-            data-ai-hint={wine.image.imageHint}
           />
         </div>
         <div className="p-4 bg-white">

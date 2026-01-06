@@ -1,4 +1,8 @@
-import type { ImagePlaceholder } from './placeholder-images';
+
+export type ImageInfo = {
+  url: string;
+  path: string;
+};
 
 export type TastingNotes = {
   brand?: string;
@@ -33,8 +37,8 @@ export type Wine = {
   type: 'Vang Đỏ' | 'Vang Trắng' | 'Vang Hồng' | 'Vang Sủi' | 'Vang Tráng Miệng' | 'Whisky' | 'Gift Set' | 'Tasting Set' | 'Armagnac';
   alcohol: number;
   description: string;
-  image: ImagePlaceholder;
-  detailImage?: ImagePlaceholder;
+  image: ImageInfo;
+  detailImage?: ImageInfo;
   tastingNotes?: TastingNotes;
   productDetails?: ProductDetails;
   isFeatured?: boolean;
@@ -50,7 +54,10 @@ export type Category = {
   id: string;
   name: string;
   slug: string;
-  image: ImagePlaceholder;
+  image: {
+    imageUrl: string,
+    imageHint: string
+  };
 };
 
 export type BlogPost = {
@@ -60,7 +67,10 @@ export type BlogPost = {
   slug: string;
   excerpt: string;
   date: string;
-  image: ImagePlaceholder;
+  image: {
+    imageUrl: string,
+    imageHint: string,
+  };
   categories: string[];
 };
 
@@ -69,5 +79,8 @@ export type Testimonial = {
   name: string;
   title: string;
   quote: string;
-  avatar: ImagePlaceholder;
+  avatar: {
+    imageUrl: string,
+    imageHint: string,
+  };
 };
