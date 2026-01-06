@@ -12,7 +12,7 @@ interface FileUploaderProps {
   fieldName: 'image' | 'detailImage';
   label: string;
   onUploadComplete: (imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => void;
-  onUploadStateChange: (isUploading: boolean) => void;
+  onUploadStateChange: (isUploading: boolean, fieldName: 'image' | 'detailImage') => void;
   defaultUrl?: string;
 }
 
@@ -22,8 +22,14 @@ export default function FileUploader({ fieldName, label, onUploadComplete, onUpl
   const { progress, url, error, startUpload, isUploading } = useUploadStorage();
 
   useEffect(() => {
-    onUploadStateChange(isUploading);
-  }, [isUploading, onUploadStateChange]);
+    onUploadStateChange(isUploading, fieldName);
+  }, [isUploading, onUploadStateChange, fieldName]);
+  
+  useEffect(() => {
+    // Update preview if defaultUrl changes (e.g., when form is reset)
+    setPreview(defaultUrl || null);
+  }, [defaultUrl]);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
