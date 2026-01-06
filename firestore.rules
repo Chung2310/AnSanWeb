@@ -37,6 +37,12 @@ service cloud.firestore {
     function isExistingDoc() {
       return resource != null;
     }
+    
+    // Allow the first admin to be created
+    function isFirstAdmin() {
+      return !exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
 
     /**
      * @description Publicly readable wine product data. Only admins can manage (create, update, delete) wine entries.
@@ -47,8 +53,7 @@ service cloud.firestore {
      */
     match /wines/{wineId} {
       allow get, list: if true;
-      allow create: if request.auth != null;
-      allow update, delete: if isAdmin() && isExistingDoc();
+      allow create, update, delete: if request.auth != null && isAdmin();
     }
 
     /**
@@ -60,8 +65,7 @@ service cloud.firestore {
      */
     match /categories/{categoryId} {
       allow get, list: if true;
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && isExistingDoc();
+      allow create, update, delete: if isAdmin() && isExistingDoc();
     }
 
     /**
@@ -73,8 +77,7 @@ service cloud.firestore {
      */
     match /blogPosts/{blogPostId} {
       allow get, list: if true;
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && isExistingDoc();
+      allow create, update, delete: if isAdmin() && isExistingDoc();
     }
 
     /**
@@ -110,9 +113,10 @@ service cloud.firestore {
      * @deny (create, delete) - A non-admin user attempts to make themselves an admin.
      * @principle Secures the role management system itself, ensuring that only trusted administrators can modify access privileges.
      */
-    match /roles_admin/{userId} {
+     match /roles_admin/{userId} {
       allow get, list: if isAdmin();
-      allow create: if isAdmin();
+      // Allow user to create their own admin role document if they are the first admin
+      allow create: if (request.auth.uid == userId && isFirstAdmin()) || isAdmin();
       allow update, delete: if isAdmin() && isExistingDoc();
     }
   }
