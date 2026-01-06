@@ -68,9 +68,9 @@ function generateSlug(name: string) {
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
   const firestore = useFirestore();
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadingStatus, setUploadingStatus] = useState({ image: false, detailImage: false });
 
-
+  const isAnyFileUploading = uploadingStatus.image || uploadingStatus.detailImage;
   const isEditMode = !!id;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,6 +80,9 @@ export function ProductForm() {
   const nameVNValue = form.watch('nameVN');
   const { isSubmitting } = form.formState;
 
+  const handleUploadStateChange = useCallback((isUploading: boolean, fieldName: 'image' | 'detailImage') => {
+    setUploadingStatus(prev => ({ ...prev, [fieldName]: isUploading }));
+  }, []);
 
   useEffect(() => {
     // Only auto-generate slug for new products, not when editing
@@ -221,14 +224,14 @@ export function ProductForm() {
                     label="Ảnh bìa (listing)"
                     onUploadComplete={handleImageUploadComplete}
                     defaultUrl={form.getValues('image.url')}
-                    onUploadStateChange={setIsUploading}
+                    onUploadStateChange={handleUploadStateChange}
                 />
                 <FileUploader
                     fieldName="detailImage"
                     label="Ảnh trang chi tiết"
                     onUploadComplete={handleImageUploadComplete}
                     defaultUrl={form.getValues('detailImage.url')}
-                    onUploadStateChange={setIsUploading}
+                    onUploadStateChange={handleUploadStateChange}
                 />
             </div>
             
@@ -255,8 +258,8 @@ export function ProductForm() {
               <Button type="button" variant="outline" onClick={onClose}>
                 Hủy
               </Button>
-              <Button type="submit" disabled={isSubmitting || isUploading}>
-                {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" disabled={isSubmitting || isAnyFileUploading}>
+                {(isSubmitting || isAnyFileUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Lưu Thay Đổi
               </Button>
             </DialogFooter>
