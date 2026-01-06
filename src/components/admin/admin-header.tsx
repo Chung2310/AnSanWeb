@@ -11,11 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, LogOut, Menu, Package2 } from 'lucide-react';
+import { User, LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Logo from '../logo';
+import { useAuth, useUser } from '@/firebase';
+import { signOut } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
 
 
 const links = [
@@ -27,6 +30,26 @@ const links = [
 
 export default function AdminHeader() {
   const pathname = usePathname();
+  const auth = useAuth();
+  const { user } = useUser();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: 'Đăng xuất thành công',
+      });
+      router.push('/login');
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Lỗi đăng xuất',
+        description: 'Đã có lỗi xảy ra. Vui lòng thử lại.',
+      });
+    }
+  };
   
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -73,23 +96,23 @@ export default function AdminHeader() {
           >
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src="https://picsum.photos/seed/admin-avatar/100/100"
+                src={user?.photoURL || "https://picsum.photos/seed/admin-avatar/100/100"}
                 alt="Admin"
               />
-              <AvatarFallback>AD</AvatarFallback>
+              <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'A'}</AvatarFallback>
             </Avatar>
             <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.email || 'Tài khoản của tôi'}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem disabled>
             <User className="mr-2 h-4 w-4" />
             Hồ sơ
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Đăng xuất
           </DropdownMenuItem>
