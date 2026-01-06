@@ -5,7 +5,6 @@ import Image from 'next/image';
 import {
   collection,
   doc,
-  deleteDoc,
   query,
   orderBy,
   Firestore,
@@ -106,7 +105,6 @@ export default function AdminProductsPage() {
     if (!deleteCandidate || !firestore) return;
     const docRef = doc(firestore, 'wines', deleteCandidate.id);
     deleteDocumentNonBlocking(docRef);
-    setDeleteCandidate(null);
   };
 
   return (

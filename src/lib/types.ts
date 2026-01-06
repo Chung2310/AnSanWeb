@@ -34,6 +34,7 @@ export type Wine = {
   alcohol: number;
   description: string;
   image: ImagePlaceholder;
+  detailImage?: ImagePlaceholder;
   tastingNotes?: TastingNotes;
   productDetails?: ProductDetails;
   isFeatured?: boolean;

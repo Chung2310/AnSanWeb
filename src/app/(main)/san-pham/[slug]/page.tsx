@@ -79,6 +79,8 @@ export default function ProductDetailPage() {
   if (!wine) {
     notFound();
   }
+  
+  const displayImage = wine.detailImage || wine.image;
 
   return (
     <div className="bg-white text-black">
@@ -87,12 +89,12 @@ export default function ProductDetailPage() {
                 {/* Image Column */}
                 <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
                     <Image
-                    src={wine.image.imageUrl}
+                    src={displayImage.imageUrl}
                     alt={wine.nameVN}
                     width={800}
                     height={1000}
                     className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
-                    data-ai-hint={wine.image.imageHint}
+                    data-ai-hint={displayImage.imageHint}
                     priority
                     />
                 </div>
