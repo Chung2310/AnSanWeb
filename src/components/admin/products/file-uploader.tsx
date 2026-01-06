@@ -1,5 +1,5 @@
 'use client';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,13 +12,18 @@ interface FileUploaderProps {
   fieldName: 'image' | 'detailImage';
   label: string;
   onUploadComplete: (imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => void;
+  onUploadStateChange: (isUploading: boolean) => void;
   defaultUrl?: string;
 }
 
-export default function FileUploader({ fieldName, label, onUploadComplete, defaultUrl }: FileUploaderProps) {
+export default function FileUploader({ fieldName, label, onUploadComplete, onUploadStateChange, defaultUrl }: FileUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(defaultUrl || null);
-  const { progress, url, error, startUpload } = useUploadStorage();
+  const { progress, url, error, startUpload, isUploading } = useUploadStorage();
+
+  useEffect(() => {
+    onUploadStateChange(isUploading);
+  }, [isUploading, onUploadStateChange]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -42,8 +47,6 @@ export default function FileUploader({ fieldName, label, onUploadComplete, defau
   };
   
   const hasUploaded = url && !error;
-  const isUploading = progress > 0 && progress < 100;
-
 
   return (
     <div className="space-y-4 rounded-md border p-4">
@@ -68,7 +71,7 @@ export default function FileUploader({ fieldName, label, onUploadComplete, defau
             className="w-full"
             variant="outline"
         >
-            <Upload className="mr-2" />
+            <Upload className="mr-2 h-4 w-4" />
             {isUploading ? 'Đang tải...' : 'Tải ảnh lên'}
         </Button>
       </div>
@@ -77,13 +80,13 @@ export default function FileUploader({ fieldName, label, onUploadComplete, defau
       {isUploading && <Progress value={progress} />}
       {hasUploaded && (
         <div className="flex items-center gap-2 text-sm text-green-600">
-          <CheckCircle />
+          <CheckCircle className="h-4 w-4" />
           <p>Tải lên thành công!</p>
         </div>
       )}
       {error && (
         <div className="flex items-center gap-2 text-sm text-destructive">
-          <XCircle />
+          <XCircle className="h-4 w-4" />
           <p>{error}</p>
         </div>
       )}

@@ -10,6 +10,7 @@ interface UploadResult {
   url: string | null;
   error: string | null;
   task: UploadTask | null;
+  isUploading: boolean;
   startUpload: (file: File, pathPrefix?: string) => Promise<ImageInfo | null>;
 }
 
@@ -21,6 +22,7 @@ export function useUploadStorage(): UploadResult {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [task, setTask] = useState<UploadTask | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const startUpload = (file: File, pathPrefix = 'uploads'): Promise<ImageInfo | null> => {
     return new Promise((resolve, reject) => {
@@ -38,6 +40,7 @@ export function useUploadStorage(): UploadResult {
 
       const uploadTask = uploadBytesResumable(storageRef, file);
       setTask(uploadTask);
+      setIsUploading(true);
 
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -47,6 +50,7 @@ export function useUploadStorage(): UploadResult {
         (uploadError: StorageError) => {
           setError(uploadError.message);
           console.error("Upload failed:", uploadError);
+          setIsUploading(false);
           reject(uploadError);
         },
         async () => {
@@ -55,11 +59,13 @@ export function useUploadStorage(): UploadResult {
             setUrl(downloadURL);
             setProgress(100);
             const imageInfo: ImageInfo = { url: downloadURL, path: storagePath };
+            setIsUploading(false);
             resolve(imageInfo);
           } catch (e) {
             const finalError = e as StorageError;
             setError(finalError.message);
             console.error("Failed to get download URL:", finalError);
+            setIsUploading(false);
             reject(finalError);
           }
         }
@@ -67,5 +73,5 @@ export function useUploadStorage(): UploadResult {
     });
   };
 
-  return { progress, url, error, task, startUpload };
+  return { progress, url, error, task, isUploading, startUpload };
 }
