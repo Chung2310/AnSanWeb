@@ -89,12 +89,11 @@ export default function ProductDetailPage() {
                 {/* Image Column */}
                 <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
                     <Image
-                    src={displayImage.imageUrl}
+                    src={displayImage.url}
                     alt={wine.nameVN}
                     width={800}
                     height={1000}
                     className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
-                    data-ai-hint={displayImage.imageHint}
                     priority
                     />
                 </div>

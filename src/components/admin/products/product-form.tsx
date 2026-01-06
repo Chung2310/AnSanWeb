@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -35,7 +35,9 @@ import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
 import { sampleWines } from '@/lib/placeholder-data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import FileUploader from '@/components/admin/products/file-uploader';
+import type { ImageInfo } from '@/lib/types';
+
 
 const formSchema = z.object({
   nameVN: z.string().min(1, 'Tên tiếng Việt là bắt buộc'),
@@ -56,8 +58,14 @@ const formSchema = z.object({
   ]),
   alcohol: z.coerce.number().min(0).max(100),
   description: z.string().min(1, 'Mô tả là bắt buộc'),
-  imageId: z.string().min(1, 'Ảnh bìa là bắt buộc'),
-  detailImageId: z.string().min(1, 'Ảnh chi tiết là bắt buộc'),
+  image: z.object({
+    url: z.string().min(1, 'URL ảnh bìa là bắt buộc'),
+    path: z.string().min(1, 'Đường dẫn ảnh bìa là bắt buộc'),
+  }),
+  detailImage: z.object({
+    url: z.string().min(1, 'URL ảnh chi tiết là bắt buộc'),
+    path: z.string().min(1, 'Đường dẫn ảnh chi tiết là bắt buộc'),
+  }),
 });
 
 export function ProductForm() {
@@ -75,8 +83,8 @@ export function ProductForm() {
       if (defaultValues) {
         form.reset({
           ...defaultValues,
-          imageId: defaultValues.image?.id || '',
-          detailImageId: defaultValues.detailImage?.id || defaultValues.image?.id || '',
+          image: defaultValues.image || { url: '', path: '' },
+          detailImage: defaultValues.detailImage || { url: '', path: '' },
         });
       } else {
         form.reset({
@@ -88,40 +96,29 @@ export function ProductForm() {
           type: 'Whisky',
           alcohol: 40,
           description: '',
-          imageId: '',
-          detailImageId: '',
+          image: { url: '', path: '' },
+          detailImage: { url: '', path: '' },
         });
       }
     }
   }, [defaultValues, form, isOpen]);
+  
+  const handleImageUploadComplete = useCallback((imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => {
+    form.setValue(fieldName, imageInfo);
+  }, [form]);
+
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     if (!firestore) return;
 
     const winesCollectionRef = collection(firestore, 'wines');
     
-    const image = PlaceHolderImages.find(p => p.id === values.imageId);
-    const detailImage = PlaceHolderImages.find(p => p.id === values.detailImageId);
-    if (!image || !detailImage) {
-      console.error("Selected image(s) not found");
-      return;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { imageId, detailImageId, ...restOfValues } = values;
-
-    const dataToSave = {
-        ...restOfValues,
-        image,
-        detailImage,
-    };
-
     if (isEditMode && id) {
       const docRef = doc(winesCollectionRef, id);
-      updateDocumentNonBlocking(docRef, dataToSave);
+      updateDocumentNonBlocking(docRef, values);
     } else {
       addDocumentNonBlocking(winesCollectionRef, {
-          ...dataToSave,
+          ...values,
           createdAt: new Date().toISOString(),
           isFeatured: false,
           isNew: true,
@@ -188,50 +185,6 @@ export function ProductForm() {
                 </FormItem>
               )}
             />
-             <FormField
-              control={form.control}
-              name="imageId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ảnh bìa (listing)</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn một ảnh" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PlaceHolderImages.map(img => (
-                        <SelectItem key={img.id} value={img.id}>{img.id} ({img.description})</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="detailImageId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ảnh trang chi tiết</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn một ảnh" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PlaceHolderImages.map(img => (
-                        <SelectItem key={img.id} value={img.id}>{img.id} ({img.description})</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="price"
@@ -245,6 +198,22 @@ export function ProductForm() {
                 </FormItem>
               )}
             />
+
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FileUploader
+                    fieldName="image"
+                    label="Ảnh bìa (listing)"
+                    onUploadComplete={handleImageUploadComplete}
+                    defaultUrl={form.getValues('image.url')}
+                />
+                <FileUploader
+                    fieldName="detailImage"
+                    label="Ảnh trang chi tiết"
+                    onUploadComplete={handleImageUploadComplete}
+                    defaultUrl={form.getValues('detailImage.url')}
+                />
+            </div>
+            
             <FormField
               control={form.control}
               name="origin"
