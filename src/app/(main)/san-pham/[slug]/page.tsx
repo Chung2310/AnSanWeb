@@ -81,6 +81,7 @@ export default function ProductDetailPage() {
   }
   
   const displayImage = wine.detailImage || wine.image;
+  const wineTypeAttribute = wine.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
 
   return (
     <div className="bg-white text-black">
@@ -103,7 +104,9 @@ export default function ProductDetailPage() {
                     <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
                         <Link href="/" className="hover:text-primary">Trang chủ</Link>
                         <ChevronRight className="h-4 w-4 mx-1" />
-                        <Link href="/danh-muc-san-pham" className="hover:text-primary">{wine.type}</Link>
+                        {wineTypeAttribute && (
+                            <Link href="/danh-muc-san-pham" className="hover:text-primary">{wineTypeAttribute.value}</Link>
+                        )}
                     </div>
                     <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{wine.nameVN}</h1>
                     <p className="mt-6 text-base text-foreground/80 leading-relaxed">{wine.description}</p>
@@ -111,22 +114,16 @@ export default function ProductDetailPage() {
                     <Separator className="my-8" />
                     
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 text-center">
-                    <div>
-                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Độ tuổi</p>
-                        <p className="mt-1 font-bold text-lg">{wine.age ? `${wine.age}` : 'N/A'}</p>
-                    </div>
-                    <div>
-                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Nồng độ cồn</p>
-                        <p className="mt-1 font-bold text-lg">{wine.alcohol}%</p>
-                    </div>
-                    <div>
-                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Dung tích</p>
-                        <p className="mt-1 font-bold text-lg">700ml</p>
-                    </div>
-                    <div>
-                        <p className="text-xs uppercase text-muted-foreground tracking-widest">Tình trạng</p>
-                        <p className="mt-1 font-bold text-lg">Còn hàng</p>
-                    </div>
+                        {wine.attributes.map(attr => (
+                             <div key={attr.label}>
+                                <p className="text-xs uppercase text-muted-foreground tracking-widest">{attr.label}</p>
+                                <p className="mt-1 font-bold text-lg">{attr.value}</p>
+                            </div>
+                        ))}
+                         <div>
+                            <p className="text-xs uppercase text-muted-foreground tracking-widest">Tình trạng</p>
+                            <p className="mt-1 font-bold text-lg">Còn hàng</p>
+                        </div>
                     </div>
 
                     <Separator className="my-8" />

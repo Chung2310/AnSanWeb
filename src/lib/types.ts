@@ -27,15 +27,17 @@ export type ProductDetails = {
   conclusion: string;
 };
 
+export type ProductAttribute = {
+  label: string;
+  value: string;
+};
+
 export type Wine = {
   id: string;
   nameVN: string;
   nameEN: string;
   slug: string;
   price: number;
-  origin: string;
-  type: 'Vang Đỏ' | 'Vang Trắng' | 'Vang Hồng' | 'Vang Sủi' | 'Vang Tráng Miệng' | 'Whisky' | 'Gift Set' | 'Tasting Set' | 'Armagnac';
-  alcohol: number;
   description: string;
   image: ImageInfo;
   detailImage?: ImageInfo;
@@ -44,9 +46,7 @@ export type Wine = {
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
-  age?: number;
-  cask?: string;
-  nonChillFiltered?: boolean;
+  attributes: ProductAttribute[];
   createdAt?: string;
 };
 
