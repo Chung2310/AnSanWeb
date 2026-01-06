@@ -39,8 +39,8 @@ export type Wine = {
   slug: string;
   price: number;
   description: string;
-  image: ImageInfo;
-  detailImage?: ImageInfo;
+  image: ImageInfo | null;
+  detailImage?: ImageInfo | null;
   tastingNotes?: TastingNotes;
   productDetails?: ProductDetails;
   isFeatured?: boolean;
@@ -48,6 +48,9 @@ export type Wine = {
   tags?: string[];
   attributes: ProductAttribute[];
   createdAt?: string;
+  age?: number;
+  cask?: string;
+  nonChillFiltered?: boolean;
 };
 
 export type Category = {
