@@ -59,13 +59,13 @@ const formSchema = z.object({
   alcohol: z.coerce.number().min(0).max(100),
   description: z.string().min(1, 'Mô tả là bắt buộc'),
   image: z.object({
-    url: z.string().min(1, 'URL ảnh bìa là bắt buộc'),
-    path: z.string().min(1, 'Đường dẫn ảnh bìa là bắt buộc'),
-  }),
+    url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
+    path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
+  }).optional(),
   detailImage: z.object({
-    url: z.string().min(1, 'URL ảnh chi tiết là bắt buộc'),
-    path: z.string().min(1, 'Đường dẫn ảnh chi tiết là bắt buộc'),
-  }),
+      url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
+      path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
+  }).optional(),
 });
 
 function generateSlug(name: string) {
