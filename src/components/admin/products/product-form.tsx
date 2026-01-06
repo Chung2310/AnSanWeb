@@ -36,7 +36,7 @@ import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/no
 import { collection, doc } from 'firebase/firestore';
 import { sampleWines } from '@/lib/placeholder-data';
 import FileUploader from '@/components/admin/products/file-uploader';
-import type { ImageInfo } from '@/lib/types';
+import type { ImageInfo, ProductAttribute } from '@/lib/types';
 
 
 const formSchema = z.object({
@@ -44,28 +44,19 @@ const formSchema = z.object({
   nameEN: z.string().min(1, 'Tên tiếng Anh là bắt buộc'),
   slug: z.string().min(1, 'Slug là bắt buộc'),
   price: z.coerce.number().min(0, 'Giá phải là số dương'),
-  origin: z.string().min(1, 'Xuất xứ là bắt buộc'),
-  type: z.enum([
-    'Vang Đỏ',
-    'Vang Trắng',
-    'Vang Hồng',
-    'Vang Sủi',
-    'Vang Tráng Miệng',
-    'Whisky',
-    'Gift Set',
-    'Tasting Set',
-    'Armagnac',
-  ]),
-  alcohol: z.coerce.number().min(0).max(100),
   description: z.string().min(1, 'Mô tả là bắt buộc'),
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
-  }).optional(),
+  }),
   detailImage: z.object({
       url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
       path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
-  }).optional(),
+  }),
+  attributes: z.array(z.object({
+    label: z.string(),
+    value: z.string()
+  })).optional(),
 });
 
 function generateSlug(name: string) {
@@ -103,28 +94,27 @@ export function ProductForm() {
 
   useEffect(() => {
     if (isOpen) {
-      if (defaultValues) {
-        form.reset({
-          ...defaultValues,
-          image: defaultValues.image || { url: '', path: '' },
-          detailImage: defaultValues.detailImage || { url: '', path: '' },
-        });
-      } else {
-        form.reset({
-          nameVN: '',
-          nameEN: '',
-          slug: '',
-          price: 0,
-          origin: '',
-          type: 'Whisky',
-          alcohol: 40,
-          description: '',
-          image: { url: '', path: '' },
-          detailImage: { url: '', path: '' },
-        });
-      }
+        if (defaultValues) {
+            form.reset({
+                ...defaultValues,
+                image: defaultValues.image || { url: '', path: '' },
+                detailImage: defaultValues.detailImage || { url: '', path: '' },
+                attributes: defaultValues.attributes || [],
+            });
+        } else {
+            form.reset({
+                nameVN: '',
+                nameEN: '',
+                slug: '',
+                price: 0,
+                description: '',
+                image: { url: '', path: '' },
+                detailImage: { url: '', path: '' },
+                attributes: [],
+            });
+        }
     }
-  }, [defaultValues, form, isOpen]);
+}, [defaultValues, form, isOpen]);
   
   const handleImageUploadComplete = useCallback((imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => {
     form.setValue(fieldName, imageInfo, { shouldValidate: true });
@@ -149,8 +139,6 @@ export function ProductForm() {
     }
     onClose();
   };
-
-  const wineTypes = Array.from(new Set(sampleWines.map(w => w.type)));
 
 
   return (
@@ -237,54 +225,6 @@ export function ProductForm() {
                 />
             </div>
             
-            <FormField
-              control={form.control}
-              name="origin"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Xuất xứ</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Scotland" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Loại sản phẩm</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn một loại" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {wineTypes.map(type => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="alcohol"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nồng độ cồn (%)</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <div className="md:col-span-2">
                <FormField
                 control={form.control}
