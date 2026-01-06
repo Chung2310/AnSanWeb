@@ -94,7 +94,7 @@ export function ProductForm() {
   const nameVNValue = form.watch('nameVN');
 
   useEffect(() => {
-    if (nameVNValue && !isEditMode) {
+    if (nameVNValue && !form.formState.isDirty) {
       const slug = generateSlug(nameVNValue);
       form.setValue('slug', slug, { shouldValidate: true });
     }
