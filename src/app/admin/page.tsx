@@ -1,6 +1,6 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { DollarSign, Package, Users, Mail } from "lucide-react";
+import { DollarSign, Package, Users, Mail, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboard() {
