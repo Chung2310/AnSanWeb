@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -50,6 +51,7 @@ const formSchema = z.object({
     label: z.string(),
     value: z.string()
   })).optional(),
+  tags: z.string().optional(),
 });
 
 function generateSlug(name: string) {
@@ -101,6 +103,7 @@ export function ProductForm() {
                 image: defaultValues.image || null,
                 detailImage: defaultValues.detailImage || null,
                 attributes: defaultValues.attributes || [],
+                tags: defaultValues.tags?.join(', ') || '',
             });
         } else {
             form.reset({
@@ -112,6 +115,7 @@ export function ProductForm() {
                 image: null,
                 detailImage: null,
                 attributes: [],
+                tags: '',
             });
         }
     }
@@ -132,6 +136,7 @@ export function ProductForm() {
         ...values,
         // Ensure attributes is always an array, even if it's not provided in the form.
         attributes: values.attributes || [], 
+        tags: values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
     };
 
     if (isEditMode && id) {
@@ -217,6 +222,22 @@ export function ProductForm() {
                 </FormItem>
               )}
             />
+
+            <div className="md:col-span-2">
+                 <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="scotch, speyside, old-rare" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+            </div>
 
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FileUploader
