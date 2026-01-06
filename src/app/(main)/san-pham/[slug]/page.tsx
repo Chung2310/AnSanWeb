@@ -1,14 +1,19 @@
-import { sampleWines } from "@/lib/placeholder-data";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-import ProductInfoSection from "@/components/product-info-section";
-import ProductDetailDescription from "@/components/product-detail-description";
-import FaqSection from "@/components/faq-section";
+'use client';
+
+import { useMemo } from 'react';
+import { useParams, notFound } from 'next/navigation';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake, ChevronRight } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { collection, query, where } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import type { Wine } from '@/lib/types';
+import ProductInfoSection from '@/components/product-info-section';
+import ProductDetailDescription from '@/components/product-detail-description';
+import FaqSection from '@/components/faq-section';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -23,10 +28,53 @@ const perks = [
     { icon: Handshake, text: "Cam kết giá bán CẠNH TRANH" },
     { icon: User, text: "Nhiều chương trình sinh hoạt cộng đồng gia tăng trải nghiệm khách hàng" },
     { icon: Phone, text: "Cam kết bồi thường nếu xảy ra vấn đề trong quá trình vận chuyển" },
-]
+];
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const wine = sampleWines.find((w) => w.slug === params.slug);
+function ProductDetailPageSkeleton() {
+  return (
+     <div className="bg-white text-black">
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
+          <Skeleton className="w-[800px] h-[1000px] max-h-[80vh]" />
+        </div>
+        <div className="md:col-span-1 container py-12 md:py-20">
+          <div className="max-w-2xl space-y-6">
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Separator />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+            <Separator />
+            <Skeleton className="h-24 w-full" />
+            <Separator />
+            <Skeleton className="h-48 w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function ProductDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const firestore = useFirestore();
+
+  const winesCollection = useMemoFirebase(() => collection(firestore, 'wines'), [firestore]);
+  const wineQuery = useMemoFirebase(() => winesCollection && query(winesCollection, where('slug', '==', slug)), [winesCollection, slug]);
+
+  const { data: wines, isLoading } = useCollection<Wine>(wineQuery);
+  
+  const wine = useMemo(() => (wines && wines.length > 0 ? wines[0] : null), [wines]);
+
+  if (isLoading) {
+    return <ProductDetailPageSkeleton />;
+  }
 
   if (!wine) {
     notFound();

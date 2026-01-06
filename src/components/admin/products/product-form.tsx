@@ -33,7 +33,7 @@ import {
 } from '@/components/ui/select';
 import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc } from 'firebase/firestore';
 import { sampleWines } from '@/lib/placeholder-data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -56,6 +56,7 @@ const formSchema = z.object({
   ]),
   alcohol: z.coerce.number().min(0).max(100),
   description: z.string().min(1, 'Mô tả là bắt buộc'),
+  imageId: z.string().min(1, 'Ảnh là bắt buộc'),
 });
 
 export function ProductForm() {
@@ -69,19 +70,25 @@ export function ProductForm() {
   });
 
   useEffect(() => {
-    if (defaultValues) {
-      form.reset(defaultValues);
-    } else {
-      form.reset({
-        nameVN: '',
-        nameEN: '',
-        slug: '',
-        price: 0,
-        origin: '',
-        type: 'Whisky',
-        alcohol: 40,
-        description: '',
-      });
+    if (isOpen) {
+      if (defaultValues) {
+        form.reset({
+          ...defaultValues,
+          imageId: defaultValues.image?.id || '',
+        });
+      } else {
+        form.reset({
+          nameVN: '',
+          nameEN: '',
+          slug: '',
+          price: 0,
+          origin: '',
+          type: 'Whisky',
+          alcohol: 40,
+          description: '',
+          imageId: '',
+        });
+      }
     }
   }, [defaultValues, form, isOpen]);
 
@@ -90,11 +97,17 @@ export function ProductForm() {
 
     const winesCollectionRef = collection(firestore, 'wines');
     
-    // For now, let's use a placeholder image if not provided
-    const image = defaultValues?.image || PlaceHolderImages.find(p => p.id === 'wine-1');
+    const image = PlaceHolderImages.find(p => p.id === values.imageId);
+    if (!image) {
+      console.error("Selected image not found");
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { imageId, ...restOfValues } = values;
 
     const dataToSave = {
-        ...values,
+        ...restOfValues,
         image,
     };
 
@@ -104,7 +117,7 @@ export function ProductForm() {
     } else {
       addDocumentNonBlocking(winesCollectionRef, {
           ...dataToSave,
-          createdAt: new Date().toISOString(), // Use client-side timestamp for simplicity
+          createdAt: new Date().toISOString(),
           isFeatured: false,
           isNew: true,
       });
@@ -166,6 +179,28 @@ export function ProductForm() {
                   <FormControl>
                     <Input {...field} placeholder="the-macallan-18" />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="imageId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ảnh sản phẩm</FormLabel>
+                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn một ảnh" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PlaceHolderImages.map(img => (
+                        <SelectItem key={img.id} value={img.id}>{img.id} ({img.description})</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
