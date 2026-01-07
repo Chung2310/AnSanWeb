@@ -35,7 +35,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { Product, Category, FullProduct } from '@/lib/types';
 import { useCategories } from '@/hooks/use-categories';
-import { Trash, X } from 'lucide-react';
+import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import {
   doc,
@@ -53,6 +53,7 @@ import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { allTags } from '@/lib/tags-data';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Progress } from '@/components/ui/progress';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -67,7 +68,7 @@ const formSchema = z.object({
   image: z
     .object({
       url: z.string().url({ message: "Vui lòng nhập một URL hợp lệ." }).or(z.literal('')),
-      path: z.string(),
+      path: z.string().optional(),
     })
     .nullable(),
   status: z.enum(['published', 'draft']),
@@ -131,19 +132,20 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   
   const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
-    form.setValue('image.url', url);
-    form.setValue('image.path', url); // Use URL as path
-    if (form.getValues('image.url')?.match(/\.(jpeg|jpg|gif|png)$/) != null) {
-      setImagePreview(url);
+    if (url) {
+        form.setValue('image.url', url);
+        form.setValue('image.path', url); // Use URL as path
+        setImagePreview(url);
     } else {
-      setImagePreview(null);
+        form.setValue('image', null);
+        setImagePreview(null);
     }
   };
 
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const mainProductData = {
+      const mainProductData: Omit<Product, 'id'> = {
         nameVN: data.nameVN,
         slug: data.slug,
         price: Number(data.price),
@@ -165,16 +167,21 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       if (initialData) {
         const productRef = doc(firestore, 'products', initialData.id);
         const detailRef = doc(firestore, 'product_details', initialData.id);
-        updateDocumentNonBlocking(productRef, mainProductData);
-        setDocumentNonBlocking(detailRef, detailData, { merge: true });
+        
+        await updateDocumentNonBlocking(productRef, mainProductData);
+        await setDocumentNonBlocking(detailRef, detailData, { merge: true });
+
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
+
       } else {
         const collectionRef = collection(firestore, 'products');
         const newDocRef = await addDocumentNonBlocking(collectionRef, mainProductData);
+        
         if (newDocRef) {
             const detailRef = doc(firestore, 'product_details', newDocRef.id);
-            setDocumentNonBlocking(detailRef, detailData, { merge: true });
+            await setDocumentNonBlocking(detailRef, detailData);
         }
+
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
       }
       router.push('/admin/products');
@@ -229,7 +236,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   {imagePreview && (
                     <div className="relative">
                       <Image src={imagePreview} alt="Xem trước ảnh" width={200} height={200} className="w-full rounded-md object-contain" />
-                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setImagePreview(null); form.setValue('image', { url: '', path: '' }); }}>
+                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { handleImageUrlChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>) }}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
@@ -244,6 +251,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           <Input
                             placeholder="https://example.com/image.png"
                             {...field}
+                            value={field.value || ''}
                             onChange={handleImageUrlChange}
                           />
                         </FormControl>
