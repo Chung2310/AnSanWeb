@@ -57,33 +57,6 @@ const productAttributeSchema = z.object({
   value: z.string().min(1, 'Giá trị không được để trống'),
 });
 
-const tastingNotesSchema = z.object({
-  brand: z.string().optional(),
-  chillFiltered: z.string().optional(),
-  region: z.string().optional(),
-  caskType: z.string().optional(),
-  color: z.string().min(1, 'Màu sắc là bắt buộc'),
-  nose: z.string().min(1, 'Mùi hương là bắt buộc'),
-  palate: z.string().min(1, 'Hương vị là bắt buộc'),
-  finish: z.string().min(1, 'Hậu vị là bắt buộc'),
-});
-
-const productDetailsSchema = z.object({
-  title: z.string().optional(),
-  paragraphs: z.array(z.string()).optional(),
-  details: z.array(productAttributeSchema).optional(),
-  tastingNote: z.object({
-      nose: z.string().optional(),
-      palate: z.string().optional(),
-      finish: z.string().optional(),
-    }).optional(),
-  howToEnjoy: z.string().optional(),
-  foodPairing: z.string().optional(),
-  storage: z.string().optional(),
-  conclusion: z.string().optional(),
-});
-
-
 const formSchema = z.object({
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   nameEN: z.string().optional(),
@@ -102,8 +75,6 @@ const formSchema = z.object({
   categoryIds: z.array(z.string()).optional(),
   attributes: z.array(productAttributeSchema).optional(),
   tags: z.array(z.string()).optional(),
-  tastingNotes: tastingNotesSchema.optional().nullable(),
-  productDetails: productDetailsSchema.optional().nullable(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -125,42 +96,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: initialData
       ? {
-          nameVN: initialData.nameVN || '',
+          ...initialData,
           nameEN: initialData.nameEN || '',
-          slug: initialData.slug || '',
           description: initialData.description || '',
-          price: initialData.price || 0,
-          image: initialData.image || null,
-          status: initialData.status || 'draft',
-          isFeatured: initialData.isFeatured || false,
-          isNew: initialData.isNew || false,
-          categoryIds: initialData.categoryIds || [],
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
-          tastingNotes: {
-            brand: initialData.tastingNotes?.brand || '',
-            chillFiltered: initialData.tastingNotes?.chillFiltered || '',
-            region: initialData.tastingNotes?.region || '',
-            caskType: initialData.tastingNotes?.caskType || '',
-            color: initialData.tastingNotes?.color || '',
-            nose: initialData.tastingNotes?.nose || '',
-            palate: initialData.tastingNotes?.palate || '',
-            finish: initialData.tastingNotes?.finish || '',
-          },
-          productDetails: {
-            title: initialData.productDetails?.title || '',
-            paragraphs: initialData.productDetails?.paragraphs || [],
-            details: initialData.productDetails?.details || [],
-            tastingNote: {
-                nose: initialData.productDetails?.tastingNote?.nose || '',
-                palate: initialData.productDetails?.tastingNote?.palate || '',
-                finish: initialData.productDetails?.tastingNote?.finish || '',
-            },
-            howToEnjoy: initialData.productDetails?.howToEnjoy || '',
-            foodPairing: initialData.productDetails?.foodPairing || '',
-            storage: initialData.productDetails?.storage || '',
-            conclusion: initialData.productDetails?.conclusion || '',
-          },
         }
       : {
           nameVN: '',
@@ -175,30 +115,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           categoryIds: [],
           attributes: [],
           tags: [],
-          tastingNotes: {
-            brand: '',
-            region: '',
-            caskType: '',
-            chillFiltered: '',
-            color: '',
-            nose: '',
-            palate: '',
-            finish: '',
-          },
-          productDetails: {
-            title: '',
-            paragraphs: [],
-            details: [],
-            tastingNote: {
-                nose: '',
-                palate: '',
-                finish: '',
-            },
-            howToEnjoy: '',
-            foodPairing: '',
-            storage: '',
-            conclusion: '',
-          },
         },
   });
 
@@ -206,12 +122,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     control: form.control,
     name: 'attributes',
   });
-
-  const { fields: detailFields, append: appendDetail, remove: removeDetail } = useFieldArray({
-    control: form.control,
-    name: 'productDetails.details',
-  });
-
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -257,7 +167,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         nameEN: data.nameEN || data.nameVN,
         slug: data.slug,
         price: Number(data.price),
-        description: data.description || '',
         image: data.image,
         status: data.status,
         isFeatured: data.isFeatured,
@@ -270,9 +179,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       };
 
       const detailData = {
-        description: data.description || '', // This seems redundant, but let's keep for compatibility.
-        tastingNotes: data.tastingNotes,
-        productDetails: data.productDetails,
+        description: data.description || '',
       };
 
       if (initialData) {
@@ -314,7 +221,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 <FormField control={form.control} name="nameEN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm (EN)</FormLabel><FormControl><Input placeholder="Ex: The Macallan 18" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabel>Đường dẫn (Slug)</FormLabel><FormControl><Input placeholder="the-macallan-18" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="price" render={({ field }) => (<FormItem><FormLabel>Giá</FormLabel><FormControl><Input type="number" placeholder="0" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Mô tả ngắn</FormLabel><FormControl><Textarea placeholder="Mô tả về sản phẩm..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Mô tả chi tiết</FormLabel><FormControl><Textarea placeholder="Mô tả chi tiết về sản phẩm..." {...field} rows={15} /></FormControl><FormMessage /></FormItem>)} />
               </CardContent>
             </Card>
 
@@ -331,51 +238,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   ))}
                   <Button type="button" variant="outline" onClick={() => append({ label: '', value: '' })}>Thêm thuộc tính</Button>
                 </div>
-              </CardContent>
-            </Card>
-
-             <Card>
-              <CardHeader><CardTitle>Ghi chú nếm thử (Tasting Notes)</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="tastingNotes.brand" render={({ field }) => (<FormItem><FormLabel>Thương hiệu</FormLabel><FormControl><Input placeholder="Vd: The Macallan" {...field} /></FormControl></FormItem>)} />
-                    <FormField control={form.control} name="tastingNotes.region" render={({ field }) => (<FormItem><FormLabel>Vùng</FormLabel><FormControl><Input placeholder="Vd: Speyside" {...field} /></FormControl></FormItem>)} />
-                    <FormField control={form.control} name="tastingNotes.caskType" render={({ field }) => (<FormItem><FormLabel>Loại thùng</FormLabel><FormControl><Input placeholder="Vd: Sherry Oak" {...field} /></FormControl></FormItem>)} />
-                    <FormField control={form.control} name="tastingNotes.chillFiltered" render={({ field }) => (<FormItem><FormLabel>Lọc lạnh</FormLabel><FormControl><Input placeholder="Vd: Không" {...field} /></FormControl></FormItem>)} />
-                </div>
-                <FormField control={form.control} name="tastingNotes.color" render={({ field }) => (<FormItem><FormLabel>Màu sắc</FormLabel><FormControl><Textarea placeholder="Mô tả màu sắc..." {...field} rows={2} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="tastingNotes.nose" render={({ field }) => (<FormItem><FormLabel>Mùi hương (Nose)</FormLabel><FormControl><Textarea placeholder="Mô tả mùi hương..." {...field} rows={3} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="tastingNotes.palate" render={({ field }) => (<FormItem><FormLabel>Hương vị (Palate)</FormLabel><FormControl><Textarea placeholder="Mô tả hương vị..." {...field} rows={3} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="tastingNotes.finish" render={({ field }) => (<FormItem><FormLabel>Hậu vị (Finish)</FormLabel><FormControl><Textarea placeholder="Mô tả hậu vị..." {...field} rows={3} /></FormControl><FormMessage /></FormItem>)} />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader><CardTitle>Mô tả chi tiết sản phẩm</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                 <FormField control={form.control} name="productDetails.title" render={({ field }) => (<FormItem><FormLabel>Tiêu đề chính</FormLabel><FormControl><Input placeholder="Tiêu đề cho phần mô tả" {...field} /></FormControl></FormItem>)} />
-                 <FormField control={form.control} name="productDetails.paragraphs.0" render={({ field }) => (<FormItem><FormLabel>Đoạn văn 1</FormLabel><FormControl><Textarea placeholder="Nội dung đoạn văn..." {...field} rows={4} /></FormControl></FormItem>)} />
-                 <FormField control={form.control} name="productDetails.paragraphs.1" render={({ field }) => (<FormItem><FormLabel>Đoạn văn 2</FormLabel><FormControl><Textarea placeholder="Nội dung đoạn văn..." {...field} rows={4} /></FormControl></FormItem>)} />
-                 
-                 <FormLabel>Các chi tiết khác</FormLabel>
-                 {detailFields.map((field, index) => (
-                    <div key={field.id} className="flex items-end gap-4">
-                        <FormField control={form.control} name={`productDetails.details.${index}.label`} render={({ field }) => (<FormItem className='flex-1'><FormControl><Input {...field} placeholder="Nhãn" /></FormControl></FormItem>)} />
-                        <FormField control={form.control} name={`productDetails.details.${index}.value`} render={({ field }) => (<FormItem className='flex-1'><FormControl><Input {...field} placeholder="Giá trị" /></FormControl></FormItem>)} />
-                        <Button type="button" variant="destructive" onClick={() => removeDetail(index)}><Trash className="h-4 w-4" /></Button>
-                    </div>
-                  ))}
-                  <Button type="button" variant="outline" onClick={() => appendDetail({ label: '', value: '' })}>Thêm chi tiết</Button>
-                  
-                  <FormField control={form.control} name="productDetails.tastingNote.nose" render={({ field }) => (<FormItem><FormLabel>Hương vị (Tasting Note - Nose)</FormLabel><FormControl><Textarea placeholder="Mô tả mùi hương chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
-                  <FormField control={form.control} name="productDetails.tastingNote.palate" render={({ field }) => (<FormItem><FormLabel>Hương vị (Tasting Note - Palate)</FormLabel><FormControl><Textarea placeholder="Mô tả hương vị chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
-                  <FormField control={form.control} name="productDetails.tastingNote.finish" render={({ field }) => (<FormItem><FormLabel>Hậu vị (Tasting Note - Finish)</FormLabel><FormControl><Textarea placeholder="Mô tả hậu vị chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
-                  
-                  <FormField control={form.control} name="productDetails.howToEnjoy" render={({ field }) => (<FormItem><FormLabel>Cách thưởng thức</FormLabel><FormControl><Textarea placeholder="Hướng dẫn cách thưởng thức..." {...field} rows={3} /></FormControl></FormItem>)} />
-                  <FormField control={form.control} name="productDetails.foodPairing" render={({ field }) => (<FormItem><FormLabel>Kết hợp món ăn</FormLabel><FormControl><Textarea placeholder="Gợi ý món ăn kết hợp..." {...field} rows={3} /></FormControl></FormItem>)} />
-                  <FormField control={form.control} name="productDetails.storage" render={({ field }) => (<FormItem><FormLabel>Bảo quản</FormLabel><FormControl><Textarea placeholder="Hướng dẫn bảo quản..." {...field} rows={3} /></FormControl></FormItem>)} />
-
-                  <FormField control={form.control} name="productDetails.conclusion" render={({ field }) => (<FormItem><FormLabel>Kết luận</FormLabel><FormControl><Textarea placeholder="Nội dung kết luận..." {...field} rows={4} /></FormControl></FormItem>)} />
               </CardContent>
             </Card>
           </div>
