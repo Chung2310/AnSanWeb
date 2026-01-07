@@ -63,8 +63,8 @@ const formSchema = z.object({
   description: z.string().optional(),
   image: z
     .object({
-      url: z.string().url({ message: "Vui lòng nhập một URL hợp lệ." }),
-      path: z.string(), // Path is now optional or can be an empty string
+      url: z.string().url({ message: "Vui lòng nhập một URL hợp lệ." }).or(z.literal('')),
+      path: z.string(),
     })
     .nullable(),
   status: z.enum(['published', 'draft']),
@@ -98,6 +98,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           description: initialData.description || '',
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
+          image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : { url: '', path: '' },
         }
       : {
           nameVN: '',
@@ -105,7 +106,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           slug: '',
           price: 0,
           description: '',
-          image: null,
+          image: { url: '', path: '' },
           status: 'published',
           isFeatured: false,
           isNew: true,
@@ -149,7 +150,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         nameEN: data.nameEN || data.nameVN,
         slug: data.slug,
         price: Number(data.price),
-        image: data.image ? { url: data.image.url, path: data.image.path || '' } : null,
+        image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
         status: data.status,
         isFeatured: data.isFeatured,
         isNew: data.isNew,
@@ -232,7 +233,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   {imagePreview && (
                     <div className="relative">
                       <Image src={imagePreview} alt="Xem trước ảnh" width={200} height={200} className="w-full rounded-md object-contain" />
-                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setImagePreview(null); form.setValue('image', null); }}>
+                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setImagePreview(null); form.setValue('image', { url: '', path: '' }); }}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
