@@ -19,8 +19,6 @@ interface CategoryNavProps {
 }
 
 const mainCategoriesConfig = [
-    { label: "Tất cả", slug: null },
-    { label: "Spirits", slug: "spirits" },
     { 
         label: "Scotch Whisky", 
         slug: "scotch-whisky",
@@ -31,6 +29,7 @@ const mainCategoriesConfig = [
         slug: "world-whisky",
         subCategories: ["whisky-ireland", "whisky-khac", "whisky-nhat", "whisky-the-lakes"]
     },
+    { label: "Spirits", slug: "spirits" },
     { label: "Old & Rare", slug: "old-rare" },
     { label: "Armagnac", slug: "armagnac" },
     { label: "Wine", slug: "wine" },
@@ -45,19 +44,20 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
     const { categories, isLoading: isLoadingCategories } = useCategories();
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-    const getProductCountForCategory = (slug: string) => {
+    const getProductCountForCategory = (slug: string | null) => {
+        if (slug === null) return products?.length || 0;
         if (isLoadingProducts || !products) return 0;
         const category = categories?.find(c => c.slug === slug);
-        if (!category) return products.filter(p => p.tags?.includes(slug)).length;
+        // if (!category) return products.filter(p => p.tags?.includes(slug)).length;
         
-        const mainCatSlugs = mainCategoriesConfig.find(mc => mc.slug === slug)?.subCategories;
-        if(mainCatSlugs){
-             return products.filter(p => p.tags?.some(t => mainCatSlugs.includes(t))).length;
+        const mainCat = mainCategoriesConfig.find(mc => mc.slug === slug);
+        if(mainCat?.subCategories){
+             return products.filter(p => p.tags?.some(t => mainCat.subCategories?.includes(t))).length;
         }
         
         return products.filter(p => p.tags?.includes(slug)).length;
     };
-
+    
     const allProductsCount = products?.length || 0;
 
     return (
@@ -65,9 +65,18 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
             <div className="container py-4 flex items-center gap-8 text-sm uppercase font-semibold text-gray-500">
                 <h2 className="font-bold text-black whitespace-nowrap">Danh mục</h2>
                 <div className="flex-grow flex items-center gap-x-6 overflow-x-auto">
+                    <button
+                        className={cn(
+                            "hover:text-black transition-colors whitespace-nowrap",
+                            selectedCategory === null ? "text-black font-bold" : ""
+                        )}
+                        onClick={() => onCategorySelect(null)}
+                    >
+                        Tất cả ({allProductsCount})
+                    </button>
                     {mainCategoriesConfig.map(cat => {
-                        const count = cat.slug === null ? allProductsCount : getProductCountForCategory(cat.slug);
-                        if (count === 0 && !isLoadingProducts && cat.slug !== null) return null;
+                        const count = getProductCountForCategory(cat.slug);
+                        if (count === 0 && !isLoadingProducts) return null;
 
                         const isActive = selectedCategory === cat.slug;
 
@@ -93,7 +102,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                             if (!subCat) return null;
                                             return (
                                                 <DropdownMenuItem key={subSlug} asChild>
-                                                    <Link href={`/danh-muc/${subCat.slug}`}>{subCat.name}</Link>
+                                                    <Link href={`/danh-muc/${cat.slug}/${subCat.slug}`}>{subCat.name}</Link>
                                                 </DropdownMenuItem>
                                             )
                                         })}
