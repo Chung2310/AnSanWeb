@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useFirestore } from '@/firebase';
+import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -36,17 +36,18 @@ const DeleteProductAlert = ({ productId }: { productId: string }) => {
   const firestore = useFirestore();
 
   const handleDelete = async () => {
-    try {
-      await deleteDoc(doc(firestore, 'products', productId));
-      toast({ title: 'Thành công', description: 'Đã xóa sản phẩm.' });
-    } catch (error) {
-      console.error('Error deleting product:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể xóa sản phẩm. Vui lòng thử lại.',
+    if (!firestore) return;
+    const productDocRef = doc(firestore, 'products', productId);
+    deleteDoc(productDocRef)
+      .then(() => {
+        toast({ title: 'Thành công', description: 'Đã xóa sản phẩm.' });
+      })
+      .catch(error => {
+        errorEmitter.emit('permission-error', new FirestorePermissionError({
+            path: productDocRef.path,
+            operation: 'delete'
+        }));
       });
-    }
   };
 
   return (
