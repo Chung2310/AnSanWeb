@@ -51,7 +51,7 @@ const formSchema = z.object({
 });
 
 export function ProductDetailForm() {
-  const { isOpen, onClose, defaultValues, id } = useProductDetailDialog();
+  const { isOpen, onClose, id } = useProductDetailDialog();
   const firestore = useFirestore();
   const [uploadingStatus, setUploadingStatus] = useState({ detailImage: false });
 
@@ -74,6 +74,7 @@ export function ProductDetailForm() {
 
   useEffect(() => {
     if (isOpen) {
+      const { defaultValues } = useProductDetailDialog.getState();
       form.reset({
         description: defaultValues?.description || '',
         detailImage: defaultValues?.detailImage || null,
@@ -89,10 +90,11 @@ export function ProductDetailForm() {
         },
       });
     }
-  }, [isOpen, defaultValues, form.reset]);
+  }, [isOpen, form.reset]);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !id) return;
+    const { defaultValues } = useProductDetailDialog.getState();
 
     const detailDocRef = doc(firestore, 'product_details', id);
     
@@ -117,7 +119,7 @@ export function ProductDetailForm() {
         <DialogHeader>
           <DialogTitle>Chỉnh sửa Chi tiết Sản phẩm</DialogTitle>
           <DialogDescription>
-            Chỉnh sửa thông tin chi tiết cho sản phẩm "{defaultValues?.nameVN}".
+            Chỉnh sửa thông tin chi tiết cho sản phẩm.
           </DialogDescription>
         </DialogHeader>
         <FormProvider {...form}>
@@ -126,7 +128,6 @@ export function ProductDetailForm() {
               <FileUploader
                   fieldName="detailImage"
                   label="Ảnh trang chi tiết"
-                  defaultUrl={defaultValues?.detailImage?.url}
                   onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'detailImage')}
               />
               <FormField
