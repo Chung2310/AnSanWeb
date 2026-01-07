@@ -6,10 +6,9 @@ import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
-import { collection, query, where, doc } from 'firebase/firestore';
-import { useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
-import type { Product, ProductDetail, FullProduct } from '@/lib/types';
+import { collection, query, where } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import type { FullProduct } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { allTags } from '@/lib/tags-data';
@@ -43,18 +42,16 @@ export default function ProductDetailPage() {
   const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
   const productQuery = useMemoFirebase(() => productsCollection && query(productsCollection, where('slug', '==', slug)), [productsCollection, slug]);
 
-  const { data: products, isLoading: isProductLoading } = useCollection<Product>(productQuery);
-  const product = useMemo(() => (products && products.length > 0 ? products[0] : null), [products]);
+  const { data: products, isLoading } = useCollection<FullProduct>(productQuery);
+  const fullProduct = useMemo(() => (products && products.length > 0 ? products[0] : null), [products]);
 
-  const detailRef = useMemoFirebase(() => product && doc(firestore, 'product_details', product.id), [firestore, product]);
-  const { data: productDetail, isLoading: isDetailLoading } = useDoc<ProductDetail>(detailRef);
+  if (isLoading) {
+    return <ProductDetailPageSkeleton />;
+  }
 
-  const fullProduct: FullProduct | null = useMemo(() => {
-    if (!product) return null;
-    return { ...product, ...productDetail };
-  }, [product, productDetail]);
-
-  const isLoading = isProductLoading || isDetailLoading;
+  if (!fullProduct) {
+    notFound();
+  }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -64,13 +61,6 @@ export default function ProductDetailPage() {
     return allTags.find(t => t.id === tagId)?.label || tagId;
   }
 
-  if (isLoading) {
-    return <ProductDetailPageSkeleton />;
-  }
-
-  if (!fullProduct) {
-    notFound();
-  }
 
   return (
     <div className="bg-white text-black">
