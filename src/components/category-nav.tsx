@@ -135,22 +135,18 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                             <Link
                                 key={cat.slug}
                                 href={cat.href || '#'}
-                                passHref
-                                legacyBehavior>
-                                <a
-                                    className={cn(
-                                        "hover:text-black transition-colors whitespace-nowrap",
-                                        isActive ? "text-black font-bold" : ""
-                                    )}
-                                    onClick={(e) => {
-                                        if (!cat.href) {
-                                            e.preventDefault();
-                                            onCategorySelect(cat.slug);
-                                        }
-                                    }}
-                                >
-                                    {cat.label} ({count})
-                                </a>
+                                className={cn(
+                                    "hover:text-black transition-colors whitespace-nowrap",
+                                    isActive ? "text-black font-bold" : ""
+                                )}
+                                onClick={(e) => {
+                                    if (!cat.href) {
+                                        e.preventDefault();
+                                        onCategorySelect(cat.slug);
+                                    }
+                                }}
+                            >
+                                {cat.label} ({count})
                             </Link>
                         );
                     })}
