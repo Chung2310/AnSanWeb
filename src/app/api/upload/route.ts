@@ -8,7 +8,8 @@ import { Readable } from 'stream';
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
-        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        // Use a server-side environment variable for the storage bucket
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     });
   } catch (error: any) {
     console.error('Firebase Admin Initialization Error:', error.message);
@@ -17,10 +18,14 @@ if (!admin.apps.length) {
 
 // Get the default bucket from the initialized app.
 // Ensure the bucket is retrieved only after initialization.
-const bucket = admin.storage().bucket();
+const bucket = admin.apps.length ? admin.storage().bucket() : null;
 
 
 export async function POST(request: Request) {
+  if (!bucket) {
+    return NextResponse.json({ error: 'Firebase Admin SDK not initialized.' }, { status: 500 });
+  }
+  
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
