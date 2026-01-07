@@ -1,8 +1,7 @@
-
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useProductDialog } from '@/components/admin/products/use-product-dialog';
@@ -119,10 +118,6 @@ export function ProductForm() {
         }
     }
 }, [defaultValues, form, isOpen]);
-  
-  const handleImageUploadComplete = useCallback((imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => {
-    form.setValue(fieldName, imageInfo, { shouldValidate: true });
-  }, [form]);
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -184,130 +179,128 @@ export function ProductForm() {
               : 'Thêm một sản phẩm mới vào danh mục của bạn.'}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4"
-          >
-            <FormField
-              control={form.control}
-              name="nameVN"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tên tiếng Việt</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="The Macallan 18..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="nameEN"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tên tiếng Anh</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="The Macallan 18..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug (URL)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="the-macallan-18" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Giá (VNĐ)</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="md:col-span-2">
-                 <FormField
-                  control={form.control}
-                  name="tags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="scotch, speyside, old-rare" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-            </div>
-
-            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FileUploader
-                    fieldName="image"
-                    label="Ảnh bìa (listing)"
-                    onUploadComplete={handleImageUploadComplete}
-                    defaultUrl={form.getValues('image.url')}
-                    onUploadStateChange={handleUploadStateChange}
-                />
-                <FileUploader
-                    fieldName="detailImage"
-                    label="Ảnh trang chi tiết"
-                    onUploadComplete={handleImageUploadComplete}
-                    defaultUrl={form.getValues('detailImage.url')}
-                    onUploadStateChange={handleUploadStateChange}
-                />
-            </div>
-            
-            <div className="md:col-span-2">
-               <FormField
+        <FormProvider {...form}>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4"
+            >
+              <FormField
                 control={form.control}
-                name="description"
+                name="nameVN"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Mô tả</FormLabel>
+                    <FormLabel>Tên tiếng Việt</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Mô tả chi tiết về sản phẩm..."
-                        className='min-h-[100px]'
-                      />
+                      <Input {...field} placeholder="The Macallan 18..." />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            <DialogFooter className="md:col-span-2">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Hủy
-              </Button>
-              <Button type="submit" disabled={isSubmitting || isAnyFileUploading}>
-                {(isSubmitting || isAnyFileUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Lưu Thay Đổi
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              <FormField
+                control={form.control}
+                name="nameEN"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tên tiếng Anh</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="The Macallan 18..." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Slug (URL)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="the-macallan-18" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Giá (VNĐ)</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="tags"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="scotch, speyside, old-rare" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+              </div>
+
+              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FileUploader
+                      fieldName="image"
+                      label="Ảnh bìa (listing)"
+                      defaultUrl={form.getValues('image.url')}
+                      onUploadStateChange={handleUploadStateChange}
+                  />
+                  <FileUploader
+                      fieldName="detailImage"
+                      label="Ảnh trang chi tiết"
+                      defaultUrl={form.getValues('detailImage.url')}
+                      onUploadStateChange={handleUploadStateChange}
+                  />
+              </div>
+              
+              <div className="md:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mô tả</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Mô tả chi tiết về sản phẩm..."
+                          className='min-h-[100px]'
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <DialogFooter className="md:col-span-2">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Hủy
+                </Button>
+                <Button type="submit" disabled={isSubmitting || isAnyFileUploading}>
+                  {(isSubmitting || isAnyFileUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Lưu Thay Đổi
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );
 }
-
-    

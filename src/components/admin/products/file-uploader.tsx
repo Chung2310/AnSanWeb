@@ -7,19 +7,20 @@ import { Progress } from '@/components/ui/progress';
 import { Image as ImageIcon, Upload, CheckCircle, XCircle } from 'lucide-react';
 import Image from 'next/image';
 import type { ImageInfo } from '@/lib/types';
+import { useFormContext } from 'react-hook-form';
 
 interface FileUploaderProps {
   fieldName: 'image' | 'detailImage';
   label: string;
-  onUploadComplete: (imageInfo: ImageInfo, fieldName: 'image' | 'detailImage') => void;
   onUploadStateChange: (isUploading: boolean, fieldName: 'image' | 'detailImage') => void;
   defaultUrl?: string;
 }
 
-export default function FileUploader({ fieldName, label, onUploadComplete, onUploadStateChange, defaultUrl }: FileUploaderProps) {
+export default function FileUploader({ fieldName, label, onUploadStateChange, defaultUrl }: FileUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(defaultUrl || null);
   const { progress, url, error, startUpload, isUploading } = useUploadStorage();
+  const { setValue } = useFormContext(); // Get setValue from form context
 
   useEffect(() => {
     onUploadStateChange(isUploading, fieldName);
@@ -47,7 +48,8 @@ export default function FileUploader({ fieldName, label, onUploadComplete, onUpl
     if (file) {
       const uploadedImageInfo = await startUpload(file, 'products');
       if (uploadedImageInfo) {
-        onUploadComplete(uploadedImageInfo, fieldName);
+        // Use setValue from react-hook-form to update the form state
+        setValue(fieldName, uploadedImageInfo, { shouldValidate: true });
       }
     }
   };
