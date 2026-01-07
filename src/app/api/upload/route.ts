@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
-import { Readable } from 'stream';
 
 // This is the correct way to initialize the admin SDK.
 // It will automatically use the service account credentials provided
@@ -45,42 +44,24 @@ export async function POST(request: Request) {
     const storagePath = `${pathPrefix}/${fileName}`;
     
     const blob = bucket.file(storagePath);
-    const blobStream = blob.createWriteStream({
-      metadata: {
-        contentType: file.type,
-      },
+    
+    // Use the save method with the buffer
+    await blob.save(fileBuffer, {
+        metadata: {
+            contentType: file.type,
+        },
     });
 
-    return new Promise((resolve, reject) => {
-      blobStream.on('error', (err) => {
-        console.error('Blob Stream Error:', err);
-        reject(NextResponse.json({ error: 'Failed to upload file.' }, { status: 500 }));
-      });
-
-      blobStream.on('finish', async () => {
-        try {
-          // Make the file publicly readable
-          await blob.makePublic();
-          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-          
-          const imageInfo = {
-            url: publicUrl,
-            path: storagePath,
-          };
-          
-          resolve(NextResponse.json(imageInfo, { status: 200 }));
-        } catch (err) {
-            console.error('Error making file public or getting URL:', err);
-            reject(NextResponse.json({ error: 'Failed to finalize file upload.' }, { status: 500 }));
-        }
-      });
-
-      // Use a readable stream to pipe the buffer to the blob stream
-      const bufferStream = new Readable();
-      bufferStream.push(fileBuffer);
-      bufferStream.push(null); // Signal the end of the stream
-      bufferStream.pipe(blobStream);
-    });
+    // Make the file publicly readable
+    await blob.makePublic();
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+    
+    const imageInfo = {
+      url: publicUrl,
+      path: storagePath,
+    };
+    
+    return NextResponse.json(imageInfo, { status: 200 });
 
   } catch (error: any) {
     console.error('API Route Error:', error);
