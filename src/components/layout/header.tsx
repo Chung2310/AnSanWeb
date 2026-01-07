@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from '../ui/input';
 import { useEffect, useState } from 'react';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import { useHydration } from '@/hooks/use-hydration';
 
 
@@ -179,6 +179,10 @@ export default function Header() {
                       </Button>
                     </SheetTrigger>
                     <SheetContent side="right" className="w-full bg-white p-6">
+                      <SheetHeader className="sr-only">
+                        <SheetTitle>Main Menu</SheetTitle>
+                        <SheetDescription>Main navigation links for the website.</SheetDescription>
+                      </SheetHeader>
                       <div className="flex flex-col space-y-6">
                         <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
                         <nav className="flex flex-col space-y-4">
