@@ -45,31 +45,9 @@ const mainNavLinks = [
 ];
 
 const categoryNavLinks = [
-    { 
-        href: '/danh-muc/scotch-whisky', 
-        label: 'Scotch Whisky',
-        sublinks: [
-            { href: '/danh-muc/scotch-whisky/whisky-campbeltown', label: 'Whisky Campbeltown' },
-            { href: '/danh-muc/scotch-whisky/whisky-highland', label: 'Whisky Highland' },
-            { href: '/danh-muc/scotch-whisky/whisky-islay', label: 'Whisky Islay' },
-            { href: '/danh-muc/scotch-whisky/whisky-lowland', label: 'Whisky Lowland' },
-            { href: '/danh-muc/scotch-whisky/whisky-speyside', label: 'Whisky Speyside' },
-            { href: '/danh-muc/scotch-whisky/whisky-islands', label: 'Whisky Islands' },
-        ]
-    },
-    { 
-        href: '/danh-muc/world-whisky', 
-        label: 'World Whisky',
-        sublinks: [
-            { href: '/danh-muc/world-whisky/whisky-ireland', label: 'Whiskey Ireland' },
-            { href: '/danh-muc/world-whisky/whisky-nhat', label: 'Whisky Nhật' },
-            { href: '/danh-muc/world-whisky/whisky-the-lakes', label: 'Whisky The Lakes' },
-            { href: '/danh-muc/world-whisky/whisky-khac', label: 'Bourbon Whiskey' },
-        ]
-    },
-    { href: '/danh-muc/old-rare', label: 'Old & Rare' },
-    { href: '/danh-muc/armagnac', label: 'Armagnac' },
-    { href: '/danh-muc/wine', label: 'Wine' },
+    { href: '/danh-muc/wine', label: 'Riệu Vang' },
+    { href: '/danh-muc/spirits', label: 'Riệu Mạnh' },
+    { href: '/danh-muc-san-pham', label: 'Cigar' },
     { href: '/danh-muc/bo-qua-tang', label: 'Bộ quà tặng' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'Khắc Tên Lên Chai' },
 ];
