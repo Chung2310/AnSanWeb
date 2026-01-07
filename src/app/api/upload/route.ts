@@ -23,8 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file provided.' }, { status: 400 });
     }
 
-    const fileBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(fileBuffer);
+    const fileArrayBuffer = await file.arrayBuffer();
     
     const fileId = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
     const fileExtension = file.name.split('.').pop();
@@ -33,7 +32,8 @@ export async function POST(request: Request) {
     
     const storageRef = ref(storage, storagePath);
 
-    const snapshot = await uploadBytes(storageRef, buffer, {
+    // Pass the ArrayBuffer directly to uploadBytes
+    const snapshot = await uploadBytes(storageRef, fileArrayBuffer, {
       contentType: file.type,
     });
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
   } catch (e: any) {
     console.error('Upload API Error:', e);
-    const errorMessage = `Upload failed: ${e.message}`;
+    const errorMessage = e.message || 'Internal server error during file upload.';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
