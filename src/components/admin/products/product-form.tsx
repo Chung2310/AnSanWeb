@@ -26,7 +26,6 @@ import { Input } from '@/components/ui/input';
 import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
-import FileUploader from '@/components/admin/products/file-uploader';
 import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
@@ -36,9 +35,9 @@ const formSchema = z.object({
   price: z.coerce.number().min(0, 'Giá phải là số dương'),
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
-    path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc"),
+    path: z.string().optional(),
     imageHint: z.string().optional(),
-  }),
+  }).nullable(),
   tags: z.string().optional(),
   attributes: z.array(z.object({
     label: z.string().min(1, "Nhãn không được để trống"),
@@ -62,8 +61,7 @@ function generateSlug(name: string) {
 export function ProductForm() {
   const { isOpen, onClose, id } = useProductDialog();
   const firestore = useFirestore();
-  const [uploadingStatus, setUploadingStatus] = useState({ image: false });
-
+  
   const isEditMode = !!id;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,13 +78,6 @@ export function ProductForm() {
   
   const nameVNValue = form.watch('nameVN');
   const { isSubmitting } = form.formState;
-
-  const handleUploadStateChange = useCallback((uploading: boolean, fieldName: 'image') => {
-    setUploadingStatus(prev => ({ ...prev, [fieldName]: uploading }));
-  }, []);
-
-  const isAnyUploading = Object.values(uploadingStatus).some(status => status);
-
 
   useEffect(() => {
     if (nameVNValue && !isEditMode) {
@@ -111,7 +102,7 @@ export function ProductForm() {
               nameEN: '',
               slug: '',
               price: 0,
-              image: undefined,
+              image: null,
               attributes: [],
               tags: '',
           });
@@ -122,26 +113,27 @@ export function ProductForm() {
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !values.image) return;
-    const { defaultValues } = useProductDialog.getState();
-
-    const productsCollectionRef = collection(firestore, 'products');
     
     const productData = {
         nameVN: values.nameVN,
         nameEN: values.nameEN,
         slug: values.slug,
         price: values.price,
-        image: values.image,
+        image: {
+            ...values.image,
+            path: values.image.path || '',
+            imageHint: values.image.imageHint || '',
+        },
         attributes: values.attributes || [], 
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
     };
 
 
     if (isEditMode && id) {
-        const productDocRef = doc(productsCollectionRef, id);
+        const productDocRef = doc(firestore, 'products', id);
         await updateDocumentNonBlocking(productDocRef, productData);
     } else {
-        await addDocumentNonBlocking(productsCollectionRef, {
+        await addDocumentNonBlocking(collection(firestore, 'products'), {
             ...productData,
             createdAt: new Date().toISOString(),
             isFeatured: false,
@@ -150,8 +142,6 @@ export function ProductForm() {
     }
     onClose();
   };
-
-  const defaultValues = useProductDialog.getState().defaultValues;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -282,12 +272,19 @@ export function ProductForm() {
                         </div>
                     </div>
                     {/* Right Column */}
-                    <div className="md:col-span-1">
-                        <FileUploader
-                            fieldName="image"
-                            label="Ảnh bìa (listing)"
-                            defaultUrl={defaultValues?.image?.url}
-                            onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'image')}
+                    <div className="md:col-span-1 space-y-4">
+                       <FormField
+                          control={form.control}
+                          name="image.url"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>URL Ảnh bìa</FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder="https://example.com/image.jpg" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                     </div>
                 </div>
@@ -295,8 +292,8 @@ export function ProductForm() {
                     <Button type="button" variant="outline" onClick={onClose}>
                     Hủy
                     </Button>
-                    <Button type="submit" disabled={isSubmitting || isAnyUploading}>
-                    {(isSubmitting || isAnyUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Lưu Thay Đổi
                     </Button>
                 </DialogFooter>

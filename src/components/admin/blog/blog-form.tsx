@@ -27,8 +27,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
-import FileUploader from '@/components/admin/products/file-uploader'; // Re-using the same uploader
-import type { ImageInfo } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
 
@@ -41,7 +39,7 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().optional(),
-    imageHint: z.string().optional(), // Add this line
+    imageHint: z.string().optional(),
   }).nullable(),
   categories: z.string().min(1, 'Phải có ít nhất một danh mục'),
 });
@@ -62,7 +60,6 @@ function generateSlug(name: string) {
 export function BlogForm() {
   const { isOpen, onClose, defaultValues, id } = useBlogDialog();
   const firestore = useFirestore();
-  const [isUploading, setIsUploading] = useState(false);
 
   const isEditMode = !!id;
 
@@ -72,10 +69,6 @@ export function BlogForm() {
   
   const titleValue = form.watch('title');
   const { isSubmitting } = form.formState;
-
-  const handleUploadStateChange = useCallback((uploading: boolean) => {
-    setIsUploading(uploading);
-  }, []);
 
   useEffect(() => {
     if (titleValue && !isEditMode) {
@@ -87,10 +80,10 @@ export function BlogForm() {
 
   useEffect(() => {
     if (isOpen) {
+        const { defaultValues } = useBlogDialog.getState();
         if (defaultValues) {
             form.reset({
                 ...defaultValues,
-                // Ensure image is handled correctly (it's an object)
                 image: defaultValues.image ? {
                     url: defaultValues.image.imageUrl,
                     path: defaultValues.image.path,
@@ -110,7 +103,7 @@ export function BlogForm() {
             });
         }
     }
-}, [defaultValues, form, isOpen]);
+}, [isOpen, form.reset]);
 
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
@@ -118,10 +111,9 @@ export function BlogForm() {
 
     const postsCollectionRef = collection(firestore, 'blogPosts');
     
-    // Prepare image data to match the BlogPost type
     const finalImage = values.image ? {
         imageUrl: values.image.url,
-        path: values.image.path,
+        path: values.image.path || '',
         imageHint: values.image.imageHint || '',
     } : null;
 
@@ -135,7 +127,6 @@ export function BlogForm() {
     if (isEditMode && id) {
       const docRef = doc(postsCollectionRef, id);
       const { date, ...updateData } = submissionData;
-      // Keep original date when editing unless explicitly changed
       updateDocumentNonBlocking(docRef, { ...updateData, date: defaultValues?.date });
     } else {
       addDocumentNonBlocking(postsCollectionRef, submissionData);
@@ -216,11 +207,18 @@ export function BlogForm() {
                     />
                 </div>
                 <div className="md:col-span-1">
-                    <FileUploader
-                        fieldName="image"
-                        label="Ảnh bìa"
-                        defaultUrl={form.getValues('image.url')}
-                        onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading)}
+                    <FormField
+                        control={form.control}
+                        name="image.url"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>URL Ảnh bìa</FormLabel>
+                            <FormControl>
+                            <Input {...field} placeholder="https://example.com/image.jpg" />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
                     />
                 </div>
                 
@@ -266,8 +264,8 @@ export function BlogForm() {
                 <Button type="button" variant="outline" onClick={onClose}>
                     Hủy
                 </Button>
-                <Button type="submit" disabled={isSubmitting || isUploading}>
-                    {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Lưu Thay Đổi
                 </Button>
                 </DialogFooter>
