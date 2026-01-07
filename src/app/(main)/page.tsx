@@ -2,7 +2,7 @@
 
 import EngravingSection from '@/components/homepage/engraving-section';
 import FamousBrands from '@/components/homepage/famous-brands';
-import FeaturedProduct from '@/components/homepage/featured-product';
+import WhiskyRegionShowcase from '@/components/homepage/whisky-region-showcase';
 import GiftSetsSection from '@/components/homepage/gift-sets-section';
 import HeroSection from '@/components/homepage/hero-section';
 import InfluenceSection from '@/components/homepage/influence-section';
@@ -14,12 +14,10 @@ export default function HomePage() {
       <HeroSection />
       <FamousBrands />
       <InfluenceSection />
-      <FeaturedProduct />
+      <WhiskyRegionShowcase />
       <PriceCategoryShowcase />
       <GiftSetsSection />
       <EngravingSection />
     </>
   );
 }
-
-    
