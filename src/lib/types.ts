@@ -41,7 +41,7 @@ export type Product = {
   nameEN: string;
   slug: string;
   price: number;
-  image: ImageInfo | null;
+  image: ImageInfo;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
