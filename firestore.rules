@@ -9,23 +9,23 @@ service cloud.firestore {
     }
 
     match /products/{productId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     match /categories/{categoryId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow read: if true;
+      allow write: if isAdmin();
     }
     
     match /product_details/{productId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow read: if true;
+      allow write: if isAdmin();
     }
     
     match /blogPosts/{blogPostId} {
-      allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     match /contacts/{contactId} {
@@ -41,7 +41,7 @@ service cloud.firestore {
     }
 
     match /admins/{userId} {
-      allow read, write: if isAdmin();
+      allow read, write: if request.auth.uid == userId || isAdmin();
     }
   }
 }

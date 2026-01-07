@@ -16,8 +16,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { collection, addDoc, updateDoc, doc, serverTimestamp, runTransaction } from 'firebase/firestore';
+import { useFirestore, useDoc, useMemoFirebase, errorEmitter, FirestorePermissionError } from '@/firebase';
+import { collection, addDoc, updateDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import FileUploader from './file-uploader';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -170,36 +170,46 @@ export default function ProductForm({ productId }: ProductFormProps) {
         return;
     }
     
-    try {
-      const dataToSave = {
-        ...values,
-        tags: values.tags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
-      };
+    const dataToSave = {
+      ...values,
+      tags: values.tags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
+    };
 
-      if (isEditMode) {
-        if (!productId) throw new Error('Product ID is missing for update.');
-        const productDocRef = doc(firestore, 'products', productId);
-        await updateDoc(productDocRef, {
-            ...dataToSave,
-            updatedAt: serverTimestamp(),
-        });
+    if (isEditMode) {
+      if (!productId) throw new Error('Product ID is missing for update.');
+      const productDocRef = doc(firestore, 'products', productId);
+      updateDoc(productDocRef, {
+          ...dataToSave,
+          updatedAt: serverTimestamp(),
+      })
+      .then(() => {
         toast({ title: 'Thành công', description: 'Đã cập nhật sản phẩm.' });
-      } else {
-        const newProductRef = doc(collection(firestore, 'products'));
-        await setDoc(newProductRef, {
-            ...dataToSave,
-            id: newProductRef.id,
-            createdAt: serverTimestamp(),
-        });
+        router.push('/admin/products');
+      })
+      .catch(err => {
+        errorEmitter.emit('permission-error', new FirestorePermissionError({
+            path: productDocRef.path,
+            operation: 'update',
+            requestResourceData: dataToSave
+        }));
+      });
+    } else {
+      const newProductRef = doc(collection(firestore, 'products'));
+      setDoc(newProductRef, {
+          ...dataToSave,
+          id: newProductRef.id,
+          createdAt: serverTimestamp(),
+      })
+      .then(() => {
         toast({ title: 'Thành công', description: 'Đã tạo sản phẩm mới.' });
-      }
-      router.push('/admin/products');
-    } catch (error) {
-      console.error('Error saving product:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Có lỗi xảy ra',
-        description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
+        router.push('/admin/products');
+      })
+      .catch(err => {
+        errorEmitter.emit('permission-error', new FirestorePermissionError({
+            path: newProductRef.path,
+            operation: 'create',
+            requestResourceData: dataToSave
+        }));
       });
     }
   };
