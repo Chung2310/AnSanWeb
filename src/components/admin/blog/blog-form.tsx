@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useBlogDialog } from '@/components/admin/blog/use-blog-dialog';
@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
-import FileUploader from '@/components/admin/products/file-uploader';
+import FileUploader from '@/components/admin/products/file-uploader'; // Re-using the same uploader
 import type { ImageInfo } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
@@ -39,9 +39,9 @@ const formSchema = z.object({
   excerpt: z.string().min(1, 'Mô tả ngắn là bắt buộc'),
   content: z.string().min(1, 'Nội dung là bắt buộc'),
   image: z.object({
-    imageUrl: z.string().min(1, "URL ảnh bìa là bắt buộc"),
-    imageHint: z.string().optional(),
+    url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().optional(),
+    imageHint: z.string().optional(), // Add this line
   }).nullable(),
   categories: z.string().min(1, 'Phải có ít nhất một danh mục'),
 });
@@ -73,8 +73,8 @@ export function BlogForm() {
   const titleValue = form.watch('title');
   const { isSubmitting } = form.formState;
 
-  const handleUploadStateChange = useCallback((isUploading: boolean) => {
-    setIsUploading(isUploading);
+  const handleUploadStateChange = useCallback((uploading: boolean) => {
+    setIsUploading(uploading);
   }, []);
 
   useEffect(() => {
@@ -90,6 +90,12 @@ export function BlogForm() {
         if (defaultValues) {
             form.reset({
                 ...defaultValues,
+                // Ensure image is handled correctly (it's an object)
+                image: defaultValues.image ? {
+                    url: defaultValues.image.imageUrl,
+                    path: defaultValues.image.path,
+                    imageHint: defaultValues.image.imageHint,
+                } : null,
                 categories: defaultValues.categories?.join(', ') || '',
             });
         } else {
@@ -105,10 +111,6 @@ export function BlogForm() {
         }
     }
 }, [defaultValues, form, isOpen]);
-  
-  const handleImageUploadComplete = useCallback((imageInfo: ImageInfo) => {
-    form.setValue('image', { imageUrl: imageInfo.url, path: imageInfo.path, imageHint: '' }, { shouldValidate: true });
-  }, [form]);
 
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
@@ -116,17 +118,25 @@ export function BlogForm() {
 
     const postsCollectionRef = collection(firestore, 'blogPosts');
     
+    // Prepare image data to match the BlogPost type
+    const finalImage = values.image ? {
+        imageUrl: values.image.url,
+        path: values.image.path,
+        imageHint: values.image.imageHint || '',
+    } : null;
+
     const submissionData = {
         ...values,
+        image: finalImage,
         categories: values.categories.split(',').map(cat => cat.trim().toUpperCase()).filter(Boolean),
-        date: new Date().toISOString(),
+        date: isEditMode ? defaultValues?.date : new Date().toISOString(),
     };
 
     if (isEditMode && id) {
       const docRef = doc(postsCollectionRef, id);
-      // When updating, we might not want to change the date, or handle it differently
       const { date, ...updateData } = submissionData;
-      updateDocumentNonBlocking(docRef, updateData);
+      // Keep original date when editing unless explicitly changed
+      updateDocumentNonBlocking(docRef, { ...updateData, date: defaultValues?.date });
     } else {
       addDocumentNonBlocking(postsCollectionRef, submissionData);
     }
@@ -145,124 +155,125 @@ export function BlogForm() {
               : 'Thêm một bài viết mới vào trang kiến thức.'}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4"
-          >
-            <div className="md:col-span-2 space-y-4">
-                 <FormField
+        <FormProvider {...form}>
+            <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4"
+            >
+                <div className="md:col-span-2 space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Tiêu đề</FormLabel>
+                            <FormControl>
+                                <Input {...field} placeholder="Đánh giá chi tiết: The Macallan 18..." />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Slug (URL)</FormLabel>
+                            <FormControl>
+                                <Input {...field} placeholder="danh-gia-chi-tiet-the-macallan-18" />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="author"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Tác giả</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
                     control={form.control}
-                    name="title"
+                    name="categories"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Tiêu đề</FormLabel>
+                        <FormLabel>Danh mục (phân cách bằng dấu phẩy)</FormLabel>
                         <FormControl>
-                            <Input {...field} placeholder="Đánh giá chi tiết: The Macallan 18..." />
+                            <Input {...field} placeholder="WHISKY REVIEW, NEWS" />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
                     )}
-                />
-                 <FormField
+                    />
+                </div>
+                <div className="md:col-span-1">
+                    <FileUploader
+                        fieldName="image"
+                        label="Ảnh bìa"
+                        defaultUrl={form.getValues('image.url')}
+                        onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading)}
+                    />
+                </div>
+                
+                <div className="md:col-span-3">
+                <FormField
                     control={form.control}
-                    name="slug"
+                    name="excerpt"
                     render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Slug (URL)</FormLabel>
-                        <FormControl>
-                            <Input {...field} placeholder="danh-gia-chi-tiet-the-macallan-18" />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="author"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Tác giả</FormLabel>
-                        <FormControl>
-                            <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="categories"
-                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Danh mục (phân cách bằng dấu phẩy)</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="WHISKY REVIEW, NEWS" />
-                      </FormControl>
-                      <FormMessage />
+                        <FormLabel>Mô tả ngắn (Excerpt)</FormLabel>
+                        <FormControl>
+                        <Textarea
+                            {...field}
+                            placeholder="Một đoạn tóm tắt ngắn gọn về bài viết..."
+                            className='min-h-[100px]'
+                        />
+                        </FormControl>
+                        <FormMessage />
                     </FormItem>
-                  )}
+                    )}
                 />
-            </div>
-            <div className="md:col-span-1">
-                <FileUploader
-                    fieldName="image"
-                    label="Ảnh bìa"
-                    onUploadComplete={handleImageUploadComplete}
-                    defaultUrl={form.getValues('image.imageUrl')}
-                    onUploadStateChange={handleUploadStateChange}
+                </div>
+                <div className="md:col-span-3">
+                <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Nội dung</FormLabel>
+                        <FormControl>
+                        <Textarea
+                            {...field}
+                            placeholder="Nội dung chi tiết của bài viết..."
+                            className='min-h-[250px]'
+                        />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
                 />
-            </div>
-            
-            <div className="md:col-span-3">
-               <FormField
-                control={form.control}
-                name="excerpt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mô tả ngắn (Excerpt)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Một đoạn tóm tắt ngắn gọn về bài viết..."
-                        className='min-h-[100px]'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="md:col-span-3">
-               <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nội dung</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Nội dung chi tiết của bài viết..."
-                        className='min-h-[250px]'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <DialogFooter className="md:col-span-3">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Hủy
-              </Button>
-              <Button type="submit" disabled={isSubmitting || isUploading}>
-                {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Lưu Thay Đổi
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+                </div>
+                <DialogFooter className="md:col-span-3">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    Hủy
+                </Button>
+                <Button type="submit" disabled={isSubmitting || isUploading}>
+                    {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Lưu Thay Đổi
+                </Button>
+                </DialogFooter>
+            </form>
+            </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );
