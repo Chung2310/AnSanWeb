@@ -59,7 +59,7 @@ export default function FileUploader({ fieldName, label, onUploadComplete, onUpl
       <p className="font-medium text-sm">{label}</p>
       <div className="relative flex h-48 w-full items-center justify-center rounded-md border-2 border-dashed bg-muted">
         {preview ? (
-          <Image src={preview} alt="Xem trước ảnh" layout="fill" objectFit="contain" className="rounded-md" />
+          <Image src={preview} alt="Xem trước ảnh" fill objectFit="contain" className="rounded-md" />
         ) : (
           <div className="text-center text-muted-foreground">
             <ImageIcon className="mx-auto h-10 w-10" />

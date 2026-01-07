@@ -9,7 +9,7 @@ import {
   LifeBuoy,
   Package,
   MessageSquare,
-  Bell,
+  Newspaper,
   Home,
   Users,
 } from 'lucide-react';
@@ -27,6 +27,7 @@ import {
 const links = [
   { href: '/admin', label: 'Bảng điều khiển', icon: Home },
   { href: '/admin/products', label: 'Sản phẩm', icon: Package },
+  { href: '/admin/blog', label: 'Bài viết', icon: Newspaper },
   { href: '/admin/contacts', label: 'Tin nhắn', icon: MessageSquare },
   { href: '/admin/newsletters', label: 'Bản tin', icon: Mail },
 ];

@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { sampleBlogPosts } from "@/lib/placeholder-data";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from '@/lib/utils';
 import type { BlogPost } from '@/lib/types';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy } from 'firebase/firestore';
+import { Skeleton } from './ui/skeleton';
 
 const allCategories = [
     'DISTILLERIES',
@@ -14,10 +16,6 @@ const allCategories = [
     'WHISKY BASICS',
     'WHISKY REVIEW',
 ];
-
-const getCategoryCount = (category: string) => {
-    return sampleBlogPosts.filter(post => post.categories.includes(category)).length;
-}
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -34,12 +32,12 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
             <div className="relative">
                 <div className="aspect-[4/3] overflow-hidden">
                     <Image 
-                        src={post.image.imageUrl} 
+                        src={post.image?.imageUrl || '/placeholder.svg'} 
                         alt={post.title}
                         width={600}
                         height={400}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        data-ai-hint={post.image.imageHint}
+                        data-ai-hint={post.image?.imageHint || 'blog post'}
                     />
                 </div>
                 <div 
@@ -68,21 +66,38 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
     );
 };
 
+const BlogCardSkeleton = () => (
+    <div className="space-y-4">
+        <Skeleton className="aspect-[4/3] w-full" />
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-4 w-1/4" />
+    </div>
+);
+
+
 interface BlogListingProps {
     defaultCategory?: string | null;
 }
 
 export default function BlogListing({ defaultCategory = null }: BlogListingProps) {
     const [activeCategory, setActiveCategory] = useState<string | null>(defaultCategory);
+    
+    const firestore = useFirestore();
+    const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
+    const postsQuery = useMemoFirebase(() => postsCollection && query(postsCollection, orderBy('date', 'desc')), [postsCollection]);
+    const { data: blogPosts, isLoading } = useCollection<BlogPost>(postsQuery);
 
+    const getCategoryCount = (category: string) => {
+        if (!blogPosts) return 0;
+        return blogPosts.filter(post => post.categories.includes(category)).length;
+    }
+    
     const filteredPosts = activeCategory
-        ? sampleBlogPosts.filter(post => post.categories.includes(activeCategory))
-        : sampleBlogPosts;
+        ? blogPosts?.filter(post => post.categories.includes(activeCategory))
+        : blogPosts;
 
     const handleCategoryClick = (category: string | null) => {
-        // If we are on a page with a default category, clicking should not change the filter.
-        // Instead, this will be used on the main blog page.
-        // For this version, we will just allow filtering visually on all pages.
         setActiveCategory(category);
     };
 
@@ -104,7 +119,7 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
                     </button>
                     {allCategories.map(category => {
                         const count = getCategoryCount(category);
-                        if (count === 0) return null;
+                        if (count === 0 && !isLoading) return null;
                         return (
                             <button 
                                 key={category}
@@ -114,7 +129,7 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
                                     activeCategory === category ? "text-black" : "text-neutral-500"
                                 )}
                             >
-                                {category} ({count})
+                                {category} {isLoading ? '' : `(${count})`}
                             </button>
                         )
                     })}
@@ -130,9 +145,13 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
             )}
             
             <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-                {filteredPosts.map(post => (
-                    <BlogCard key={post.id} post={post} />
-                ))}
+                {isLoading ? (
+                    Array.from({ length: 6 }).map((_, i) => <BlogCardSkeleton key={i} />)
+                ) : (
+                    filteredPosts?.map(post => (
+                        <BlogCard key={post.id} post={post} />
+                    ))
+                )}
             </div>
         </div>
     )
