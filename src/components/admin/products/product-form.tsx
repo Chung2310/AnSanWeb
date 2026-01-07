@@ -36,7 +36,8 @@ const formSchema = z.object({
   price: z.coerce.number().min(0, 'Giá phải là số dương'),
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
-    path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
+    path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc"),
+    imageHint: z.string().optional(),
   }),
   tags: z.string().optional(),
   attributes: z.array(z.object({
@@ -59,7 +60,7 @@ function generateSlug(name: string) {
 
 
 export function ProductForm() {
-  const { isOpen, onClose, defaultValues, id } = useProductDialog();
+  const { isOpen, onClose, id } = useProductDialog();
   const firestore = useFirestore();
   const [uploadingStatus, setUploadingStatus] = useState({ image: false });
 
@@ -96,6 +97,7 @@ export function ProductForm() {
 
 
   useEffect(() => {
+    const { defaultValues } = useProductDialog.getState();
     if (isOpen) {
         if (defaultValues) {
             form.reset({
@@ -109,17 +111,18 @@ export function ProductForm() {
                 nameEN: '',
                 slug: '',
                 price: 0,
-                image: null,
+                image: undefined,
                 attributes: [],
                 tags: '',
             });
         }
     }
-}, [isOpen, defaultValues, form.reset]);
+  }, [isOpen, form.reset]);
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !values.image) return;
+    const { defaultValues } = useProductDialog.getState();
 
     const productsCollectionRef = collection(firestore, 'products');
     
@@ -156,7 +159,7 @@ export function ProductForm() {
           <DialogTitle>{isEditMode ? 'Chỉnh sửa' : 'Thêm'} Sản phẩm (Cơ bản)</DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? `Chỉnh sửa thông tin cơ bản cho sản phẩm ${defaultValues?.nameVN}.`
+              ? `Chỉnh sửa thông tin cơ bản cho sản phẩm.`
               : 'Điền thông tin cơ bản để tạo sản phẩm.'}
           </DialogDescription>
         </DialogHeader>
@@ -282,7 +285,6 @@ export function ProductForm() {
                         <FileUploader
                             fieldName="image"
                             label="Ảnh bìa (listing)"
-                            defaultUrl={defaultValues?.image?.url}
                             onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'image')}
                         />
                     </div>
