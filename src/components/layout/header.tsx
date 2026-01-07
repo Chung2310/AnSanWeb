@@ -71,7 +71,6 @@ const categoryNavLinks = [
     { href: '/danh-muc/armagnac', label: 'Armagnac' },
     { href: '/danh-muc/wine', label: 'Wine' },
     { href: '/danh-muc/bo-qua-tang', label: 'Bộ quà tặng' },
-    { href: '/danh-muc/set-thu-ruou', label: 'Set thử rượu' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'Khắc Tên Lên Chai' },
 ];
 
