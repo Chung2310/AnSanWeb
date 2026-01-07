@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import {
   Home,
   Package,
-  Package2,
   Settings,
   ShoppingCart,
   Users2,
