@@ -58,7 +58,7 @@ const categoryNavLinks = [
         ]
     },
     {
-        href: '/danh-muc/ruou-manh/ballantines-finest',
+        href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
         sublinks: [
             { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S" },
@@ -70,7 +70,7 @@ const categoryNavLinks = [
         ]
     },
      {
-        href: '/danh-muc/cigar/hanos',
+        href: '/danh-muc/cigar',
         label: 'CIGAR',
         sublinks: [
             { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
