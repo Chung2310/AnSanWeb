@@ -2,6 +2,8 @@
 export type ImageInfo = {
   url: string;
   path: string;
+  imageUrl?: string;
+  imageHint?: string;
 };
 
 export type TastingNotes = {
@@ -69,11 +71,13 @@ export type BlogPost = {
   title: string;
   slug: string;
   excerpt: string;
+  content: string;
   date: string;
   image: {
-    imageUrl: string,
-    imageHint: string,
-  };
+    imageUrl: string;
+    imageHint: string;
+    path?: string;
+  } | null;
   categories: string[];
 };
 

@@ -24,6 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 const links = [
     { href: '/admin', label: 'Bảng điều khiển' },
     { href: '/admin/products', label: 'Sản phẩm' },
+    { href: '/admin/blog', label: 'Bài viết' },
     { href: '/admin/contacts', label: 'Tin nhắn' },
     { href: '/admin/newsletters', label: 'Bản tin' },
 ];

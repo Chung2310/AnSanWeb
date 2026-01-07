@@ -1,15 +1,22 @@
 'use client';
 
-import { sampleBlogPosts } from "@/lib/placeholder-data";
 import Link from "next/link";
 import { Separator } from "./ui/separator";
-import { Calendar } from "lucide-react";
+import { Calendar, Newspaper } from "lucide-react";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import { collection, query, orderBy, limit } from "firebase/firestore";
+import type { BlogPost } from "@/lib/types";
+import { Skeleton } from "./ui/skeleton";
 
 export default function PostSidebar({ currentPostId }: { currentPostId: string }) {
-    // Get the 4 most recent posts, excluding the current one
-    const recentPosts = sampleBlogPosts
-        .filter(p => p.id !== currentPostId)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    const firestore = useFirestore();
+    const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
+    // Fetch 5 recent posts to have enough to filter out the current one and still have 4
+    const postsQuery = useMemoFirebase(() => postsCollection && query(postsCollection, orderBy('date', 'desc'), limit(5)), [postsCollection]);
+    const { data: allRecentPosts, isLoading } = useCollection<BlogPost>(postsQuery);
+
+    const recentPosts = allRecentPosts
+        ?.filter(p => p.id !== currentPostId)
         .slice(0, 4);
     
     const formatDate = (dateString: string) => {
@@ -23,7 +30,21 @@ export default function PostSidebar({ currentPostId }: { currentPostId: string }
                 Bài Viết Mới Nhất
             </h3>
             <div className="space-y-6">
-                {recentPosts.map((post, index) => (
+                 {isLoading && Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="space-y-2">
+                        <Skeleton className="h-4 w-1/3" />
+                        <Skeleton className="h-5 w-full" />
+                        <Skeleton className="h-4 w-1/2" />
+                        <Separator className="mt-6 !mb-2" />
+                    </div>
+                ))}
+                {!isLoading && recentPosts?.length === 0 && (
+                    <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-8 border rounded-md">
+                        <Newspaper className="h-8 w-8 mb-2"/>
+                        <p>Không có bài viết nào.</p>
+                    </div>
+                )}
+                {!isLoading && recentPosts?.map((post, index) => (
                     <div key={post.id}>
                         <Link href={`/tin-tuc/${post.slug}`} className="group block">
                             <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#8a7d6a' }}>

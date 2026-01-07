@@ -1,33 +1,93 @@
-import { sampleBlogPosts } from "@/lib/placeholder-data";
-import { notFound } from "next/navigation";
+'use client'
+
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, User } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import { collection, query, where } from "firebase/firestore";
+import type { BlogPost } from "@/lib/types";
+import { useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // This is a placeholder for a function that would parse content and extract headings
 const generateHeadings = (content: string) => {
     // In a real app, you'd parse the content to find h2, h3, etc.
     // For now, we'll use a static example based on the UI.
-    return [
-        { id: "giai-doan-lich-su", text: "MỘT GIAI ĐOẠN LỊCH SỬ QUAN TRỌNG CỦA LAPHROAIG", level: 2 },
-        { id: "qua-trinh-truong-thanh", text: "QUÁ TRÌNH TRƯỞNG THÀNH PHỨC HỢP", level: 2 },
-        { id: "thiet-ke-ton-vinh", text: "THIẾT KẾ TÔN VINH DI SẢN ISLAY", level: 2 },
-        { id: "gioi-han-phat-hanh", text: "GIỚI HẠN PHÁT HÀNH TOÀN CẦU - GIÁ TRỊ SƯU TẦM ĐỈNH CAO", level: 2 },
-    ];
+    const headings = [];
+    const matches = content.matchAll(/<h([2-3]) id="([^"]+)">([^<]+)<\/h\1>/g);
+    for (const match of matches) {
+        headings.push({
+            level: parseInt(match[1]),
+            id: match[2],
+            text: match[3],
+        });
+    }
+    // if no headings found, create some from text
+    if (headings.length === 0) {
+        const lines = content.split('\n');
+        // get first 4 non-empty lines
+        const a = lines.filter(line => line.trim() !== '').slice(1, 5);
+        return a.map((line, i) => ({
+            id: `heading-${i}`,
+            text: line.substring(0, 50),
+            level: 2,
+        }));
+    }
+    return headings;
 }
 
+const PostPageSkeleton = () => (
+    <div className="bg-white text-black py-16">
+        <div className="container max-w-screen-xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-8">
+                    <div className="flex items-center space-x-6 mb-6">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-4 w-24" />
+                    </div>
+                    <Skeleton className="h-12 w-full mb-8" />
+                    <Skeleton className="h-40 w-full mb-10" />
+                    <div className="space-y-4">
+                        <Skeleton className="h-6 w-full" />
+                        <Skeleton className="h-6 w-5/6" />
+                        <Skeleton className="h-6 w-full" />
+                        <Skeleton className="h-6 w-4/6" />
+                        <Skeleton className="h-6 w-full" />
+                    </div>
+                </div>
+                <div className="lg:col-span-4">
+                    <Skeleton className="h-96 w-full" />
+                </div>
+            </div>
+        </div>
+    </div>
+)
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = sampleBlogPosts.find((p) => p.slug === params.slug);
+
+export default function BlogPostPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const firestore = useFirestore();
+
+  const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
+  const postQuery = useMemoFirebase(() => postsCollection && query(postsCollection, where('slug', '==', slug)), [postsCollection, slug]);
+
+  const { data: posts, isLoading } = useCollection<BlogPost>(postQuery);
+  
+  const post = useMemo(() => (posts && posts.length > 0 ? posts[0] : null), [posts]);
+
+  if (isLoading) {
+    return <PostPageSkeleton />;
+  }
 
   if (!post) {
     notFound();
   }
 
-  const headings = generateHeadings(post.excerpt); 
-
+  const headings = generateHeadings(post.content || ""); 
   const date = new Date(post.date);
   const formattedDate = `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 
@@ -58,25 +118,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         {post.title}
                     </h1>
 
-                    <TableOfContents headings={headings} />
+                    {headings.length > 0 && <TableOfContents headings={headings} />}
                     
-                    <article className="prose prose-lg max-w-none" style={{color: '#5a5a5a'}}>
-                        <p className="font-bold italic">
-                          Chỉ có 400 chai được phát hành toàn cầu, giá bán lẻ lên tới 4.300 USD. 
-                          Laphroaig vừa công bố phiên bản thứ hai trong dòng Archive Collection – một chai single malt 38 năm tuổi, chưng cất vào năm 1985, thuộc thời kỳ chuyển mình đầy biến động của nhà chưng cất Islay này. Đây là một trong những chai whisky hiếm nhất còn sót lại từ giai đoạn đặc biệt ấy.
-                        </p>
-                        
-                        <h2 id="giai-doan-lich-su" className="font-headline font-black uppercase text-2xl !mt-12 !mb-6" style={{color: '#5a5a5a'}}>
-                          Một Giai Đoạn Lịch Sử Quan Trọng Của Laphroaig
-                        </h2>
-                        <p>
-                          Thập niên 1980 là thời kỳ đầy thách thức với Laphroaig: sản lượng giảm mạnh trong khi nhà máy tiến hành hàng loạt đợt cải tạo lớn, bao gồm cả việc xây dựng nhà chưng cất (stillhouse) mới. Chai whisky này đại diện cho những mẻ chưng cất cuối cùng sử dụng hệ thống truyền thống – trước khi các nồi chưng cất và bộ ngưng tụ được chuyển vào không gian kín lần đầu tiên trong lịch sử.
-                        </p>
-                        
-                        <h2 id="qua-trinh-truong-thanh" className="font-headline font-black uppercase text-2xl !mt-12 !mb-6" style={{color: '#5a5a5a'}}>
-                          Quá Trình Trưởng Thành Phức Hợp
-                        </h2>
-                        <Image 
+                    {post.image && (
+                         <Image 
                             src={post.image.imageUrl} 
                             alt={post.title}
                             width={1200}
@@ -84,22 +129,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                             className="w-full rounded-lg my-8"
                             data-ai-hint={post.image.imageHint}
                         />
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
-                        </p>
-                        <p>
-                          Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor.
-                        </p>
-
-                        <h2 id="thiet-ke-ton-vinh" className="font-headline font-black uppercase text-2xl !mt-12 !mb-6" style={{color: '#5a5a5a'}}>
-                          Thiết Kế Tôn Vinh Di Sản Islay
-                        </h2>
-                        <p>Nội dung đang được cập nhật...</p>
-
-                        <h2 id="gioi-han-phat-hanh" className="font-headline font-black uppercase text-2xl !mt-12 !mb-6" style={{color: '#5a5a5a'}}>
-                           Giới Hạn Phát Hành Toàn Cầu - Giá Trị Sưu Tầm Đỉnh Cao
-                        </h2>
-                        <p>Nội dung đang được cập nhật...</p>
+                    )}
+                    
+                    <article 
+                        className="prose prose-lg max-w-none" 
+                        style={{color: '#5a5a5a'}}
+                        dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}
+                    >
                     </article>
                 </div>
 
