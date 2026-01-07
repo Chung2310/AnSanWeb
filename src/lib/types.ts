@@ -1,5 +1,4 @@
 
-
 export type ImageInfo = {
   url: string;
   path: string;
@@ -41,12 +40,14 @@ export type Product = {
   nameVN: string;
   nameEN: string;
   slug: string;
+  description?: string;
   price: number;
   image: ImageInfo | null;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
   attributes: ProductAttribute[];
+  categoryIds?: string[];
   createdAt?: any;
   status: 'published' | 'draft';
   // Denormalized fields for filtering

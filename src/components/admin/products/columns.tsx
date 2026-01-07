@@ -1,7 +1,8 @@
+
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import type { Product } from '@/lib/types';
+import type { Category, Product } from '@/lib/types';
 import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,6 +29,7 @@ import {
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
+import { useCategories } from '@/hooks/use-categories';
 
 const DeleteProductAlert = ({ productId }: { productId: string }) => {
   const { toast } = useToast();
@@ -104,6 +106,23 @@ export const columns: ColumnDef<Product>[] = [
           </Button>
         )
       },
+  },
+  {
+    accessorKey: 'categoryIds',
+    header: 'Danh mục',
+    cell: ({ row }) => {
+      const categoryIds = row.original.categoryIds;
+      const { categories } = useCategories();
+      if (!categoryIds || !categories) return null;
+      
+      const productCategories = categories.filter(c => categoryIds.includes(c.id));
+
+      return (
+        <div className='flex flex-wrap gap-1'>
+            {productCategories.map(cat => <Badge key={cat.id} variant="secondary">{cat.name}</Badge>)}
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'isFeatured',
