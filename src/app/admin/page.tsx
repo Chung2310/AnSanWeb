@@ -21,6 +21,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -58,18 +59,23 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { useProducts } from '@/hooks/use-products';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const chartData = [
-  { date: '2024-05-20', revenue: 1250 },
-  { date: '2024-05-21', revenue: 1400 },
-  { date: '2024-05-22', revenue: 1600 },
-  { date: '2024-05-23', revenue: 1500 },
-  { date: '2024-05-24', revenue: 1800 },
-  { date: '2024-05-25', revenue: 2100 },
-  { date: '2024-05-26', revenue: 2300 },
+  { date: '2024-05-20', revenue: 12500000 },
+  { date: '2024-05-21', revenue: 14000000 },
+  { date: '2024-05-22', revenue: 16000000 },
+  { date: '2024-05-23', revenue: 15000000 },
+  { date: '2024-05-24', revenue: 18000000 },
+  { date: '2024-05-25', revenue: 21000000 },
+  { date: '2024-05-26', revenue: 23000000 },
 ];
 
 export default function Dashboard() {
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const recentProducts = products?.slice(0, 5) || [];
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -91,7 +97,7 @@ export default function Dashboard() {
             <PackageSearch className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1.250</div>
+            <div className="text-2xl font-bold">{isLoadingProducts ? <Skeleton className="h-7 w-20" /> : products?.length || 0}</div>
             <p className="text-xs text-muted-foreground">+50 sản phẩm mới trong tháng này</p>
           </CardContent>
         </Card>
@@ -177,43 +183,55 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Hoạt động gần đây</CardTitle>
+            <CardTitle>Sản phẩm được thêm gần đây</CardTitle>
             <CardDescription>
-              Các sản phẩm và bài viết được thêm gần đây.
+              5 sản phẩm mới nhất được thêm vào cửa hàng.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-8">
-            <div className="flex items-center gap-4">
-              <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="https://picsum.photos/seed/product1/100/100" alt="Product image" />
-                <AvatarFallback>SP</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <p className="text-sm font-medium leading-none">
-                  Sản phẩm mới: The Macallan 18
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Thêm vào bởi admin@example.com
-                </p>
-              </div>
-              <div className="ml-auto font-medium text-sm">2 phút trước</div>
-            </div>
-            <div className="flex items-center gap-4">
-               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="https://picsum.photos/seed/news1/100/100" alt="News image" />
-                <AvatarFallback>TT</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <p className="text-sm font-medium leading-none">
-                  Bài viết mới: Khám phá vùng Speyside
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Đăng bởi admin@example.com
-                </p>
-              </div>
-              <div className="ml-auto font-medium text-sm">1 giờ trước</div>
-            </div>
+          <CardContent>
+             <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Ảnh</TableHead>
+                  <TableHead>Tên</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Giá</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoadingProducts && Array.from({length: 5}).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><Skeleton className="h-10 w-10" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-16" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                  </TableRow>
+                ))}
+                {recentProducts.map(product => (
+                  <TableRow key={product.id}>
+                    <TableCell>
+                      <Avatar className="h-10 w-10 rounded-md">
+                        <AvatarImage src={product.image?.url} alt={product.nameVN} />
+                        <AvatarFallback className='rounded-md'>SP</AvatarFallback>
+                      </Avatar>
+                    </TableCell>
+                    <TableCell className="font-medium">{product.nameVN}</TableCell>
+                    <TableCell>
+                      <Badge variant={product.status === 'published' ? 'default' : 'secondary'}>
+                        {product.status === 'published' ? 'Xuất bản' : 'Bản nháp'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{new Intl.NumberFormat('vi-VN').format(product.price)}₫</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
+           <CardFooter className='justify-end'>
+             <Button asChild size="sm" variant="outline">
+              <Link href="/admin/products">Xem tất cả</Link>
+            </Button>
+          </CardFooter>
         </Card>
       </div>
     </>

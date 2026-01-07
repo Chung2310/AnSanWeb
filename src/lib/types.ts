@@ -47,7 +47,8 @@ export type Product = {
   isNew?: boolean;
   tags?: string[];
   attributes: ProductAttribute[];
-  createdAt?: string;
+  createdAt?: any;
+  status: 'published' | 'draft';
   // Denormalized fields for filtering
   age?: number;
   cask?: string;
