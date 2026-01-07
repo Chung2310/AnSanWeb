@@ -22,7 +22,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('admin@ansan.com');
   const [password, setPassword] = useState('123456');
   const [error, setError] = useState('');
-  const { login, user } = useAuthStore();
+  const { user } = useAuthStore();
   const router = useRouter();
   const auth = useAuth();
   const firestore = useFirestore();
@@ -43,8 +43,8 @@ export default function LoginPage() {
     }
 
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        login(userCredential.user);
+        await signInWithEmailAndPassword(auth, email, password);
+        // The onAuthStateChanged listener in auth-store will handle user state update.
         router.push('/admin');
     } catch (error: any) {
         if (error.code === AuthErrorCodes.USER_NOT_FOUND || error.code === 'auth/invalid-credential') {
@@ -55,7 +55,7 @@ export default function LoginPage() {
                 const adminDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
                 await setDoc(adminDocRef, { role: 'admin', createdAt: serverTimestamp() });
 
-                login(newUserCredential.user);
+                // The onAuthStateChanged listener will pick up the new user.
                 router.push('/admin');
             } catch (createError: any) {
                 setError(createError.message || 'Không thể tạo tài khoản.');

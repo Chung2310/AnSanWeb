@@ -51,6 +51,8 @@ export const useAuthStore = create<AuthState>()(
         _isHydrated: false, // Flag to check if rehydration is done
 
         login: (user) => {
+          // This function is now mainly for imperative logins if needed,
+          // but onAuthStateChanged is the source of truth.
           const { uid, email, displayName, photoURL } = user;
           set({ user: { uid, email, displayName, photoURL }, loading: false })
         },
