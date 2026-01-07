@@ -129,13 +129,13 @@ export default function AdminHeader() {
             className="overflow-hidden rounded-full"
           >
             <Avatar>
-              <AvatarImage src={user?.avatar} alt={user?.name} />
-              <AvatarFallback>{user?.name?.charAt(0) || 'A'}</AvatarFallback>
+              <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || user?.email || 'Admin'} />
+              <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'A'}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.displayName || user?.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
