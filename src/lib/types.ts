@@ -20,6 +20,9 @@ export type ProductStructuredDetails = {
   title: string;
   paragraphs: string[];
   details: { label: string; value: string }[];
+  howToEnjoy?: string;
+  foodPairing?: string;
+  storage?: string;
   tastingNote: {
     nose: string;
     palate: string;

@@ -1,12 +1,24 @@
 'use client';
 import { useState } from "react";
-import type { ProductDetails } from "@/lib/types";
+import type { ProductStructuredDetails } from "@/lib/types";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function ProductDetailDescription({ details }: { details: ProductDetails }) {
-    const { title, paragraphs, details: detailList, tastingNote, conclusion } = details;
+const DetailSection = ({ title, content }: { title: string, content?: string }) => {
+    if (!content) return null;
+    return (
+        <div className="mb-6">
+            <h3 className="font-bold text-lg mb-4">{title}</h3>
+            <div className="space-y-2">
+                {content.split('\n').map((line, i) => <p key={i}>{line}</p>)}
+            </div>
+        </div>
+    );
+}
+
+export default function ProductDetailDescription({ details }: { details: ProductStructuredDetails }) {
+    const { title, paragraphs, details: detailList, tastingNote, howToEnjoy, foodPairing, storage, conclusion } = details;
     const [isExpanded, setIsExpanded] = useState(false);
 
     const previewParagraphs = paragraphs.slice(0, 2);
@@ -43,33 +55,43 @@ export default function ProductDetailDescription({ details }: { details: Product
                                     <p key={`p2-${i}`} className="mb-4">{p}</p>
                                 ))}
 
-                                <h4 className="font-bold text-md mt-8 mb-4">Chi Tiết Về {title} – Dấu Ấn Của Thời Gian và Sự Tuyển Chọn:</h4>
-                                <ul className="mb-4 space-y-2">
-                                    {detailList.map(item => (
-                                        <li key={item.label}>
-                                            <span className="font-semibold">{item.label}:</span> {item.value}
-                                        </li>
-                                    ))}
-                                </ul>
-                                
-                                {paragraphs.length > 2 && (
-                                  <>
-                                    <h4 className="font-bold text-md mt-8 mb-4">Ý Nghĩa Của {detailList.find(d => d.label === "Tuổi Rượu")?.value} Trưởng Thành Nhiệt Đới và Sự Ảnh Hưởng Của Thùng {detailList.find(d => d.label === "Loại Thùng Ủ")?.value}:</h4>
-                                    {paragraphs.slice(3).map((p, i) => (
-                                        <p key={`p3-${i}`} className="mb-4 leading-relaxed">{p}</p>
-                                    ))}
-                                  </>
+                                {detailList && detailList.length > 0 && (
+                                    <>
+                                        <h4 className="font-bold text-md mt-8 mb-4">Chi Tiết Về {title}:</h4>
+                                        <ul className="mb-4 space-y-2">
+                                            {detailList.map(item => (
+                                                <li key={item.label}>
+                                                    <span className="font-semibold">{item.label}:</span> {item.value}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
                                 )}
                                 
-                                <h3 className="font-bold text-lg mt-10 mb-4">Tasting Note</h3>
-                                <div className="space-y-4">
-                                    <p><span className="font-semibold">Mùi hương:</span> {tastingNote.nose}</p>
-                                    <p><span className="font-semibold">Hương vị:</span> {tastingNote.palate}</p>
-                                    <p><span className="font-semibold">Hậu vị:</span> {tastingNote.finish}</p>
+                                {tastingNote && (
+                                    <>
+                                        <h3 className="font-bold text-lg mt-10 mb-4">Tasting Note Chi Tiết</h3>
+                                        <div className="space-y-4">
+                                            <p><span className="font-semibold">Mùi hương:</span> {tastingNote.nose}</p>
+                                            <p><span className="font-semibold">Hương vị:</span> {tastingNote.palate}</p>
+                                            <p><span className="font-semibold">Hậu vị:</span> {tastingNote.finish}</p>
+                                        </div>
+                                    </>
+                                )}
+
+                                <div className="mt-10">
+                                    <DetailSection title="Cách Thưởng Thức" content={howToEnjoy} />
+                                    <DetailSection title="Kết Hợp Món Ăn" content={foodPairing} />
+                                    <DetailSection title="Bảo Quản" content={storage} />
                                 </div>
 
-                                <h3 className="font-bold text-lg mt-10 mb-4">Kết Luận:</h3>
-                                <p className="leading-relaxed">{conclusion}</p>
+
+                                {conclusion && (
+                                    <>
+                                        <h3 className="font-bold text-lg mt-10 mb-4">Kết Luận:</h3>
+                                        <p className="leading-relaxed">{conclusion}</p>
+                                    </>
+                                )}
                             </motion.div>
                         )}
                     </AnimatePresence>
