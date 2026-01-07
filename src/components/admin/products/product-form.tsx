@@ -5,13 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
   Form,
   FormControl,
   FormField,
@@ -20,13 +13,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useProductDialog } from '@/stores/use-product-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import FileUploader from './file-uploader';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
+import { Product } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   nameVN: z.string().min(2, "Tên tiếng Việt phải có ít nhất 2 ký tự."),
@@ -51,12 +47,45 @@ const formSchema = z.object({
 
 type ProductFormValues = z.infer<typeof formSchema>;
 
-export default function ProductForm() {
-  const { isOpen, onClose, defaultValues } = useProductDialog();
+interface ProductFormProps {
+    productId?: string;
+}
+
+const ProductFormSkeleton = () => (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-8 w-1/2" />
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <Skeleton className="h-40 w-full" />
+        <div className="grid grid-cols-2 gap-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+        </div>
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <div className="flex justify-end gap-2">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+export default function ProductForm({ productId }: ProductFormProps) {
   const { toast } = useToast();
   const firestore = useFirestore();
+  const router = useRouter();
 
-  const isEditMode = !!defaultValues?.id;
+  const isEditMode = productId !== 'new' && !!productId;
+
+  const productRef = useMemoFirebase(
+    () => (isEditMode ? doc(firestore, 'products', productId) : null),
+    [isEditMode, firestore, productId]
+  );
+  
+  const { data: defaultValues, isLoading: isLoadingProduct } = useDoc<Product>(productRef);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -74,15 +103,15 @@ export default function ProductForm() {
   });
 
   useEffect(() => {
-    if (isOpen) {
-      const valuesToSet = defaultValues 
-        ? {
-            ...defaultValues,
-            tags: defaultValues.tags?.join(', '),
-            price: defaultValues.price || 0,
-            image: defaultValues.image || null,
-          }
-        : {
+    if (isEditMode && defaultValues) {
+        form.reset({
+          ...defaultValues,
+          tags: defaultValues.tags?.join(', '),
+          price: defaultValues.price || 0,
+          image: defaultValues.image || null,
+        });
+      } else {
+        form.reset({
             nameVN: '',
             nameEN: '',
             slug: '',
@@ -92,10 +121,9 @@ export default function ProductForm() {
             isNew: true,
             tags: '',
             attributes: [],
-          };
-      form.reset(valuesToSet);
-    }
-  }, [isOpen, defaultValues, form]);
+        });
+      }
+  }, [isEditMode, defaultValues, form]);
 
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,9 +147,9 @@ export default function ProductForm() {
       };
 
       if (isEditMode) {
-        if (!defaultValues.id) throw new Error('Product ID is missing for update.');
-        const productRef = doc(firestore, 'products', defaultValues.id);
-        await updateDoc(productRef, {
+        if (!productId) throw new Error('Product ID is missing for update.');
+        const productDocRef = doc(firestore, 'products', productId);
+        await updateDoc(productDocRef, {
             ...dataToSave,
             updatedAt: serverTimestamp(),
         });
@@ -129,11 +157,12 @@ export default function ProductForm() {
       } else {
         await addDoc(collection(firestore, 'products'), {
             ...dataToSave,
+            id: '', // Firestore will generate it, but we need to satisfy the type
             createdAt: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Đã tạo sản phẩm mới.' });
       }
-      onClose();
+      router.push('/admin/products');
     } catch (error) {
       console.error('Error saving product:', error);
       toast({
@@ -144,18 +173,19 @@ export default function ProductForm() {
     }
   };
 
+  if (isLoadingProduct) {
+    return <ProductFormSkeleton />;
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[725px]">
-        <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Chỉnh sửa sản phẩm' : 'Tạo sản phẩm mới'}</DialogTitle>
-          <DialogDescription>
-            {isEditMode ? 'Cập nhật thông tin chi tiết cho sản phẩm này.' : 'Điền thông tin để tạo một sản phẩm mới.'}
-          </DialogDescription>
-        </DialogHeader>
+    <Card>
+      <CardHeader>
+        <CardTitle>{isEditMode ? 'Chỉnh sửa sản phẩm' : 'Tạo sản phẩm mới'}</CardTitle>
+      </CardHeader>
+      <CardContent>
         <FormProvider {...form}>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                   control={form.control}
                   name="image"
@@ -280,7 +310,7 @@ export default function ProductForm() {
               </div>
               
               <div className="flex justify-end gap-2 pt-4">
-                <Button type="button" variant="outline" onClick={onClose}>
+                <Button type="button" variant="outline" onClick={() => router.push('/admin/products')}>
                   Hủy
                 </Button>
                 <Button type="submit" disabled={form.formState.isSubmitting}>
@@ -290,7 +320,7 @@ export default function ProductForm() {
             </form>
           </Form>
         </FormProvider>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 }
