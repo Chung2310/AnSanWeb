@@ -52,7 +52,7 @@ export default function LoginPage() {
                 const newUserCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
                 // Grant admin role to the new user
-                const adminDocRef = doc(firestore, 'admins', newUserCredential.user.uid);
+                const adminDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
                 await setDoc(adminDocRef, { role: 'admin', createdAt: new Date() });
 
                 login(newUserCredential.user);

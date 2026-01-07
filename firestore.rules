@@ -5,7 +5,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isAdmin() {
-      return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
     match /products/{productId} {
@@ -40,7 +40,7 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
-    match /admins/{userId} {
+    match /roles_admin/{userId} {
       allow read, write: if request.auth.uid == userId || isAdmin();
     }
   }
