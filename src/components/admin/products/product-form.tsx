@@ -30,7 +30,7 @@ const formSchema = z.object({
   slug: z.string().min(2, "Slug phải có ít nhất 2 ký tự."),
   price: z.coerce.number().min(0, "Giá phải là số dương."),
   image: z.object({
-    url: z.string().url("URL ảnh không hợp lệ."),
+    url: z.string().url("URL ảnh không hợp lệ.").min(1, "Vui lòng tải lên một ảnh đại diện."),
     path: z.string(),
   }).nullable(),
   isFeatured: z.boolean().default(false),
@@ -40,9 +40,6 @@ const formSchema = z.object({
     label: z.string(),
     value: z.string(),
   })).optional(),
-}).refine(data => data.image, {
-    message: "Vui lòng tải lên một ảnh đại diện.",
-    path: ["image"],
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -140,6 +137,10 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
 
   const onSubmit = async (values: ProductFormValues) => {
+    if (!values.image) {
+        form.setError("image", { type: "manual", message: "Vui lòng tải lên một ảnh đại diện." });
+        return;
+    }
     try {
       const dataToSave = {
         ...values,
