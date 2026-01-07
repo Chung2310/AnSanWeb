@@ -37,7 +37,7 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={campbeltownProducts}
-      title="Whisky Campbeltown"
+      title="Whisky Vùng Campbeltown"
       bannerData={bannerData}
     />
   );

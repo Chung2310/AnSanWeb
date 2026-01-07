@@ -35,7 +35,7 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={bourbonProducts}
-      title="Bourbon Whiskey"
+      title="Whisky Khác"
     />
   );
 }

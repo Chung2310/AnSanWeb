@@ -35,7 +35,7 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={speysideProducts}
-      title="Whisky Speyside"
+      title="Whisky Vùng Speyside"
     />
   );
 }

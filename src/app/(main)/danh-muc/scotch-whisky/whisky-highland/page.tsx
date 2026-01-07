@@ -35,7 +35,7 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={highlandProducts}
-      title="Whisky Highland"
+      title="Whisky Vùng Highland"
     />
   );
 }

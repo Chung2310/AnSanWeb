@@ -45,41 +45,35 @@ const mainNavLinks = [
 ];
 
 const categoryNavLinks = [
-    { 
-      href: '/danh-muc/ruou-vang', 
-      label: 'RƯỢU VANG',
+    { href: '/danh-muc/spirits', label: 'SPIRITS' },
+    {
+      href: '/danh-muc/scotch-whisky',
+      label: 'SCOTCH WHISKY',
       sublinks: [
-        { href: '/danh-muc/ruou-vang/vang-duc', label: 'VANG ĐỨC' },
-        { href: '/danh-muc/ruou-vang/vang-nga', label: 'VANG NGA' },
-        { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
-        { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
-        { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
-        { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
+        { href: '/danh-muc/scotch-whisky/whisky-campbeltown', label: 'WHISKY VÙNG CAMPBELTOWN' },
+        { href: '/danh-muc/scotch-whisky/whisky-highland', label: 'WHISKY VÙNG HIGHLAND' },
+        { href: '/danh-muc/scotch-whisky/whisky-islands', label: 'WHISKY VÙNG ISLANDS' },
+        { href: '/danh-muc/scotch-whisky/whisky-islay', label: 'WHISKY VÙNG ISLAY' },
+        { href: '/danh-muc/scotch-whisky/whisky-lowland', label: 'WHISKY VÙNG LOWLAND' },
+        { href: '/danh-muc/scotch-whisky/whisky-speyside', label: 'WHISKY VÙNG SPEYSIDE' },
       ]
     },
     {
-      href: '/danh-muc/spirits',
-      label: 'RƯỢU MẠNH',
+      href: '/danh-muc/world-whisky',
+      label: 'WORLD WHISKY',
       sublinks: [
-        { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S FINEST" },
-        { href: '/danh-muc/ruou-manh/john-walker', label: 'JOHN WALKER' },
-        { href: '/danh-muc/ruou-manh/mortlach', label: 'MORTLACH' },
-        { href: '/danh-muc/ruou-manh/chivas', label: 'CHIVAS' },
-        { href: '/danh-muc/ruou-manh/royal-salute', label: 'ROYAL SALUTE' },
-        { href: '/danh-muc/ruou-manh/the-singleton', label: 'THE SINGLETON' },
+          { href: '/danh-muc/world-whisky/whisky-ireland', label: 'WHISKY IRELAND' },
+          { href: '/danh-muc/world-whisky/whisky-nhat', label: 'WHISKY NHẬT' },
+          { href: '/danh-muc/world-whisky/whisky-the-lakes', label: 'WHISKY THE LAKES' },
+          { href: '/danh-muc/world-whisky/whisky-khac', label: 'WHISKY KHÁC' },
       ]
     },
-    {
-      href: '/danh-muc/cigar',
-      label: 'CIGAR',
-      sublinks: [
-          { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
-          { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
-          { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
-      ]
-    },
+    { href: '/danh-muc/old-rare', label: 'OLD & RARE' },
+    { href: '/danh-muc/armagnac', label: 'ARMAGNAC' },
+    { href: '/danh-muc/wine', label: 'WINE' },
     { href: '/danh-muc/bo-qua-tang', label: 'BỘ QUÀ TẶNG' },
-    { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
+    { href: '/danh-muc/set-thu-ruou', label: 'SET THỬ RƯỢU' },
+    { href: '/danh-muc/cigar', label: 'XÌ GÀ' },
 ];
 
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
