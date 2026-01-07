@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useFirebase } from '@/firebase';
 import type { ImageInfo } from '@/lib/types';
 
 interface UploadResult {
@@ -11,56 +13,68 @@ interface UploadResult {
 export function useUploadStorage(): UploadResult {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { firebaseApp } = useFirebase();
 
   const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo> => {
     return new Promise((resolve, reject) => {
       if (!file) {
         return reject(new Error('No file provided for upload.'));
       }
+      if (!firebaseApp) {
+        return reject(new Error('Firebase app is not initialized.'));
+      }
 
       setIsUploading(true);
       setProgress(0);
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('pathPrefix', pathPrefix);
+      const storage = getStorage(firebaseApp);
+      
+      const fileId = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
+      const fileExtension = file.name.split('.').pop();
+      const fileName = `${fileId}.${fileExtension}`;
+      const storagePath = `${pathPrefix}/${fileName}`;
+      
+      const storageRef = ref(storage, storagePath);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/api/upload', true);
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const progressValue = (event.loaded / event.total) * 100;
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progressValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setProgress(progressValue);
-        }
-      };
-
-      xhr.onload = () => {
-        setIsUploading(false);
-        if (xhr.status === 200) {
-          try {
-            const imageInfo: ImageInfo = JSON.parse(xhr.responseText);
+        },
+        (error) => {
+          setIsUploading(false);
+          console.error("Upload Error:", error);
+          let errorMessage = 'Upload failed. Please try again.';
+          switch (error.code) {
+            case 'storage/unauthorized':
+              errorMessage = 'Permission denied. Please check storage security rules.';
+              break;
+            case 'storage/canceled':
+              errorMessage = 'Upload was canceled.';
+              break;
+            case 'storage/unknown':
+              errorMessage = 'An unknown error occurred on the server.';
+              break;
+          }
+          reject(new Error(errorMessage));
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setIsUploading(false);
             setProgress(100);
+            const imageInfo: ImageInfo = {
+              url: downloadURL,
+              path: storagePath,
+            };
             resolve(imageInfo);
-          } catch (e) {
-            reject(new Error('Failed to parse server response.'));
-          }
-        } else {
-          try {
-            const errorResponse = JSON.parse(xhr.responseText);
-            reject(new Error(errorResponse.error || 'Upload failed with status ' + xhr.status));
-          } catch (e) {
-            reject(new Error('Upload failed with status ' + xhr.status));
-          }
+          }).catch(error => {
+            setIsUploading(false);
+            console.error("Get Download URL Error:", error);
+            reject(new Error('Could not get download URL after upload.'));
+          });
         }
-      };
-
-      xhr.onerror = () => {
-        setIsUploading(false);
-        reject(new Error('Upload failed due to a network error.'));
-      };
-
-      xhr.send(formData);
+      );
     });
   };
 
