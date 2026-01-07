@@ -46,7 +46,18 @@ const mainNavLinks = [
 
 const categoryNavLinks = [
     { href: '/danh-muc/wine', label: 'Rượu Vang' },
-    { href: '/danh-muc/spirits', label: 'Rượu Mạnh' },
+    { 
+      href: '/danh-muc/spirits', 
+      label: 'Rượu Mạnh',
+      sublinks: [
+        { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
+        { href: '/danh-muc/ruou-manh/john-walker', label: 'JHON WALKER' },
+        { href: '/danh-muc/ruou-manh/mortlach', label: 'MORTLACH' },
+        { href: '/danh-muc/ruou-manh/ruou-chivas', label: 'RƯỢU CHIVAS' },
+        { href: '/danh-muc/ruou-manh/ruou-royal', label: 'RƯỢU ROYAL' },
+        { href: '/danh-muc/ruou-manh/the-singleton', label: 'THE SINGLETON' },
+      ]
+    },
     { 
       href: '/danh-muc/cigar', 
       label: 'Cigar',
