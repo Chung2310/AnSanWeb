@@ -33,10 +33,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { Product, Category, FullProduct } from '@/lib/types';
 import { useCategories } from '@/hooks/use-categories';
-import { Trash, Upload, X } from 'lucide-react';
+import { Trash, X } from 'lucide-react';
 import Image from 'next/image';
-import { useUploadStorage } from '@/hooks/use-upload-storage';
-import { Progress } from '@/components/ui/progress';
 import {
   doc,
   collection,
@@ -65,8 +63,8 @@ const formSchema = z.object({
   description: z.string().optional(),
   image: z
     .object({
-      url: z.string(),
-      path: z.string(),
+      url: z.string().url({ message: "Vui lòng nhập một URL hợp lệ." }),
+      path: z.string(), // Path is now optional or can be an empty string
     })
     .nullable(),
   status: z.enum(['published', 'draft']),
@@ -88,7 +86,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const router = useRouter();
   const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
-  const { startUpload, progress, isUploading } = useUploadStorage();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
   const [tagsInput, setTagsInput] = useState(initialData?.tags?.join(', ') || '');
 
@@ -126,37 +123,19 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     form.setValue('nameVN', name);
-    if (!form.getValues('slug')) {
+    if (!form.formState.isDirty) {
       form.setValue('slug', slugify(name, { lower: true, strict: true }));
     }
   };
   
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Show preview immediately
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    try {
-      // Start the actual upload
-      const imageInfo = await startUpload(file, 'products');
-      // On success, update the form with the real URL
-      form.setValue('image', imageInfo);
-      setImagePreview(imageInfo.url);
-    } catch (error: any) {
-      // On failure, show error and clear the preview
-      toast({
-        variant: 'destructive',
-        title: 'Lỗi tải lên',
-        description: error.message || 'Không thể tải ảnh lên. Vui lòng thử lại.',
-      });
+  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value;
+    form.setValue('image.url', url);
+    form.setValue('image.path', url); // Use URL as path
+    if (form.getValues('image.url')?.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+      setImagePreview(url);
+    } else {
       setImagePreview(null);
-      form.setValue('image', null);
     }
   };
 
@@ -170,7 +149,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         nameEN: data.nameEN || data.nameVN,
         slug: data.slug,
         price: Number(data.price),
-        image: data.image,
+        image: data.image ? { url: data.image.url, path: data.image.path || '' } : null,
         status: data.status,
         isFeatured: data.isFeatured,
         isNew: data.isNew,
@@ -249,30 +228,35 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <Card>
               <CardHeader><CardTitle>Hình ảnh</CardTitle></CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                 <div className="space-y-4">
                   {imagePreview && (
                     <div className="relative">
                       <Image src={imagePreview} alt="Xem trước ảnh" width={200} height={200} className="w-full rounded-md object-contain" />
-                      <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setImagePreview(null); form.setValue('image', null); }}>
+                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setImagePreview(null); form.setValue('image', null); }}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
                   )}
-                  <FormField control={form.control} name="image" render={() => (
+                  <FormField
+                    control={form.control}
+                    name="image.url"
+                    render={({ field }) => (
                       <FormItem>
-                        <FormLabel htmlFor="image-upload" className="cursor-pointer">
-                          <div className="flex items-center justify-center border-2 border-dashed p-4 text-center text-muted-foreground hover:bg-accent">
-                            <Upload className="mr-2 h-4 w-4" />
-                            <span>{isUploading ? 'Đang tải lên...' : 'Tải ảnh lên'}</span>
-                          </div>
-                        </FormLabel>
+                        <FormLabel>URL hình ảnh</FormLabel>
                         <FormControl>
-                          <Input id="image-upload" type="file" className="sr-only" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                          <Input
+                            placeholder="https://example.com/image.png"
+                            {...field}
+                            onChange={handleImageUrlChange}
+                          />
                         </FormControl>
-                        {isUploading && <Progress value={progress} />}
+                        <FormDescription>
+                          Dán URL hình ảnh sản phẩm vào đây.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
-                  )} />
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -338,8 +322,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             </Card>
           </div>
         </div>
-        <Button type="submit" disabled={form.formState.isSubmitting || isUploading}>
-          {isUploading ? 'Đang tải ảnh...' : form.formState.isSubmitting ? 'Đang lưu...' : initialData ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? 'Đang lưu...' : initialData ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
         </Button>
       </form>
     </Form>
