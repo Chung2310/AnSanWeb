@@ -89,8 +89,11 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: 'createdAt',
     header: 'Ngày tạo',
      cell: ({ row }) => {
-        const date = row.original.createdAt?.toDate();
-        return date ? date.toLocaleDateString('vi-VN') : 'N/A';
+        const { createdAt } = row.original;
+        if (!createdAt) return 'N/A';
+        // Firestore Timestamps have a toDate method, but other date objects/strings might not.
+        const date = typeof createdAt.toDate === 'function' ? createdAt.toDate() : new Date(createdAt);
+        return date.toLocaleDateString('vi-VN');
     }
   },
   {
