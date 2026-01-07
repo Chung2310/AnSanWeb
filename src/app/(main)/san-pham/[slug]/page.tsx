@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useMemo } from 'react';
@@ -91,6 +92,8 @@ export default function ProductDetailPage() {
   
   const displayImage = fullProduct.detailImage || fullProduct.image;
   const productTypeAttribute = fullProduct.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
+  const otherDetails = fullProduct.productDetails?.details?.filter(d => !['Màu sắc'].includes(d.label)) || [];
+
 
   return (
     <div className="bg-white text-black">
@@ -98,14 +101,16 @@ export default function ProductDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-2">
                 {/* Image Column */}
                 <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
-                    <Image
-                    src={displayImage.url}
-                    alt={fullProduct.nameVN}
-                    width={800}
-                    height={1000}
-                    className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
-                    priority
-                    />
+                    {displayImage && (
+                        <Image
+                            src={displayImage.url}
+                            alt={fullProduct.nameVN}
+                            width={800}
+                            height={1000}
+                            className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
+                            priority
+                        />
+                    )}
                 </div>
                 {/* Details Column */}
                 <div className="md:col-span-1 container py-12 md:py-20">
@@ -168,11 +173,24 @@ export default function ProductDetailPage() {
       {fullProduct.tastingNotes && <ProductInfoSection notes={fullProduct.tastingNotes} />}
 
       {fullProduct.productDetails && <ProductDetailDescription details={fullProduct.productDetails} />}
+      
+      {otherDetails.length > 0 && (
+        <section className="py-12 bg-white">
+            <div className="container max-w-4xl mx-auto">
+                 <h2 className="text-center font-headline text-3xl font-black uppercase mb-8" style={{color: '#5a5a5a'}}>
+                    Thông Tin Thêm
+                </h2>
+                <div className="space-y-4 text-base" style={{color: '#5a5a5a'}}>
+                    {otherDetails.map(detail => (
+                        <p key={detail.label}><span className="font-bold">{detail.label}:</span> {detail.value}</p>
+                    ))}
+                </div>
+            </div>
+        </section>
+      )}
 
       <FaqSection />
       
     </div>
   );
 }
-
-    
