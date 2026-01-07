@@ -4,40 +4,49 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
 
     match /products/{productId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
-
+    
     match /categories/{categoryId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
     
     match /product_details/{productId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
     
     match /blogPosts/{blogPostId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
     match /contacts/{contactId} {
-      allow read: if false;
+      allow read: if isAdmin();
       allow create: if true;
-      allow update, delete: if false;
+      allow update, delete: if isAdmin();
     }
 
     match /newsletterSubscriptions/{subscriptionId} {
-      allow read: if false;
+      allow read: if isAdmin();
       allow create: if true;
-      allow update, delete: if false;
+      allow update, delete: if isAdmin();
+    }
+
+    match /roles_admin/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow write: if false; 
     }
   }
 }
