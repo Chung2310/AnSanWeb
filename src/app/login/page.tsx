@@ -14,8 +14,9 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent, useEffect } from 'react';
 import Logo from '@/components/logo';
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@ansan.com');
@@ -24,6 +25,7 @@ export default function LoginPage() {
   const { login, user } = useAuthStore();
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
 
   useEffect(() => {
     if (user) {
@@ -35,8 +37,8 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    if (!auth) {
-        setError('Dịch vụ xác thực không khả dụng.');
+    if (!auth || !firestore) {
+        setError('Dịch vụ xác thực hoặc cơ sở dữ liệu không khả dụng.');
         return;
     }
 
@@ -46,10 +48,13 @@ export default function LoginPage() {
         router.push('/admin');
     } catch (error: any) {
         if (error.code === AuthErrorCodes.USER_NOT_FOUND || error.code === 'auth/invalid-credential') {
-            // If user not found, try to create it. This is for easy setup.
-            // In a real production app, you might want a separate sign-up flow.
             try {
                 const newUserCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Grant admin role to the new user
+                const adminDocRef = doc(firestore, 'admins', newUserCredential.user.uid);
+                await setDoc(adminDocRef, { role: 'admin', createdAt: new Date() });
+
                 login(newUserCredential.user);
                 router.push('/admin');
             } catch (createError: any) {

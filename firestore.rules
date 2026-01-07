@@ -1,151 +1,49 @@
-/**
- * Core Philosophy: This ruleset implements a Role-Based Access Control (RBAC) model.
- * Public users (including unauthenticated visitors) have read-only access to product and content
- * collections like 'wines', 'categories', and 'blogPosts'. Write access to these collections
- * is strictly limited to users designated as administrators. This is managed by checking for the
- * existence of a corresponding document in the '/admins/{uid}' collection.
- *
- * Data Structure: The database uses a flat hierarchy with several top-level collections.
- * - /wines, /categories, /blogPosts: Publicly readable content.
- * - /contacts, /newsletterSubscriptions: "Mailbox" collections where anyone can write (create)
- *   but only admins can read or manage the submissions.
- * - /admins: A dedicated collection to store the UIDs of users with administrative privileges.
- *
- * Key Security Decisions:
- * - Admin Role Management: A user is considered an admin if a document with their UID exists
- *   in the `/admins` collection. This provides a clear, database-driven way to manage roles.
- * - Write-Only Mailboxes: The `/contacts` and `/newsletterSubscriptions` collections are designed
- *   to allow public form submissions without requiring users to be signed in. Read access is
- *   denied to the public to protect submitter privacy.
- * - No User Enumeration: Listing documents in the `/admins` collection is explicitly forbidden
- *   to prevent attackers from discovering who the administrators are.
- * - Client-Side Write Prevention: To prevent privilege escalation, creating, updating, or deleting
- *   documents in the `/admins` collection is disallowed through security rules. These changes
- *   must be made with server-side code or through the Firebase Console.
- */
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ----------------------------------------------------------------------
-    // Helper Functions
-    // ----------------------------------------------------------------------
-
-    /**
-     * Checks if a user is authenticated.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * Checks if the authenticated user has an admin role.
-     * An admin is defined by the existence of a document in the /admins collection
-     * where the document ID matches the user's UID.
-     */
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-    // ----------------------------------------------------------------------
-    // Collection Rules
-    // ----------------------------------------------------------------------
-
-    /**
-     * @description Stores wine product information. Publicly readable by all users.
-     *   Only administrators are allowed to create, update, or delete wine documents.
-     * @path /wines/{wineId}
-     * @allow (get) Any user, signed in or not, can read a specific wine document.
-     * @deny (create) A non-admin user attempts to add a new wine.
-     * @principle Public read access for catalog data, with writes restricted by role (RBAC).
-     */
-    match /wines/{wineId} {
+    // Products: Public read, admin write
+    match /products/{productId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow create, update, delete: if isAdmin();
     }
 
-    /**
-     * @description Stores wine category information. Publicly readable by all users.
-     *   Only administrators are allowed to create, update, or delete categories.
-     * @path /categories/{categoryId}
-     * @allow (list) Any user, signed in or not, can list all categories.
-     * @deny (update) A regular signed-in user tries to change a category name.
-     * @principle Public read access for catalog data, with writes restricted by role (RBAC).
-     */
+    // Product Details: Public read, admin write
+    match /product_details/{productId} {
+      allow get: if true;
+      allow list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Categories: Public read, admin write
     match /categories/{categoryId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow create, update, delete: if isAdmin();
     }
 
-    /**
-     * @description Stores blog post information. Publicly readable by all users.
-     *   Only administrators are allowed to create, update, or delete blog posts.
-     * @path /blogPosts/{blogPostId}
-     * @allow (get) Any user, signed in or not, can read a blog post.
-     * @deny (delete) An admin attempts to delete a non-existent blog post.
-     * @principle Public read access for content, with writes restricted by role (RBAC).
-     */
-    match /blogPosts/{blogPostId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
-    }
-
-    /**
-     * @description Stores contact form submissions. Anyone can submit a message.
-     *   Only administrators can read, update, or delete these submissions to protect privacy.
-     * @path /contacts/{contactId}
-     * @allow (create) An unauthenticated user submits the contact form.
-     * @deny (get) A regular user attempts to read someone else's contact submission.
-     * @principle Implements a "write-only" mailbox for public submissions.
-     */
-    match /contacts/{contactId} {
+    // Admin collection: only admins can read, nobody can write from client
+    match /admins/{userId} {
       allow get: if isAdmin();
-      allow list: if isAdmin();
-      allow create: if true;
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow list, create, update, delete: if false;
     }
+  }
+}
 
-    /**
-     * @description Stores newsletter email subscriptions. Anyone can subscribe.
-     *   Only administrators can read or delete subscriptions.
-     * @path /newsletterSubscriptions/{subscriptionId}
-     * @allow (create) An unauthenticated user provides their email to subscribe.
-     * @deny (list) A signed-in user tries to get a list of all subscriber emails.
-     * @principle Implements a "write-only" mailbox for public submissions.
-     */
-    match /newsletterSubscriptions/{subscriptionId} {
-      allow get: if isAdmin();
-      allow list: if isAdmin();
-      allow create: if true;
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
-    }
-
-    /**
-     * @description Manages admin roles. The existence of a document here grants admin privileges.
-     *   This collection cannot be modified by clients to prevent privilege escalation.
-     * @path /admins/{uid}
-     * @allow (get) An admin checks if they have admin privileges.
-     * @deny (list) Any user attempts to list all admins.
-     * @deny (create) A user tries to make themselves an admin.
-     * @principle Prevents client-side privilege escalation and admin user enumeration.
-     */
-    match /admins/{uid} {
-      allow get: if isAdmin();
-      allow list: if false;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to all files
+    match /{allPaths=**} {
+      allow read: if true;
+      // Allow writes only if the user is authenticated (i.e., our admin)
+      allow write: if request.auth != null;
     }
   }
 }
