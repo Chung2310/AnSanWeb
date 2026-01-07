@@ -1,28 +1,22 @@
 
 import { NextResponse } from 'next/server';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase-admin/storage';
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
 import { firebaseConfig } from '@/firebase/config';
 
 // Function to initialize Firebase Admin SDK
-function initializeAdminApp() {
-  if (getApps().length > 0 && getApps().some(app => app.name === 'admin')) {
-    return getApps().find(app => app.name === 'admin');
+function initializeAdminApp(): App {
+  const adminAppName = 'admin-upload';
+  const existingApp = getApps().find(app => app.name === adminAppName);
+  if (existingApp) {
+    return existingApp;
   }
 
-  // Check for service account credentials in environment variables
-  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-    : null;
-
-  if (!serviceAccount) {
-    throw new Error('Firebase service account key is not set in environment variables.');
-  }
-
+  // In a managed environment like App Hosting, the SDK can auto-discover credentials.
+  // We don't need to pass a service account key explicitly.
   return initializeApp({
-    credential: cert(serviceAccount),
     storageBucket: firebaseConfig.storageBucket,
-  }, 'admin');
+  }, adminAppName);
 }
 
 export async function POST(request: Request) {
@@ -47,7 +41,7 @@ export async function POST(request: Request) {
     const fileExtension = file.name.split('.').pop();
     const fileName = `${fileId}.${fileExtension}`;
     const storagePath = `products/${fileName}`;
-    const fileRef = ref(storage.bucket().name, storagePath);
+    const fileRef = ref(storage.bucket(), storagePath);
 
     await uploadBytes(fileRef, buffer, {
       contentType: file.type,
