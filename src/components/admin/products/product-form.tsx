@@ -37,7 +37,7 @@ const formSchema = z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().optional(),
     imageHint: z.string().optional(),
-  }).nullable(),
+  }),
   tags: z.string().optional(),
   attributes: z.array(z.object({
     label: z.string().min(1, "Nhãn không được để trống"),
@@ -89,26 +89,26 @@ export function ProductForm() {
 
   useEffect(() => {
     if (isOpen) {
-      const { defaultValues } = useProductDialog.getState();
-      if (defaultValues) {
-          form.reset({
-              ...defaultValues,
-              tags: defaultValues.tags?.join(', ') || '',
-              attributes: defaultValues.attributes || [],
-          });
-      } else {
-          form.reset({
-              nameVN: '',
-              nameEN: '',
-              slug: '',
-              price: 0,
-              image: null,
-              attributes: [],
-              tags: '',
-          });
-      }
+        const { defaultValues } = useProductDialog.getState();
+        if (defaultValues) {
+            form.reset({
+                ...defaultValues,
+                tags: defaultValues.tags?.join(', ') || '',
+                attributes: defaultValues.attributes || [],
+            });
+        } else {
+            form.reset({
+                nameVN: '',
+                nameEN: '',
+                slug: '',
+                price: 0,
+                image: { url: ''},
+                attributes: [],
+                tags: '',
+            });
+        }
     }
-  }, [isOpen, form.reset]);
+}, [isOpen, form.reset]);
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
