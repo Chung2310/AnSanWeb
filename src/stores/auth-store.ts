@@ -17,7 +17,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAdmin: false,
   isAuthLoading: true,
   logout: () => {
-    const { auth } = get()._internal;
+    // This is a placeholder. The actual logout logic will be handled
+    // by the Firebase Auth instance.
+    const { auth } = (get() as any)._internal;
     if (auth) {
       auth.signOut();
     }
