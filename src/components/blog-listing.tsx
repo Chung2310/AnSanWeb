@@ -8,6 +8,7 @@ import type { BlogPost } from '@/lib/types';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Skeleton } from './ui/skeleton';
+import { sampleBlogPosts } from '@/lib/placeholder-data';
 
 const allCategories = [
     'DISTILLERIES',
@@ -31,14 +32,16 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
         <Link href={`/tin-tuc/${post.slug}`} className="group block">
             <div className="relative">
                 <div className="aspect-[4/3] overflow-hidden">
-                    <Image 
-                        src={post.image?.imageUrl || '/placeholder.svg'} 
-                        alt={post.title}
-                        width={600}
-                        height={400}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        data-ai-hint={post.image?.imageHint || 'blog post'}
-                    />
+                    {post.image && (
+                        <Image 
+                            src={post.image.imageUrl}
+                            alt={post.title}
+                            width={600}
+                            height={400}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            data-ai-hint={post.image.imageHint || 'blog post'}
+                        />
+                    )}
                 </div>
                 <div 
                     className="absolute top-4 left-0 bg-white text-center font-bold"
@@ -83,10 +86,9 @@ interface BlogListingProps {
 export default function BlogListing({ defaultCategory = null }: BlogListingProps) {
     const [activeCategory, setActiveCategory] = useState<string | null>(defaultCategory);
     
-    const firestore = useFirestore();
-    const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
-    const postsQuery = useMemoFirebase(() => postsCollection && query(postsCollection, orderBy('date', 'desc')), [postsCollection]);
-    const { data: blogPosts, isLoading } = useCollection<BlogPost>(postsQuery);
+    // Use placeholder data instead of Firestore
+    const blogPosts = sampleBlogPosts;
+    const isLoading = false;
 
     const getCategoryCount = (category: string) => {
         if (!blogPosts) return 0;

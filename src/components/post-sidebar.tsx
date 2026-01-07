@@ -3,17 +3,14 @@
 import Link from "next/link";
 import { Separator } from "./ui/separator";
 import { Calendar, Newspaper } from "lucide-react";
-import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import { collection, query, orderBy, limit } from "firebase/firestore";
 import type { BlogPost } from "@/lib/types";
 import { Skeleton } from "./ui/skeleton";
+import { sampleBlogPosts } from "@/lib/placeholder-data";
 
 export default function PostSidebar({ currentPostId }: { currentPostId: string }) {
-    const firestore = useFirestore();
-    const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
-    // Fetch 5 recent posts to have enough to filter out the current one and still have 4
-    const postsQuery = useMemoFirebase(() => postsCollection && query(postsCollection, orderBy('date', 'desc'), limit(5)), [postsCollection]);
-    const { data: allRecentPosts, isLoading } = useCollection<BlogPost>(postsQuery);
+    // Use placeholder data
+    const isLoading = false;
+    const allRecentPosts = sampleBlogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const recentPosts = allRecentPosts
         ?.filter(p => p.id !== currentPostId)
