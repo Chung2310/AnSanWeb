@@ -19,27 +19,42 @@ interface CategoryNavProps {
 }
 
 const mainCategoriesConfig = [
-    { 
-        label: "Scotch Whisky", 
-        slug: "scotch-whisky",
-        subCategories: ["whisky-campbeltown", "whisky-highland", "whisky-islands", "whisky-islay", "whisky-lowland", "whisky-speyside"]
+    {
+        label: "Rượu Vang",
+        slug: "wine",
+        subCategories: [
+            { label: 'VANG Ý', href: '/danh-muc/ruou-vang/vang-y' },
+            { label: 'VANG PHÁP', href: '/danh-muc/ruou-vang/vang-phap' },
+            { label: 'VANG TÂY BAN NHA', href: '/danh-muc/ruou-vang/vang-tay-ban-nha' },
+            { label: 'VANG ÚC', href: '/danh-muc/ruou-vang/vang-uc' },
+            { label: 'VANG NGA', href: '/danh-muc/ruou-vang/vang-nga' },
+            { label: 'VANG ĐỨC', href: '/danh-muc/ruou-vang/vang-duc' },
+        ]
     },
-    { 
-        label: "World Whisky", 
-        slug: "world-whisky",
-        subCategories: ["whisky-ireland", "whisky-khac", "whisky-nhat", "whisky-the-lakes"]
+    {
+        label: "Rượu Mạnh",
+        slug: "spirits",
+        subCategories: [
+            { label: "BALLANTINE'S FINEST", href: '/danh-muc/ruou-manh/ballantines-finest' },
+            { label: 'JOHN WALKER', href: '/danh-muc/ruou-manh/john-walker' },
+            { label: 'MORTLACH', href: '/danh-muc/ruou-manh/mortlach' },
+            { label: 'CHIVAS', href: '/danh-muc/ruou-manh/chivas' },
+            { label: 'ROYAL SALUTE', href: '/danh-muc/ruou-manh/royal-salute' },
+            { label: 'THE SINGLETON', href: '/danh-muc/ruou-manh/the-singleton' },
+        ]
     },
-    { label: "Spirits", slug: "spirits" },
-    { label: "Old & Rare", slug: "old-rare" },
-    { label: "Armagnac", slug: "armagnac" },
-    { label: "Wine", slug: "wine" },
-    { label: "Bộ Quà Tặng", slug: "bo-qua-tang" },
-    { label: "Set Thử Rượu", slug: "set-thu-ruou" },
-    { 
-        label: "Xì Gà", 
-        slug: "cigar", 
-        subCategories: ["cigar-hanos", "cigar-lotus", "cigar-vinaboss"]
+    {
+        label: "Cigar",
+        slug: "cigar",
+        subCategories: [
+            { label: 'Cigar Hanos', href: '/danh-muc/cigar/hanos' },
+            { label: 'Cigar Lotus', href: '/danh-muc/cigar/lotus' },
+            { label: "Cigar Vinaboss's", href: '/danh-muc/cigar/vinaboss' },
+        ]
     },
+    { label: "Bộ Quà Tặng", slug: "bo-qua-tang", href: "/danh-muc/bo-qua-tang" },
+    { label: "Khắc Tên Lên Chai", slug: "khac-ten-len-chai", href: "/danh-muc/khac-ten-len-chai" },
+    { label: "Set Thử Rượu", slug: "set-thu-ruou", href: "/danh-muc/set-thu-ruou" },
 ];
 
 
@@ -56,13 +71,14 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
         mainCategoriesConfig.forEach(cat => {
             if (cat.subCategories) {
                 // For parent categories, count products that have ANY of the subcategory tags
-                counts[cat.slug] = products.filter(p => p.tags?.some(t => cat.subCategories?.includes(t))).length;
+                 const subCategorySlugs = categories?.filter(c => cat.subCategories.some(sc => sc.label.toLowerCase() === c.name.toLowerCase() || sc.href.includes(c.slug))).map(c => c.slug) || [];
+                 counts[cat.slug] = products.filter(p => p.tags?.some(t => subCategorySlugs.includes(t)) || p.tags?.includes(cat.slug)).length;
             } else {
                 counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
             }
         });
         return counts;
-    }, [products, isLoadingProducts]);
+    }, [products, isLoadingProducts, categories]);
 
     
     const allProductsCount = products?.length || 0;
@@ -105,31 +121,37 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="bg-white">
-                                        {cat.subCategories.map(subSlug => {
-                                            const subCat = categories?.find(c => c.slug === subSlug);
-                                            if (!subCat) return null;
-                                            return (
-                                                <DropdownMenuItem key={subSlug} asChild>
-                                                    <Link href={`/danh-muc/${cat.slug}/${subCat.slug}`}>{subCat.name}</Link>
-                                                </DropdownMenuItem>
-                                            )
-                                        })}
+                                        {cat.subCategories.map(subLink => (
+                                            <DropdownMenuItem key={subLink.href} asChild>
+                                                <Link href={subLink.href}>{subLink.label}</Link>
+                                            </DropdownMenuItem>
+                                        ))}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             )
                         }
 
                         return (
-                            <button
-                                key={cat.slug || 'all'}
-                                className={cn(
-                                    "hover:text-black transition-colors whitespace-nowrap",
-                                    isActive ? "text-black font-bold" : ""
-                                )}
-                                onClick={() => onCategorySelect(cat.slug)}
-                            >
-                                {cat.label} ({count})
-                            </button>
+                            <Link
+                                key={cat.slug}
+                                href={cat.href || '#'}
+                                passHref
+                                legacyBehavior>
+                                <a
+                                    className={cn(
+                                        "hover:text-black transition-colors whitespace-nowrap",
+                                        isActive ? "text-black font-bold" : ""
+                                    )}
+                                    onClick={(e) => {
+                                        if (!cat.href) {
+                                            e.preventDefault();
+                                            onCategorySelect(cat.slug);
+                                        }
+                                    }}
+                                >
+                                    {cat.label} ({count})
+                                </a>
+                            </Link>
                         );
                     })}
                 </div>
