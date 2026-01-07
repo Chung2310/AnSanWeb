@@ -22,7 +22,8 @@ const bucket = admin.apps.length ? admin.storage().bucket() : null;
 
 export async function POST(request: Request) {
   if (!bucket) {
-    return NextResponse.json({ error: 'Firebase Admin SDK not initialized.' }, { status: 500 });
+    console.error('Firebase Admin SDK not initialized or bucket could not be retrieved.');
+    return NextResponse.json({ error: 'Firebase Admin SDK not initialized or bucket not found.' }, { status: 500 });
   }
   
   try {
