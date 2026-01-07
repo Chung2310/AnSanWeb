@@ -63,7 +63,7 @@ export type ProductDetail = {
 };
 
 // Combined type for convenience when working with full product data
-export type FullProduct = Product & ProductDetail;
+export type FullProduct = Product & Partial<ProductDetail>;
 
 
 export type Category = {

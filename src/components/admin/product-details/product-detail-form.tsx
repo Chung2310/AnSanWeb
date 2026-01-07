@@ -52,24 +52,40 @@ const formSchema = z.object({
 export function ProductDetailForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDetailDialog();
   const firestore = useFirestore();
-  const [uploadingStatus, setUploadingStatus] = useState(false);
+  const [uploadingStatus, setUploadingStatus] = useState({ detailImage: false });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      description: '',
+      detailImage: null,
+      tastingNotes: null,
+    }
   });
   
   const { isSubmitting } = form.formState;
 
-  const handleUploadStateChange = useCallback((uploading: boolean) => {
-    setUploadingStatus(uploading);
+  const handleUploadStateChange = useCallback((uploading: boolean, fieldName: 'detailImage') => {
+    setUploadingStatus(prev => ({ ...prev, [fieldName]: uploading }));
   }, []);
+
+  const isAnyUploading = Object.values(uploadingStatus).some(status => status);
 
   useEffect(() => {
     if (isOpen) {
       form.reset({
         description: defaultValues?.description || '',
         detailImage: defaultValues?.detailImage || null,
-        tastingNotes: defaultValues?.tastingNotes || null,
+        tastingNotes: defaultValues?.tastingNotes || {
+          brand: '',
+          chillFiltered: '',
+          region: '',
+          caskType: '',
+          nose: '',
+          palate: '',
+          finish: '',
+          color: '',
+        },
       });
     }
   }, [defaultValues, form, isOpen]);
@@ -109,7 +125,7 @@ export function ProductDetailForm() {
                   fieldName="detailImage"
                   label="Ảnh trang chi tiết"
                   defaultUrl={form.getValues('detailImage.url')}
-                  onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading)}
+                  onUploadStateChange={(isUploading, fieldName) => handleUploadStateChange(isUploading, 'detailImage')}
               />
               <FormField
                   control={form.control}
@@ -132,11 +148,11 @@ export function ProductDetailForm() {
               <div className="rounded-md border p-4">
                   <h3 className="mb-4 font-semibold">Ghi chú nếm thử (Tasting Notes)</h3>
                   <div className="grid grid-cols-2 gap-4">
-                       <FormField control={form.control} name="tastingNotes.brand" render={({ field }) => (<FormItem><FormLabel>Thương hiệu</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>)} />
-                       <FormField control={form.control} name="tastingNotes.region" render={({ field }) => (<FormItem><FormLabel>Vùng</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>)} />
-                       <FormField control={form.control} name="tastingNotes.caskType" render={({ field }) => (<FormItem><FormLabel>Loại thùng ủ</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>)} />
-                       <FormField control={form.control} name="tastingNotes.chillFiltered" render={({ field }) => (<FormItem><FormLabel>Lọc lạnh</FormLabel><FormControl><Input {...field} /></FormControl></FormItem>)} />
-                       <FormField control={form.control} name="tastingNotes.color" render={({ field }) => (<FormItem><FormLabel>Màu sắc</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name="tastingNotes.brand" render={({ field }) => (<FormItem><FormLabel>Thương hiệu</FormLabel><FormControl><Input {...field} placeholder="VD: The Macallan" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name="tastingNotes.region" render={({ field }) => (<FormItem><FormLabel>Vùng</FormLabel><FormControl><Input {...field} placeholder="VD: Speyside" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name="tastingNotes.caskType" render={({ field }) => (<FormItem><FormLabel>Loại thùng ủ</FormLabel><FormControl><Input {...field} placeholder="VD: Sherry Oak" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name="tastingNotes.chillFiltered" render={({ field }) => (<FormItem><FormLabel>Lọc lạnh</FormLabel><FormControl><Input {...field} placeholder="VD: Không" /></FormControl><FormMessage /></FormItem>)} />
+                       <FormField control={form.control} name="tastingNotes.color" render={({ field }) => (<FormItem><FormLabel>Màu sắc</FormLabel><FormControl><Input {...field} placeholder="VD: Vàng hổ phách đậm" /></FormControl><FormMessage /></FormItem>)} />
                        <FormField control={form.control} name="tastingNotes.nose" render={({ field }) => (<FormItem className="col-span-2"><FormLabel>Mùi hương (Nose)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
                        <FormField control={form.control} name="tastingNotes.palate" render={({ field }) => (<FormItem className="col-span-2"><FormLabel>Hương vị (Palate)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
                        <FormField control={form.control} name="tastingNotes.finish" render={({ field }) => (<FormItem className="col-span-2"><FormLabel>Hậu vị (Finish)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -150,8 +166,8 @@ export function ProductDetailForm() {
                   <Button type="button" variant="outline" onClick={onClose}>
                   Hủy
                   </Button>
-                  <Button type="submit" disabled={isSubmitting || uploadingStatus}>
-                  {(isSubmitting || uploadingStatus) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  <Button type="submit" disabled={isSubmitting || isAnyUploading}>
+                  {(isSubmitting || isAnyUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Lưu Thay Đổi
                   </Button>
               </DialogFooter>
