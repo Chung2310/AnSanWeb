@@ -6,12 +6,11 @@ import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { collection, query, where } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import type { FullProduct } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { allTags } from '@/lib/tags-data';
+import { useProducts } from '@/hooks/use-products';
+import type { FullProduct } from '@/lib/types';
 
 function ProductDetailPageSkeleton() {
   return (
@@ -37,18 +36,18 @@ function ProductDetailPageSkeleton() {
 export default function ProductDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const firestore = useFirestore();
+  const { products, isLoading } = useProducts();
 
-  const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-  const productQuery = useMemoFirebase(() => productsCollection && query(productsCollection, where('slug', '==', slug)), [productsCollection, slug]);
-
-  const { data: products, isLoading } = useCollection<FullProduct>(productQuery);
-  const fullProduct = useMemo(() => (products && products.length > 0 ? products[0] : null), [products]);
+  const fullProduct = useMemo(() => {
+    if (!products) return null;
+    return products.find((p) => p.slug === slug) || null;
+  }, [products, slug]);
 
   if (isLoading) {
     return <ProductDetailPageSkeleton />;
   }
 
+  // After loading, if the product is still not found, show 404
   if (!fullProduct) {
     notFound();
   }
