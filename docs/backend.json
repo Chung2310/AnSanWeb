@@ -276,16 +276,16 @@
   "firestore": {
     "structure": [
       {
-        "path": "/wines/{wineId}",
+        "path": "/products/{productId}",
         "definition": {
-          "entityName": "Wine",
+          "entityName": "Product",
           "schema": {
             "$ref": "#/backend/entities/Wine"
           },
           "description": "Stores wine product information. Publicly readable.",
           "params": [
             {
-              "name": "wineId",
+              "name": "productId",
               "description": "Unique identifier for the wine product."
             }
           ]
@@ -372,6 +372,6 @@
         }
       }
     ],
-    "reasoning": "This Firestore data structure is designed to support a premium wine showcase website. The structure prioritizes security, scalability, and ease of maintenance, while adhering to the principles of Authorization Independence, Structural Segregation, Access Modeling, and Data Clarity. All authentication is based on `request.auth.uid`.  \n\n**Authorization Independence:**\n\n*   The structure avoids hierarchical authorization dependencies (`get()` calls in security rules) by not relying on parent document data for access control to subcollections. Since there are no subcollections in this design, this is inherently satisfied.\n\n**Structural Segregation:**\n\n*   Each top-level collection (`wines`, `categories`, `blogPosts`, `contacts`, `newsletterSubscriptions`) is structurally segregated to ensure homogeneous security postures within each collection.\n*   The use of separate collections for public content (wines, categories, blog posts) and user-submitted data (contacts, newsletterSubscriptions) simplifies security rules and prevents unintended data exposure.\n\n**Access Modeling:**\n\n*   The `wines`, `categories`, and `blogPosts` collections are designed for public read access, enabling straightforward listing and display of website content.\n*   The `contacts` collection allows anyone to create a document, which simulates a contact form submission. Security rules will restrict reading/listing to admin roles only.\n*   The `newsletterSubscriptions` collection follows a similar pattern, allowing anyone to subscribe.  Security rules will restrict reading/listing to admin roles only.\n*   Admin access is controlled by the existence of a document in the `/roles_admin/{uid}` collection. This approach, based on existence over content, simplifies rule logic for administrative privileges.\n\n**QAPs (Rules are not Filters):**\n\n*   The segregation of data into distinct collections, each with clear access requirements, supports secure `list` operations. Rules can efficiently allow or deny access to entire collections based on user roles or authentication status, without needing to filter documents based on content.\n\n**Invariants:**\n\n*   Timestamps (`createdAt`, `date`, `subscribedAt`) can be enforced within security rules to ensure data integrity. Ownership is implicitly managed through the structure and the `roles_admin` collection."
+    "reasoning": "This Firestore data structure is designed to support a premium wine showcase website. The structure prioritizes security, scalability, and ease of maintenance, while adhering to the principles of Authorization Independence, Structural Segregation, Access Modeling, and Data Clarity. All authentication is based on `request.auth.uid`.  \n\n**Authorization Independence:**\n\n*   The structure avoids hierarchical authorization dependencies (`get()` calls in security rules) by not relying on parent document data for access control to subcollections. Since there are no subcollections in this design, this is inherently satisfied.\n\n**Structural Segregation:**\n\n*   Each top-level collection (`products`, `categories`, `blogPosts`, `contacts`, `newsletterSubscriptions`) is structurally segregated to ensure homogeneous security postures within each collection.\n*   The use of separate collections for public content (products, categories, blog posts) and user-submitted data (contacts, newsletterSubscriptions) simplifies security rules and prevents unintended data exposure.\n\n**Access Modeling:**\n\n*   The `products`, `categories`, and `blogPosts` collections are designed for public read access, enabling straightforward listing and display of website content.\n*   The `contacts` collection allows anyone to create a document, which simulates a contact form submission. Security rules will restrict reading/listing to admin roles only.\n*   The `newsletterSubscriptions` collection follows a similar pattern, allowing anyone to subscribe.  Security rules will restrict reading/listing to admin roles only.\n*   Admin access is controlled by the existence of a document in the `/roles_admin/{uid}` collection. This approach, based on existence over content, simplifies rule logic for administrative privileges.\n\n**QAPs (Rules are not Filters):**\n\n*   The segregation of data into distinct collections, each with clear access requirements, supports secure `list` operations. Rules can efficiently allow or deny access to entire collections based on user roles or authentication status, without needing to filter documents based on content.\n\n**Invariants:**\n\n*   Timestamps (`createdAt`, `date`, `subscribedAt`) can be enforced within security rules to ensure data integrity. Ownership is implicitly managed through the structure and the `roles_admin` collection."
   }
 }
