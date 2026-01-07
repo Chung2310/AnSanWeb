@@ -35,7 +35,7 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={islandsProducts}
-      title="Whisky Islands"
+      title="Whisky Vùng Islands"
     />
   );
 }
