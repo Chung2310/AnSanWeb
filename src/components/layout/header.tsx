@@ -47,19 +47,19 @@ const mainNavLinks = [
 const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
-        label: 'Rượu Vang',
+        label: 'RƯỢU VANG',
         sublinks: [
-            { href: '/danh-muc/ruou-vang/vang-duc', label: 'VANG ĐỨC' },
-            { href: '/danh-muc/ruou-vang/vang-nga', label: 'VANG NGA' },
+            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
             { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
             { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
-            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
+            { href: '/danh-muc/ruou-vang/vang-nga', label: 'VANG NGA' },
+            { href: '/danh-muc/ruou-vang/vang-duc', label: 'VANG ĐỨC' },
         ]
     },
     {
         href: '/danh-muc/ruou-manh',
-        label: 'Rượu Mạnh',
+        label: 'RƯỢU MẠNH',
         sublinks: [
             { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S FINEST" },
             { href: '/danh-muc/ruou-manh/john-walker', label: 'JOHN WALKER' },
@@ -69,9 +69,9 @@ const categoryNavLinks = [
             { href: '/danh-muc/ruou-manh/the-singleton', label: 'THE SINGLETON' },
         ]
     },
-    {
+     {
         href: '/danh-muc/cigar',
-        label: 'Cigar',
+        label: 'CIGAR',
         sublinks: [
             { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
             { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
