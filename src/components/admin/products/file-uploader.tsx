@@ -12,7 +12,7 @@ import { useFormContext } from 'react-hook-form';
 interface FileUploaderProps {
   fieldName: 'image' | 'detailImage';
   label: string;
-  onUploadStateChange: (isUploading: boolean, fieldName: 'image' | 'detailImage') => void;
+  onUploadStateChange: (isUploading: boolean, fieldName: any) => void;
   defaultUrl?: string;
 }
 
@@ -34,12 +34,12 @@ export default function FileUploader({ fieldName, label, onUploadStateChange, de
     const currentFormValue = getValues(fieldName);
     if (defaultUrl && !currentFormValue) {
       setPreview(defaultUrl);
-    } else if (currentFormValue) {
+    } else if (currentFormValue?.url) {
       setPreview(currentFormValue.url);
     } else {
       setPreview(null);
     }
-  }, [defaultUrl, fieldName, getValues, isOpen]);
+  }, [defaultUrl, fieldName, getValues]);
 
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
