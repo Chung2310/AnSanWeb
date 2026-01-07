@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,6 +40,7 @@ export default function WhiskyRegionShowcase() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const mainControls = useAnimation();
+  const featuredImage = PlaceHolderImages.find((img) => img.id === 'featured-macallan-25');
 
   useEffect(() => {
     if (isInView) {
@@ -45,13 +48,25 @@ export default function WhiskyRegionShowcase() {
     }
   }, [isInView, mainControls]);
 
+  if (!featuredImage) return null;
+
   return (
-    <section ref={ref} className="bg-primary text-white py-20">
+    <section ref={ref} className="relative text-white py-20 bg-background overflow-hidden min-h-[600px] flex items-center">
+       <Image
+        src={featuredImage.imageUrl}
+        alt={featuredImage.description}
+        fill
+        className="object-cover"
+        data-ai-hint={featuredImage.imageHint}
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-black/60" />
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="container flex flex-col items-center justify-center text-center"
+        className="container relative z-10 flex flex-col items-center justify-center text-center"
       >
         <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80">
           Lựa chọn vùng whisky
