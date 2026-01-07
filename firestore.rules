@@ -1,137 +1,52 @@
-/**
- * Core Philosophy: This ruleset implements a role-based access control (RBAC) model
- * tailored for a public-facing content website with an administrative backend.
- * The primary security distinction is between public read access and privileged
- * admin write access.
- *
- * Data Structure: The data is organized into flat, top-level collections for
- * each entity type (wines, categories, blogPosts, etc.). This structural
- * segregation simplifies rules by ensuring that all documents within a collection
- * share the same access control pattern.
- *
- * Key Security Decisions:
- * - Admin Role Management: A user is considered an 'admin' if a document with their
- *   UID exists in the `/roles_admin` collection. This allows for centralized
- *   and clear management of privileges.
- * - Public Content: The `wines`, `categories`, and `blogPosts` collections are
- *   publicly readable by anyone, including unauthenticated users, to support the
- *   website's public-facing nature. All write operations (create, update, delete)
- *   on this content are restricted to admins.
- * - Write-Only "Drop Boxes": The `contacts` and `newsletterSubscriptions`
- *   collections function as secure "drop boxes". Any user can create a document
- *   (e.g., submit a form), but no one, not even admins via these rules, can read,
- *   update, or delete them. This protects user-submitted PII.
- * - Denormalization for Authorization: The use of the `/roles_admin` collection is a
- *   form of denormalization for authorization. Instead of checking a field on a user
- *   profile, we perform a direct `exists()` check on a known path, which is a
- *   secure and performant way to implement global roles.
- */
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions for auth logic
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * Checks if the currently authenticated user has admin privileges.
-     * An admin is defined by the existence of a document with their UID
-     * in the /roles_admin collection.
-     */
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      return request.auth != null && request.auth.token.email == 'admin@ansan.com';
     }
 
-    /**
-     * @description Publicly readable collection of wine products. Only admins can manage entries.
-     * @path /wines/{wineId}
-     * @allow (get) Any user, signed in or not, can retrieve a specific wine document.
-     * @deny (create) A non-admin user attempts to add a new wine.
-     * @principle Implements a public-read, admin-write access model for catalog content.
-     */
-    match /wines/{wineId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+    match /{document=**} {
+      allow read, write: if false;
     }
 
-    /**
-     * @description Publicly readable collection of wine categories. Only admins can manage entries.
-     * @path /categories/{categoryId}
-     * @allow (list) Any user, signed in or not, can list all available categories.
-     * @deny (update) A non-admin user attempts to change a category name.
-     * @principle Implements a public-read, admin-write access model for content organization.
-     */
+    match /products/{productId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+    }
+    
     match /categories/{categoryId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow get, list: if true;
+      allow write: if isAdmin();
     }
-
-    /**
-     * @description Publicly readable collection of blog posts. Only admins can manage entries.
-     * @path /blogPosts/{blogPostId}
-     * @allow (get) Any user, signed in or not, can read a blog post.
-     * @deny (delete) A non-admin user attempts to delete a blog post.
-     * @principle Implements a public-read, admin-write access model for editorial content.
-     */
+    
+    match /product_details/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
     match /blogPosts/{blogPostId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    /**
-     * @description Write-only collection for user contact form submissions.
-     * @path /contacts/{contactId}
-     * @allow (create) Any user, signed in or not, can submit a contact form message.
-     * @deny (get, list, update, delete) All users, including admins, are blocked from reading or modifying submitted data to protect PII.
-     * @principle Establishes a secure "drop-box" where data can be written but not read or altered via client SDKs.
-     */
     match /contacts/{contactId} {
-      allow get: if false;
-      allow list: if false;
+      allow read: if isAdmin();
       allow create: if true;
-      allow update: if false;
-      allow delete: if false;
+      allow update, delete: if isAdmin();
     }
 
-    /**
-     * @description Write-only collection for newsletter email subscriptions.
-     * @path /newsletterSubscriptions/{subscriptionId}
-     * @allow (create) Any user, signed in or not, can subscribe to the newsletter.
-     * @deny (get, list, update, delete) All users are blocked from reading or modifying submitted emails to protect privacy.
-     * @principle Establishes a secure "drop-box" where data can be written but not read or altered via client SDKs.
-     */
     match /newsletterSubscriptions/{subscriptionId} {
-      allow get: if false;
-      allow list: if false;
+      allow read: if isAdmin();
       allow create: if true;
-      allow update: if false;
-      allow delete: if false;
+      allow update, delete: if isAdmin();
     }
 
-    /**
-     * @description Manages user admin roles. Access is restricted to other admins.
-     * @path /roles_admin/{userId}
-     * @allow (create, delete) An existing admin can grant or revoke admin privileges for another user.
-     * @deny (list, create) A non-admin user attempts to list all admins or make themselves an admin.
-     * @principle Secures the role management system itself, preventing unauthorized privilege escalation.
-     */
+    // This collection is no longer needed for auth checks
     match /roles_admin/{userId} {
-      allow get: if isAdmin();
-      allow list: if isAdmin();
-      allow create: if isAdmin();
-      allow update: if isAdmin() && resource != null;
-      allow delete: if isAdmin() && resource != null;
+      allow read, write: if false;
     }
   }
 }
