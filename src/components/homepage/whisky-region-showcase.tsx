@@ -110,9 +110,7 @@ export default function WhiskyRegionShowcase() {
                     : 'text-5xl text-white/60'
                 }`}
             >
-              <Link href={region.href}>
-                {region.name}
-              </Link>
+              {region.name}
             </motion.div>
           ))}
         </div>
