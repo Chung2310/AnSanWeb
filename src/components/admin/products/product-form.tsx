@@ -23,17 +23,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
-import { addDocumentNonBlocking, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
 import FileUploader from '@/components/admin/products/file-uploader';
-import type { ImageInfo, FullProduct } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const formSchema = z.object({
-  // From Product
   nameVN: z.string().min(1, 'Tên tiếng Việt là bắt buộc'),
   nameEN: z.string().min(1, 'Tên tiếng Anh là bắt buộc'),
   slug: z.string().min(1, 'Slug là bắt buộc'),
@@ -47,34 +43,26 @@ const formSchema = z.object({
     label: z.string(),
     value: z.string()
   })).optional(),
-  
-  // From ProductDetail
-  description: z.string().optional(),
-  detailImage: z.object({
-      url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
-      path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
-  }).nullable(),
 });
 
 function generateSlug(name: string) {
   if (!name) return '';
   return name
     .toLowerCase()
-    .normalize('NFD') // Decompose combined graphemes into base characters and diacritical marks
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/đ/g, 'd') // Replace đ with d
-    .replace(/[^a-z0-9\s-]/g, '') // Remove invalid chars
-    .replace(/\s+/g, '-') // Collapse whitespace and replace by -
-    .replace(/-+/g, '-'); // Collapse dashes
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
   const firestore = useFirestore();
-  const [uploadingStatus, setUploadingStatus] = useState({ image: false, detailImage: false });
+  const [isUploading, setIsUploading] = useState(false);
 
-  const isAnyFileUploading = uploadingStatus.image || uploadingStatus.detailImage;
   const isEditMode = !!id;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -84,8 +72,8 @@ export function ProductForm() {
   const nameVNValue = form.watch('nameVN');
   const { isSubmitting } = form.formState;
 
-  const handleUploadStateChange = useCallback((isUploading: boolean, fieldName: 'image' | 'detailImage') => {
-    setUploadingStatus(prev => ({ ...prev, [fieldName]: isUploading }));
+  const handleUploadStateChange = useCallback((uploading: boolean) => {
+    setIsUploading(uploading);
   }, []);
 
   useEffect(() => {
@@ -102,7 +90,6 @@ export function ProductForm() {
             form.reset({
                 ...defaultValues,
                 tags: defaultValues.tags?.join(', ') || '',
-                description: defaultValues.description || '',
             });
         } else {
             form.reset({
@@ -110,9 +97,7 @@ export function ProductForm() {
                 nameEN: '',
                 slug: '',
                 price: 0,
-                description: '',
                 image: undefined,
-                detailImage: null,
                 attributes: [],
                 tags: '',
             });
@@ -125,7 +110,6 @@ export function ProductForm() {
     if (!firestore) return;
 
     const productsCollectionRef = collection(firestore, 'products');
-    const detailsCollectionRef = collection(firestore, 'product_details');
     
     const productData = {
         nameVN: values.nameVN,
@@ -137,33 +121,17 @@ export function ProductForm() {
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
     };
 
-    const detailData = {
-        description: values.description || '',
-        detailImage: values.detailImage,
-        // TODO: Add forms for these fields later
-        tastingNotes: defaultValues?.tastingNotes || null,
-        productDetails: defaultValues?.productDetails || null,
-    };
 
     if (isEditMode && id) {
         const productDocRef = doc(productsCollectionRef, id);
-        const detailDocRef = doc(detailsCollectionRef, id);
-        
         await updateDocumentNonBlocking(productDocRef, productData);
-        await setDocumentNonBlocking(detailDocRef, detailData, { merge: true });
-
     } else {
-        const newProductRef = await addDocumentNonBlocking(productsCollectionRef, {
+        await addDocumentNonBlocking(productsCollectionRef, {
             ...productData,
             createdAt: new Date().toISOString(),
             isFeatured: false,
             isNew: true,
         });
-
-        if (newProductRef) {
-            const detailDocRef = doc(detailsCollectionRef, newProductRef.id);
-            await setDocumentNonBlocking(detailDocRef, detailData, { merge: false });
-        }
     }
     onClose();
   };
@@ -173,141 +141,101 @@ export function ProductForm() {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Chỉnh sửa' : 'Thêm'} Sản phẩm</DialogTitle>
+          <DialogTitle>{isEditMode ? 'Chỉnh sửa' : 'Thêm'} Sản phẩm (Cơ bản)</DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? `Chỉnh sửa thông tin cho sản phẩm ${defaultValues?.nameVN}.`
-              : 'Điền thông tin cơ bản để tạo sản phẩm, sau đó chuyển qua tab chi tiết.'}
+              ? `Chỉnh sửa thông tin cơ bản cho sản phẩm ${defaultValues?.nameVN}.`
+              : 'Điền thông tin cơ bản để tạo sản phẩm.'}
           </DialogDescription>
         </DialogHeader>
         <FormProvider {...form}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <Tabs defaultValue="basic" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
-                        <TabsTrigger value="details" disabled={!isEditMode}>Thông tin chi tiết</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="basic" className="py-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="py-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="nameVN"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tên tiếng Việt</FormLabel>
+                                <FormControl>
+                                <Input {...field} placeholder="The Macallan 18..." />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="nameEN"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tên tiếng Anh</FormLabel>
+                                <FormControl>
+                                <Input {...field} placeholder="The Macallan 18..." />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="slug"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Slug (URL)</FormLabel>
+                                <FormControl>
+                                <Input {...field} placeholder="the-macallan-18" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Giá (VNĐ)</FormLabel>
+                                <FormControl>
+                                <Input type="number" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+                        <div className="md:col-span-2">
                             <FormField
                                 control={form.control}
-                                name="nameVN"
+                                name="tags"
                                 render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Tên tiếng Việt</FormLabel>
+                                    <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
                                     <FormControl>
-                                    <Input {...field} placeholder="The Macallan 18..." />
+                                    <Input {...field} placeholder="scotch, speyside, old-rare" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="nameEN"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Tên tiếng Anh</FormLabel>
-                                    <FormControl>
-                                    <Input {...field} placeholder="The Macallan 18..." />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="slug"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Slug (URL)</FormLabel>
-                                    <FormControl>
-                                    <Input {...field} placeholder="the-macallan-18" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="price"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Giá (VNĐ)</FormLabel>
-                                    <FormControl>
-                                    <Input type="number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
-                            <div className="md:col-span-2">
-                                <FormField
-                                    control={form.control}
-                                    name="tags"
-                                    render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
-                                        <FormControl>
-                                        <Input {...field} placeholder="scotch, speyside, old-rare" />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                    )}
-                                />
-                            </div>
-                            <div className="md:col-span-2">
-                                <FileUploader
-                                    fieldName="image"
-                                    label="Ảnh bìa (listing)"
-                                    defaultUrl={form.getValues('image.url')}
-                                    onUploadStateChange={handleUploadStateChange}
-                                />
-                            </div>
                         </div>
-                    </TabsContent>
-                    <TabsContent value="details" className="py-4">
-                       <div className="space-y-6">
-                            <div>
-                                <FileUploader
-                                    fieldName="detailImage"
-                                    label="Ảnh trang chi tiết (Nếu khác ảnh bìa)"
-                                    defaultUrl={form.getValues('detailImage.url')}
-                                    onUploadStateChange={handleUploadStateChange}
-                                />
-                            </div>
-                             <div>
-                                <FormField
-                                    control={form.control}
-                                    name="description"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                        <FormLabel>Mô tả ngắn</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                            {...field}
-                                            placeholder="Mô tả ngắn gọn về sản phẩm cho trang chi tiết..."
-                                            className='min-h-[100px]'
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                             <div className="text-muted-foreground text-sm">
-                                <p><strong>Lưu ý:</strong> Các mục chi tiết hơn như "Ghi chú nếm thử" và "Thông tin cấu trúc" sẽ được triển khai trong các phiên bản sau. Hiện tại, bạn có thể quản lý các thông tin này trực tiếp trên Firestore nếu cần.</p>
-                            </div>
-                       </div>
-                    </TabsContent>
-                </Tabs>
+                        <div className="md:col-span-2">
+                            <FileUploader
+                                fieldName="image"
+                                label="Ảnh bìa (listing)"
+                                defaultUrl={form.getValues('image.url')}
+                                onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading)}
+                            />
+                        </div>
+                    </div>
+                </div>
                 <DialogFooter className="pt-6">
                     <Button type="button" variant="outline" onClick={onClose}>
                     Hủy
                     </Button>
-                    <Button type="submit" disabled={isSubmitting || isAnyFileUploading}>
-                    {(isSubmitting || isAnyFileUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <Button type="submit" disabled={isSubmitting || isUploading}>
+                    {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Lưu Thay Đổi
                     </Button>
                 </DialogFooter>

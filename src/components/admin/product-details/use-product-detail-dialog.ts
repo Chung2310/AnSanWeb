@@ -1,17 +1,17 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Product } from '@/lib/types';
+import type { FullProduct } from '@/lib/types';
 
-type ProductDialogState = {
+type ProductDetailDialogState = {
   id?: string;
   isOpen: boolean;
-  defaultValues?: Partial<Product>;
-  onOpen: (id?: string, defaultValues?: Partial<Product>) => void;
+  defaultValues?: Partial<FullProduct>;
+  onOpen: (id?: string, defaultValues?: Partial<FullProduct>) => void;
   onClose: () => void;
 };
 
-export const useProductDialog = create<ProductDialogState>((set) => ({
+export const useProductDetailDialog = create<ProductDetailDialogState>((set) => ({
   id: undefined,
   isOpen: false,
   defaultValues: undefined,

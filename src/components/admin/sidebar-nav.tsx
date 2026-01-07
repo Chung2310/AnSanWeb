@@ -12,6 +12,7 @@ import {
   Newspaper,
   Home,
   Users,
+  FileText,
 } from 'lucide-react';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -27,6 +28,7 @@ import {
 const links = [
   { href: '/admin', label: 'Bảng điều khiển', icon: Home },
   { href: '/admin/products', label: 'Sản phẩm', icon: Package },
+  { href: '/admin/product-details', label: 'Chi tiết Sản phẩm', icon: FileText },
   { href: '/admin/blog', label: 'Bài viết', icon: Newspaper },
   { href: '/admin/contacts', label: 'Tin nhắn', icon: MessageSquare },
   { href: '/admin/newsletters', label: 'Bản tin', icon: Mail },
@@ -52,7 +54,7 @@ export default function SidebarNav() {
                 href={link.href}
                 className={cn(
                   'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  pathname === link.href && 'bg-muted text-primary'
+                  pathname.startsWith(link.href) && 'bg-muted text-primary'
                 )}
               >
                 <link.icon className="h-4 w-4" />
