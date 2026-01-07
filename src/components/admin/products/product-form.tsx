@@ -77,6 +77,9 @@ const productDetailsSchema = z.object({
       palate: z.string().optional(),
       finish: z.string().optional(),
     }).optional(),
+  howToEnjoy: z.string().optional(),
+  foodPairing: z.string().optional(),
+  storage: z.string().optional(),
   conclusion: z.string().optional(),
 });
 
@@ -126,7 +129,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           nameEN: initialData.nameEN || '',
           slug: initialData.slug || '',
           description: initialData.description || '',
-          price: String(initialData.price || '0'),
+          price: initialData.price || 0,
           image: initialData.image || null,
           status: initialData.status || 'draft',
           isFeatured: initialData.isFeatured || false,
@@ -153,6 +156,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 palate: initialData.productDetails?.tastingNote?.palate || '',
                 finish: initialData.productDetails?.tastingNote?.finish || '',
             },
+            howToEnjoy: initialData.productDetails?.howToEnjoy || '',
+            foodPairing: initialData.productDetails?.foodPairing || '',
+            storage: initialData.productDetails?.storage || '',
             conclusion: initialData.productDetails?.conclusion || '',
           },
         }
@@ -160,7 +166,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           nameVN: '',
           nameEN: '',
           slug: '',
-          price: '0',
+          price: 0,
           description: '',
           image: null,
           status: 'published',
@@ -188,6 +194,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 palate: '',
                 finish: '',
             },
+            howToEnjoy: '',
+            foodPairing: '',
+            storage: '',
             conclusion: '',
           },
         },
@@ -358,6 +367,14 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   ))}
                   <Button type="button" variant="outline" onClick={() => appendDetail({ label: '', value: '' })}>Thêm chi tiết</Button>
                   
+                  <FormField control={form.control} name="productDetails.tastingNote.nose" render={({ field }) => (<FormItem><FormLabel>Hương vị (Tasting Note - Nose)</FormLabel><FormControl><Textarea placeholder="Mô tả mùi hương chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
+                  <FormField control={form.control} name="productDetails.tastingNote.palate" render={({ field }) => (<FormItem><FormLabel>Hương vị (Tasting Note - Palate)</FormLabel><FormControl><Textarea placeholder="Mô tả hương vị chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
+                  <FormField control={form.control} name="productDetails.tastingNote.finish" render={({ field }) => (<FormItem><FormLabel>Hậu vị (Tasting Note - Finish)</FormLabel><FormControl><Textarea placeholder="Mô tả hậu vị chi tiết..." {...field} rows={2} /></FormControl></FormItem>)} />
+                  
+                  <FormField control={form.control} name="productDetails.howToEnjoy" render={({ field }) => (<FormItem><FormLabel>Cách thưởng thức</FormLabel><FormControl><Textarea placeholder="Hướng dẫn cách thưởng thức..." {...field} rows={3} /></FormControl></FormItem>)} />
+                  <FormField control={form.control} name="productDetails.foodPairing" render={({ field }) => (<FormItem><FormLabel>Kết hợp món ăn</FormLabel><FormControl><Textarea placeholder="Gợi ý món ăn kết hợp..." {...field} rows={3} /></FormControl></FormItem>)} />
+                  <FormField control={form.control} name="productDetails.storage" render={({ field }) => (<FormItem><FormLabel>Bảo quản</FormLabel><FormControl><Textarea placeholder="Hướng dẫn bảo quản..." {...field} rows={3} /></FormControl></FormItem>)} />
+
                   <FormField control={form.control} name="productDetails.conclusion" render={({ field }) => (<FormItem><FormLabel>Kết luận</FormLabel><FormControl><Textarea placeholder="Nội dung kết luận..." {...field} rows={4} /></FormControl></FormItem>)} />
               </CardContent>
             </Card>
@@ -434,7 +451,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                                 <FormItem key={category.id} className="flex flex-row items-start space-x-3 space-y-0">
                                   <FormControl>
                                     <Checkbox checked={field.value?.includes(category.id)} onCheckedChange={(checked) => {
-                                      return checked ? field.onChange([...field.value || [], category.id]) : field.onChange(field.value?.filter((value) => value !== category.id))
+                                      return checked ? field.onChange([...(field.value || []), category.id]) : field.onChange(field.value?.filter((value) => value !== category.id))
                                     }} />
                                   </FormControl>
                                   <FormLabel className="font-normal">{category.name}</FormLabel>
