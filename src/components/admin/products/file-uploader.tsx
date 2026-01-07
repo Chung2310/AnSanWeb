@@ -8,20 +8,37 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { ImageInfo } from '@/lib/types';
+import { useFormContext } from 'react-hook-form';
 
 interface FileUploaderProps {
   fieldName: string;
-  defaultUrl?: string | null;
   onFieldChange: (value: ImageInfo | null) => void;
 }
 
-export default function FileUploader({ fieldName, defaultUrl, onFieldChange }: FileUploaderProps) {
-  const [preview, setPreview] = useState<string | null>(defaultUrl || null);
+export default function FileUploader({ fieldName, onFieldChange }: FileUploaderProps) {
+  const { watch } = useFormContext();
+  const existingImage = watch(fieldName);
+
+  const [preview, setPreview] = useState<string | null>(existingImage?.url || null);
   const { progress, startUpload, isUploading, error } = useUploadStorage();
 
   useEffect(() => {
-    setPreview(defaultUrl || null);
-  }, [defaultUrl]);
+    // If the form is reset or default values change, update the preview
+    const subscription = watch((value, { name }) => {
+      if (name === fieldName) {
+        setPreview(value[fieldName]?.url || null);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, fieldName]);
+  
+  useEffect(() => {
+    // Also set initial preview on mount if exists
+    if (existingImage?.url) {
+      setPreview(existingImage.url);
+    }
+  }, [existingImage]);
+
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -50,7 +67,7 @@ export default function FileUploader({ fieldName, defaultUrl, onFieldChange }: F
       <div className="w-full aspect-video border-2 border-dashed border-muted-foreground/30 rounded-lg flex items-center justify-center relative group">
         {preview ? (
           <>
-            <Image src={preview} alt="Preview" layout="fill" objectFit="contain" className="rounded-lg" />
+            <Image src={preview} alt="Preview" fill objectFit="contain" className="rounded-lg" />
             <Button
               type="button"
               variant="destructive"
@@ -72,6 +89,7 @@ export default function FileUploader({ fieldName, defaultUrl, onFieldChange }: F
                 className="sr-only"
                 onChange={handleFileChange}
                 accept="image/png, image/jpeg, image/webp"
+                disabled={isUploading}
             />
           </label>
         )}
@@ -81,5 +99,3 @@ export default function FileUploader({ fieldName, defaultUrl, onFieldChange }: F
     </div>
   );
 }
-
-    

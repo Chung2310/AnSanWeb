@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,6 @@ import { useCategoryDialog } from '@/stores/use-category-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useFirestore } from '@/firebase';
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
-import type { Category } from '@/lib/types';
 import FileUploader from '../products/file-uploader';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -40,6 +39,9 @@ const formSchema = z.object({
       path: z.string(),
     })
     .nullable(),
+}).refine(data => data.image, {
+    message: "Vui lòng tải lên một ảnh đại diện.",
+    path: ["image"],
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>;
@@ -67,7 +69,11 @@ export default function CategoryForm() {
       form.reset(
         defaultValues
           ? {
-              ...defaultValues,
+              name: defaultValues.name || '',
+              slug: defaultValues.slug || '',
+              description: defaultValues.description || '',
+              // @ts-ignore
+              status: defaultValues.status || 'active',
               image: defaultValues.image || null,
             }
           : {
@@ -97,10 +103,6 @@ export default function CategoryForm() {
 
   const onSubmit = async (values: CategoryFormValues) => {
     try {
-       if (!values.image) {
-        form.setError('image', { type: 'manual', message: 'Vui lòng tải lên một ảnh đại diện.' });
-        return;
-      }
       if (isEditMode) {
         if (!defaultValues.id) throw new Error('Category ID is missing for update.');
         const categoryRef = doc(firestore, 'categories', defaultValues.id);
@@ -136,100 +138,100 @@ export default function CategoryForm() {
             {isEditMode ? 'Cập nhật thông tin chi tiết cho danh mục này.' : 'Điền thông tin để tạo một danh mục mới.'}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
-                <div className="col-span-2">
+        <FormProvider {...form}>
+            <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="image"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Ảnh đại diện</FormLabel>
+                                    <FormControl>
+                                        <FileUploader 
+                                            fieldName="image"
+                                            onFieldChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                    </div>
                     <FormField
                         control={form.control}
-                        name="image"
+                        name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Ảnh đại diện</FormLabel>
-                                <FormControl>
-                                    <FileUploader 
-                                        fieldName="image"
-                                        onFieldChange={field.onChange}
-                                        defaultUrl={field.value?.url}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                </div>
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Tên danh mục</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Vd: Scotch Whisky" {...field} onChange={handleNameChange} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Slug</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Vd: scotch-whisky" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                 <div className="col-span-2">
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Mô tả</FormLabel>
+                            <FormLabel>Tên danh mục</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Mô tả ngắn về danh mục..." {...field} />
+                                <Input placeholder="Vd: Scotch Whisky" {...field} onChange={handleNameChange} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
                         )}
                     />
-                </div>
-                 <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm col-span-2">
-                            <div className="space-y-0.5">
-                                <FormLabel>Trạng thái</FormLabel>
-                                <FormMessage />
-                            </div>
+                    <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Slug</FormLabel>
                             <FormControl>
-                                <Switch
-                                    checked={field.value === 'active'}
-                                    onCheckedChange={(checked) => field.onChange(checked ? 'active' : 'inactive')}
-                                />
+                                <Input placeholder="Vd: scotch-whisky" {...field} />
                             </FormControl>
-                        </FormItem>
-                    )}
-                />
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Hủy
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Đang lưu...' : 'Lưu'}
-              </Button>
-            </div>
-          </form>
-        </Form>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className="col-span-2">
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Mô tả</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Mô tả ngắn về danh mục..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm col-span-2">
+                                <div className="space-y-0.5">
+                                    <FormLabel>Trạng thái</FormLabel>
+                                    <FormMessage />
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value === 'active'}
+                                        onCheckedChange={(checked) => field.onChange(checked ? 'active' : 'inactive')}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div className="flex justify-end gap-2">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    Hủy
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting ? 'Đang lưu...' : 'Lưu'}
+                </Button>
+                </div>
+            </form>
+            </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );
 }
-    
