@@ -40,7 +40,6 @@ export default function LoginPage() {
   const router = useRouter();
   const { auth } = useFirebase();
   const firestore = useFirestore();
-  const { checkAdminStatus } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,8 +51,7 @@ export default function LoginPage() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      await checkAdminStatus(userCredential.user);
+      await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
         title: 'Đăng nhập thành công!',
       });
@@ -69,8 +67,6 @@ export default function LoginPage() {
           const roleDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
           await setDoc(roleDocRef, { role: 'admin' });
           
-          await checkAdminStatus(newUserCredential.user);
-
           toast({
             title: 'Tài khoản admin đã được tạo.',
             description: 'Đang đăng nhập...',
