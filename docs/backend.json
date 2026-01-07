@@ -4,7 +4,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Wine",
       "type": "object",
-      "description": "Represents a wine product.",
+      "description": "Represents a wine product with its details.",
       "properties": {
         "id": {
           "type": "string",
@@ -20,7 +20,7 @@
         },
         "slug": {
           "type": "string",
-          "description": "URL-friendly slug for the wine product."
+          "description": "URL-friendly slug for the wine."
         },
         "descriptionVN": {
           "type": "string",
@@ -63,20 +63,23 @@
         },
         "rating": {
           "type": "number",
-          "description": "Rating of the wine (e.g., 1-5 stars)."
+          "description": "Customer rating of the wine."
         },
         "isFeatured": {
           "type": "boolean",
-          "description": "Indicates if the wine is featured."
+          "description": "Indicates if the wine is featured on the homepage."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the wine was added to the database.",
+          "description": "Timestamp of when the wine was added to the catalog.",
           "format": "date-time"
         },
-        "categoryId": {
-          "type": "string",
-          "description": "Reference to Category. (Relationship: Category 1:N Wine)"
+        "categoryIds": {
+          "type": "array",
+          "description": "References to Categories. (Relationship: Category N:N Wine)",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
@@ -95,15 +98,14 @@
         "images",
         "rating",
         "isFeatured",
-        "createdAt",
-        "categoryId"
+        "createdAt"
       ]
     },
     "Category": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
-      "description": "Represents a wine category.",
+      "description": "Represents a category of wines (e.g., Red Wine, White Wine).",
       "properties": {
         "id": {
           "type": "string",
@@ -143,7 +145,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "BlogPost",
       "type": "object",
-      "description": "Represents a blog post.",
+      "description": "Represents a blog post or article.",
       "properties": {
         "id": {
           "type": "string",
@@ -199,7 +201,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Contact",
       "type": "object",
-      "description": "Represents a contact message.",
+      "description": "Represents a contact message submitted through the contact form.",
       "properties": {
         "id": {
           "type": "string",
@@ -207,24 +209,24 @@
         },
         "name": {
           "type": "string",
-          "description": "Name of the person sending the message."
+          "description": "Name of the person submitting the contact form."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the person sending the message.",
+          "description": "Email address of the person submitting the contact form.",
           "format": "email"
         },
         "phone": {
           "type": "string",
-          "description": "Phone number of the person sending the message."
+          "description": "Phone number of the person submitting the contact form."
         },
         "message": {
           "type": "string",
-          "description": "The contact message."
+          "description": "Message content from the contact form."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the message was created.",
+          "description": "Timestamp of when the contact message was submitted.",
           "format": "date-time"
         }
       },
@@ -254,7 +256,7 @@
         },
         "subscribedAt": {
           "type": "string",
-          "description": "Timestamp of when the user subscribed.",
+          "description": "Timestamp of when the user subscribed to the newsletter.",
           "format": "date-time"
         }
       },
@@ -280,7 +282,7 @@
           "schema": {
             "$ref": "#/backend/entities/Wine"
           },
-          "description": "Stores wine product information. Public read access is permitted. Write access is restricted to admins only.",
+          "description": "Stores wine product information. Publicly readable.",
           "params": [
             {
               "name": "wineId",
@@ -296,7 +298,7 @@
           "schema": {
             "$ref": "#/backend/entities/Category"
           },
-          "description": "Stores wine category information. Public read access.  Write access restricted to admins.",
+          "description": "Stores wine categories. Publicly readable.",
           "params": [
             {
               "name": "categoryId",
@@ -312,7 +314,7 @@
           "schema": {
             "$ref": "#/backend/entities/BlogPost"
           },
-          "description": "Stores blog post information. Public read access. Write access restricted to admins.",
+          "description": "Stores blog post information. Publicly readable.",
           "params": [
             {
               "name": "blogPostId",
@@ -328,7 +330,7 @@
           "schema": {
             "$ref": "#/backend/entities/Contact"
           },
-          "description": "Stores contact form submissions.  Write access for anyone to submit the form. Read/Delete access restricted to admins.",
+          "description": "Stores contact form submissions. Writeable by anyone, but only readable by admins.",
           "params": [
             {
               "name": "contactId",
@@ -344,7 +346,7 @@
           "schema": {
             "$ref": "#/backend/entities/NewsletterSubscription"
           },
-          "description": "Stores newsletter subscriptions.  Write access for anyone to subscribe. Read/Delete access restricted to admins.",
+          "description": "Stores newsletter subscriptions. Writeable by anyone, but only readable by admins.",
           "params": [
             {
               "name": "subscriptionId",
@@ -354,22 +356,22 @@
         }
       },
       {
-        "path": "/admins/{uid}",
+        "path": "/roles_admin/{userId}",
         "definition": {
-          "entityName": "admin",
+          "entityName": "User",
           "schema": {
-            "$ref": "#/backend/entities/admin"
+            "$ref": "#/backend/entities/NewsletterSubscription"
           },
-          "description": "Stores admin role information. The existence of a document indicates the user is an admin.",
+          "description": "Indicates admin role. Existence of document grants admin privileges.",
           "params": [
             {
-              "name": "uid",
-              "description": "User ID of the admin."
+              "name": "userId",
+              "description": "User ID of the administrator."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure authorization independence, clarity, and scalability, adhering to the principles of DBAC (Database-Based Access Control) and QAPs (Rules are not Filters).  Authorization Independence is achieved through denormalization, copying relevant authorization data into subcollections to avoid `get()` calls in security rules. Structural Segregation is employed by separating data with different access needs into distinct collections. Access modeling leverages path-based ownership for user-specific data and membership maps for collaborative data. The structure includes dedicated collections for entities like `wines`, `categories`, `blogPosts`, `contacts`, and `newsletterSubscriptions`.\n\nTo fix the storage permission issue reported, a separate collection `/admins/{uid}` is implemented. The presence of a document in the `/admins/{uid}` collection grants the user the 'admin' role, permitting read/write access to all collections and Storage buckets (product-images). Security rules will check for the existence of this document.\n\nQAPs (Rules Are Not Filters) are supported by ensuring that list operations are secured through structural segregation and appropriate security rules, preventing the need to filter data based on client-side logic."
+    "reasoning": "This Firestore data structure is designed to support a premium wine showcase website. The structure prioritizes security, scalability, and ease of maintenance, while adhering to the principles of Authorization Independence, Structural Segregation, Access Modeling, and Data Clarity. All authentication is based on `request.auth.uid`.  \n\n**Authorization Independence:**\n\n*   The structure avoids hierarchical authorization dependencies (`get()` calls in security rules) by not relying on parent document data for access control to subcollections. Since there are no subcollections in this design, this is inherently satisfied.\n\n**Structural Segregation:**\n\n*   Each top-level collection (`wines`, `categories`, `blogPosts`, `contacts`, `newsletterSubscriptions`) is structurally segregated to ensure homogeneous security postures within each collection.\n*   The use of separate collections for public content (wines, categories, blog posts) and user-submitted data (contacts, newsletterSubscriptions) simplifies security rules and prevents unintended data exposure.\n\n**Access Modeling:**\n\n*   The `wines`, `categories`, and `blogPosts` collections are designed for public read access, enabling straightforward listing and display of website content.\n*   The `contacts` collection allows anyone to create a document, which simulates a contact form submission. Security rules will restrict reading/listing to admin roles only.\n*   The `newsletterSubscriptions` collection follows a similar pattern, allowing anyone to subscribe.  Security rules will restrict reading/listing to admin roles only.\n*   Admin access is controlled by the existence of a document in the `/roles_admin/{uid}` collection. This approach, based on existence over content, simplifies rule logic for administrative privileges.\n\n**QAPs (Rules are not Filters):**\n\n*   The segregation of data into distinct collections, each with clear access requirements, supports secure `list` operations. Rules can efficiently allow or deny access to entire collections based on user roles or authentication status, without needing to filter documents based on content.\n\n**Invariants:**\n\n*   Timestamps (`createdAt`, `date`, `subscribedAt`) can be enforced within security rules to ensure data integrity. Ownership is implicitly managed through the structure and the `roles_admin` collection."
   }
 }
