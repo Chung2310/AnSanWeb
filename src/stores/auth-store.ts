@@ -12,33 +12,32 @@ interface AuthState {
   initializeAuthListener: (auth: Auth, firestore: Firestore) => () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   isAdmin: false,
   isAuthLoading: true,
   logout: () => {
-    // This will be replaced by the actual logout function in initializeAuthListener
+    const { auth } = get()._internal;
+    if (auth) {
+      auth.signOut();
+    }
   },
   initializeAuthListener: (auth: Auth, firestore: Firestore) => {
+    set({ _internal: { auth, firestore } });
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      set({ user });
       if (user) {
-        try {
-          const roleDocRef = doc(firestore, 'roles_admin', user.uid);
-          const roleDoc = await getDoc(roleDocRef);
-          set({ isAdmin: roleDoc.exists() && roleDoc.data()?.role === 'admin' });
-        } catch (error) {
-          console.error("Error checking admin status:", error);
-          set({ isAdmin: false });
-        }
+        // Since firestore.rules now checks email, we can do the same on the client
+        const isAdmin = user.email === 'admin@ansan.com';
+        set({ user, isAdmin, isAuthLoading: false });
       } else {
-        set({ isAdmin: false });
+        set({ user: null, isAdmin: false, isAuthLoading: false });
       }
-      set({ isAuthLoading: false });
     });
 
-    set({ logout: () => auth.signOut() });
-    
     return unsubscribe;
+  },
+  _internal: {
+    auth: null,
+    firestore: null,
   },
 }));
