@@ -14,7 +14,7 @@ import { useFirebase } from '@/firebase';
 interface UploadResult {
   progress: number;
   isUploading: boolean;
-  startUpload: (file: File, pathPrefix?: string) => Promise<ImageInfo | null>;
+  startUpload: (file: File, pathPrefix?: string) => Promise<ImageInfo>;
 }
 
 export function useUploadStorage(): UploadResult {
@@ -22,15 +22,16 @@ export function useUploadStorage(): UploadResult {
   const [isUploading, setIsUploading] = useState(false);
   const { firebaseApp } = useFirebase();
 
-  const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo | null> => {
+  const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo> => {
     return new Promise((resolve, reject) => {
       if (!firebaseApp) {
+        setIsUploading(false);
         return reject(new Error('Firebase app is not initialized.'));
       }
-      // Get storage instance here to ensure firebaseApp is ready.
       const storage = getStorage(firebaseApp);
       
       if (!file) {
+        setIsUploading(false);
         return reject(new Error('No file provided for upload.'));
       }
 
@@ -55,7 +56,7 @@ export function useUploadStorage(): UploadResult {
           console.error("Upload failed:", uploadError);
           setIsUploading(false);
           setProgress(0);
-          reject(uploadError);
+          reject(uploadError); // Reject the promise on error
         },
         async () => {
           try {
@@ -66,12 +67,12 @@ export function useUploadStorage(): UploadResult {
             };
             setIsUploading(false);
             setProgress(100);
-            resolve(imageInfo);
+            resolve(imageInfo); // Resolve the promise with image info
           } catch (urlError) {
             console.error("Failed to get download URL:", urlError);
             setIsUploading(false);
             setProgress(0);
-            reject(urlError);
+            reject(urlError); // Reject on URL retrieval error
           }
         }
       );
