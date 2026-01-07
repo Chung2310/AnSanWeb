@@ -76,7 +76,8 @@ export default function ProductDetailPage() {
   const { data: productDetail, isLoading: isDetailLoading } = useDoc<ProductDetail>(detailRef);
 
   const fullProduct: FullProduct | null = useMemo(() => {
-    if (!product || !productDetail) return null;
+    if (!product) return null;
+    // Merge product and productDetail, but give precedence to productDetail if fields overlap
     return { ...product, ...productDetail };
   }, [product, productDetail]);
 
