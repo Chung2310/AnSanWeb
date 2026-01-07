@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -87,7 +88,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
-  const [tagsInput, setTagsInput] = useState(initialData?.tags?.join(', ') || '');
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -143,7 +143,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const tags = tagsInput.split(',').map(tag => tag.trim().toLowerCase()).filter(Boolean);
+      // Automatically generate tags from the slugs of selected categories
+      const selectedCategories = categories?.filter(cat => data.categoryIds?.includes(cat.id)) || [];
+      const tags = selectedCategories.map(cat => cat.slug);
       
       const mainProductData = {
         nameVN: data.nameVN,
@@ -293,7 +295,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 
                 <FormField control={form.control} name="categoryIds" render={() => (
                     <FormItem>
-                      <FormLabel>Danh mục chính</FormLabel>
+                      <FormLabel>Danh mục chính (sẽ được dùng làm tags)</FormLabel>
                       {isLoadingCategories ? <p>Đang tải...</p> : (
                         <div className="space-y-2 max-h-48 overflow-y-auto">
                           {(categories || []).map((category: Category) => (
@@ -313,12 +315,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormMessage />
                     </FormItem>
                 )} />
-                <FormItem>
-                  <FormLabel>Tags</FormLabel>
-                  <FormDescription>Phân cách các tag bằng dấu phẩy (,)</FormDescription>
-                  <FormControl><Input placeholder="Vd: scotch, old-rare, islay" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} /></FormControl>
-                  <FormMessage />
-                </FormItem>
               </CardContent>
             </Card>
           </div>
@@ -330,3 +326,5 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
+
+    
