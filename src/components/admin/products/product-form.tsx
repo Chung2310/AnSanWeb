@@ -120,9 +120,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     form.setValue('nameVN', name);
-    if (!form.formState.isDirty) {
-      form.setValue('slug', slugify(name, { lower: true, strict: true }));
-    }
+    form.setValue('slug', slugify(name, { lower: true, strict: true }));
   };
   
   const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
