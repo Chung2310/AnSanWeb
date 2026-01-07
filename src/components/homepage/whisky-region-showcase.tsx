@@ -60,13 +60,13 @@ export default function WhiskyRegionShowcase() {
         data-ai-hint={featuredImage.imageHint}
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-black/60" />
+      {/* <div className="absolute inset-0 bg-black/60" /> */}
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="container relative z-10 flex flex-col items-center justify-center text-center"
+        className="container relative z-10 flex flex-col items-start justify-center text-left"
       >
         <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80">
           Lựa chọn vùng whisky
