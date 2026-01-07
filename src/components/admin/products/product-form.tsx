@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -50,6 +51,8 @@ import {
 import slugify from 'slugify';
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { allTags } from '@/lib/tags-data';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -143,10 +146,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      // Automatically generate tags from the slugs of selected categories
-      const selectedCategories = categories?.filter(cat => data.categoryIds?.includes(cat.id)) || [];
-      const tags = selectedCategories.map(cat => cat.slug);
-      
       const mainProductData = {
         nameVN: data.nameVN,
         nameEN: data.nameEN || data.nameVN,
@@ -158,7 +157,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         isNew: data.isNew,
         categoryIds: data.categoryIds || [],
         attributes: data.attributes || [],
-        tags: tags,
+        tags: data.tags || [],
         createdAt: initialData?.createdAt || serverTimestamp(),
         updatedAt: serverTimestamp(),
       };
@@ -295,26 +294,84 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 
                 <FormField control={form.control} name="categoryIds" render={() => (
                     <FormItem>
-                      <FormLabel>Danh mục chính (sẽ được dùng làm tags)</FormLabel>
+                      <div className="mb-4">
+                        <FormLabel>Danh mục chính</FormLabel>
+                        <FormDescription>Chọn các danh mục chính cho sản phẩm.</FormDescription>
+                      </div>
                       {isLoadingCategories ? <p>Đang tải...</p> : (
-                        <div className="space-y-2 max-h-48 overflow-y-auto">
-                          {(categories || []).map((category: Category) => (
-                            <FormField key={category.id} control={form.control} name="categoryIds" render={({ field }) => (
-                                <FormItem key={category.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                  <FormControl>
-                                    <Checkbox checked={field.value?.includes(category.id)} onCheckedChange={(checked) => {
-                                      return checked ? field.onChange([...(field.value || []), category.id]) : field.onChange(field.value?.filter((value) => value !== category.id))
-                                    }} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">{category.name}</FormLabel>
-                                </FormItem>
-                            )} />
-                          ))}
-                        </div>
+                        <ScrollArea className="h-32 rounded-md border">
+                          <div className="p-4 space-y-2">
+                            {(categories || []).map((category: Category) => (
+                              <FormField key={category.id} control={form.control} name="categoryIds" render={({ field }) => (
+                                  <FormItem key={category.id} className="flex flex-row items-start space-x-3 space-y-0">
+                                    <FormControl>
+                                      <Checkbox checked={field.value?.includes(category.id)} onCheckedChange={(checked) => {
+                                        return checked ? field.onChange([...(field.value || []), category.id]) : field.onChange(field.value?.filter((value) => value !== category.id))
+                                      }} />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">{category.name}</FormLabel>
+                                  </FormItem>
+                              )} />
+                            ))}
+                          </div>
+                        </ScrollArea>
                       )}
                       <FormMessage />
                     </FormItem>
                 )} />
+
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={() => (
+                    <FormItem>
+                      <div className="mb-4">
+                        <FormLabel>Tags (Loại sản phẩm)</FormLabel>
+                        <FormDescription>
+                          Chọn các tags phù hợp. Dùng để lọc sản phẩm theo loại.
+                        </FormDescription>
+                      </div>
+                       <ScrollArea className="h-48 rounded-md border">
+                          <div className="p-4 grid grid-cols-2 gap-2">
+                          {allTags.map((tag) => (
+                            <FormField
+                              key={tag.id}
+                              control={form.control}
+                              name="tags"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={tag.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(tag.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), tag.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== tag.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {tag.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </ScrollArea>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
           </div>
