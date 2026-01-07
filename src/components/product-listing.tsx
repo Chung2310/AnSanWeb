@@ -230,7 +230,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [clientProducts, activeFilters, activeSort, activeCategory, filters, categories]);
+  }, [clientProducts, activeFilters, activeSort, activeCategory, categories, filtersData]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
