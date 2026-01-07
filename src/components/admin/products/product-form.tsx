@@ -115,7 +115,7 @@ export function ProductForm() {
             });
         }
     }
-}, [defaultValues, form, isOpen]);
+}, [defaultValues, isOpen, form.reset]);
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
