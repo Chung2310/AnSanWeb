@@ -46,7 +46,7 @@ service cloud.firestore {
 
     match /roles_admin/{userId} {
       allow read: if request.auth.uid == userId;
-      allow write: if false; 
+      allow write: if isAdmin(); 
     }
   }
 }
