@@ -1,85 +1,86 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
-  Mail,
-  Settings,
-  LifeBuoy,
-  Package,
-  MessageSquare,
-  Newspaper,
   Home,
-  Users,
-  FileText,
+  Package,
+  Package2,
+  Settings,
+  ShoppingCart,
+  Users2,
+  LineChart,
+  Newspaper,
+  Tags,
 } from 'lucide-react';
-import Logo from '@/components/logo';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import Logo from '../logo';
 
-const links = [
-  { href: '/admin', label: 'Bảng điều khiển', icon: Home },
-  { href: '/admin/products', label: 'Sản phẩm', icon: Package },
-  { href: '/admin/product-details', label: 'Chi tiết Sản phẩm', icon: FileText },
-  { href: '/admin/blog', label: 'Bài viết', icon: Newspaper },
-  { href: '/admin/contacts', label: 'Tin nhắn', icon: MessageSquare },
-  { href: '/admin/newsletters', label: 'Bản tin', icon: Mail },
+const navLinks = [
+  { href: '/admin', icon: Home, label: 'Dashboard' },
+  { href: '/admin/orders', icon: ShoppingCart, label: 'Đơn hàng' },
+  { href: '/admin/products', icon: Package, label: 'Sản phẩm' },
+  { href: '/admin/categories', icon: Tags, label: 'Danh mục' },
+  { href: '/admin/news', icon: Newspaper, label: 'Tin tức' },
+  { href: '/admin/users', icon: Users2, label: 'Khách hàng' },
+  { href: '/admin/analytics', icon: LineChart, label: 'Phân tích' },
 ];
 
 export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <div className="hidden border-r bg-muted/40 md:block">
-      <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Logo />
-            <span className="">AnSan</span>
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <TooltipProvider>
+        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+          <Link
+            href="/admin"
+            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+          >
+            <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
+            <span className="sr-only">AnSan</span>
           </Link>
-        </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {links.map((link) => (
+          {navLinks.map(({ href, icon: Icon, label }) => (
+            <Tooltip key={href}>
+              <TooltipTrigger asChild>
+                <Link
+                  href={href}
+                  className={cn(
+                    'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8',
+                    {
+                      'bg-accent text-accent-foreground': pathname.startsWith(href),
+                    }
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="sr-only">{label}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">{label}</TooltipContent>
+            </Tooltip>
+          ))}
+        </nav>
+        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  pathname.startsWith(link.href) && 'bg-muted text-primary'
-                )}
+                href="/admin/settings"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
-                <link.icon className="h-4 w-4" />
-                {link.label}
+                <Settings className="h-5 w-5" />
+                <span className="sr-only">Settings</span>
               </Link>
-            ))}
-          </nav>
-        </div>
-        <div className="mt-auto p-4">
-          <Card x-chunk="dashboard-02-chunk-0">
-            <CardHeader className="p-2 pt-0 md:p-4">
-              <CardTitle>Cần Hỗ Trợ?</CardTitle>
-              <CardDescription>
-                Liên hệ với chúng tôi để được giải đáp các thắc mắc.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-              <Button size="sm" className="w-full">
-                <LifeBuoy className="mr-2 h-4 w-4" />
-                Hỗ trợ
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+            </TooltipTrigger>
+            <TooltipContent side="right">Settings</TooltipContent>
+          </Tooltip>
+        </nav>
+      </TooltipProvider>
+    </aside>
   );
 }

@@ -1,6 +1,26 @@
 'use client';
 
+import {
+  Home,
+  LineChart,
+  Package,
+  Package2,
+  PanelLeft,
+  Search,
+  ShoppingCart,
+  Users2,
+  Newspaper
+} from 'lucide-react';
 import Link from 'next/link';
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,114 +30,122 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, LogOut, Menu } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { usePathname, useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import Logo from '../logo';
-import { useAuth, useUser } from '@/firebase';
-import { signOut } from 'firebase/auth';
-import { useToast } from '@/hooks/use-toast';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { useAuthStore } from '@/stores/auth-store';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { usePathname } from 'next/navigation';
 
-
-const links = [
-    { href: '/admin', label: 'Bảng điều khiển' },
-    { href: '/admin/products', label: 'Sản phẩm' },
-    { href: '/admin/product-details', label: 'Chi tiết Sản phẩm' },
-    { href: '/admin/blog', label: 'Bài viết' },
-    { href: '/admin/contacts', label: 'Tin nhắn' },
-    { href: '/admin/newsletters', label: 'Bản tin' },
+const navLinks = [
+    { href: "/admin", icon: Home, label: "Dashboard" },
+    { href: "/admin/orders", icon: ShoppingCart, label: "Orders" },
+    { href: "/admin/products", icon: Package, label: "Products" },
+    { href: "/admin/categories", icon: Package2, label: "Categories" },
+    { href: "/admin/news", icon: Newspaper, label: "News" },
+    { href: "/admin/users", icon: Users2, label: "Customers" },
 ];
 
-export default function AdminHeader() {
-  const pathname = usePathname();
-  const auth = useAuth();
-  const { user } = useUser();
-  const { toast } = useToast();
-  const router = useRouter();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      toast({
-        title: 'Đăng xuất thành công',
-      });
-      router.push('/login');
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Lỗi đăng xuất',
-        description: 'Đã có lỗi xảy ra. Vui lòng thử lại.',
-      });
-    }
-  };
+export default function AdminHeader() {
+  const { user, logout } = useAuthStore();
+  const pathname = usePathname();
   
+  // Create breadcrumbs from pathname
+  const breadcrumbs = pathname.split('/').filter(Boolean);
+
+
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle navigation menu</span>
+          <Button size="icon" variant="outline" className="sm:hidden">
+            <PanelLeft className="h-5 w-5" />
+            <span className="sr-only">Toggle Menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="flex flex-col">
-          <nav className="grid gap-2 text-lg font-medium">
+        <SheetContent side="left" className="sm:max-w-xs">
+          <nav className="grid gap-6 text-lg font-medium">
             <Link
-              href="/"
-              className="flex items-center gap-2 text-lg font-semibold mb-4"
+              href="#"
+              className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <Logo />
+              <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
               <span className="sr-only">AnSan</span>
             </Link>
-            {links.map((link) => (
-               <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                      "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
-                      pathname === link.href && "bg-muted text-foreground"
-                  )}
+            {navLinks.map(({ href, icon: Icon, label }) => (
+                <Link
+                    key={href}
+                    href={href}
+                    className={`flex items-center gap-4 px-2.5 ${pathname === href ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
-                  {link.label}
+                    <Icon className="h-5 w-5" />
+                    {label}
                 </Link>
             ))}
           </nav>
         </SheetContent>
       </Sheet>
 
-      <div className="w-full flex-1" />
-
+      <Breadcrumb className="hidden md:flex">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/admin">Admin</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          {breadcrumbs.slice(1).map((crumb, index) => (
+            <React.Fragment key={crumb}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {index === breadcrumbs.length - 2 ? (
+                   <BreadcrumbPage className="capitalize">{crumb}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link href={`/${breadcrumbs.slice(0, index + 2).join('/')}`} className="capitalize">
+                      {crumb}
+                    </Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </React.Fragment>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+      
+      <div className="relative ml-auto flex-1 md:grow-0">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+        />
+      </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="secondary"
+            variant="outline"
             size="icon"
-            className="rounded-full"
+            className="overflow-hidden rounded-full"
           >
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={user?.photoURL || "https://picsum.photos/seed/admin-avatar/100/100"}
-                alt="Admin"
-              />
-              <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || 'A'}</AvatarFallback>
+            <Avatar>
+              <AvatarImage src={user?.avatar} alt={user?.name} />
+              <AvatarFallback>{user?.name?.charAt(0) || 'A'}</AvatarFallback>
             </Avatar>
-            <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{user?.email || 'Tài khoản của tôi'}</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem disabled>
-            <User className="mr-2 h-4 w-4" />
-            Hồ sơ
-          </DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Đăng xuất
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -1,13 +1,5 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useAuth } from '@/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter, redirect } from 'next/navigation';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,143 +8,78 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuthStore } from '@/stores/auth-store';
+import { useRouter } from 'next/navigation';
+import { useState, type FormEvent } from 'react';
 import Logo from '@/components/logo';
-import { useUser } from '@/firebase';
-import { Loader2 } from 'lucide-react';
-import { useEffect } from 'react';
-
-const formSchema = z.object({
-  email: z.string().email('Email không hợp lệ.'),
-  password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự.'),
-});
 
 export default function LoginPage() {
-  const auth = useAuth();
-  const { toast } = useToast();
+  const [email, setEmail] = useState('admin@example.com');
+  const [password, setPassword] = useState('password');
+  const [error, setError] = useState('');
+  const login = useAuthStore((state) => state.login);
   const router = useRouter();
-  const { user, isUserLoading } = useUser();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: 'admin@ansan.co',
-      password: 'ansan@123',
-    },
-  });
-
-  const { isSubmitting } = form.formState;
-  
-  useEffect(() => {
-    if (!isUserLoading && user) {
-        redirect('/admin');
-    }
-  }, [user, isUserLoading]);
-
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      toast({
-        title: 'Đăng nhập thành công!',
-        description: 'Chào mừng trở lại, quản trị viên.',
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+    // Simple validation
+    if (email === 'admin@example.com' && password === 'password') {
+      login({
+        name: 'Admin',
+        email: 'admin@example.com',
+        avatar: 'https://i.pravatar.cc/150?u=admin@example.com',
       });
       router.push('/admin');
-    } catch (error: any) {
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
-        // If user does not exist, try to create a new user
-        try {
-          await createUserWithEmailAndPassword(auth, values.email, values.password);
-          toast({
-            title: 'Tài khoản admin đã được tạo!',
-            description: 'Chào mừng bạn đến với trang quản trị.',
-          });
-          router.push('/admin');
-        } catch (creationError: any) {
-          toast({
-            variant: 'destructive',
-            title: 'Lỗi tạo tài khoản',
-            description: creationError.message || 'Đã có lỗi xảy ra khi tạo tài khoản admin.',
-          });
-        }
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Đăng nhập thất bại',
-          description: 'Đã có lỗi xảy ra. Vui lòng thử lại.',
-        });
-        console.error('Login error:', error);
-      }
+    } else {
+      setError('Invalid email or password.');
     }
   };
 
-  if (isUserLoading || user) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary">
-      <Card className="mx-auto max-w-sm w-full">
+    <div className="flex min-h-screen items-center justify-center bg-muted/40">
+      <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <Logo />
-          </div>
-          <CardTitle className="text-2xl font-bold">Đăng Nhập Admin</CardTitle>
+            <div className="flex justify-center mb-4">
+                <Logo />
+            </div>
+          <CardTitle className="text-2xl">Đăng nhập</CardTitle>
           <CardDescription>
-            Nhập email và mật khẩu của bạn để truy cập bảng điều khiển.
+            Nhập thông tin của bạn để truy cập trang quản trị.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="admin@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mật khẩu</FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Mật khẩu</Label>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Đăng Nhập
-              </Button>
-            </form>
-          </Form>
+            </div>
+            {error && <p className="text-xs text-red-500">{error}</p>}
+            <Button type="submit" className="w-full">
+              Đăng nhập
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
