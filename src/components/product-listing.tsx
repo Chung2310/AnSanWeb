@@ -7,8 +7,7 @@ import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
-import { useProducts } from "@/hooks/use-products";
-import { sampleWines } from "@/lib/placeholder-data";
+import { useCategories } from "@/hooks/use-categories";
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -96,6 +95,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const productsPerPage = 18;
 
   const [clientProducts, setClientProducts] = useState(initialProducts);
+  const { categories } = useCategories();
 
   // When initialProducts changes (from Firestore fetch), update the state
   useEffect(() => {
@@ -109,11 +109,18 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       return { label: brand, count: count };
     }).filter(brand => brand.count > 0);
 
+    const categoryOptions = categories?.map(cat => ({
+        label: cat.name,
+        value: cat.slug,
+        count: clientProducts.filter(p => p.tags?.includes(cat.slug)).length
+    })).filter(cat => cat.count > 0);
+
     return {
       "THƯƠNG HIỆU": brandsInProducts,
+      "DANH MỤC": categoryOptions || [],
       ...staticFiltersData
     }
-  }, [clientProducts]);
+  }, [clientProducts, categories]);
 
 
   const handleFilterChange = (group: string, value: string) => {
@@ -139,6 +146,12 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         products = products.filter(p => {
           return values.some(v => p.nameVN.toUpperCase().includes(v));
         });
+      }
+      if (group === "DANH MỤC") {
+          const categorySlugs = values.map(v => filtersData["DANH MỤC"].find(opt => opt.label === v)?.value);
+          products = products.filter(p => 
+              p.tags && categorySlugs.some(slug => slug && p.tags?.includes(slug))
+          );
       }
       if (group === "KHOẢNG GIÁ") {
           const priceRanges = values.map(v => filtersData["KHOẢNG GIÁ"].find(opt => opt.label === v)?.value);
@@ -289,5 +302,3 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     </div>
   );
 }
-
-    
