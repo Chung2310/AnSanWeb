@@ -107,13 +107,16 @@ service cloud.firestore {
     }
 
     /**
-     * @description Manages administrator roles. Only existing admins can add or remove other admins.
-     * The very first admin can be created by any authenticated user, securing the system initialization.
+     * @description Manages administrator roles. Any authenticated user can create their OWN admin role document.
+     * This is a temporary, broader rule to allow the first admin to self-assign their role.
+     * IMPORTANT: This rule should be tightened after the first admin is created.
+     * Only existing admins should be able to grant or revoke admin roles.
      * @path /roles_admin/{userId}
      */
      match /roles_admin/{userId} {
       allow get, list: if isAdmin();
-      allow create: if request.auth.uid == userId && (isFirstAdminCreation() || isAdmin());
+      // Temporarily allow any authenticated user to create their own admin role document.
+      allow create: if request.auth.uid == userId && request.auth != null;
       allow update, delete: if isAdmin();
     }
   }
