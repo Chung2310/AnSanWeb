@@ -7,6 +7,7 @@ import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import Sidebar from '@/components/admin/sidebar';
 import { useFirebase } from '@/firebase';
+import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({
   children,
