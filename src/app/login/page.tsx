@@ -16,7 +16,7 @@ import { useState, type FormEvent } from 'react';
 import Logo from '@/components/logo';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('admin@example.com');
+  const [email, setEmail] = useState('admin@ansan.com');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const login = useAuthStore((state) => state.login);
@@ -26,11 +26,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     // Simple validation
-    if (email === 'admin@example.com' && password === 'password') {
+    if (email === 'admin@ansan.com' && password === 'password') {
       login({
         name: 'Admin',
-        email: 'admin@example.com',
-        avatar: 'https://i.pravatar.cc/150?u=admin@example.com',
+        email: 'admin@ansan.com',
+        avatar: 'https://i.pravatar.cc/150?u=admin@ansan.com',
       });
       router.push('/admin');
     } else {
