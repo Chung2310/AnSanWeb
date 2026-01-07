@@ -19,20 +19,16 @@ interface UploadResult {
 export function useUploadStorage(): UploadResult {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { storage } = useFirebase();
+  const { storage } = useFirebase(); // Correctly use the hook to get storage instance
 
   const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo | null> => {
     return new Promise((resolve, reject) => {
       if (!file) {
-        const err = new Error('No file provided for upload.');
-        reject(err);
-        return;
+        return reject(new Error('No file provided for upload.'));
       }
       
       if (!storage) {
-        const err = new Error('Firebase Storage is not initialized.');
-        reject(err);
-        return;
+        return reject(new Error('Firebase Storage is not initialized.'));
       }
 
       setIsUploading(true);
@@ -56,7 +52,7 @@ export function useUploadStorage(): UploadResult {
           console.error("Upload failed:", uploadError);
           setIsUploading(false);
           setProgress(0);
-          reject(uploadError); // Reject the promise with the error
+          reject(uploadError); 
         },
         async () => {
           try {
@@ -72,7 +68,7 @@ export function useUploadStorage(): UploadResult {
             console.error("Failed to get download URL:", urlError);
             setIsUploading(false);
             setProgress(0);
-            reject(urlError); // Reject the promise with the error
+            reject(urlError);
           }
         }
       );
