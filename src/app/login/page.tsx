@@ -22,13 +22,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useFirebase, useFirestore } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
+import { useAuthStore } from '@/stores/auth-store';
 
 const formSchema = z.object({
   email: z.string().email('Email không hợp lệ.'),
@@ -40,6 +40,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { auth } = useFirebase();
   const firestore = useFirestore();
+  const { checkAdminStatus } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +52,8 @@ export default function LoginPage() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      await checkAdminStatus(userCredential.user);
       toast({
         title: 'Đăng nhập thành công!',
       });
@@ -66,6 +68,9 @@ export default function LoginPage() {
           );
           const roleDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
           await setDoc(roleDocRef, { role: 'admin' });
+          
+          await checkAdminStatus(newUserCredential.user);
+
           toast({
             title: 'Tài khoản admin đã được tạo.',
             description: 'Đang đăng nhập...',
@@ -78,11 +83,11 @@ export default function LoginPage() {
             description: creationError.message,
           });
         }
-      } else if (error.code === 'auth/wrong-password') {
+      } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
          toast({
             variant: 'destructive',
             title: 'Đăng nhập thất bại',
-            description: 'Sai mật khẩu. Vui lòng thử lại.',
+            description: 'Sai mật khẩu hoặc tài khoản. Vui lòng thử lại.',
           });
       } else {
         toast({
