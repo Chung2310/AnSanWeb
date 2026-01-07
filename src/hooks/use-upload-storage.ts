@@ -5,6 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  getStorage,
   UploadTask,
   UploadTaskSnapshot,
 } from 'firebase/storage';
@@ -19,7 +20,9 @@ interface UploadResult {
 export function useUploadStorage(): UploadResult {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { storage } = useFirebase(); // Correctly use the hook to get storage instance
+  const { firebaseApp } = useFirebase(); 
+  
+  const storage = getStorage(firebaseApp);
 
   const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo | null> => {
     return new Promise((resolve, reject) => {
