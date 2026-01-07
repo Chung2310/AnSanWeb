@@ -12,7 +12,7 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /products/{productId} {
+    match /products/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
