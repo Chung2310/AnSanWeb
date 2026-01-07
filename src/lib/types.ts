@@ -41,8 +41,8 @@ export type Product = {
   id: string;
   nameVN: string;
   slug: string;
-  description: string;
   price: number;
+  description: string;
   image: ImageInfo | null;
   isFeatured?: boolean;
   isNew?: boolean;
@@ -55,13 +55,6 @@ export type Product = {
   age?: number;
   cask?: string;
   nonChillFiltered?: boolean;
-};
-
-// Represents extended data for the product detail page - NO LONGER USED, MERGED INTO Product
-export type ProductDetail = {
-  id: string; // Must match the ID in the 'products' collection
-  description: string;
-  detailImage?: ImageInfo | null;
 };
 
 // Combined type for convenience when working with full product data

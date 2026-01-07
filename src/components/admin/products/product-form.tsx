@@ -142,28 +142,25 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         nameVN: data.nameVN,
         slug: data.slug,
         price: Number(data.price),
+        description: data.description || '',
         image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
         status: data.status,
         isFeatured: data.isFeatured,
         isNew: data.isNew,
         attributes: data.attributes || [],
         tags: data.tags || [],
-        description: data.description || '',
         updatedAt: serverTimestamp(),
       };
-      
-      const finalData = {
-          ...productData,
-          createdAt: initialData?.createdAt || serverTimestamp(),
-      }
 
       if (initialData) {
         const productRef = doc(firestore, 'products', initialData.id);
-        await updateDocumentNonBlocking(productRef, productData);
+        const finalData = { ...productData, createdAt: initialData.createdAt };
+        await setDoc(productRef, finalData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
 
       } else {
         const collectionRef = collection(firestore, 'products');
+        const finalData = { ...productData, createdAt: serverTimestamp() };
         await addDoc(collectionRef, finalData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
       }
