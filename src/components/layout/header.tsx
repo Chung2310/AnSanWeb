@@ -46,7 +46,7 @@ const mainNavLinks = [
 
 const categoryNavLinks = [
     {
-        href: '/danh-muc/ruou-vang',
+        href: '/danh-muc/ruou-vang/vang-y',
         label: 'RƯỢU VANG',
         sublinks: [
             { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
@@ -58,7 +58,7 @@ const categoryNavLinks = [
         ]
     },
     {
-        href: '/danh-muc/ruou-manh',
+        href: '/danh-muc/ruou-manh/ballantines-finest',
         label: 'RƯỢU MẠNH',
         sublinks: [
             { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S FINEST" },
@@ -70,7 +70,7 @@ const categoryNavLinks = [
         ]
     },
      {
-        href: '/danh-muc/cigar',
+        href: '/danh-muc/cigar/hanos',
         label: 'CIGAR',
         sublinks: [
             { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
@@ -97,17 +97,22 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
   if (sublinks) {
     return (
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-            className={cn("p-0 h-auto no-focus-border", linkClasses)}
+        <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} className="flex items-center">
+          <Link
+            href={href}
+            className={linkClasses}
           >
             {label}
-            <ChevronDown className="h-4 w-4 ml-1" />
-          </Button>
-        </DropdownMenuTrigger>
+          </Link>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className={cn("p-0 h-auto no-focus-border", linkClasses)}
+            >
+              <ChevronDown className="h-4 w-4 ml-1" />
+            </Button>
+          </DropdownMenuTrigger>
+        </div>
         <DropdownMenuContent 
           onMouseEnter={() => setOpen(true)} 
           onMouseLeave={() => setOpen(false)}
