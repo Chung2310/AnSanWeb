@@ -27,7 +27,7 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useFirebase, useFirestore } from '@/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const formSchema = z.object({
   email: z.string().email('Email không hợp lệ.'),
@@ -43,26 +43,34 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      email: 'admin@ansan.com',
       password: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleLogin = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      
+      // Step 1: Sign in the user
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+
+      // Step 2: If it's the admin email, ensure the admin role document exists.
       if (values.email === 'admin@ansan.com') {
         const roleDocRef = doc(firestore, 'roles_admin', userCredential.user.uid);
-        await setDoc(roleDocRef, { role: 'admin' });
+        // Use setDoc with merge to be safe. This will create or update the doc.
+        // The security rule now allows the user to write to their own role doc.
+        await setDoc(roleDocRef, { role: 'admin' }, { merge: true });
       }
 
       toast({
         title: 'Đăng nhập thành công!',
       });
       router.push('/admin');
-
     } catch (error: any) {
+      // If user does not exist AND it's the admin email, create the account first.
       if (error.code === 'auth/user-not-found' && values.email === 'admin@ansan.com') {
         try {
           const newUserCredential = await createUserWithEmailAndPassword(
@@ -70,27 +78,27 @@ export default function LoginPage() {
             values.email,
             values.password
           );
+          // After creating, set the admin role.
           const roleDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
           await setDoc(roleDocRef, { role: 'admin' });
-          
+
           toast({
-            title: 'Tài khoản admin đã được tạo.',
-            description: 'Đang đăng nhập...',
+            title: 'Tài khoản admin đã được tạo và đăng nhập thành công.',
           });
-          router.push('/admin');
+          router.push('/admin'); // Redirect to admin panel
         } catch (creationError: any) {
           toast({
             variant: 'destructive',
-            title: 'Lỗi tạo tài khoản',
+            title: 'Lỗi tạo tài khoản admin',
             description: creationError.message,
           });
         }
       } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-         toast({
-            variant: 'destructive',
-            title: 'Đăng nhập thất bại',
-            description: 'Sai mật khẩu hoặc tài khoản. Vui lòng thử lại.',
-          });
+        toast({
+          variant: 'destructive',
+          title: 'Đăng nhập thất bại',
+          description: 'Sai mật khẩu hoặc tài khoản. Vui lòng thử lại.',
+        });
       } else {
         toast({
           variant: 'destructive',
@@ -112,7 +120,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
