@@ -12,37 +12,30 @@ import { useFirebase } from '@/firebase';
 
 interface UploadResult {
   progress: number;
-  url: string | null;
-  error: string | null;
   isUploading: boolean;
   startUpload: (file: File, pathPrefix?: string) => Promise<ImageInfo | null>;
 }
 
 export function useUploadStorage(): UploadResult {
   const [progress, setProgress] = useState(0);
-  const [url, setUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const { storage } = useFirebase();
 
   const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo | null> => {
     return new Promise((resolve, reject) => {
       if (!file) {
-        const err = 'No file provided for upload.';
-        setError(err);
-        reject(new Error(err));
+        const err = new Error('No file provided for upload.');
+        reject(err);
         return;
       }
       
       if (!storage) {
-        const err = 'Firebase Storage is not initialized.';
-        setError(err);
-        reject(new Error(err));
+        const err = new Error('Firebase Storage is not initialized.');
+        reject(err);
         return;
       }
 
       setIsUploading(true);
-      setError(null);
       setProgress(0);
 
       const fileId = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
@@ -61,9 +54,9 @@ export function useUploadStorage(): UploadResult {
         },
         (uploadError) => {
           console.error("Upload failed:", uploadError);
-          setError(uploadError.message);
           setIsUploading(false);
-          reject(uploadError);
+          setProgress(0);
+          reject(uploadError); // Reject the promise with the error
         },
         async () => {
           try {
@@ -72,20 +65,19 @@ export function useUploadStorage(): UploadResult {
               url: downloadURL,
               path: storagePath,
             };
-            setUrl(downloadURL);
             setIsUploading(false);
             setProgress(100);
             resolve(imageInfo);
           } catch (urlError) {
             console.error("Failed to get download URL:", urlError);
-            setError((urlError as Error).message);
             setIsUploading(false);
-            reject(urlError);
+            setProgress(0);
+            reject(urlError); // Reject the promise with the error
           }
         }
       );
     });
   };
 
-  return { progress, url, error, isUploading, startUpload };
+  return { progress, isUploading, startUpload };
 }
