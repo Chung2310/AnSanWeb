@@ -30,12 +30,12 @@ export default function ProductsPage() {
     )
   }
   
-  const filteredProducts = products?.filter(wine => wine.nameVN.toLowerCase().includes('royal')) || [];
+  const spiritsProducts = products?.filter(wine => wine.tags?.includes('spirits')) || [];
 
   return (
     <ProductListing 
-      initialProducts={filteredProducts}
-      title="Rượu Royal"
+      initialProducts={spiritsProducts}
+      title="Rượu Mạnh"
     />
   );
 }
