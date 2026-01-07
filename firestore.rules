@@ -25,12 +25,10 @@ service cloud.firestore {
     /**
      * Checks if a user is a designated administrator.
      * Admin status is granted by the existence of a document in the /roles_admin collection
-     * where the document ID is the user's UID.
+     * where the document ID is the user's UID. This is a secure and performant way to check roles.
      */
     function isAdmin() {
-      // In a real app, you'd check a custom claim or a document.
-      // For this mock setup, we'll allow any authenticated user to be an admin.
-      return request.auth != null;
+      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
     /**
@@ -57,7 +55,7 @@ service cloud.firestore {
      */
     match /products/{productId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
 
     /**
@@ -66,7 +64,7 @@ service cloud.firestore {
      */
     match /product_details/{productId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
 
     /**
@@ -75,7 +73,7 @@ service cloud.firestore {
      */
     match /categories/{categoryId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
 
     /**
@@ -84,7 +82,7 @@ service cloud.firestore {
      */
     match /blogPosts/{blogPostId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
 
     /**
@@ -119,5 +117,3 @@ service cloud.firestore {
     }
   }
 }
-
-    
