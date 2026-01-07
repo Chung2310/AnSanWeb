@@ -24,7 +24,6 @@ export default function WineCard({ product }: WineCardProps) {
           />
         </div>
         <div className="p-4 bg-white">
-          <p className="text-xs text-gray-500 uppercase tracking-wider">{product.attributes.find(a => a.label.toLowerCase() === 'xuất xứ')?.value || 'N/A'}</p>
           <h3 className="mt-2 font-bold text-lg leading-tight text-black uppercase truncate group-hover:text-primary">
             {product.nameVN}
           </h3>
@@ -34,5 +33,3 @@ export default function WineCard({ product }: WineCardProps) {
     </div>
   );
 }
-
-    
