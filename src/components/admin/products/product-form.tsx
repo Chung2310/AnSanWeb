@@ -133,27 +133,30 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
 
-      try {
-        const imageInfo = await startUpload(file, 'products');
-        if (imageInfo) {
-          form.setValue('image', imageInfo);
-          setImagePreview(imageInfo.url);
-        }
-      } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Lỗi tải lên',
-          description: 'Không thể tải ảnh lên. Vui lòng thử lại.',
-        });
-        setImagePreview(null);
-      }
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    try {
+      // Start the actual upload
+      const imageInfo = await startUpload(file, 'products');
+      // On success, update the form with the real URL
+      form.setValue('image', imageInfo);
+      setImagePreview(imageInfo.url);
+    } catch (error: any) {
+      // On failure, show error and clear the preview
+      toast({
+        variant: 'destructive',
+        title: 'Lỗi tải lên',
+        description: error.message || 'Không thể tải ảnh lên. Vui lòng thử lại.',
+      });
+      setImagePreview(null);
+      form.setValue('image', null);
     }
   };
 
