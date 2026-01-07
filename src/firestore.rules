@@ -5,7 +5,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isAdmin() {
-      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      return request.auth != null && request.auth.token.email == 'admin@ansan.com';
     }
 
     match /{document=**} {
@@ -44,11 +44,9 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // This collection is no longer needed for auth checks
     match /roles_admin/{userId} {
-      allow read: if request.auth.uid == userId;
-      // Allow a logged-in user to create their own admin role document.
-      // This is safe because they can only write to their own document.
-      allow write: if request.auth.uid == userId;
+      allow read, write: if false;
     }
   }
 }
