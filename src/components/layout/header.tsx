@@ -47,7 +47,15 @@ const mainNavLinks = [
 const categoryNavLinks = [
     { href: '/danh-muc/wine', label: 'Rượu Vang' },
     { href: '/danh-muc/spirits', label: 'Rượu Mạnh' },
-    { href: '/danh-muc-san-pham', label: 'Cigar' },
+    { 
+      href: '/danh-muc/cigar', 
+      label: 'Cigar',
+      sublinks: [
+          { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
+          { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
+          { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
+      ]
+    },
     { href: '/danh-muc/bo-qua-tang', label: 'Bộ quà tặng' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'Khắc Tên Lên Chai' },
 ];
