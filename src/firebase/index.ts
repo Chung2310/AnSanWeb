@@ -2,12 +2,19 @@
 
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore'
+import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
+
+// This interface defines the shape of the object returned by getSdks.
+interface FirebaseServices {
+  firebaseApp: FirebaseApp;
+  auth: Auth;
+  firestore: Firestore;
+}
 
 // This function initializes Firebase and returns the SDKs.
 // It ensures that initialization only happens once.
-export function initializeFirebase() {
+export function initializeFirebase(): FirebaseServices {
   // If no apps are initialized, initialize a new one with the static config.
   if (!getApps().length) {
     const firebaseApp = initializeApp(firebaseConfig);
@@ -18,11 +25,11 @@ export function initializeFirebase() {
 }
 
 // This helper function gets the Auth and Firestore SDKs from a FirebaseApp instance.
-export function getSdks(firebaseApp: FirebaseApp) {
+function getSdks(firebaseApp: FirebaseApp): FirebaseServices {
   return {
     firebaseApp,
     auth: getAuth(firebaseApp),
-    firestore: getFirestore(firebaseApp)
+    firestore: getFirestore(firebaseApp),
   };
 }
 
