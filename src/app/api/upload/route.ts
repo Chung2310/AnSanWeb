@@ -1,43 +1,51 @@
 import { NextResponse } from 'next/server';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { initializeApp, getApps, getApp, type App } from 'firebase-admin/app';
+import { getStorage } from 'firebase-admin/storage';
 import { firebaseConfig } from '@/firebase/config';
 
-// Initialize Firebase on the server-side
-function initializeServerApp() {
+// Initialize Firebase Admin SDK
+function initializeAdminApp(): App {
   const apps = getApps();
-  if (apps.length) {
+  if (apps.length > 0) {
     return getApp();
   }
-  return initializeApp(firebaseConfig);
+  return initializeApp({
+    storageBucket: firebaseConfig.storageBucket,
+  });
 }
 
 export async function POST(request: Request) {
   try {
-    const app = initializeServerApp();
-    const storage = getStorage(app);
+    const adminApp = initializeAdminApp();
+    const bucket = getStorage(adminApp).bucket();
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get('file') as File | null;
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided.' }, { status: 400 });
     }
 
     const fileArrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(fileArrayBuffer);
     
     const fileId = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
     const fileExtension = file.name.split('.').pop();
     const fileName = `${fileId}.${fileExtension}`;
     const storagePath = `products/${fileName}`;
     
-    const storageRef = ref(storage, storagePath);
+    const fileUpload = bucket.file(storagePath);
 
-    // Pass the ArrayBuffer directly to uploadBytes
-    const snapshot = await uploadBytes(storageRef, fileArrayBuffer, {
-      contentType: file.type,
+    await fileUpload.save(buffer, {
+      metadata: {
+        contentType: file.type,
+      },
     });
 
-    const downloadURL = await getDownloadURL(snapshot.ref);
+    const [downloadURL] = await fileUpload.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2491', // Far-future expiration date
+    });
+
 
     return NextResponse.json({
       url: downloadURL,
@@ -46,6 +54,7 @@ export async function POST(request: Request) {
 
   } catch (e: any) {
     console.error('Upload API Error:', e);
+    // Provide a more specific error if available
     const errorMessage = e.message || 'Internal server error during file upload.';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
