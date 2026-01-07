@@ -73,9 +73,9 @@ export default function WhiskyRegionShowcase() {
         <motion.div
           key={activeImage?.id || 'default'}
           className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeIn' } }}
-          exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } }}
+          exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeIn' } }}
         >
           {activeImage && (
             <Image
@@ -85,20 +85,19 @@ export default function WhiskyRegionShowcase() {
               className="object-cover"
               data-ai-hint={activeImage.imageHint}
               sizes="100vw"
+              priority
             />
           )}
         </motion.div>
       </AnimatePresence>
-      <div className="absolute inset-0 bg-black/30" />
-
-
+      
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
         className="container relative z-10 flex flex-col items-start justify-center text-left"
       >
-        <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80">
+        <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 shadow-text">
           Lựa chọn vùng whisky
         </motion.p>
         <div className="my-6">
@@ -108,15 +107,13 @@ export default function WhiskyRegionShowcase() {
               variants={itemVariants}
               onMouseEnter={() => handleMouseEnter(region.imageId)}
               onMouseLeave={handleMouseLeave}
-            >
-              <Link
-                href={region.href}
-                className={`block font-headline font-black uppercase transition-all duration-300 hover:text-white hover:opacity-100 ${
+              className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 ${
                   region.prominent
                     ? 'text-6xl text-white'
                     : 'text-5xl text-white/60'
                 }`}
-              >
+            >
+              <Link href={region.href}>
                 {region.name}
               </Link>
             </motion.div>
@@ -132,8 +129,14 @@ export default function WhiskyRegionShowcase() {
           </Button>
         </motion.div>
       </motion.div>
+      <style jsx>{`
+        .shadow-text {
+          text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .font-headline {
+          text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+      `}</style>
     </section>
   );
 }
-
-    
