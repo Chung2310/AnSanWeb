@@ -46,7 +46,7 @@ const mainNavLinks = [
 
 const categoryNavLinks = [
     {
-        href: '/danh-muc/ruou-vang/vang-y',
+        href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
             { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
@@ -61,7 +61,7 @@ const categoryNavLinks = [
         href: '/danh-muc/ruou-manh/ballantines-finest',
         label: 'RƯỢU MẠNH',
         sublinks: [
-            { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S FINEST" },
+            { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S" },
             { href: '/danh-muc/ruou-manh/john-walker', label: 'JOHN WALKER' },
             { href: '/danh-muc/ruou-manh/mortlach', label: 'MORTLACH' },
             { href: '/danh-muc/ruou-manh/chivas', label: 'CHIVAS' },
@@ -97,7 +97,11 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
   if (sublinks) {
     return (
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} className="flex items-center">
+        <div 
+          onMouseEnter={() => setOpen(true)} 
+          onMouseLeave={() => setOpen(false)} 
+          className="flex items-center"
+        >
           <Link
             href={href}
             className={linkClasses}
