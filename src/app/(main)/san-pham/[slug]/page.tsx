@@ -5,58 +5,34 @@ import { useMemo } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake, ChevronRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { collection, query, where, doc } from 'firebase/firestore';
 import { useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
 import type { Product, ProductDetail, FullProduct } from '@/lib/types';
-import FaqSection from '@/components/faq-section';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-        <path d="M12.55,10.36c-1.39-0.08-2.58,1.03-2.66,2.42c-0.08,1.39,1.03,2.58,2.42,2.66c1.39,0.08,2.58-1.03,2.66-2.42C15.05,11.43,13.94,10.28,12.55,10.36z M8.13,12.82c0-2.61,2.12-4.73,4.73-4.73c2.61,0,4.73,2.12,4.73,4.73c0,2.61-2.12,4.73-4.73,4.73C10.25,17.55,8.13,15.43,8.13,12.82z M20.93,3.07c-1.5-1.5-3.48-2.33-5.59-2.33h-6.22c-4.43,0-8.03,3.6-8.03,8.03v6.22c0,4.43,3.6,8.03,8.03,8.03h6.22c4.43,0,8.03-3.6,8.03-8.03v-6.22C23.25,6.55,22.43,4.57,20.93,3.07z M17.58,12.82c0,2.9-2.36,5.25-5.25,5.25c-2.9,0-5.25-2.36-5.25-5.25c0-2.9,2.36-5.25,5.25-5.25C15.22,7.57,17.58,9.92,17.58,12.82z" />
-    </svg>
-);
-
-const perks = [
-    { icon: Truck, text: "Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km nội thành Hà Nội" },
-    { icon: Gem, text: "UỐNG THỬ MIỄN PHÍ tại showroom 31 Nguyễn Gia Thiều, Hà Nội" },
-    { icon: ShieldCheck, text: "Cam kết 100% sản phẩm CHẤT LƯỢNG" },
-    { icon: Handshake, text: "Cam kết giá bán CẠNH TRANH" },
-    { icon: User, text: "Nhiều chương trình sinh hoạt cộng đồng gia tăng trải nghiệm khách hàng" },
-    { icon: Phone, text: "Cam kết bồi thường nếu xảy ra vấn đề trong quá trình vận chuyển" },
-];
+import { Badge } from '@/components/ui/badge';
+import { allTags } from '@/lib/tags-data';
 
 function ProductDetailPageSkeleton() {
   return (
-     <div className="bg-white text-black">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
-          <Skeleton className="w-[800px] h-[1000px] max-h-[80vh]" />
-        </div>
-        <div className="md:col-span-1 container py-12 md:py-20">
-          <div className="max-w-2xl space-y-6">
-            <Skeleton className="h-4 w-1/3" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Separator />
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-            </div>
-            <Separator />
+    <div className="bg-white text-black py-12 md:py-20">
+      <div className="container max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div>
+            <Skeleton className="w-full aspect-square" />
+          </div>
+          <div className="space-y-6">
+            <Skeleton className="h-10 w-3/4" />
+            <Skeleton className="h-8 w-1/4" />
             <Skeleton className="h-24 w-full" />
-            <Separator />
-            <Skeleton className="h-48 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-12 w-full" />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function ProductDetailPage() {
@@ -80,6 +56,14 @@ export default function ProductDetailPage() {
 
   const isLoading = isProductLoading || isDetailLoading;
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  };
+  
+  const getTagLabel = (tagId: string) => {
+    return allTags.find(t => t.id === tagId)?.label || tagId;
+  }
+
   if (isLoading) {
     return <ProductDetailPageSkeleton />;
   }
@@ -87,102 +71,98 @@ export default function ProductDetailPage() {
   if (!fullProduct) {
     notFound();
   }
-  
-  const displayImage = fullProduct.detailImage || fullProduct.image;
-  const productTypeAttribute = fullProduct.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
 
   return (
     <div className="bg-white text-black">
-        <div className="bg-white">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* Image Column */}
-                <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
-                    {displayImage && (
-                        <Image
-                            src={displayImage.url}
-                            alt={fullProduct.nameVN}
-                            width={800}
-                            height={1000}
-                            className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
-                            priority
-                        />
-                    )}
-                </div>
-                {/* Details Column */}
-                <div className="md:col-span-1 container py-12 md:py-20">
-                <div className="max-w-2xl">
-                    <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
-                        <Link href="/" className="hover:text-primary">Trang chủ</Link>
-                        <ChevronRight className="h-4 w-4 mx-1" />
-                        {productTypeAttribute && (
-                            <Link href="/danh-muc-san-pham" className="hover:text-primary">{productTypeAttribute.value}</Link>
-                        )}
-                    </div>
-                    <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{fullProduct.nameVN}</h1>
-                    
-                    <Separator className="my-8" />
-                    
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 text-center">
-                        {fullProduct.attributes.map(attr => (
-                             <div key={attr.label}>
-                                <p className="text-xs uppercase text-muted-foreground tracking-widest">{attr.label}</p>
-                                <p className="mt-1 font-bold text-lg">{attr.value}</p>
-                            </div>
-                        ))}
-                         <div>
-                            <p className="text-xs uppercase text-muted-foreground tracking-widest">Tình trạng</p>
-                            <p className="mt-1 font-bold text-lg">Còn hàng</p>
+      <div className="container mx-auto max-w-5xl py-12 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+          {/* Image Column */}
+          <div className="sticky top-24">
+            {fullProduct.image?.url && (
+              <div className="bg-secondary rounded-lg p-8">
+                <Image
+                  src={fullProduct.image.url}
+                  alt={fullProduct.nameVN}
+                  width={800}
+                  height={800}
+                  className="w-full h-auto object-contain aspect-square drop-shadow-2xl"
+                  priority
+                />
+              </div>
+            )}
+            {fullProduct.isNew && (
+                <Badge className="absolute top-4 left-4" variant="destructive">MỚI</Badge>
+            )}
+             {fullProduct.isFeatured && (
+                <Badge className="absolute top-4 right-4">NỔI BẬT</Badge>
+            )}
+          </div>
+
+          {/* Details Column */}
+          <div className="space-y-8">
+            <div>
+              <h1 className="font-headline text-3xl md:text-4xl font-bold text-gray-800">
+                {fullProduct.nameVN}
+              </h1>
+              <p className="text-3xl font-semibold text-primary mt-4">
+                {formatPrice(fullProduct.price)}
+              </p>
+            </div>
+
+            <Separator />
+            
+            <div>
+                <h2 className="text-lg font-bold text-gray-700 mb-4">Thông tin chi tiết</h2>
+                <div className="space-y-3 text-gray-600">
+                    {fullProduct.attributes.map(attr => (
+                        <div key={attr.label} className="grid grid-cols-2 gap-4">
+                            <span className="font-semibold">{attr.label}:</span>
+                            <span>{attr.value}</span>
                         </div>
+                    ))}
+                    <div className="grid grid-cols-2 gap-4">
+                        <span className="font-semibold">Tình trạng:</span>
+                        <span>Còn hàng</span>
                     </div>
+                </div>
+            </div>
 
-                    <Separator className="my-8" />
-
-                    <div>
-                    <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Liên hệ để nhận tư vấn</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><Phone className="h-4 w-4"/> ĐIỆN THOẠI</Button>
-                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> MESSENGER</Button>
-                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><ZaloIcon className="h-4 w-4"/> ZALO</Button>
-                        <Button variant="outline" className="rounded-none justify-start gap-2 h-12 text-xs font-bold tracking-widest"><MessageCircle className="h-4 w-4"/> WHATSAPP</Button>
-                    </div>
-                    </div>
-
-                    <Separator className="my-8" />
-                    
-                    <div>
-                    <h3 className="font-bold text-sm tracking-wider uppercase mb-6">Giá độc quyền trên website</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-                        {perks.map((perk, index) => (
-                            <div key={index} className="flex items-center gap-4">
-                                <perk.icon className="h-7 w-7 text-primary/80 shrink-0" />
-                                <p className="text-sm text-foreground/70">{perk.text}</p>
-                            </div>
+            <Button size="lg" className="w-full h-12 text-lg">
+              Liên Hệ Đặt Hàng
+            </Button>
+            
+            {fullProduct.tags && fullProduct.tags.length > 0 && (
+                 <div>
+                    <h2 className="text-lg font-bold text-gray-700 mb-4">Loại sản phẩm</h2>
+                    <div className="flex flex-wrap gap-2">
+                        {fullProduct.tags.map(tag => (
+                            <Badge key={tag} variant="secondary" className="font-normal">
+                                {getTagLabel(tag)}
+                            </Badge>
                         ))}
                     </div>
-                    </div>
                 </div>
-                </div>
-            </div>
+            )}
+          </div>
         </div>
-      
-      {fullProduct.description && (
-        <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
-            <div className="container max-w-4xl mx-auto">
-                <h2 className="text-center font-headline text-4xl font-black uppercase mb-10" style={{color: '#5a5a5a'}}>
-                    Mô tả chi tiết
-                </h2>
-                <div 
-                    className="prose prose-lg dark:prose-invert max-w-none" 
-                    style={{color: '#5a5a5a'}}
-                    dangerouslySetInnerHTML={{ __html: fullProduct.description.replace(/\n/g, '<br />') }}
-                >
-                </div>
-            </div>
-        </section>
-      )}
 
-      <FaqSection />
-      
+        {/* Description Section */}
+        {fullProduct.description && (
+          <div className="mt-20">
+            <Separator />
+            <div className="py-12 max-w-4xl mx-auto">
+              <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+                Mô Tả Sản Phẩm
+              </h2>
+              <div 
+                className="prose prose-lg dark:prose-invert max-w-none text-gray-600 leading-relaxed" 
+                dangerouslySetInnerHTML={{ __html: fullProduct.description.replace(/\n/g, '<br />') }}
+              >
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
