@@ -1,9 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL, StorageError } from 'firebase/storage';
-import { useFirebaseApp } from '@/firebase';
 import type { ImageInfo } from '@/lib/types';
-
 
 interface UploadResult {
   progress: number;
@@ -14,52 +11,52 @@ interface UploadResult {
 }
 
 export function useUploadStorage(): UploadResult {
-  const firebaseApp = useFirebaseApp();
-  const storage = getStorage(firebaseApp);
-
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const startUpload = (file: File, pathPrefix = 'uploads'): Promise<ImageInfo | null> => {
+  const startUpload = (file: File): Promise<ImageInfo | null> => {
     return new Promise(async (resolve, reject) => {
       if (!file) {
         const err = 'No file provided for upload.';
         setError(err);
-        reject(err);
+        reject(new Error(err));
         return;
       }
-      
-      const fileId = `${Date.now()}-${Math.random().toString(36).substring(2)}`;
-      const fileExtension = file.name.split('.').pop();
-      const fileName = `${fileId}.${fileExtension}`;
-      const storagePath = `${pathPrefix}/${fileName}`;
-      const storageRef = ref(storage, storagePath);
 
       setIsUploading(true);
       setError(null);
-      setProgress(0); // Indicate start
+      setProgress(0);
+
+      const formData = new FormData();
+      formData.append('file', file);
 
       try {
-        // Use uploadBytes for a simpler, non-resumable upload
-        const snapshot = await uploadBytes(storageRef, file);
-        setProgress(50); // Halfway after upload promise resolves
+        setProgress(30);
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        setProgress(70);
 
-        const downloadURL = await getDownloadURL(snapshot.ref);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Upload failed');
+        }
+
+        const imageInfo: ImageInfo = await response.json();
         
-        setUrl(downloadURL);
-        setProgress(100); // Complete
-        const imageInfo: ImageInfo = { url: downloadURL, path: storagePath };
-        
+        setUrl(imageInfo.url);
+        setProgress(100);
         setIsUploading(false);
         resolve(imageInfo);
-      } catch (uploadError) {
-        const finalError = uploadError as StorageError;
-        setError(finalError.message);
-        console.error("Upload failed:", finalError);
+
+      } catch (uploadError: any) {
+        setError(uploadError.message);
+        console.error("Upload failed:", uploadError);
         setIsUploading(false);
-        reject(finalError);
+        reject(uploadError);
       }
     });
   };
