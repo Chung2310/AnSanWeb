@@ -1,31 +1,6 @@
-/**
- * This ruleset governs access to a premium wine showcase application.
- *
- * Core Philosophy:
- * The security model separates public-facing content from privately submitted data.
- * Public content like wines, categories, and blog posts are readable by anyone to
- * ensure a smooth browsing experience for all visitors. All write operations
- * (create, update, delete) on this content are restricted to administrators.
- * Data submitted by users, such as contact forms and newsletter subscriptions, can be
- * created by anyone but is strictly private and can only be read or managed by administrators.
- *
- * Data Structure:
- * The data is organized into a flat structure with distinct top-level collections
- * for each entity (e.g., /wines, /categories, /contacts). This approach simplifies
- * security rules by ensuring that all documents within a single collection share the
- * same access control pattern, which is ideal for secure and performant list queries.
- *
- * Key Security Decisions:
- * - Administrator privileges are determined by the existence of a user's UID in the
- *   /admins collection. This is a highly performant and secure method for role checking.
- * - Public list access is safely enabled on content collections (/products, /categories, /blogPosts)
- *   because all documents within them are intended for public viewing.
- * - List access is denied for all non-administrators on private data collections
- *   (/contacts, /newsletterSubscriptions) to prevent data leakage.
- * - Anonymous or unauthenticated users are permitted to create documents in the
- *   /contacts and /newsletterSubscriptions collections to support public-facing forms.
- */
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
