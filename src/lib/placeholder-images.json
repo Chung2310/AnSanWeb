@@ -171,7 +171,7 @@
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -183,31 +183,31 @@
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
       "id": "category-sparkling",
       "description": "Champagne flutes being filled",
-      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "champagne flutes"
     },
     {
       "id": "category-dessert",
       "description": "Pouring a sweet dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1699968359715-a22a1df56a68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3dlZXQlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1699968359715-a22a1df56a68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3dlZXQlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "sweet wine"
     },
     {
       "id": "brand-story",
       "description": "Interior of an old wine cellar",
-      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "wine cellar"
     },
     {
@@ -255,13 +255,13 @@
     {
       "id": "avatar-2",
       "description": "Smiling woman",
-      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "woman smiling"
     },
     {
       "id": "avatar-3",
       "description": "Smiling person",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "person smiling"
     },
     {
@@ -323,6 +323,18 @@
       "description": "Springbank 27 Year Old whisky bottle and box.",
       "imageUrl": "/images/banner/campbeltown.jpg",
       "imageHint": "springbank whisky"
+    },
+    {
+      "id": "banner-japanese-whisky",
+      "description": "Japanese whisky banner image.",
+      "imageUrl": "/images/dt_japanese_whisky_banner.webp",
+      "imageHint": "japanese whisky"
+    },
+    {
+      "id": "banner-world-whisky",
+      "description": "World whisky banner image.",
+      "imageUrl": "/images/Artboard-19-2.webp",
+      "imageHint": "world whisky"
     },
     {
       "id": "minskoye-shampanskoye",

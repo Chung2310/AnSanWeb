@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { motion, useAnimation, useInView } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,36 +31,66 @@ const itemVariants = {
 };
 
 const regions = [
-  { name: 'SCOTCH WHISKY', href: '/danh-muc/scotch-whisky', prominent: true },
-  { name: 'JAPANESE WHISKY', href: '/danh-muc/world-whisky/whisky-nhat', prominent: false },
-  { name: 'WORLD WHISKY', href: '/danh-muc/world-whisky', prominent: false },
+  { name: 'SCOTCH WHISKY', href: '/danh-muc/scotch-whisky', prominent: true, imageId: 'featured-macallan-25' },
+  { name: 'JAPANESE WHISKY', href: '/danh-muc/world-whisky/whisky-nhat', prominent: false, imageId: 'banner-japanese-whisky' },
+  { name: 'WORLD WHISKY', href: '/danh-muc/world-whisky', prominent: false, imageId: 'banner-world-whisky' },
 ];
+
+const getImage = (id: string): ImagePlaceholder | undefined => {
+  return PlaceHolderImages.find((img) => img.id === id);
+};
 
 export default function WhiskyRegionShowcase() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const mainControls = useAnimation();
-  const featuredImage = PlaceHolderImages.find((img) => img.id === 'featured-macallan-25');
+  
+  const defaultImage = getImage('featured-macallan-25');
+  const [activeImage, setActiveImage] = useState<ImagePlaceholder | undefined>(defaultImage);
 
   useEffect(() => {
     if (isInView) {
       mainControls.start('visible');
     }
   }, [isInView, mainControls]);
+  
+  const handleMouseEnter = (imageId: string) => {
+    const image = getImage(imageId);
+    if (image) {
+      setActiveImage(image);
+    }
+  };
+  
+  const handleMouseLeave = () => {
+    setActiveImage(defaultImage);
+  };
 
-  if (!featuredImage) return null;
+  if (!defaultImage) return null;
 
   return (
     <section ref={ref} className="relative text-white py-20 bg-background overflow-hidden min-h-[600px] flex items-center">
-       <Image
-        src={featuredImage.imageUrl}
-        alt={featuredImage.description}
-        fill
-        className="object-cover"
-        data-ai-hint={featuredImage.imageHint}
-        sizes="100vw"
-      />
-      {/* <div className="absolute inset-0 bg-black/60" /> */}
+      <AnimatePresence>
+        <motion.div
+          key={activeImage?.id || 'default'}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.5, ease: 'easeIn' } }}
+          exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
+        >
+          {activeImage && (
+            <Image
+              src={activeImage.imageUrl}
+              alt={activeImage.description}
+              fill
+              className="object-cover"
+              data-ai-hint={activeImage.imageHint}
+              sizes="100vw"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-black/30" />
+
 
       <motion.div
         variants={containerVariants}
@@ -73,7 +103,12 @@ export default function WhiskyRegionShowcase() {
         </motion.p>
         <div className="my-6">
           {regions.map((region) => (
-            <motion.div key={region.name} variants={itemVariants}>
+            <motion.div 
+              key={region.name} 
+              variants={itemVariants}
+              onMouseEnter={() => handleMouseEnter(region.imageId)}
+              onMouseLeave={handleMouseLeave}
+            >
               <Link
                 href={region.href}
                 className={`block font-headline font-black uppercase transition-all duration-300 hover:text-white hover:opacity-100 ${
@@ -100,3 +135,5 @@ export default function WhiskyRegionShowcase() {
     </section>
   );
 }
+
+    
