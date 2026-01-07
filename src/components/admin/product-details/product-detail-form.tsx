@@ -35,6 +35,7 @@ const formSchema = z.object({
   detailImage: z.object({
       url: z.string(),
       path: z.string(),
+      imageHint: z.string().optional(),
   }).nullable(),
   tastingNotes: z.object({
       brand: z.string().optional(),
@@ -88,7 +89,7 @@ export function ProductDetailForm() {
         },
       });
     }
-  }, [defaultValues, form, isOpen]);
+  }, [defaultValues, isOpen, form.reset]);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !id) return;
@@ -96,6 +97,7 @@ export function ProductDetailForm() {
     const detailDocRef = doc(firestore, 'product_details', id);
     
     const detailData = {
+        id,
         description: values.description || '',
         detailImage: values.detailImage,
         tastingNotes: values.tastingNotes,
@@ -125,7 +127,7 @@ export function ProductDetailForm() {
                   fieldName="detailImage"
                   label="Ảnh trang chi tiết"
                   defaultUrl={form.getValues('detailImage.url')}
-                  onUploadStateChange={(isUploading, fieldName) => handleUploadStateChange(isUploading, 'detailImage')}
+                  onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'detailImage')}
               />
               <FormField
                   control={form.control}
