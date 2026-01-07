@@ -1,4 +1,3 @@
-
 export type ImageInfo = {
   url: string;
   path: string;
@@ -76,7 +75,6 @@ export type Category = {
   description?: string;
   image?: ImageInfo | null;
   status: 'active' | 'inactive';
-  createdAt: string;
 };
 
 export type BlogPost = {
@@ -105,6 +103,3 @@ export type Testimonial = {
     imageHint: string,
   };
 };
-
-    
-    
