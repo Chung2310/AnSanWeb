@@ -42,7 +42,7 @@ export type Product = {
   nameEN: string;
   slug: string;
   price: number;
-  image: ImageInfo;
+  image: ImageInfo | null;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
@@ -72,7 +72,7 @@ export type Category = {
   name: string;
   slug: string;
   description?: string;
-  image?: ImageInfo;
+  image?: ImageInfo | null;
   status: 'active' | 'inactive';
   createdAt: string;
 };
@@ -104,4 +104,5 @@ export type Testimonial = {
   };
 };
 
+    
     

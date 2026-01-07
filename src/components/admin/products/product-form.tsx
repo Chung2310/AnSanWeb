@@ -37,7 +37,7 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().url("URL ảnh không hợp lệ."),
     path: z.string(),
-  }),
+  }).nullable(),
   isFeatured: z.boolean().default(false),
   isNew: z.boolean().default(true),
   tags: z.string().optional(),
@@ -63,6 +63,7 @@ export default function ProductForm() {
       nameEN: '',
       slug: '',
       price: 0,
+      image: null,
       isFeatured: false,
       isNew: true,
       tags: '',
@@ -75,15 +76,16 @@ export default function ProductForm() {
       const valuesToSet = defaultValues 
         ? {
             ...defaultValues,
-            tags: defaultValues.tags?.join(', '), // Convert array to comma-separated string
+            tags: defaultValues.tags?.join(', '),
             price: defaultValues.price || 0,
+            image: defaultValues.image || null,
           }
         : {
             nameVN: '',
             nameEN: '',
             slug: '',
             price: 0,
-            image: undefined,
+            image: null,
             isFeatured: false,
             isNew: true,
             tags: '',
@@ -109,6 +111,11 @@ export default function ProductForm() {
 
   const onSubmit = async (values: ProductFormValues) => {
     try {
+      if (!values.image) {
+        form.setError('image', { type: 'manual', message: 'Vui lòng tải lên một ảnh đại diện.' });
+        return;
+      }
+
       const dataToSave = {
         ...values,
         tags: values.tags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
@@ -151,6 +158,24 @@ export default function ProductForm() {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+             <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Ảnh đại diện</FormLabel>
+                        <FormControl>
+                            <FileUploader 
+                                fieldName="image"
+                                onFieldChange={field.onChange}
+                                defaultUrl={field.value?.url}
+                            />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+
             <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                     control={form.control}
@@ -205,25 +230,6 @@ export default function ProductForm() {
                     )}
                 />
             </div>
-
-             <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Ảnh đại diện</FormLabel>
-                        <FormControl>
-                             <Input
-                                type="text"
-                                placeholder="Dán URL ảnh vào đây"
-                                onChange={(e) => field.onChange({ url: e.target.value, path: e.target.value })}
-                                value={field.value?.url || ''}
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-                />
 
              <FormField
                 control={form.control}
@@ -290,3 +296,4 @@ export default function ProductForm() {
     </Dialog>
   );
 }
+    
