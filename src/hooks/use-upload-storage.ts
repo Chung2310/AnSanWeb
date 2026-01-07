@@ -20,18 +20,17 @@ interface UploadResult {
 export function useUploadStorage(): UploadResult {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { firebaseApp } = useFirebase(); 
-  
-  const storage = getStorage(firebaseApp);
+  const { firebaseApp } = useFirebase();
 
   const startUpload = (file: File, pathPrefix = 'products'): Promise<ImageInfo | null> => {
     return new Promise((resolve, reject) => {
+      if (!firebaseApp) {
+        return reject(new Error('Firebase app is not initialized.'));
+      }
+      const storage = getStorage(firebaseApp);
+      
       if (!file) {
         return reject(new Error('No file provided for upload.'));
-      }
-      
-      if (!storage) {
-        return reject(new Error('Firebase Storage is not initialized.'));
       }
 
       setIsUploading(true);
@@ -55,7 +54,7 @@ export function useUploadStorage(): UploadResult {
           console.error("Upload failed:", uploadError);
           setIsUploading(false);
           setProgress(0);
-          reject(uploadError); 
+          reject(uploadError);
         },
         async () => {
           try {
