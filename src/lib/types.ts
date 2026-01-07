@@ -40,7 +40,6 @@ export type ProductAttribute = {
 export type Product = {
   id: string;
   nameVN: string;
-  nameEN: string;
   slug: string;
   description?: string;
   price: number;

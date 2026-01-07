@@ -5,7 +5,7 @@ import ProductForm from '@/components/admin/products/product-form';
 import { useMemo } from 'react';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
-import type { Product } from '@/lib/types';
+import type { FullProduct } from '@/lib/types';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 
@@ -18,7 +18,7 @@ export default function EditProductPage() {
     () => doc(firestore, 'products', productId as string),
     [firestore, productId]
   );
-  const { data: product, isLoading } = useDoc<Product>(productRef);
+  const { data: product, isLoading } = useDoc<FullProduct>(productRef);
 
   if (isLoading) {
     return (

@@ -61,7 +61,6 @@ const productAttributeSchema = z.object({
 
 const formSchema = z.object({
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
-  nameEN: z.string().optional(),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
   description: z.string().optional(),
@@ -97,7 +96,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     defaultValues: initialData
       ? {
           ...initialData,
-          nameEN: initialData.nameEN || '',
           description: initialData.description || '',
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
@@ -105,7 +103,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         }
       : {
           nameVN: '',
-          nameEN: '',
           slug: '',
           price: 0,
           description: '',
@@ -148,7 +145,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     try {
       const mainProductData = {
         nameVN: data.nameVN,
-        nameEN: data.nameEN || data.nameVN,
         slug: data.slug,
         price: Number(data.price),
         image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
@@ -201,8 +197,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <Card>
               <CardHeader><CardTitle>Thông tin cơ bản</CardTitle></CardHeader>
               <CardContent className="space-y-4">
-                <FormField control={form.control} name="nameVN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm (VN)</FormLabel><FormControl><Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="nameEN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm (EN)</FormLabel><FormControl><Input placeholder="Ex: The Macallan 18" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="nameVN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm</FormLabel><FormControl><Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabel>Đường dẫn (Slug)</FormLabel><FormControl><Input placeholder="the-macallan-18" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="price" render={({ field }) => (<FormItem><FormLabel>Giá</FormLabel><FormControl><Input type="number" placeholder="0" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Mô tả chi tiết</FormLabel><FormControl><Textarea placeholder="Mô tả chi tiết về sản phẩm..." {...field} rows={15} /></FormControl><FormMessage /></FormItem>)} />
