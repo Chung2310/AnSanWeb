@@ -26,7 +26,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
 import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { doc } from 'firebase/firestore';
-import FileUploader from '@/components/admin/products/file-uploader';
 import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -34,7 +33,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   detailImage: z.object({
       url: z.string(),
-      path: z.string(),
+      path: z.string().optional(),
       imageHint: z.string().optional(),
   }).nullable(),
   tastingNotes: z.object({
@@ -47,14 +46,12 @@ const formSchema = z.object({
       finish: z.string().min(1, "Bắt buộc"),
       color: z.string().min(1, "Bắt buộc"),
   }).nullable(),
-  // productDetails will be handled as a raw JSON string for simplicity
 });
 
 export function ProductDetailForm() {
   const { isOpen, onClose, id } = useProductDetailDialog();
   const firestore = useFirestore();
-  const [uploadingStatus, setUploadingStatus] = useState({ detailImage: false });
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,12 +62,6 @@ export function ProductDetailForm() {
   });
   
   const { isSubmitting } = form.formState;
-
-  const handleUploadStateChange = useCallback((uploading: boolean, fieldName: 'detailImage') => {
-    setUploadingStatus(prev => ({ ...prev, [fieldName]: uploading }));
-  }, []);
-
-  const isAnyUploading = Object.values(uploadingStatus).some(status => status);
 
   useEffect(() => {
     if (isOpen) {
@@ -98,23 +89,22 @@ export function ProductDetailForm() {
     if (!firestore || !id) return;
     const { defaultValues } = useProductDetailDialog.getState();
 
-    const detailDocRef = doc(firestore, 'product_details', id);
-    
     const detailData = {
         id,
         description: values.description || '',
-        detailImage: values.detailImage,
+        detailImage: values.detailImage ? {
+            ...values.detailImage,
+            path: values.detailImage.path || '',
+            imageHint: values.detailImage.imageHint || '',
+        } : null,
         tastingNotes: values.tastingNotes,
-        // For now, we keep productDetails as it is, will add form fields later
         productDetails: defaultValues?.productDetails || null,
     };
 
-    await setDocumentNonBlocking(detailDocRef, detailData, { merge: true });
+    await setDocumentNonBlocking(doc(firestore, 'product_details', id), detailData, { merge: true });
     
     onClose();
   };
-
-  const defaultValues = useProductDetailDialog.getState().defaultValues;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -128,11 +118,18 @@ export function ProductDetailForm() {
         <FormProvider {...form}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 py-4">
-              <FileUploader
-                  fieldName="detailImage"
-                  label="Ảnh trang chi tiết"
-                  defaultUrl={defaultValues?.detailImage?.url}
-                  onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'detailImage')}
+              <FormField
+                control={form.control}
+                name="detailImage.url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL Ảnh trang chi tiết</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="https://example.com/image.jpg" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <FormField
                   control={form.control}
@@ -173,8 +170,8 @@ export function ProductDetailForm() {
                   <Button type="button" variant="outline" onClick={onClose}>
                   Hủy
                   </Button>
-                  <Button type="submit" disabled={isSubmitting || isAnyUploading}>
-                  {(isSubmitting || isAnyUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Lưu Thay Đổi
                   </Button>
               </DialogFooter>
