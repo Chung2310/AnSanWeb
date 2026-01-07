@@ -8,7 +8,6 @@
       "properties": {
         "id": { "type": "string", "description": "Unique identifier for the wine product." },
         "nameVN": { "type": "string", "description": "Wine name in Vietnamese." },
-        "nameEN": { "type": "string", "description": "Wine name in English." },
         "slug": { "type": "string", "description": "URL-friendly slug for the wine product." },
         "price": { "type": "number", "description": "Price of the wine." },
         "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
