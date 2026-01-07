@@ -2,9 +2,8 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase';
+import { Auth, onAuthStateChanged, User } from 'firebase/auth';
+import { doc, getDoc, Firestore } from 'firebase/firestore';
 
 interface AuthState {
   user: User | null;
@@ -13,57 +12,60 @@ interface AuthState {
   setUser: (user: User | null) => void;
   setIsAdmin: (isAdmin: boolean) => void;
   logout: () => void;
-  initializeAuthListener: () => () => void;
+  initializeAuthListener: (auth: Auth, firestore: Firestore) => () => void;
 }
 
-const { auth, firestore } = initializeFirebase();
+// This function will be called by the provider, not here.
+const initializeListener = (set: (fn: (state: AuthState) => Partial<AuthState>) => void, auth: Auth, firestore: Firestore) => {
+    set(state => ({ ...state, isAuthLoading: true }));
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        set(state => ({ ...state, user }));
+        if (user) {
+            try {
+                const roleDocRef = doc(firestore, 'roles_admin', user.uid);
+                const roleDoc = await getDoc(roleDocRef);
+                set(state => ({ ...state, isAdmin: roleDoc.exists() && roleDoc.data()?.role === 'admin' }));
+            } catch (error) {
+                console.error("Error checking admin status:", error);
+                set(state => ({ ...state, isAdmin: false }));
+            }
+        } else {
+            set(state => ({ ...state, isAdmin: false }));
+        }
+        set(state => ({ ...state, isAuthLoading: false }));
+    });
+    return unsubscribe;
+};
+
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isAdmin: false,
       isAuthLoading: true,
       setUser: (user) => set({ user }),
       setIsAdmin: (isAdmin) => set({ isAdmin }),
       logout: () => {
-        auth.signOut();
-        set({ user: null, isAdmin: false });
+        // Auth instance will be available when this is called from the app
       },
-      initializeAuthListener: () => {
-        set({ isAuthLoading: true });
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          set({ user });
-          if (user) {
-            try {
-              const roleDocRef = doc(firestore, 'roles_admin', user.uid);
-              const roleDoc = await getDoc(roleDocRef);
-              set({ isAdmin: roleDoc.exists() && roleDoc.data()?.role === 'admin' });
-            } catch (error) {
-              console.error("Error checking admin status:", error);
-              set({ isAdmin: false });
+      initializeAuthListener: (auth: Auth, firestore: Firestore) => {
+        // Redefine logout with the auth instance
+        set({
+            logout: () => {
+                auth.signOut();
+                set({ user: null, isAdmin: false });
             }
-          } else {
-            set({ isAdmin: false });
-          }
-          set({ isAuthLoading: false });
         });
-        return unsubscribe;
-      },
+        return initializeListener(set, auth, firestore);
+      }
     }),
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => sessionStorage),
-      onRehydrateStorage: () => (state, error) => {
-        if (state) {
-          state.initializeAuthListener();
-        }
-      },
+       // We don't need onRehydrateStorage as initialization is now handled by the provider.
+       // We also exclude functions from being persisted.
+      partialize: (state) => ({ user: state.user, isAdmin: state.isAdmin }),
     }
   )
 );
-
-// Initialize the listener when the app loads on the client
-if (typeof window !== 'undefined') {
-    useAuthStore.getState().initializeAuthListener();
-}

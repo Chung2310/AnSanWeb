@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import Sidebar from '@/components/admin/sidebar';
-import { useFirebase } from '@/firebase';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({
@@ -32,7 +31,7 @@ export default function AdminLayout({
     );
   }
   
-  if (!isAdmin) {
+  if (!user || !isAdmin) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <h1 className="mt-4 text-2xl font-bold">Truy cập bị từ chối</h1>
