@@ -804,6 +804,42 @@ tastingNotes: genericTastingNotes,
     productDetails: genericProductDetails,
     isNew: true,
     createdAt: '2024-08-10',
+  },
+  {
+    id: '35',
+    nameVN: "Ballantine's Finest",
+    nameEN: "Ballantine's Finest",
+    slug: 'ballantines-finest',
+    price: 441000,
+    description: 'Bản có hộp. Phối trộn từ hơn 40 loại Whisky ngũ cốc và mạch nha đơn cất.',
+    image: getImage('ballantines-finest'),
+    tags: ['scotch', 'blended'],
+    attributes: [
+      { label: 'Xuất xứ', value: 'Scotland' },
+      { label: 'Loại', value: 'Blended Scotch Whisky' },
+      { label: 'Nồng độ', value: '40%' },
+    ],
+    tastingNotes: null,
+    productDetails: {
+      title: "Chi Tiết Về Ballantine's Finest",
+      paragraphs: [
+        "Ballantine's Finest là một loại Blended Scotch Whisky phức hợp, tinh tế và thanh lịch. Nó được coi là một hương vị để thỏa mãn phong cách hiện đại. Màu vàng nhạt và hương vị không thể nhầm lẫn của hỗn hợp đến từ sự pha trộn phức tạp của các loại whisky mạch nha và ngũ cốc được lựa chọn cẩn thận - tất cả đều được ủ ít nhất ba năm, và nhiều loại lâu hơn nữa."
+      ],
+      details: [
+          { label: "Màu sắc", value: "Vàng đồng sáng lộng lẫy" },
+          { label: "Cách thưởng thức", value: "Uống trực tiếp (Neat), thêm một ít đá hoặc pha chế cocktail (như Ballantine's & Tonic)." },
+          { label: "Kết hợp món ăn", value: "Các loại hạt rang, phô mai nhẹ, thịt nguội hoặc sô-cô-la." },
+          { label: "Bảo quản", value: "Để chai đứng, nơi khô ráo, tránh ánh nắng trực tiếp và nhiệt độ cao." },
+      ],
+      tastingNote: {
+        nose: "Hương thơm nhẹ nhàng, tinh tế của mật ong và gia vị.",
+        palate: "Vị cân bằng giữa vị sô-cô-la sữa, táo đỏ và vani.",
+        finish: "Hậu vị kéo dài và tươi mát.",
+      },
+      conclusion: "Với hương vị đặc trưng đến từ các loại whisky mạch nha từ Miltonduff và Glenburgie, Ballantine's Finest là một lựa chọn tuyệt vời cho cả người mới bắt đầu và những người sành sỏi whisky."
+    },
+    isNew: true,
+    createdAt: '2024-08-11',
   }
 ];
 
