@@ -1,96 +1,109 @@
 {
   "entities": {
-    "Product": {
+    "Wine": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Product",
+      "title": "Wine",
       "type": "object",
-      "description": "Represents a wine/spirit product's core information for listings.",
+      "description": "Represents a wine product.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the product."
+          "description": "Unique identifier for the wine product."
         },
         "nameVN": {
           "type": "string",
-          "description": "Name of the product in Vietnamese."
+          "description": "Wine name in Vietnamese."
         },
         "nameEN": {
           "type": "string",
-          "description": "Name of the product in English."
+          "description": "Wine name in English."
         },
         "slug": {
           "type": "string",
-          "description": "URL-friendly slug for the product."
+          "description": "URL-friendly slug for the wine product."
+        },
+        "descriptionVN": {
+          "type": "string",
+          "description": "Wine description in Vietnamese."
+        },
+        "descriptionEN": {
+          "type": "string",
+          "description": "Wine description in English."
         },
         "price": {
           "type": "number",
-          "description": "Price of the product."
+          "description": "Price of the wine."
         },
-        "image": {
-          "type": "object",
-          "properties": {
-            "url": {"type": "string"},
-            "path": {"type": "string"}
+        "origin": {
+          "type": "string",
+          "description": "Country of origin of the wine."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of wine (e.g., Red, White, Rosé)."
+        },
+        "vintage": {
+          "type": "number",
+          "description": "Vintage year of the wine."
+        },
+        "alcohol": {
+          "type": "number",
+          "description": "Alcohol percentage of the wine."
+        },
+        "volume": {
+          "type": "number",
+          "description": "Volume of the wine bottle (e.g., 750ml)."
+        },
+        "images": {
+          "type": "array",
+          "description": "Array of image URLs for the wine.",
+          "items": {
+            "type": "string"
           }
+        },
+        "rating": {
+          "type": "number",
+          "description": "Rating of the wine (e.g., 1-5 stars)."
         },
         "isFeatured": {
           "type": "boolean",
-          "description": "Indicates if the product is featured."
-        },
-        "isNew": {
-          "type": "boolean",
-          "description": "Indicates if the product is a new arrival."
-        },
-        "tags": {
-            "type": "array",
-            "items": {"type": "string"}
-        },
-        "attributes": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "label": {"type": "string"},
-                    "value": {"type": "string"}
-                }
-            }
+          "description": "Indicates if the wine is featured."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the product was created.",
+          "description": "Timestamp of when the wine was added to the database.",
           "format": "date-time"
+        },
+        "categoryId": {
+          "type": "string",
+          "description": "Reference to Category. (Relationship: Category 1:N Wine)"
         }
       },
-      "required": ["id", "nameVN", "nameEN", "slug", "price", "createdAt"]
-    },
-    "ProductDetail": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ProductDetail",
-      "type": "object",
-      "description": "Contains detailed information for a single product page.",
-      "properties": {
-          "id": {
-              "type": "string",
-              "description": "Matches the ID in the 'products' collection."
-          },
-          "description": {"type": "string"},
-          "detailImage": {
-              "type": "object",
-              "properties": {
-                  "url": {"type": "string"},
-                  "path": {"type": "string"}
-              }
-          },
-          "tastingNotes": {"type": "object"},
-          "productDetails": {"type": "object"}
-      },
-      "required": ["id", "description"]
+      "required": [
+        "id",
+        "nameVN",
+        "nameEN",
+        "slug",
+        "descriptionVN",
+        "descriptionEN",
+        "price",
+        "origin",
+        "type",
+        "vintage",
+        "alcohol",
+        "volume",
+        "images",
+        "rating",
+        "isFeatured",
+        "createdAt",
+        "categoryId"
+      ]
     },
     "Category": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
-      "description": "Represents a category of wines.",
+      "description": "Represents a wine category.",
       "properties": {
         "id": {
           "type": "string",
@@ -98,11 +111,11 @@
         },
         "nameVN": {
           "type": "string",
-          "description": "Name of the category in Vietnamese."
+          "description": "Category name in Vietnamese."
         },
         "nameEN": {
           "type": "string",
-          "description": "Name of the category in English."
+          "description": "Category name in English."
         },
         "slug": {
           "type": "string",
@@ -114,7 +127,7 @@
         },
         "image": {
           "type": "string",
-          "description": "Image URL for the category."
+          "description": "URL of the category image."
         }
       },
       "required": [
@@ -138,11 +151,11 @@
         },
         "titleVN": {
           "type": "string",
-          "description": "Title of the blog post in Vietnamese."
+          "description": "Blog post title in Vietnamese."
         },
         "titleEN": {
           "type": "string",
-          "description": "Title of the blog post in English."
+          "description": "Blog post title in English."
         },
         "slug": {
           "type": "string",
@@ -150,15 +163,15 @@
         },
         "contentVN": {
           "type": "string",
-          "description": "Content of the blog post in Vietnamese."
+          "description": "Blog post content in Vietnamese."
         },
         "contentEN": {
           "type": "string",
-          "description": "Content of the blog post in English."
+          "description": "Blog post content in English."
         },
         "image": {
           "type": "string",
-          "description": "Image URL for the blog post."
+          "description": "URL of the blog post image."
         },
         "author": {
           "type": "string",
@@ -236,7 +249,7 @@
         },
         "email": {
           "type": "string",
-          "description": "Email address for the newsletter subscription.",
+          "description": "Email address of the subscriber.",
           "format": "email"
         },
         "subscribedAt": {
@@ -261,33 +274,17 @@
   "firestore": {
     "structure": [
       {
-        "path": "/products/{productId}",
+        "path": "/wines/{wineId}",
         "definition": {
-          "entityName": "Product",
+          "entityName": "Wine",
           "schema": {
-            "$ref": "#/backend/entities/Product"
+            "$ref": "#/backend/entities/Wine"
           },
-          "description": "Stores core product information for listings.",
+          "description": "Stores wine product information. Public read access is permitted. Write access is restricted to admins only.",
           "params": [
             {
-              "name": "productId",
-              "description": "Unique identifier for the product."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/product_details/{productId}",
-        "definition": {
-          "entityName": "ProductDetail",
-          "schema": {
-            "$ref": "#/backend/entities/ProductDetail"
-          },
-          "description": "Stores extended product information for detail pages.",
-          "params": [
-            {
-              "name": "productId",
-              "description": "Unique identifier matching the product ID."
+              "name": "wineId",
+              "description": "Unique identifier for the wine product."
             }
           ]
         }
@@ -299,11 +296,11 @@
           "schema": {
             "$ref": "#/backend/entities/Category"
           },
-          "description": "Stores wine categories.",
+          "description": "Stores wine category information. Public read access.  Write access restricted to admins.",
           "params": [
             {
               "name": "categoryId",
-              "description": "Unique identifier for the category."
+              "description": "Unique identifier for the wine category."
             }
           ]
         }
@@ -315,7 +312,7 @@
           "schema": {
             "$ref": "#/backend/entities/BlogPost"
           },
-          "description": "Stores blog post content.",
+          "description": "Stores blog post information. Public read access. Write access restricted to admins.",
           "params": [
             {
               "name": "blogPostId",
@@ -331,7 +328,7 @@
           "schema": {
             "$ref": "#/backend/entities/Contact"
           },
-          "description": "Stores contact form submissions. Only accessible to admins.",
+          "description": "Stores contact form submissions.  Write access for anyone to submit the form. Read/Delete access restricted to admins.",
           "params": [
             {
               "name": "contactId",
@@ -341,39 +338,38 @@
         }
       },
       {
-        "path": "/newsletterSubscriptions/{newsletterSubscriptionId}",
+        "path": "/newsletterSubscriptions/{subscriptionId}",
         "definition": {
           "entityName": "NewsletterSubscription",
           "schema": {
             "$ref": "#/backend/entities/NewsletterSubscription"
           },
-          "description": "Stores newsletter subscription information.",
+          "description": "Stores newsletter subscriptions.  Write access for anyone to subscribe. Read/Delete access restricted to admins.",
           "params": [
             {
-              "name": "newsletterSubscriptionId",
+              "name": "subscriptionId",
               "description": "Unique identifier for the newsletter subscription."
             }
           ]
         }
       },
       {
-        "path": "/roles_admin/{userId}",
+        "path": "/admins/{uid}",
         "definition": {
-          "entityName": "roles_admin",
+          "entityName": "admin",
           "schema": {
-            "$ref": "#/backend/entities/NewsletterSubscription"
+            "$ref": "#/backend/entities/admin"
           },
-          "description": "Admin role management.  Document existence grants admin access. This supports DBAC (Database-Based Access Control).",
+          "description": "Stores admin role information. The existence of a document indicates the user is an admin.",
           "params": [
             {
-              "name": "userId",
-              "description": "User ID for whom the admin role is assigned."
+              "name": "uid",
+              "description": "User ID of the admin."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support a wine showcase website with a blog and admin dashboard. It prioritizes security, scalability, and ease of debugging. The key principle is Authorization Independence achieved through denormalization where necessary. Product data is split into two collections: `products` for fast, lightweight listings and `product_details` for heavy, detailed information to optimize query performance.  \n\n**Authorization Independence (Denormalization):**\n*   Admin access is controlled via the existence of a document in `/roles_admin/{uid}`. This eliminates the need for custom claims or complex role-based logic within the security rules.\n\n**Structural Segregation:**\n*   Each top-level collection (`products`, `product_details`, `categories`, `blogPosts`, `contacts`, `newsletterSubscriptions`, `roles_admin`) serves a distinct purpose and has its own security posture. This simplifies security rules.\n*   The structure uses path-based ownership for admin roles, which provides a straightforward and secure method for access control.\n\n**Access Modeling:**\n*   Admin role is determined by document existence in `/roles_admin/{uid}`. This provides a simple and scalable way to manage admin privileges without relying on complex data structures or custom claims.\n\n**QAPs (Rules are not Filters):**\n*   `list` operations are secured by ensuring that public data is stored separately from private data. Only authorized admins can read the `contacts` collection.\n\n**Invariants:**\n*   Timestamps (e.g., `createdAt` in `products`, `contacts`, and `newsletterSubscriptions`) can be enforced using security rules to ensure data integrity.\n\n\nThis structure facilitates simple and robust security rules, making the application easier to maintain and debug.  The denormalization of the admin role eliminates the need for complex `get()` calls in the rules, enhancing performance and security."
+    "reasoning": "The Firestore structure is designed to ensure authorization independence, clarity, and scalability, adhering to the principles of DBAC (Database-Based Access Control) and QAPs (Rules are not Filters).  Authorization Independence is achieved through denormalization, copying relevant authorization data into subcollections to avoid `get()` calls in security rules. Structural Segregation is employed by separating data with different access needs into distinct collections. Access modeling leverages path-based ownership for user-specific data and membership maps for collaborative data. The structure includes dedicated collections for entities like `wines`, `categories`, `blogPosts`, `contacts`, and `newsletterSubscriptions`.\n\nTo fix the storage permission issue reported, a separate collection `/admins/{uid}` is implemented. The presence of a document in the `/admins/{uid}` collection grants the user the 'admin' role, permitting read/write access to all collections and Storage buckets (product-images). Security rules will check for the existence of this document.\n\nQAPs (Rules Are Not Filters) are supported by ensuring that list operations are secured through structural segregation and appropriate security rules, preventing the need to filter data based on client-side logic."
   }
 }
-    
