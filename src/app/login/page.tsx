@@ -26,7 +26,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     // Simple validation
-    if (email === 'admin@ansan.com' && password === 'password') {
+    if (email === 'admin@ansan.com' && password === '123456') {
       login({
         name: 'Admin',
         email: 'admin@ansan.com',
