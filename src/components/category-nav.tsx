@@ -35,7 +35,11 @@ const mainCategoriesConfig = [
     { label: "Wine", slug: "wine" },
     { label: "Bộ Quà Tặng", slug: "bo-qua-tang" },
     { label: "Set Thử Rượu", slug: "set-thu-ruou" },
-    { label: "Xì Gà", slug: "cigar", subCategories: ["cigar-hanos", "cigar-lotus", "cigar-vinaboss"]},
+    { 
+        label: "Xì Gà", 
+        slug: "cigar", 
+        subCategories: ["cigar-hanos", "cigar-lotus", "cigar-vinaboss"]
+    },
 ];
 
 
@@ -51,6 +55,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
     
         mainCategoriesConfig.forEach(cat => {
             if (cat.subCategories) {
+                // For parent categories, count products that have ANY of the subcategory tags
                 counts[cat.slug] = products.filter(p => p.tags?.some(t => cat.subCategories?.includes(t))).length;
             } else {
                 counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
