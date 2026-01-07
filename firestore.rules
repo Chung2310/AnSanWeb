@@ -8,10 +8,12 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.email == 'admin@ansan.com';
     }
 
+    // Default deny all
     match /{document=**} {
       allow read, write: if false;
     }
 
+    // Publicly readable collections
     match /products/{productId} {
       allow get, list: if true;
       allow write: if isAdmin();
@@ -32,6 +34,7 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // User-creatable, admin-manageable collections
     match /contacts/{contactId} {
       allow read: if isAdmin();
       allow create: if true;
@@ -42,11 +45,6 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow create: if true;
       allow update, delete: if isAdmin();
-    }
-
-    // This collection is no longer needed for auth checks
-    match /roles_admin/{userId} {
-      allow read, write: if false;
     }
   }
 }
