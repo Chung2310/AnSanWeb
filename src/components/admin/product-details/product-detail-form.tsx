@@ -89,7 +89,7 @@ export function ProductDetailForm() {
         },
       });
     }
-  }, [defaultValues, isOpen, form.reset]);
+  }, [isOpen, defaultValues, form.reset]);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !id) return;
@@ -126,7 +126,7 @@ export function ProductDetailForm() {
               <FileUploader
                   fieldName="detailImage"
                   label="Ảnh trang chi tiết"
-                  defaultUrl={form.getValues('detailImage.url')}
+                  defaultUrl={defaultValues?.detailImage?.url}
                   onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'detailImage')}
               />
               <FormField

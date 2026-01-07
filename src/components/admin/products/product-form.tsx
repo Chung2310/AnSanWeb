@@ -37,7 +37,7 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
-  }).nullable(),
+  }),
   tags: z.string().optional(),
   attributes: z.array(z.object({
     label: z.string().min(1, "Nhãn không được để trống"),
@@ -115,7 +115,7 @@ export function ProductForm() {
             });
         }
     }
-}, [defaultValues, isOpen, form.reset]);
+}, [isOpen, defaultValues, form.reset]);
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -282,7 +282,7 @@ export function ProductForm() {
                         <FileUploader
                             fieldName="image"
                             label="Ảnh bìa (listing)"
-                            defaultUrl={form.getValues('image.url')}
+                            defaultUrl={defaultValues?.image?.url}
                             onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'image')}
                         />
                     </div>
