@@ -68,7 +68,7 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
         const displayLabel = typeof option === 'object' && option.count ? `${label} (${option.count})` : label;
         const isActive = activeFilters.includes(label);
         
-        if (typeof option === 'object' && option.count === 0) return null;
+        if (typeof option === 'object' && option.hasOwnProperty('count') && option.count === 0) return null;
 
         return (
           <Button
@@ -97,11 +97,9 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const [clientProducts, setClientProducts] = useState(initialProducts);
   const { categories } = useCategories();
 
-  // When initialProducts changes (from Firestore fetch), update the state
   useEffect(() => {
     setClientProducts(initialProducts);
   }, [initialProducts]);
-
 
   const filtersData = useMemo(() => {
     const brandsInProducts = allBrands.map(brand => {
@@ -113,7 +111,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         label: cat.name,
         value: cat.slug,
         count: clientProducts.filter(p => p.tags?.includes(cat.slug)).length
-    })).filter(cat => cat.count > 0) || [];
+    })) || [];
 
     return {
       "DANH MỤC": categoryOptions,
@@ -121,7 +119,6 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       ...staticFiltersData
     }
   }, [clientProducts, categories]);
-
 
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
