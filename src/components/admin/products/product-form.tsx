@@ -33,19 +33,18 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { Product, Category, FullProduct } from '@/lib/types';
-import { useCategories } from '@/hooks/use-categories';
-import { Trash, X, Upload } from 'lucide-react';
+import type { Product, FullProduct } from '@/lib/types';
+import { Trash, X } from 'lucide-react';
 import Image from 'next/image';
 import {
   doc,
   collection,
   serverTimestamp,
+  addDoc,
+  setDoc,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import {
-  setDocumentNonBlocking,
-  addDocumentNonBlocking,
   updateDocumentNonBlocking,
 } from '@/firebase/non-blocking-updates';
 import slugify from 'slugify';
@@ -53,7 +52,6 @@ import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { allTags } from '@/lib/tags-data';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -74,7 +72,6 @@ const formSchema = z.object({
   status: z.enum(['published', 'draft']),
   isFeatured: z.boolean(),
   isNew: z.boolean(),
-  categoryIds: z.array(z.string()).optional(),
   attributes: z.array(productAttributeSchema).optional(),
   tags: z.array(z.string()).optional(),
 });
@@ -89,7 +86,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const firestore = useFirestore();
-  const { categories, isLoading: isLoadingCategories } = useCategories();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
 
   const form = useForm<ProductFormValues>({
@@ -111,7 +107,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           status: 'published',
           isFeatured: false,
           isNew: true,
-          categoryIds: [],
           attributes: [],
           tags: [],
         },
@@ -153,7 +148,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         status: data.status,
         isFeatured: data.isFeatured,
         isNew: data.isNew,
-        categoryIds: data.categoryIds || [],
         attributes: data.attributes || [],
         tags: data.tags || [],
         createdAt: initialData?.createdAt || serverTimestamp(),
@@ -169,18 +163,17 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         const detailRef = doc(firestore, 'product_details', initialData.id);
         
         await updateDocumentNonBlocking(productRef, mainProductData);
-        await setDocumentNonBlocking(detailRef, detailData, { merge: true });
+        await setDoc(detailRef, detailData, { merge: true });
 
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
 
       } else {
         const collectionRef = collection(firestore, 'products');
-        const newDocRef = await addDocumentNonBlocking(collectionRef, mainProductData);
+        const newDocRef = await addDoc(collectionRef, mainProductData);
         
-        if (newDocRef) {
-            const detailRef = doc(firestore, 'product_details', newDocRef.id);
-            await setDocumentNonBlocking(detailRef, detailData);
-        }
+        // Now that we have the ID, create the detail document
+        const detailRef = doc(firestore, 'product_details', newDocRef.id);
+        await setDoc(detailRef, detailData);
 
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
       }
@@ -294,34 +287,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                     </FormItem>
                  )} />
-                
-                <FormField control={form.control} name="categoryIds" render={() => (
-                    <FormItem>
-                      <div className="mb-4">
-                        <FormLabel>Danh mục chính</FormLabel>
-                        <FormDescription>Chọn các danh mục chính cho sản phẩm.</FormDescription>
-                      </div>
-                      {isLoadingCategories ? <p>Đang tải...</p> : (
-                        <ScrollArea className="h-32 rounded-md border">
-                          <div className="p-4 space-y-2">
-                            {(categories || []).map((category: Category) => (
-                              <FormField key={category.id} control={form.control} name="categoryIds" render={({ field }) => (
-                                  <FormItem key={category.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox checked={field.value?.includes(category.id)} onCheckedChange={(checked) => {
-                                        return checked ? field.onChange([...(field.value || []), category.id]) : field.onChange(field.value?.filter((value) => value !== category.id))
-                                      }} />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">{category.name}</FormLabel>
-                                  </FormItem>
-                              )} />
-                            ))}
-                          </div>
-                        </ScrollArea>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                )} />
 
                 <FormField
                   control={form.control}
@@ -386,5 +351,3 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
-
-    
