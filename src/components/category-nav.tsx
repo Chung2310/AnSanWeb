@@ -15,47 +15,46 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
 
     const getProductCountForCategory = (slug: string) => {
         if (isLoadingProducts || !products) return 0;
-        if (slug === 'all') return products.length;
         return products.filter(p => p.tags?.includes(slug)).length;
     };
 
-    const navItems = categories?.map(cat => ({
-        label: cat.name,
-        slug: cat.slug,
-        count: getProductCountForCategory(cat.slug)
-    })) || [];
+    const navItems = categories
+        ?.map(cat => ({
+            label: cat.name,
+            slug: cat.slug,
+            count: getProductCountForCategory(cat.slug)
+        }))
+        .filter(item => item.count > 0) // Only show categories with products
+        .sort((a, b) => a.label.localeCompare(b.label)) // Sort alphabetically
+        || [];
     
-    // Manually add 'all' category
     const allProductsCount = products?.length || 0;
-
 
     return (
         <div className="border-b border-t">
             <div className="container py-4 flex items-center gap-8 text-sm uppercase font-semibold text-gray-500">
                 <h2 className="font-bold text-black whitespace-nowrap">Danh mục</h2>
                 <div className="flex-grow flex items-center gap-6 overflow-x-auto">
-                    <Link
-                        href="/danh-muc-san-pham"
+                    <button
                         className={cn(
                             "hover:text-black transition-colors whitespace-nowrap",
-                            selectedCategory === null && "text-black"
+                            selectedCategory === null ? "text-black font-bold" : ""
                         )}
-                        onClick={(e) => { e.preventDefault(); onCategorySelect(null); }}
+                        onClick={() => onCategorySelect(null)}
                     >
                         Tất cả ({allProductsCount})
-                    </Link>
+                    </button>
                     {navItems.map(item => (
-                         <Link
+                         <button
                             key={item.slug}
-                            href={`/danh-muc-san-pham?category=${item.slug}`}
                             className={cn(
                                 "hover:text-black transition-colors whitespace-nowrap",
-                                selectedCategory === item.slug && "text-black"
+                                selectedCategory === item.slug ? "text-black font-bold" : ""
                             )}
-                            onClick={(e) => { e.preventDefault(); onCategorySelect(item.slug); }}
+                            onClick={() => onCategorySelect(item.slug)}
                         >
                             {item.label} ({item.count})
-                        </Link>
+                        </button>
                     ))}
                 </div>
             </div>
