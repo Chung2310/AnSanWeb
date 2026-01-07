@@ -5,8 +5,7 @@ import { firebaseConfig } from '@/firebase/config';
 
 // Initialize Firebase Admin SDK
 function initializeAdminApp(): App {
-  const apps = getApps();
-  if (apps.length > 0) {
+  if (getApps().length > 0) {
     return getApp();
   }
   return initializeApp({
@@ -41,10 +40,9 @@ export async function POST(request: Request) {
       },
     });
 
-    const [downloadURL] = await fileUpload.getSignedUrl({
-      action: 'read',
-      expires: '03-09-2491', // Far-future expiration date
-    });
+    // Make the file public and get the URL
+    await fileUpload.makePublic();
+    const downloadURL = fileUpload.publicUrl();
 
 
     return NextResponse.json({
