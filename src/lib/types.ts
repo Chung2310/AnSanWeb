@@ -63,8 +63,6 @@ export type ProductDetail = {
   id: string; // Must match the ID in the 'products' collection
   description: string;
   detailImage?: ImageInfo | null;
-  tastingNotes?: TastingNotes | null;
-  productDetails?: ProductStructuredDetails | null;
 };
 
 // Combined type for convenience when working with full product data

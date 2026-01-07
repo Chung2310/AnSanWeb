@@ -11,8 +11,6 @@ import Link from 'next/link';
 import { collection, query, where, doc } from 'firebase/firestore';
 import { useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
 import type { Product, ProductDetail, FullProduct } from '@/lib/types';
-import ProductInfoSection from '@/components/product-info-section';
-import ProductDetailDescription from '@/components/product-detail-description';
 import FaqSection from '@/components/faq-section';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -77,7 +75,6 @@ export default function ProductDetailPage() {
 
   const fullProduct: FullProduct | null = useMemo(() => {
     if (!product) return null;
-    // Merge product and productDetail, but give precedence to productDetail if fields overlap
     return { ...product, ...productDetail };
   }, [product, productDetail]);
 
@@ -93,8 +90,6 @@ export default function ProductDetailPage() {
   
   const displayImage = fullProduct.detailImage || fullProduct.image;
   const productTypeAttribute = fullProduct.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
-  const otherDetails = fullProduct.productDetails?.details?.filter(d => !['Màu sắc'].includes(d.label)) || [];
-
 
   return (
     <div className="bg-white text-black">
@@ -124,7 +119,6 @@ export default function ProductDetailPage() {
                         )}
                     </div>
                     <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{fullProduct.nameVN}</h1>
-                    <p className="mt-6 text-base text-foreground/80 leading-relaxed">{fullProduct.description}</p>
                     
                     <Separator className="my-8" />
                     
@@ -171,20 +165,17 @@ export default function ProductDetailPage() {
             </div>
         </div>
       
-      {fullProduct.tastingNotes && <ProductInfoSection notes={fullProduct.tastingNotes} />}
-
-      {fullProduct.productDetails && <ProductDetailDescription details={fullProduct.productDetails} />}
-      
-      {otherDetails.length > 0 && (
-        <section className="py-12 bg-white">
+      {fullProduct.description && (
+        <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
             <div className="container max-w-4xl mx-auto">
-                 <h2 className="text-center font-headline text-3xl font-black uppercase mb-8" style={{color: '#5a5a5a'}}>
-                    Thông Tin Thêm
+                <h2 className="text-center font-headline text-4xl font-black uppercase mb-10" style={{color: '#5a5a5a'}}>
+                    Mô tả chi tiết
                 </h2>
-                <div className="space-y-4 text-base" style={{color: '#5a5a5a'}}>
-                    {otherDetails.map(detail => (
-                        <p key={detail.label}><span className="font-bold">{detail.label}:</span> {detail.value}</p>
-                    ))}
+                <div 
+                    className="prose prose-lg dark:prose-invert max-w-none" 
+                    style={{color: '#5a5a5a'}}
+                    dangerouslySetInnerHTML={{ __html: fullProduct.description.replace(/\n/g, '<br />') }}
+                >
                 </div>
             </div>
         </section>
