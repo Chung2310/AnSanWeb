@@ -5,10 +5,19 @@ import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Product, Category } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import { useCategories } from "@/hooks/use-categories";
 import CategoryNav from "./category-nav";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -145,7 +154,10 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     
     // Category filter from top nav
     if (activeCategory) {
-        products = products.filter(p => p.tags?.includes(activeCategory));
+        const selectedCategory = categories?.find(c => c.slug === activeCategory);
+        if (selectedCategory) {
+           products = products.filter(p => p.tags?.includes(selectedCategory.slug));
+        }
     }
 
 
@@ -218,7 +230,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [clientProducts, activeFilters, activeSort, activeCategory, filtersData]);
+  }, [clientProducts, activeFilters, activeSort, activeCategory, filters, categories]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
@@ -242,7 +254,9 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
              <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
          </div>
       )}
+      
       <CategoryNav onCategorySelect={handleCategoryNavSelect} selectedCategory={activeCategory} />
+      
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
