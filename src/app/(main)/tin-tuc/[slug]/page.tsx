@@ -6,18 +6,18 @@ import Link from "next/link";
 import { Calendar, User } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
-import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import { collection, query, where } from "firebase/firestore";
 import type { BlogPost } from "@/lib/types";
 import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { sampleBlogPosts } from "@/lib/placeholder-data";
 
 // This is a placeholder for a function that would parse content and extract headings
 const generateHeadings = (content: string) => {
     // In a real app, you'd parse the content to find h2, h3, etc.
     // For now, we'll use a static example based on the UI.
     const headings = [];
-    const matches = content.matchAll(/<h([2-3]) id="([^"]+)">([^<]+)<\/h\1>/g);
+    const contentToParse = content || "";
+    const matches = contentToParse.matchAll(/<h([2-3]) id="([^"]+)">([^<]+)<\/h\1>/g);
     for (const match of matches) {
         headings.push({
             level: parseInt(match[1]),
@@ -27,7 +27,7 @@ const generateHeadings = (content: string) => {
     }
     // if no headings found, create some from text
     if (headings.length === 0) {
-        const lines = content.split('\n');
+        const lines = contentToParse.split('\n');
         // get first 4 non-empty lines
         const a = lines.filter(line => line.trim() !== '').slice(1, 5);
         return a.map((line, i) => ({
@@ -70,14 +70,11 @@ const PostPageSkeleton = () => (
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const firestore = useFirestore();
-
-  const postsCollection = useMemoFirebase(() => collection(firestore, 'blogPosts'), [firestore]);
-  const postQuery = useMemoFirebase(() => postsCollection && query(postsCollection, where('slug', '==', slug)), [postsCollection, slug]);
-
-  const { data: posts, isLoading } = useCollection<BlogPost>(postQuery);
   
-  const post = useMemo(() => (posts && posts.length > 0 ? posts[0] : null), [posts]);
+  // Use placeholder data instead of Firestore
+  const isLoading = false;
+  const post = useMemo(() => sampleBlogPosts.find(p => p.slug === slug), [slug]);
+
 
   if (isLoading) {
     return <PostPageSkeleton />;
@@ -134,7 +131,7 @@ export default function BlogPostPage() {
                     <article 
                         className="prose prose-lg max-w-none" 
                         style={{color: '#5a5a5a'}}
-                        dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}
+                        dangerouslySetInnerHTML={{ __html: (post.content || "").replace(/\n/g, '<br />') }}
                     >
                     </article>
                 </div>
