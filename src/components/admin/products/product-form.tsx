@@ -41,7 +41,7 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
-  }).nullable(),
+  }),
   tags: z.string().optional(),
   attributes: z.array(z.object({
     label: z.string(),
@@ -110,7 +110,7 @@ export function ProductForm() {
                 slug: '',
                 price: 0,
                 description: '',
-                image: null,
+                image: undefined,
                 detailImage: null,
                 attributes: [],
                 tags: '',
