@@ -39,7 +39,7 @@ const formSchema = z.object({
       url: z.string(),
       path: z.string(),
     })
-    .optional(),
+    .nullable(),
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>;
@@ -58,7 +58,7 @@ export default function CategoryForm() {
       slug: '',
       description: '',
       status: 'active',
-      image: undefined,
+      image: null,
     },
   });
 
@@ -68,13 +68,14 @@ export default function CategoryForm() {
         defaultValues
           ? {
               ...defaultValues,
+              image: defaultValues.image || null,
             }
           : {
               name: '',
               slug: '',
               description: '',
               status: 'active',
-              image: undefined,
+              image: null,
             }
       );
     }
@@ -96,6 +97,10 @@ export default function CategoryForm() {
 
   const onSubmit = async (values: CategoryFormValues) => {
     try {
+       if (!values.image) {
+        form.setError('image', { type: 'manual', message: 'Vui lòng tải lên một ảnh đại diện.' });
+        return;
+      }
       if (isEditMode) {
         if (!defaultValues.id) throw new Error('Category ID is missing for update.');
         const categoryRef = doc(firestore, 'categories', defaultValues.id);
@@ -144,6 +149,7 @@ export default function CategoryForm() {
                                 <FormControl>
                                     <FileUploader 
                                         fieldName="image"
+                                        onFieldChange={field.onChange}
                                         defaultUrl={field.value?.url}
                                     />
                                 </FormControl>
@@ -226,3 +232,4 @@ export default function CategoryForm() {
     </Dialog>
   );
 }
+    

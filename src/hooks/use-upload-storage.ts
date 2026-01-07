@@ -41,6 +41,8 @@ export function useUploadStorage(): UploadResult {
       const uploadTask = uploadBytesResumable(storageRef, file);
       setTask(uploadTask);
       setIsUploading(true);
+      setError(null);
+      setProgress(0);
 
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -75,3 +77,5 @@ export function useUploadStorage(): UploadResult {
 
   return { progress, url, error, task, isUploading, startUpload };
 }
+
+    

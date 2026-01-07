@@ -156,8 +156,7 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = row.original.createdAt;
-      // @ts-ignore
+      const date = row.original.createdAt as any;
       const formattedDate = date ? new Date(date.seconds * 1000).toLocaleDateString('vi-VN') : 'N/A';
       return <div>{formattedDate}</div>;
     },
@@ -193,3 +192,5 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
 ];
+
+    

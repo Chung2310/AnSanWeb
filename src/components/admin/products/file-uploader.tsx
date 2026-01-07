@@ -1,53 +1,48 @@
 'use client';
 
 import { ChangeEvent, useState, useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 import Image from 'next/image';
 import { Upload, X } from 'lucide-react';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import type { ImageInfo } from '@/lib/types';
 
 interface FileUploaderProps {
   fieldName: string;
   defaultUrl?: string | null;
+  onFieldChange: (value: ImageInfo | null) => void;
 }
 
-export default function FileUploader({ fieldName, defaultUrl }: FileUploaderProps) {
-  const { setValue, getValues, formState } = useFormContext();
+export default function FileUploader({ fieldName, defaultUrl, onFieldChange }: FileUploaderProps) {
   const [preview, setPreview] = useState<string | null>(defaultUrl || null);
   const { progress, startUpload, isUploading, error } = useUploadStorage();
 
-  // Effect to update preview when defaultUrl changes (e.g., when editing an item)
   useEffect(() => {
-    const currentValue = getValues(fieldName)?.url;
-    if (defaultUrl && defaultUrl !== currentValue) {
-      setPreview(defaultUrl);
-    } else if (!defaultUrl) {
-      setPreview(null);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultUrl, fieldName]);
+    setPreview(defaultUrl || null);
+  }, [defaultUrl]);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
       try {
-        const imageInfo = await startUpload(file, 'categories');
+        const imageInfo = await startUpload(file, 'product-images');
         if (imageInfo) {
-          setValue(fieldName, imageInfo, { shouldValidate: true, shouldDirty: true });
+          onFieldChange(imageInfo);
         }
       } catch (uploadError) {
         console.error('Upload failed in component', uploadError);
-        // Error state is already handled by the hook
+        onFieldChange(null);
+        setPreview(null);
       }
     }
   };
 
   const handleRemoveImage = () => {
     setPreview(null);
-    setValue(fieldName, null, { shouldValidate: true, shouldDirty: true });
+    onFieldChange(null);
   };
 
   return (
@@ -83,11 +78,8 @@ export default function FileUploader({ fieldName, defaultUrl }: FileUploaderProp
       </div>
       {isUploading && <Progress value={progress} className="w-full mt-2 h-2" />}
       {error && <p className="text-sm text-destructive mt-2">{error}</p>}
-      {formState.errors[fieldName] && (
-        <p className="text-sm font-medium text-destructive mt-2">
-            {(formState.errors[fieldName] as any)?.message}
-        </p>
-      )}
     </div>
   );
 }
+
+    
