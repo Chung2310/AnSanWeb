@@ -11,7 +11,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useProductDialog } from '@/stores/use-product-dialog';
 import { useFirestore } from '@/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
 
 const DeleteProductAlert = ({ productId }: { productId: string }) => {
   const { toast } = useToast();
@@ -165,7 +165,7 @@ export const columns: ColumnDef<Product>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const product = row.original;
-      const { onOpen } = useProductDialog();
+      const router = useRouter();
 
       return (
         <DropdownMenu>
@@ -177,7 +177,7 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onOpen(product)}>
+            <DropdownMenuItem onClick={() => router.push(`/admin/products/${product.id}`)}>
               Chỉnh sửa
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -192,5 +192,3 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
 ];
-
-    

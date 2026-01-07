@@ -2,16 +2,15 @@
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useProductDialog } from '@/stores/use-product-dialog';
-import ProductForm from '@/components/admin/products/product-form';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { columns } from '@/components/admin/products/columns';
 import { DataTable } from '@/components/admin/products/data-table';
+import { useRouter } from 'next/navigation';
 
 export default function AdminProductsPage() {
-  const { onOpen } = useProductDialog();
+  const router = useRouter();
   const firestore = useFirestore();
 
   const productsCollection = useMemoFirebase(
@@ -35,7 +34,7 @@ export default function AdminProductsPage() {
             Quản lý các sản phẩm của bạn.
           </p>
         </div>
-        <Button onClick={() => onOpen()}>
+        <Button onClick={() => router.push('/admin/products/new')}>
           <PlusCircle className="mr-2 h-4 w-4" /> Thêm sản phẩm
         </Button>
       </div>
@@ -51,8 +50,6 @@ export default function AdminProductsPage() {
           <DataTable columns={columns} data={products || []} isLoading={isLoading} />
         </CardContent>
       </Card>
-      
-      <ProductForm />
     </>
   );
 }
