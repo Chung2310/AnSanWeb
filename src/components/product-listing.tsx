@@ -65,10 +65,10 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     <div className="flex flex-wrap gap-2">
       {options.map((option, index) => {
         const label = typeof option === 'string' ? option : option.label;
-        const displayLabel = typeof option === 'object' && option.count ? `${option.label} (${option.count})` : label;
+        const displayLabel = typeof option === 'object' && option.count ? `${label} (${option.count})` : label;
         const isActive = activeFilters.includes(label);
         
-        if (option.count === 0) return null;
+        if (typeof option === 'object' && option.count === 0) return null;
 
         return (
           <Button
@@ -113,11 +113,11 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         label: cat.name,
         value: cat.slug,
         count: clientProducts.filter(p => p.tags?.includes(cat.slug)).length
-    })).filter(cat => cat.count > 0);
+    })).filter(cat => cat.count > 0) || [];
 
     return {
+      "DANH MỤC": categoryOptions,
       "THƯƠNG HIỆU": brandsInProducts,
-      "DANH MỤC": categoryOptions || [],
       ...staticFiltersData
     }
   }, [clientProducts, categories]);
@@ -154,7 +154,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
           );
       }
       if (group === "KHOẢNG GIÁ") {
-          const priceRanges = values.map(v => filtersData["KHOẢNG GIÁ"].find(opt => opt.label === v)?.value);
+          const priceRanges = values.map(v => staticFiltersData["KHOẢNG GIÁ"].find(opt => opt.label === v)?.value);
           products = products.filter(p => 
               priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
           );
@@ -194,8 +194,10 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         break;
       case "MỚI NHẤT":
         products.sort((a, b) => {
-            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            // @ts-ignore
+            const dateA = a.createdAt?.seconds ? new Date(a.createdAt.seconds * 1000).getTime() : 0;
+            // @ts-ignore
+            const dateB = b.createdAt?.seconds ? new Date(b.createdAt.seconds * 1000).getTime() : 0;
             return dateB - dateA;
         });
         break;
@@ -227,7 +229,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       {bannerData && <CategoryBanner {...bannerData} />}
       <div className="container py-12">
         <div className="text-left mb-4">
-          <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
+          <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title} ({filteredAndSortedProducts.length})</h1>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
@@ -236,7 +238,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
               <FilterGroup 
                 key={groupTitle} 
                 title={groupTitle} 
-                options={options.map(opt => (typeof opt === 'string' ? opt : { ...opt, label: opt.label }))}
+                options={options.map(opt => (typeof opt === 'string' ? {label: opt} : { ...opt, label: opt.label }))}
                 onFilterChange={handleFilterChange}
                 activeFilters={activeFilters[groupTitle] || []}
               />
