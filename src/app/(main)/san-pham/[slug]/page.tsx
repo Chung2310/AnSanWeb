@@ -4,29 +4,21 @@
 import { useMemo } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import { allTags } from '@/lib/tags-data';
 import { useProducts } from '@/hooks/use-products';
-import type { FullProduct } from '@/lib/types';
+import { Separator } from '@/components/ui/separator';
 
 function ProductDetailPageSkeleton() {
   return (
-    <div className="bg-white text-black py-12 md:py-20">
-      <div className="container max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <Skeleton className="w-full aspect-square" />
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-8 w-1/4" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
+    <div className="container mx-auto max-w-4xl py-12 md:py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <Skeleton className="w-full aspect-square" />
+        </div>
+        <div className="space-y-6">
+          <Skeleton className="h-10 w-3/4" />
+          <Skeleton className="h-8 w-1/4" />
+          <Skeleton className="h-24 w-full" />
         </div>
       </div>
     </div>
@@ -38,7 +30,7 @@ export default function ProductDetailPage() {
   const slug = params.slug as string;
   const { products, isLoading } = useProducts();
 
-  const fullProduct = useMemo(() => {
+  const product = useMemo(() => {
     if (!products) return null;
     return products.find((p) => p.slug === slug) || null;
   }, [products, slug]);
@@ -47,110 +39,58 @@ export default function ProductDetailPage() {
     return <ProductDetailPageSkeleton />;
   }
 
-  // After loading, if the product is still not found, show 404
-  if (!fullProduct) {
+  if (!product) {
     notFound();
   }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
-  
-  const getTagLabel = (tagId: string) => {
-    return allTags.find(t => t.id === tagId)?.label || tagId;
-  }
-
 
   return (
     <div className="bg-white text-black">
-      <div className="container mx-auto max-w-5xl py-12 md:py-20">
+      <div className="container mx-auto max-w-4xl py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           {/* Image Column */}
-          <div className="sticky top-24">
-            {fullProduct.image?.url && (
-              <div className="bg-secondary rounded-lg p-8">
-                <Image
-                  src={fullProduct.image.url}
-                  alt={fullProduct.nameVN}
-                  width={800}
-                  height={800}
-                  className="w-full h-auto object-contain aspect-square drop-shadow-2xl"
-                  priority
-                />
-              </div>
-            )}
-            {fullProduct.isNew && (
-                <Badge className="absolute top-4 left-4" variant="destructive">MỚI</Badge>
-            )}
-             {fullProduct.isFeatured && (
-                <Badge className="absolute top-4 right-4">NỔI BẬT</Badge>
-            )}
-          </div>
+          {product.image?.url && (
+            <div className="bg-secondary rounded-lg p-8 sticky top-24">
+              <Image
+                src={product.image.url}
+                alt={product.nameVN}
+                width={800}
+                height={800}
+                className="w-full h-auto object-contain aspect-square"
+                priority
+              />
+            </div>
+          )}
 
           {/* Details Column */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div>
               <h1 className="font-headline text-3xl md:text-4xl font-bold text-gray-800">
-                {fullProduct.nameVN}
+                {product.nameVN}
               </h1>
               <p className="text-3xl font-semibold text-primary mt-4">
-                {formatPrice(fullProduct.price)}
+                {formatPrice(product.price)}
               </p>
             </div>
-
-            <Separator />
             
-            <div>
-                <h2 className="text-lg font-bold text-gray-700 mb-4">Thông tin chi tiết</h2>
-                <div className="space-y-3 text-gray-600">
-                    {fullProduct.attributes.map(attr => (
-                        <div key={attr.label} className="grid grid-cols-2 gap-4">
-                            <span className="font-semibold">{attr.label}:</span>
-                            <span>{attr.value}</span>
-                        </div>
-                    ))}
-                    <div className="grid grid-cols-2 gap-4">
-                        <span className="font-semibold">Tình trạng:</span>
-                        <span>Còn hàng</span>
-                    </div>
-                </div>
-            </div>
-
-            <Button size="lg" className="w-full h-12 text-lg">
-              Liên Hệ Đặt Hàng
-            </Button>
-            
-            {fullProduct.tags && fullProduct.tags.length > 0 && (
-                 <div>
-                    <h2 className="text-lg font-bold text-gray-700 mb-4">Loại sản phẩm</h2>
-                    <div className="flex flex-wrap gap-2">
-                        {fullProduct.tags.map(tag => (
-                            <Badge key={tag} variant="secondary" className="font-normal">
-                                {getTagLabel(tag)}
-                            </Badge>
-                        ))}
+            {product.description && (
+                <div>
+                    <Separator className="my-6" />
+                    <h2 className="text-lg font-bold text-gray-700 mb-4">
+                        Mô Tả Sản Phẩm
+                    </h2>
+                    <div 
+                        className="prose prose-sm dark:prose-invert max-w-none text-gray-600 leading-relaxed" 
+                        dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br />') }}
+                    >
                     </div>
                 </div>
             )}
           </div>
         </div>
-
-        {/* Description Section */}
-        {fullProduct.description && (
-          <div className="mt-20">
-            <Separator />
-            <div className="py-12 max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
-                Mô Tả Sản Phẩm
-              </h2>
-              <div 
-                className="prose prose-lg dark:prose-invert max-w-none text-gray-600 leading-relaxed" 
-                dangerouslySetInnerHTML={{ __html: fullProduct.description.replace(/\n/g, '<br />') }}
-              >
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
