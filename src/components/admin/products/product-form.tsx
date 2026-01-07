@@ -33,7 +33,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { Product, FullProduct } from '@/lib/types';
+import type { FullProduct } from '@/lib/types';
 import { Trash, X } from 'lucide-react';
 import Image from 'next/image';
 import {
@@ -138,7 +138,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const mainProductData: Omit<Product, 'id'> = {
+      const productData = {
         nameVN: data.nameVN,
         slug: data.slug,
         price: Number(data.price),
@@ -148,31 +148,23 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         isNew: data.isNew,
         attributes: data.attributes || [],
         tags: data.tags || [],
-        createdAt: initialData?.createdAt || serverTimestamp(),
+        description: data.description || '',
         updatedAt: serverTimestamp(),
       };
-
-      const detailData = {
-        description: data.description || '',
-      };
+      
+      const finalData = {
+          ...productData,
+          createdAt: initialData?.createdAt || serverTimestamp(),
+      }
 
       if (initialData) {
         const productRef = doc(firestore, 'products', initialData.id);
-        const detailRef = doc(firestore, 'product_details', initialData.id);
-        
-        await updateDocumentNonBlocking(productRef, mainProductData);
-        await setDoc(detailRef, detailData, { merge: true });
-
+        await updateDocumentNonBlocking(productRef, productData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
 
       } else {
         const collectionRef = collection(firestore, 'products');
-        const newDocRef = await addDoc(collectionRef, mainProductData);
-        
-        // Now that we have the ID, create the detail document
-        const detailRef = doc(firestore, 'product_details', newDocRef.id);
-        await setDoc(detailRef, detailData);
-
+        await addDoc(collectionRef, finalData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
       }
       router.push('/admin/products');
