@@ -17,7 +17,7 @@ export type TastingNotes = {
   color: string;
 };
 
-export type ProductDetails = {
+export type ProductStructuredDetails = {
   title: string;
   paragraphs: string[];
   details: { label: string; value: string }[];
@@ -34,26 +34,37 @@ export type ProductAttribute = {
   value: string;
 };
 
-export type Wine = {
+// Represents core data for product listings
+export type Product = {
   id: string;
   nameVN: string;
   nameEN: string;
   slug: string;
   price: number;
-  description: string;
   image: ImageInfo | null;
-  detailImage?: ImageInfo | null;
-  tastingNotes?: TastingNotes;
-  productDetails?: ProductDetails;
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
   attributes: ProductAttribute[];
   createdAt?: string;
+  // Denormalized fields for filtering
   age?: number;
   cask?: string;
   nonChillFiltered?: boolean;
 };
+
+// Represents extended data for the product detail page
+export type ProductDetail = {
+  id: string; // Must match the ID in the 'products' collection
+  description: string;
+  detailImage?: ImageInfo | null;
+  tastingNotes?: TastingNotes;
+  productDetails?: ProductStructuredDetails;
+};
+
+// Combined type for convenience when working with full product data
+export type FullProduct = Product & ProductDetail;
+
 
 export type Category = {
   id: string;
@@ -91,3 +102,5 @@ export type Testimonial = {
     imageHint: string,
   };
 };
+
+    

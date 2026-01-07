@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
-import type { Wine } from "@/lib/types";
+import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
@@ -50,7 +50,7 @@ type ActiveFilters = {
 };
 
 interface ProductListingProps {
-    initialProducts: Wine[];
+    initialProducts: Product[];
     title: string;
     bannerData?: CategoryBannerProps;
 }
@@ -249,8 +249,8 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
             </div>
             {paginatedProducts.length > 0 ? (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {paginatedProducts.map((wine) => (
-                        <WineCard key={wine.id} wine={wine} />
+                    {paginatedProducts.map((product) => (
+                        <WineCard key={product.id} product={product} />
                     ))}
                 </div>
             ) : (
@@ -289,3 +289,5 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     </div>
   );
 }
+
+    

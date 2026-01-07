@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Phone, MessageCircle, Truck, ShieldCheck, Gem, User, Handshake, ChevronRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { collection, query, where } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import type { Wine } from '@/lib/types';
+import { collection, query, where, doc } from 'firebase/firestore';
+import { useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
+import type { Product, ProductDetail, FullProduct } from '@/lib/types';
 import ProductInfoSection from '@/components/product-info-section';
 import ProductDetailDescription from '@/components/product-detail-description';
 import FaqSection from '@/components/faq-section';
@@ -65,23 +65,32 @@ export default function ProductDetailPage() {
   const slug = params.slug as string;
   const firestore = useFirestore();
 
-  const winesCollection = useMemoFirebase(() => collection(firestore, 'wines'), [firestore]);
-  const wineQuery = useMemoFirebase(() => winesCollection && query(winesCollection, where('slug', '==', slug)), [winesCollection, slug]);
+  const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
+  const productQuery = useMemoFirebase(() => productsCollection && query(productsCollection, where('slug', '==', slug)), [productsCollection, slug]);
 
-  const { data: wines, isLoading } = useCollection<Wine>(wineQuery);
-  
-  const wine = useMemo(() => (wines && wines.length > 0 ? wines[0] : null), [wines]);
+  const { data: products, isLoading: isProductLoading } = useCollection<Product>(productQuery);
+  const product = useMemo(() => (products && products.length > 0 ? products[0] : null), [products]);
+
+  const detailRef = useMemoFirebase(() => product && doc(firestore, 'product_details', product.id), [firestore, product]);
+  const { data: productDetail, isLoading: isDetailLoading } = useDoc<ProductDetail>(detailRef);
+
+  const fullProduct: FullProduct | null = useMemo(() => {
+    if (!product || !productDetail) return null;
+    return { ...product, ...productDetail };
+  }, [product, productDetail]);
+
+  const isLoading = isProductLoading || isDetailLoading;
 
   if (isLoading) {
     return <ProductDetailPageSkeleton />;
   }
 
-  if (!wine) {
+  if (!fullProduct) {
     notFound();
   }
   
-  const displayImage = wine.detailImage || wine.image;
-  const wineTypeAttribute = wine.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
+  const displayImage = fullProduct.detailImage || fullProduct.image;
+  const productTypeAttribute = fullProduct.attributes.find(attr => attr.label.toLowerCase() === 'loại' || attr.label.toLowerCase() === 'type');
 
   return (
     <div className="bg-white text-black">
@@ -91,7 +100,7 @@ export default function ProductDetailPage() {
                 <div className="md:col-span-1 bg-secondary flex items-center justify-center p-4 min-h-screen">
                     <Image
                     src={displayImage.url}
-                    alt={wine.nameVN}
+                    alt={fullProduct.nameVN}
                     width={800}
                     height={1000}
                     className="w-auto h-full max-h-[80vh] object-contain drop-shadow-2xl"
@@ -104,17 +113,17 @@ export default function ProductDetailPage() {
                     <div className="flex items-center text-xs uppercase font-medium text-muted-foreground tracking-widest mb-4">
                         <Link href="/" className="hover:text-primary">Trang chủ</Link>
                         <ChevronRight className="h-4 w-4 mx-1" />
-                        {wineTypeAttribute && (
-                            <Link href="/danh-muc-san-pham" className="hover:text-primary">{wineTypeAttribute.value}</Link>
+                        {productTypeAttribute && (
+                            <Link href="/danh-muc-san-pham" className="hover:text-primary">{productTypeAttribute.value}</Link>
                         )}
                     </div>
-                    <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{wine.nameVN}</h1>
-                    <p className="mt-6 text-base text-foreground/80 leading-relaxed">{wine.description}</p>
+                    <h1 className="font-headline text-3xl md:text-5xl font-black uppercase tracking-wide">{fullProduct.nameVN}</h1>
+                    <p className="mt-6 text-base text-foreground/80 leading-relaxed">{fullProduct.description}</p>
                     
                     <Separator className="my-8" />
                     
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 text-center">
-                        {wine.attributes.map(attr => (
+                        {fullProduct.attributes.map(attr => (
                              <div key={attr.label}>
                                 <p className="text-xs uppercase text-muted-foreground tracking-widest">{attr.label}</p>
                                 <p className="mt-1 font-bold text-lg">{attr.value}</p>
@@ -156,12 +165,14 @@ export default function ProductDetailPage() {
             </div>
         </div>
       
-      {wine.tastingNotes && <ProductInfoSection notes={wine.tastingNotes} />}
+      {fullProduct.tastingNotes && <ProductInfoSection notes={fullProduct.tastingNotes} />}
 
-      {wine.productDetails && <ProductDetailDescription details={wine.productDetails} />}
+      {fullProduct.productDetails && <ProductDetailDescription details={fullProduct.productDetails} />}
 
       <FaqSection />
       
     </div>
   );
 }
+
+    
