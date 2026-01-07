@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,6 @@ import { useProductDialog } from '@/stores/use-product-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useFirestore } from '@/firebase';
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
-import type { Product } from '@/lib/types';
 import FileUploader from './file-uploader';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -45,6 +44,9 @@ const formSchema = z.object({
     label: z.string(),
     value: z.string(),
   })).optional(),
+}).refine(data => data.image, {
+    message: "Vui lòng tải lên một ảnh đại diện.",
+    path: ["image"],
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -111,11 +113,6 @@ export default function ProductForm() {
 
   const onSubmit = async (values: ProductFormValues) => {
     try {
-      if (!values.image) {
-        form.setError('image', { type: 'manual', message: 'Vui lòng tải lên một ảnh đại diện.' });
-        return;
-      }
-
       const dataToSave = {
         ...values,
         tags: values.tags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
@@ -156,144 +153,144 @@ export default function ProductForm() {
             {isEditMode ? 'Cập nhật thông tin chi tiết cho sản phẩm này.' : 'Điền thông tin để tạo một sản phẩm mới.'}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-             <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Ảnh đại diện</FormLabel>
-                        <FormControl>
-                            <FileUploader 
-                                fieldName="image"
-                                onFieldChange={field.onChange}
-                                defaultUrl={field.value?.url}
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-                />
+        <FormProvider {...form}>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                      <FormItem>
+                          <FormLabel>Ảnh đại diện</FormLabel>
+                          <FormControl>
+                              <FileUploader 
+                                  fieldName="image"
+                                  onFieldChange={field.onChange}
+                              />
+                          </FormControl>
+                          <FormMessage />
+                      </FormItem>
+                  )}
+                  />
 
-            <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                    control={form.control}
-                    name="nameVN"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Tên sản phẩm (VN)</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="nameEN"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Tên sản phẩm (EN)</FormLabel>
-                        <FormControl>
-                            <Input placeholder="E.g., The Macallan 18" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Slug</FormLabel>
-                        <FormControl>
-                            <Input placeholder="vd: the-macallan-18" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Giá</FormLabel>
-                        <FormControl>
-                            <Input type="number" placeholder="0" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                  <FormField
+                      control={form.control}
+                      name="nameVN"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Tên sản phẩm (VN)</FormLabel>
+                          <FormControl>
+                              <Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+                  <FormField
+                      control={form.control}
+                      name="nameEN"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Tên sản phẩm (EN)</FormLabel>
+                          <FormControl>
+                              <Input placeholder="E.g., The Macallan 18" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+                  <FormField
+                      control={form.control}
+                      name="slug"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Slug</FormLabel>
+                          <FormControl>
+                              <Input placeholder="vd: the-macallan-18" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+                  <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Giá</FormLabel>
+                          <FormControl>
+                              <Input type="number" placeholder="0" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+              </div>
 
-             <FormField
-                control={form.control}
-                name="tags"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Tags</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="Nhập các tag, cách nhau bởi dấu phẩy" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
+              <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Tags</FormLabel>
+                      <FormControl>
+                          <Textarea placeholder="Nhập các tag, cách nhau bởi dấu phẩy" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+              />
 
-            <div className="grid grid-cols-2 gap-4">
-                 <FormField
-                    control={form.control}
-                    name="isFeatured"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                            <div className="space-y-0.5">
-                                <FormLabel>Nổi bật</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="isNew"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                            <div className="space-y-0.5">
-                                <FormLabel>Sản phẩm mới</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-            </div>
-            
-            <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Hủy
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Đang lưu...' : 'Lưu'}
-              </Button>
-            </div>
-          </form>
-        </Form>
+              <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                      control={form.control}
+                      name="isFeatured"
+                      render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <div className="space-y-0.5">
+                                  <FormLabel>Nổi bật</FormLabel>
+                              </div>
+                              <FormControl>
+                                  <Switch
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                  />
+                              </FormControl>
+                          </FormItem>
+                      )}
+                  />
+                  <FormField
+                      control={form.control}
+                      name="isNew"
+                      render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <div className="space-y-0.5">
+                                  <FormLabel>Sản phẩm mới</FormLabel>
+                              </div>
+                              <FormControl>
+                                  <Switch
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                  />
+                              </FormControl>
+                          </FormItem>
+                      )}
+                  />
+              </div>
+              
+              <div className="flex justify-end gap-2 pt-4">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Hủy
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? 'Đang lưu...' : 'Lưu'}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );
 }
-    
