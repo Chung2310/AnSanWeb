@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface CategoryNavProps {
     onCategorySelect: (slug: string | null) => void;
@@ -44,19 +44,21 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
     const { categories, isLoading: isLoadingCategories } = useCategories();
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-    const getProductCountForCategory = (slug: string | null) => {
-        if (slug === null) return products?.length || 0;
-        if (isLoadingProducts || !products) return 0;
-        const category = categories?.find(c => c.slug === slug);
-        // if (!category) return products.filter(p => p.tags?.includes(slug)).length;
-        
-        const mainCat = mainCategoriesConfig.find(mc => mc.slug === slug);
-        if(mainCat?.subCategories){
-             return products.filter(p => p.tags?.some(t => mainCat.subCategories?.includes(t))).length;
-        }
-        
-        return products.filter(p => p.tags?.includes(slug)).length;
-    };
+    const categoryCounts = useMemo(() => {
+        if (isLoadingProducts || !products) return {};
+    
+        const counts: { [key: string]: number } = {};
+    
+        mainCategoriesConfig.forEach(cat => {
+            if (cat.subCategories) {
+                counts[cat.slug] = products.filter(p => p.tags?.some(t => cat.subCategories?.includes(t))).length;
+            } else {
+                counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
+            }
+        });
+        return counts;
+    }, [products, isLoadingProducts]);
+
     
     const allProductsCount = products?.length || 0;
 
@@ -75,7 +77,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                         Tất cả ({allProductsCount})
                     </button>
                     {mainCategoriesConfig.map(cat => {
-                        const count = getProductCountForCategory(cat.slug);
+                        const count = categoryCounts[cat.slug] || 0;
                         if (count === 0 && !isLoadingProducts) return null;
 
                         const isActive = selectedCategory === cat.slug;
@@ -88,8 +90,9 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                             variant="ghost"
                                             onClick={() => onCategorySelect(cat.slug)}
                                             className={cn(
-                                                "p-0 h-auto hover:bg-transparent hover:text-black no-focus-border transition-colors whitespace-nowrap",
-                                                isActive ? "text-black font-bold" : ""
+                                                "p-0 h-auto no-focus-border transition-colors whitespace-nowrap",
+                                                isActive ? "text-black font-bold" : "",
+                                                'hover:text-black hover:bg-transparent'
                                             )}
                                         >
                                             {cat.label} ({count})
