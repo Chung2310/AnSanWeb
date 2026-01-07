@@ -14,16 +14,16 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isAdmin, isAuthLoading, _isHydrated } = useAuthStore();
+  const { user, isAdmin, isAuthLoading } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (_isHydrated && !isAuthLoading && !user) {
+    if (!isAuthLoading && !user) {
       router.push('/login');
     }
-  }, [user, isAuthLoading, _isHydrated, router]);
+  }, [user, isAuthLoading, router]);
 
-  if (!_isHydrated || isAuthLoading) {
+  if (isAuthLoading) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
         <Lottie animationData={loadingAnimation} className="h-32 w-32" />
