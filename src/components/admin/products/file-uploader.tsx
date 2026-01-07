@@ -20,16 +20,26 @@ export default function FileUploader({ fieldName, label, onUploadStateChange, de
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(defaultUrl || null);
   const { progress, url, error, startUpload, isUploading } = useUploadStorage();
-  const { setValue } = useFormContext(); // Get setValue from form context
+  const { setValue, getValues } = useFormContext(); // Get setValue and getValues from form context
 
   useEffect(() => {
     onUploadStateChange(isUploading, fieldName);
   }, [isUploading, onUploadStateChange, fieldName]);
   
   useEffect(() => {
-    // Update preview if defaultUrl changes (e.g., when form is reset)
-    setPreview(defaultUrl || null);
-  }, [defaultUrl]);
+    // When the dialog opens and defaultUrl is provided, set the preview.
+    // getValues() is used to check if the form already has a value for this field,
+    // which can happen on re-renders. We don't want to overwrite a new user selection
+    // with the old defaultUrl.
+    const currentFormValue = getValues(fieldName);
+    if (defaultUrl && !currentFormValue) {
+      setPreview(defaultUrl);
+    } else if (currentFormValue) {
+      setPreview(currentFormValue.url);
+    } else {
+      setPreview(null);
+    }
+  }, [defaultUrl, fieldName, getValues, isOpen]);
 
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +59,7 @@ export default function FileUploader({ fieldName, label, onUploadStateChange, de
       const uploadedImageInfo = await startUpload(file, 'products');
       if (uploadedImageInfo) {
         // Use setValue from react-hook-form to update the form state
-        setValue(fieldName, uploadedImageInfo, { shouldValidate: true });
+        setValue(fieldName, uploadedImageInfo, { shouldValidate: true, shouldDirty: true });
       }
     }
   };

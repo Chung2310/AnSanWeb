@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useProductDialog } from '@/components/admin/products/use-product-dialog';
@@ -27,7 +27,7 @@ import { useFirestore } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
 import FileUploader from '@/components/admin/products/file-uploader';
-import { Loader2 } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
   nameVN: z.string().min(1, 'Tên tiếng Việt là bắt buộc'),
@@ -37,11 +37,11 @@ const formSchema = z.object({
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
-  }),
+  }).nullable(),
   tags: z.string().optional(),
   attributes: z.array(z.object({
-    label: z.string(),
-    value: z.string()
+    label: z.string().min(1, "Nhãn không được để trống"),
+    value: z.string().min(1, "Giá trị không được để trống")
   })).optional(),
 });
 
@@ -61,20 +61,31 @@ function generateSlug(name: string) {
 export function ProductForm() {
   const { isOpen, onClose, defaultValues, id } = useProductDialog();
   const firestore = useFirestore();
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadingStatus, setUploadingStatus] = useState({ image: false });
 
   const isEditMode = !!id;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      attributes: [],
+    }
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "attributes"
   });
   
   const nameVNValue = form.watch('nameVN');
   const { isSubmitting } = form.formState;
 
-  const handleUploadStateChange = useCallback((uploading: boolean) => {
-    setIsUploading(uploading);
+  const handleUploadStateChange = useCallback((uploading: boolean, fieldName: 'image') => {
+    setUploadingStatus(prev => ({ ...prev, [fieldName]: uploading }));
   }, []);
+
+  const isAnyUploading = Object.values(uploadingStatus).some(status => status);
+
 
   useEffect(() => {
     if (nameVNValue && !isEditMode) {
@@ -90,6 +101,7 @@ export function ProductForm() {
             form.reset({
                 ...defaultValues,
                 tags: defaultValues.tags?.join(', ') || '',
+                attributes: defaultValues.attributes || [],
             });
         } else {
             form.reset({
@@ -97,7 +109,7 @@ export function ProductForm() {
                 nameEN: '',
                 slug: '',
                 price: 0,
-                image: undefined,
+                image: null,
                 attributes: [],
                 tags: '',
             });
@@ -107,7 +119,7 @@ export function ProductForm() {
 
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!firestore) return;
+    if (!firestore || !values.image) return;
 
     const productsCollectionRef = collection(firestore, 'products');
     
@@ -151,8 +163,9 @@ export function ProductForm() {
         <FormProvider {...form}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <div className="py-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="py-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Left Column */}
+                    <div className="md:col-span-2 space-y-4">
                         <FormField
                             control={form.control}
                             name="nameVN"
@@ -179,63 +192,107 @@ export function ProductForm() {
                             </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="slug"
-                            render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Slug (URL)</FormLabel>
-                                <FormControl>
-                                <Input {...field} placeholder="the-macallan-18" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Giá (VNĐ)</FormLabel>
-                                <FormControl>
-                                <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                            )}
-                        />
-                        <div className="md:col-span-2">
+                        <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}
-                                name="tags"
+                                name="slug"
                                 render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
+                                    <FormLabel>Slug (URL)</FormLabel>
                                     <FormControl>
-                                    <Input {...field} placeholder="scotch, speyside, old-rare" />
+                                    <Input {...field} placeholder="the-macallan-18" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Giá (VNĐ)</FormLabel>
+                                    <FormControl>
+                                    <Input type="number" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                                 )}
                             />
                         </div>
-                        <div className="md:col-span-2">
-                            <FileUploader
-                                fieldName="image"
-                                label="Ảnh bìa (listing)"
-                                defaultUrl={form.getValues('image.url')}
-                                onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading)}
-                            />
+                        <FormField
+                            control={form.control}
+                            name="tags"
+                            render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tags (phân cách bằng dấu phẩy)</FormLabel>
+                                <FormControl>
+                                <Input {...field} placeholder="scotch, speyside, old-rare" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                            )}
+                        />
+
+                        {/* Attributes Section */}
+                        <div className="space-y-4 rounded-md border p-4">
+                            <div className="flex justify-between items-center">
+                               <h3 className="text-sm font-medium">Thuộc tính</h3>
+                               <Button type="button" size="sm" variant="ghost" onClick={() => append({ label: '', value: '' })}>
+                                   <PlusCircle className="mr-2 h-4 w-4" /> Thêm
+                               </Button>
+                            </div>
+                            {fields.map((field, index) => (
+                                <div key={field.id} className="flex gap-2 items-end">
+                                    <FormField
+                                        control={form.control}
+                                        name={`attributes.${index}.label`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel className="text-xs">Nhãn</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} placeholder="VD: Xuất xứ" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`attributes.${index}.value`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel className="text-xs">Giá trị</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} placeholder="VD: Scotland" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="button" size="icon" variant="ghost" onClick={() => remove(index)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
                         </div>
+                    </div>
+                    {/* Right Column */}
+                    <div className="md:col-span-1">
+                        <FileUploader
+                            fieldName="image"
+                            label="Ảnh bìa (listing)"
+                            defaultUrl={form.getValues('image.url')}
+                            onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'image')}
+                        />
                     </div>
                 </div>
                 <DialogFooter className="pt-6">
                     <Button type="button" variant="outline" onClick={onClose}>
                     Hủy
                     </Button>
-                    <Button type="submit" disabled={isSubmitting || isUploading}>
-                    {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <Button type="submit" disabled={isSubmitting || isAnyUploading}>
+                    {(isSubmitting || isAnyUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Lưu Thay Đổi
                     </Button>
                 </DialogFooter>

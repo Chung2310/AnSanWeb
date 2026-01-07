@@ -7,7 +7,7 @@ type ProductDetailDialogState = {
   id?: string;
   isOpen: boolean;
   defaultValues?: Partial<FullProduct>;
-  onOpen: (id?: string, defaultValues?: Partial<FullProduct>) => void;
+  onOpen: (id: string, defaultValues?: Partial<FullProduct>) => void;
   onClose: () => void;
 };
 

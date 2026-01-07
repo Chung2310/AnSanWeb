@@ -1,6 +1,6 @@
 
 import { PlaceHolderImages } from './placeholder-images';
-import type { Wine, Category, BlogPost, Testimonial } from './types';
+import type { FullProduct, Category, BlogPost, Testimonial } from './types';
 
 const getImage = (id: string) => {
   const img = PlaceHolderImages.find((img) => img.id === id);
@@ -45,7 +45,7 @@ const genericProductDetails = {
 };
 
 
-export const sampleWines: Wine[] = [
+export const sampleWines: FullProduct[] = [
   {
     id: '1',
     nameVN: 'Château Margaux Premier Grand Cru Classé',
