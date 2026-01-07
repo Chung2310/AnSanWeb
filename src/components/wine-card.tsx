@@ -24,7 +24,7 @@ export default function WineCard({ product }: WineCardProps) {
           />
         </div>
         <div className="p-4 bg-white">
-          <h3 className="mt-2 font-bold text-lg leading-tight text-black uppercase truncate group-hover:text-primary">
+          <h3 className="mt-2 font-bold text-lg leading-tight text-black uppercase group-hover:text-primary">
             {product.nameVN}
           </h3>
           <p className="mt-2 text-base font-semibold text-gray-800">{formatPrice(product.price)}</p>
