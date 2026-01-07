@@ -13,16 +13,16 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isAdmin, _isHydrated } = useAuthStore();
+  const { user, isAdmin, isAuthLoading, _isHydrated } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (_isHydrated && !user) {
+    if (_isHydrated && !isAuthLoading && !user) {
       router.push('/login');
     }
-  }, [user, _isHydrated, router]);
+  }, [user, isAuthLoading, _isHydrated, router]);
 
-  if (!_isHydrated || !user) {
+  if (!_isHydrated || isAuthLoading) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
         <Lottie animationData={loadingAnimation} className="h-32 w-32" />
@@ -30,7 +30,7 @@ export default function AdminLayout({
       </div>
     );
   }
-
+  
   if (!isAdmin) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
@@ -38,9 +38,9 @@ export default function AdminLayout({
         <p className="text-muted-foreground">
           Bạn không có quyền truy cập vào trang này.
         </p>
-        <button onClick={() => router.push('/')} className="mt-6">
+        <Button onClick={() => router.push('/')} className="mt-6">
           Quay về trang chủ
-        </button>
+        </Button>
       </div>
     );
   }

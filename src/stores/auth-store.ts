@@ -9,11 +9,13 @@ import { initializeFirebase } from '@/firebase';
 interface AuthState {
   user: User | null;
   isAdmin: boolean;
+  isAuthLoading: boolean;
   _isHydrated: boolean;
   setUser: (user: User | null) => void;
   setIsAdmin: (isAdmin: boolean) => void;
   setHydrated: (isHydrated: boolean) => void;
   logout: () => void;
+  checkAdminStatus: (user: User | null) => Promise<void>;
   initializeAuthListener: () => () => void;
 }
 
@@ -24,6 +26,7 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       isAdmin: false,
+      isAuthLoading: true,
       _isHydrated: false,
       setUser: (user) => set({ user }),
       setIsAdmin: (isAdmin) => set({ isAdmin }),
@@ -32,15 +35,25 @@ export const useAuthStore = create<AuthState>()(
         auth.signOut();
         set({ user: null, isAdmin: false });
       },
+      checkAdminStatus: async (user: User | null) => {
+        if (user) {
+          const roleDocRef = doc(firestore, 'roles_admin', user.uid);
+          const roleDoc = await getDoc(roleDocRef);
+          const isAdmin = roleDoc.exists() && roleDoc.data()?.role === 'admin';
+          set({ isAdmin });
+        } else {
+          set({ isAdmin: false });
+        }
+      },
       initializeAuthListener: () => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          set({ user });
+          set({ user, isAuthLoading: true });
           if (user) {
             const roleDocRef = doc(firestore, 'roles_admin', user.uid);
             const roleDoc = await getDoc(roleDocRef);
-            set({ isAdmin: roleDoc.exists() && roleDoc.data()?.role === 'admin' });
+            set({ isAdmin: roleDoc.exists() && roleDoc.data()?.role === 'admin', isAuthLoading: false });
           } else {
-            set({ isAdmin: false });
+            set({ isAdmin: false, isAuthLoading: false });
           }
         });
         return unsubscribe;
@@ -58,4 +71,7 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-useAuthStore.getState().initializeAuthListener();
+// Initialize the listener once the app loads
+if (typeof window !== 'undefined') {
+    useAuthStore.getState().initializeAuthListener();
+}
