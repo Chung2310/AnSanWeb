@@ -75,20 +75,22 @@ export function ProductDetailForm() {
   useEffect(() => {
     if (isOpen) {
       const { defaultValues } = useProductDetailDialog.getState();
-      form.reset({
-        description: defaultValues?.description || '',
-        detailImage: defaultValues?.detailImage || null,
-        tastingNotes: defaultValues?.tastingNotes || {
-          brand: '',
-          chillFiltered: '',
-          region: '',
-          caskType: '',
-          nose: '',
-          palate: '',
-          finish: '',
-          color: '',
-        },
-      });
+      if (defaultValues) {
+        form.reset({
+          description: defaultValues?.description || '',
+          detailImage: defaultValues?.detailImage || null,
+          tastingNotes: defaultValues?.tastingNotes || {
+            brand: '',
+            chillFiltered: '',
+            region: '',
+            caskType: '',
+            nose: '',
+            palate: '',
+            finish: '',
+            color: '',
+          },
+        });
+      }
     }
   }, [isOpen, form.reset]);
 
@@ -112,6 +114,7 @@ export function ProductDetailForm() {
     onClose();
   };
 
+  const defaultValues = useProductDetailDialog.getState().defaultValues;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -128,6 +131,7 @@ export function ProductDetailForm() {
               <FileUploader
                   fieldName="detailImage"
                   label="Ảnh trang chi tiết"
+                  defaultUrl={defaultValues?.detailImage?.url}
                   onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'detailImage')}
               />
               <FormField

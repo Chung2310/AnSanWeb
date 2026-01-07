@@ -97,25 +97,25 @@ export function ProductForm() {
 
 
   useEffect(() => {
-    const { defaultValues } = useProductDialog.getState();
     if (isOpen) {
-        if (defaultValues) {
-            form.reset({
-                ...defaultValues,
-                tags: defaultValues.tags?.join(', ') || '',
-                attributes: defaultValues.attributes || [],
-            });
-        } else {
-            form.reset({
-                nameVN: '',
-                nameEN: '',
-                slug: '',
-                price: 0,
-                image: undefined,
-                attributes: [],
-                tags: '',
-            });
-        }
+      const { defaultValues } = useProductDialog.getState();
+      if (defaultValues) {
+          form.reset({
+              ...defaultValues,
+              tags: defaultValues.tags?.join(', ') || '',
+              attributes: defaultValues.attributes || [],
+          });
+      } else {
+          form.reset({
+              nameVN: '',
+              nameEN: '',
+              slug: '',
+              price: 0,
+              image: undefined,
+              attributes: [],
+              tags: '',
+          });
+      }
     }
   }, [isOpen, form.reset]);
 
@@ -151,6 +151,7 @@ export function ProductForm() {
     onClose();
   };
 
+  const defaultValues = useProductDialog.getState().defaultValues;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -285,6 +286,7 @@ export function ProductForm() {
                         <FileUploader
                             fieldName="image"
                             label="Ảnh bìa (listing)"
+                            defaultUrl={defaultValues?.image?.url}
                             onUploadStateChange={(isUploading) => handleUploadStateChange(isUploading, 'image')}
                         />
                     </div>

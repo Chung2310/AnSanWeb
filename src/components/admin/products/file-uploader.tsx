@@ -8,38 +8,31 @@ import { Image as ImageIcon, Upload, CheckCircle, XCircle } from 'lucide-react';
 import Image from 'next/image';
 import type { ImageInfo } from '@/lib/types';
 import { useFormContext } from 'react-hook-form';
-import { useProductDialog } from './use-product-dialog';
-import { useProductDetailDialog } from '../product-details/use-product-detail-dialog';
 
 interface FileUploaderProps {
   fieldName: 'image' | 'detailImage';
   label: string;
+  defaultUrl?: string | null;
   onUploadStateChange: (isUploading: boolean, fieldName: any) => void;
 }
 
-export default function FileUploader({ fieldName, label, onUploadStateChange }: FileUploaderProps) {
+export default function FileUploader({ fieldName, label, defaultUrl, onUploadStateChange }: FileUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const { progress, url, error, startUpload, isUploading } = useUploadStorage();
-  const { setValue, getValues, watch } = useFormContext(); 
+  const { setValue, watch } = useFormContext(); 
 
-  // Watch for changes in the specific field to update the preview
   const fieldValue = watch(fieldName);
 
   useEffect(() => {
-    if (fieldValue && fieldValue.url) {
+    if (fieldValue?.url) {
       setPreview(fieldValue.url);
+    } else if (defaultUrl) {
+      setPreview(defaultUrl);
     } else {
-       // Reset preview if field value is cleared
-       const dialogState = fieldName === 'image' ? useProductDialog.getState() : useProductDetailDialog.getState();
-       if (dialogState.isOpen && dialogState.defaultValues) {
-           const defaultUrl = fieldName === 'image' ? (dialogState.defaultValues as any).image?.url : (dialogState.defaultValues as any).detailImage?.url;
-           setPreview(defaultUrl || null);
-       } else {
-           setPreview(null);
-       }
+      setPreview(null);
     }
-  }, [fieldValue, fieldName]);
+  }, [fieldValue, defaultUrl]);
 
   useEffect(() => {
     onUploadStateChange(isUploading, fieldName);
