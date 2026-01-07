@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import { useCategories } from "@/hooks/use-categories";
+import CategoryNav from "./category-nav";
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -91,6 +92,7 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
 export default function ProductListing({ initialProducts, title, bannerData }: ProductListingProps) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 
@@ -107,18 +109,11 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       return { label: brand, count: count };
     }).filter(brand => brand.count > 0);
 
-    const categoryOptions = categories?.map(cat => ({
-        label: cat.name,
-        value: cat.slug,
-        count: clientProducts.filter(p => p.tags?.includes(cat.slug)).length
-    })) || [];
-
     return {
-      "DANH MỤC": categoryOptions,
       "THƯƠNG HIỆU": brandsInProducts,
       ...staticFiltersData
     }
-  }, [clientProducts, categories]);
+  }, [clientProducts]);
 
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -134,8 +129,14 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
 
   const filteredAndSortedProducts = useMemo(() => {
     let products = [...clientProducts];
+    
+    // Category filter from nav
+    if (activeCategory) {
+        products = products.filter(p => p.tags?.includes(activeCategory));
+    }
 
-    // Filtering logic
+
+    // Filtering logic from sidebar
     Object.entries(activeFilters).forEach(([group, values]) => {
       if (values.length === 0) return;
 
@@ -143,12 +144,6 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         products = products.filter(p => {
           return values.some(v => p.nameVN.toUpperCase().includes(v));
         });
-      }
-      if (group === "DANH MỤC") {
-          const categorySlugs = values.map(v => filtersData["DANH MỤC"].find(opt => opt.label === v)?.value);
-          products = products.filter(p => 
-              p.tags && categorySlugs.some(slug => slug && p.tags?.includes(slug))
-          );
       }
       if (group === "KHOẢNG GIÁ") {
           const priceRanges = values.map(v => staticFiltersData["KHOẢNG GIÁ"].find(opt => opt.label === v)?.value);
@@ -204,7 +199,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [clientProducts, activeFilters, activeSort, filtersData]);
+  }, [clientProducts, activeFilters, activeSort, activeCategory]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
@@ -223,11 +218,13 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
 
   return (
     <div className="bg-white text-black">
-      {bannerData && <CategoryBanner {...bannerData} />}
+      {bannerData ? <CategoryBanner {...bannerData} /> : (
+         <div className="container pt-12 text-left">
+             <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
+         </div>
+      )}
+      <CategoryNav onCategorySelect={setActiveCategory} selectedCategory={activeCategory} />
       <div className="container py-12">
-        <div className="text-left mb-4">
-          <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title} ({filteredAndSortedProducts.length})</h1>
-        </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
