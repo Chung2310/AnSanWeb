@@ -1,4 +1,5 @@
 
+
 export type ImageInfo = {
   url: string;
   path: string;
@@ -70,10 +71,10 @@ export type Category = {
   id: string;
   name: string;
   slug: string;
-  image: {
-    imageUrl: string,
-    imageHint: string
-  };
+  description?: string;
+  image?: ImageInfo;
+  status: 'active' | 'inactive';
+  createdAt: string;
 };
 
 export type BlogPost = {
@@ -82,7 +83,7 @@ export type BlogPost = {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;
+  content?: string;
   date: string;
   image: {
     imageUrl: string;

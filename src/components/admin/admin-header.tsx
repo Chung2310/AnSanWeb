@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import {
   Home,
   LineChart,
@@ -9,7 +9,8 @@ import {
   Search,
   ShoppingCart,
   Users2,
-  Newspaper
+  Newspaper,
+  Tags
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,12 +33,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { useAuthStore } from '@/stores/auth-store';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { usePathname } from 'next/navigation';
@@ -46,7 +41,7 @@ const navLinks = [
     { href: "/admin", icon: Home, label: "Dashboard" },
     { href: "/admin/orders", icon: ShoppingCart, label: "Orders" },
     { href: "/admin/products", icon: Package, label: "Products" },
-    { href: "/admin/categories", icon: Package2, label: "Categories" },
+    { href: "/admin/categories", icon: Tags, label: "Categories" },
     { href: "/admin/news", icon: Newspaper, label: "News" },
     { href: "/admin/users", icon: Users2, label: "Customers" },
 ];
