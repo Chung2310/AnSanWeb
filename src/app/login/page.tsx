@@ -28,7 +28,6 @@ import {
 import { useRouter } from 'next/navigation';
 import { useFirebase, useFirestore } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { useAuthStore } from '@/stores/auth-store';
 
 const formSchema = z.object({
   email: z.string().email('Email không hợp lệ.'),
@@ -51,11 +50,18 @@ export default function LoginPage() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      
+      if (values.email === 'admin@ansan.com') {
+        const roleDocRef = doc(firestore, 'roles_admin', userCredential.user.uid);
+        await setDoc(roleDocRef, { role: 'admin' });
+      }
+
       toast({
         title: 'Đăng nhập thành công!',
       });
       router.push('/admin');
+
     } catch (error: any) {
       if (error.code === 'auth/user-not-found' && values.email === 'admin@ansan.com') {
         try {
