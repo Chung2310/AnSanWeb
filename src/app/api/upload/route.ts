@@ -1,32 +1,21 @@
-
 import { NextResponse } from 'next/server';
-import * as storageAdmin from 'firebase-admin/storage';
-import * as appAdmin from 'firebase-admin/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { firebaseConfig } from '@/firebase/config';
 
-// Function to initialize Firebase Admin SDK
-function initializeAdminApp(): appAdmin.App {
-  const adminAppName = 'admin-upload';
-  const existingApp = appAdmin.getApps().find(app => app.name === adminAppName);
-  if (existingApp) {
-    return existingApp;
+// Initialize Firebase on the server-side
+function initializeServerApp() {
+  const apps = getApps();
+  if (apps.length) {
+    return getApp();
   }
-
-  // In a managed environment like App Hosting, the SDK can auto-discover credentials.
-  // We don't need to pass a service account key explicitly.
-  return appAdmin.initializeApp({
-    storageBucket: firebaseConfig.storageBucket,
-  }, adminAppName);
+  return initializeApp(firebaseConfig);
 }
 
 export async function POST(request: Request) {
   try {
-    const adminApp = initializeAdminApp();
-    if (!adminApp) {
-        throw new Error("Admin SDK initialization failed.");
-    }
-
-    const storage = storageAdmin.getStorage(adminApp);
+    const app = initializeServerApp();
+    const storage = getStorage(app);
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
@@ -41,13 +30,14 @@ export async function POST(request: Request) {
     const fileExtension = file.name.split('.').pop();
     const fileName = `${fileId}.${fileExtension}`;
     const storagePath = `products/${fileName}`;
-    const fileRef = storageAdmin.ref(storage.bucket(), storagePath);
+    
+    const storageRef = ref(storage, storagePath);
 
-    await storageAdmin.uploadBytes(fileRef, buffer, {
+    const snapshot = await uploadBytes(storageRef, buffer, {
       contentType: file.type,
     });
 
-    const downloadURL = await storageAdmin.getDownloadURL(fileRef);
+    const downloadURL = await getDownloadURL(snapshot.ref);
 
     return NextResponse.json({
       url: downloadURL,
@@ -56,10 +46,7 @@ export async function POST(request: Request) {
 
   } catch (e: any) {
     console.error('Upload API Error:', e);
-    // Ensure we don't leak internal implementation details in the error response
-    const errorMessage = e.message.includes('is not a function') 
-        ? 'Internal server error during file upload.' 
-        : `Upload failed: ${e.message}`;
+    const errorMessage = `Upload failed: ${e.message}`;
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
