@@ -26,32 +26,35 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useFirestore } from '@/firebase';
-import { addDocumentNonBlocking, updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { addDocumentNonBlocking, updateDocumentNonBlocking, setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, doc } from 'firebase/firestore';
 import FileUploader from '@/components/admin/products/file-uploader';
-import type { ImageInfo, ProductAttribute } from '@/lib/types';
+import type { ImageInfo, FullProduct } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
 
 const formSchema = z.object({
+  // From Product
   nameVN: z.string().min(1, 'Tên tiếng Việt là bắt buộc'),
   nameEN: z.string().min(1, 'Tên tiếng Anh là bắt buộc'),
   slug: z.string().min(1, 'Slug là bắt buộc'),
   price: z.coerce.number().min(0, 'Giá phải là số dương'),
-  description: z.string().min(1, 'Mô tả là bắt buộc'),
   image: z.object({
     url: z.string().min(1, "URL ảnh bìa là bắt buộc"),
     path: z.string().min(1, "Đường dẫn ảnh bìa là bắt buộc")
   }).nullable(),
-  detailImage: z.object({
-      url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
-      path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
-  }).nullable(),
+  tags: z.string().optional(),
   attributes: z.array(z.object({
     label: z.string(),
     value: z.string()
   })).optional(),
-  tags: z.string().optional(),
+  
+  // From ProductDetail
+  description: z.string().min(1, 'Mô tả là bắt buộc'),
+  detailImage: z.object({
+      url: z.string().min(1, "URL ảnh chi tiết là bắt buộc"),
+      path: z.string().min(1, "Đường dẫn ảnh chi tiết là bắt buộc")
+  }).nullable(),
 });
 
 function generateSlug(name: string) {
@@ -87,7 +90,6 @@ export function ProductForm() {
   }, []);
 
   useEffect(() => {
-    // Only auto-generate slug for new products, not when editing
     if (nameVNValue && !isEditMode) {
       const slug = generateSlug(nameVNValue);
       form.setValue('slug', slug, { shouldValidate: true });
@@ -100,9 +102,6 @@ export function ProductForm() {
         if (defaultValues) {
             form.reset({
                 ...defaultValues,
-                image: defaultValues.image || null,
-                detailImage: defaultValues.detailImage || null,
-                attributes: defaultValues.attributes || [],
                 tags: defaultValues.tags?.join(', ') || '',
             });
         } else {
@@ -126,29 +125,49 @@ export function ProductForm() {
   }, [form]);
 
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore) return;
 
-    const winesCollectionRef = collection(firestore, 'wines');
+    const productsCollectionRef = collection(firestore, 'products');
+    const detailsCollectionRef = collection(firestore, 'product_details');
     
-    // Create a new data object for submission, ensuring attributes are handled correctly.
-    const submissionData = {
-        ...values,
-        // Ensure attributes is always an array, even if it's not provided in the form.
+    const productData = {
+        nameVN: values.nameVN,
+        nameEN: values.nameEN,
+        slug: values.slug,
+        price: values.price,
+        image: values.image,
         attributes: values.attributes || [], 
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
     };
 
+    const detailData = {
+        description: values.description,
+        detailImage: values.detailImage,
+        // TODO: Add forms for these fields later
+        tastingNotes: defaultValues?.tastingNotes || null,
+        productDetails: defaultValues?.productDetails || null,
+    };
+
     if (isEditMode && id) {
-      const docRef = doc(winesCollectionRef, id);
-      updateDocumentNonBlocking(docRef, submissionData);
+        const productDocRef = doc(productsCollectionRef, id);
+        const detailDocRef = doc(detailsCollectionRef, id);
+        
+        await updateDocumentNonBlocking(productDocRef, productData);
+        await setDocumentNonBlocking(detailDocRef, detailData, { merge: true });
+
     } else {
-      addDocumentNonBlocking(winesCollectionRef, {
-          ...submissionData,
-          createdAt: new Date().toISOString(),
-          isFeatured: false,
-          isNew: true,
-      });
+        const newProductRef = await addDocumentNonBlocking(productsCollectionRef, {
+            ...productData,
+            createdAt: new Date().toISOString(),
+            isFeatured: false,
+            isNew: true,
+        });
+
+        if (newProductRef) {
+            const detailDocRef = doc(detailsCollectionRef, newProductRef.id);
+            await setDocumentNonBlocking(detailDocRef, detailData, { merge: false });
+        }
     }
     onClose();
   };
@@ -290,3 +309,5 @@ export function ProductForm() {
     </Dialog>
   );
 }
+
+    

@@ -2,19 +2,19 @@
  * Core Philosophy: This ruleset implements a Role-Based Access Control (RBAC) model tailored for a content-driven website with an administrative backend. The core principle is a strict separation between publicly readable content and privately managed data. A user's administrative status, determined by the existence of their UID in a dedicated 'roles_admin' collection, is the sole factor for granting write access to any data.
  *
  * Data Structure: The database is organized into several flat, top-level collections.
- * - /wines, /categories, /blogPosts: These collections store public-facing content that anyone can read.
+ * - /products, /product_details, /categories, /blogPosts: These collections store public-facing content that anyone can read.
  * - /contacts, /newsletterSubscriptions: These collections store data submitted by users. They are write-only for the public and read-only for admins to protect user privacy.
  * - /roles_admin: A specialized collection acting as a high-performance lookup table for authorization. The existence of a document /roles_admin/{userId} grants that user administrative privileges across the entire database.
  *
  * Key Security Decisions:
  * - Admin-Centric Writes: All write operations (create, update, delete) on any data are restricted to authenticated users with an admin role.
- * - Public Read Access: Core content like wines, categories, and blog posts is publicly readable to allow the website to function for all visitors, including those not signed in.
+ * - Public Read Access: Core content like products, categories, and blog posts is publicly readable to allow the website to function for all visitors, including those not signed in.
  * - Write-Only for User Submissions: To protect privacy, contact forms and newsletter subscriptions can be created by anyone but can only be viewed and managed by administrators.
  * - No User Data Ownership: The concept of individual user data ownership does not exist in this model, simplifying the rules significantly. All content is managed centrally by admins.
  *
  * Denormalization for Authorization: The /roles_admin/{userId} collection is a key example of denormalization for performance and security. Instead of looking up a role on a user profile document (requiring a costly 'get' call), rules perform a fast, non-billable 'exists()' check. This makes role verification efficient and isolates authorization logic from user profile data.
  *
- * Structural Segregation: Public content (like /wines) is stored in separate collections from private user-submitted data (like /contacts). This clear separation allows for simple, collection-wide security rules (e.g., allow public list on /wines, deny public list on /contacts) without needing complex conditions based on document fields.
+ * Structural Segregation: Public content (like /products) is stored in separate collections from private user-submitted data (like /contacts). This clear separation allows for simple, collection-wide security rules (e.g., allow public list on /products, deny public list on /contacts) without needing complex conditions based on document fields.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -48,15 +48,20 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/roles_admin).size == 0;
     }
 
+    /**
+     * @description Publicly readable product data (core info). Only admins can manage (create, update, delete) product entries.
+     * @path /products/{productId}
+     */
+    match /products/{productId} {
+      allow get, list: if true;
+      allow create, update, delete: if request.auth != null;
+    }
 
     /**
-     * @description Publicly readable wine product data. Only admins can manage (create, update, delete) wine entries.
-     * @path /wines/{wineId}
-     * @allow (get, list) - Any user, signed in or not, can view the list of wines or a specific wine.
-     * @deny (create) - A non-admin user attempts to add a new wine product.
-     * @principle Public read access for website content, with centralized admin control for all modifications.
+     * @description Publicly readable product detail data. Only admins can manage.
+     * @path /product_details/{productId}
      */
-    match /wines/{wineId} {
+    match /product_details/{productId} {
       allow get, list: if true;
       allow create, update, delete: if request.auth != null;
     }
@@ -64,9 +69,6 @@ service cloud.firestore {
     /**
      * @description Publicly readable category data. Only admins can manage categories.
      * @path /categories/{categoryId}
-     * @allow (get) - Any user can read a specific category's details.
-     * @deny (update) - A signed-in, non-admin user tries to rename a category.
-     * @principle Public read access for website content, with centralized admin control for all modifications.
      */
     match /categories/{categoryId} {
       allow get, list: if true;
@@ -76,9 +78,6 @@ service cloud.firestore {
     /**
      * @description Publicly readable blog posts. Only admins can publish or manage posts.
      * @path /blogPosts/{blogPostId}
-     * @allow (list) - The website front-end can list all blog posts for any visitor.
-     * @deny (delete) - A non-admin user attempts to delete a blog post.
-     * @principle Public read access for website content, with centralized admin control for all modifications.
      */
     match /blogPosts/{blogPostId} {
       allow get, list: if true;
@@ -88,9 +87,6 @@ service cloud.firestore {
     /**
      * @description Stores contact form submissions. Anyone can submit a message, but only admins can read or manage them.
      * @path /contacts/{contactId}
-     * @allow (create) - An anonymous user submits the contact form on the website.
-     * @deny (get, list) - A non-admin user tries to read contact messages, protecting user privacy.
-     * @principle Protects private user-submitted data by allowing public creation but restricting all other access to administrators.
      */
     match /contacts/{contactId} {
       allow get, list: if isAdmin();
@@ -101,9 +97,6 @@ service cloud.firestore {
     /**
      * @description Stores newsletter email subscriptions. Anyone can subscribe, but only admins can view or manage the subscription list.
      * @path /newsletterSubscriptions/{newsletterSubscriptionId}
-     * @allow (create) - An anonymous visitor enters their email to subscribe to the newsletter.
-     * @deny (list) - A regular user attempts to get the list of all subscribed emails.
-     * @principle Protects private user-submitted data by allowing public creation but restricting all other access to administrators.
      */
     match /newsletterSubscriptions/{newsletterSubscriptionId} {
       allow get, list: if isAdmin();
@@ -115,16 +108,13 @@ service cloud.firestore {
      * @description Manages administrator roles. Only existing admins can add or remove other admins.
      * The very first admin can be created by any authenticated user, securing the system initialization.
      * @path /roles_admin/{userId}
-     * @allow (create) - An existing admin grants privileges OR the first-ever admin document is created by an authenticated user.
-     * @deny (create) - A non-admin user attempts to create an admin role when one already exists.
-     * @principle Secures the role management system, ensuring only trusted admins can modify privileges after initial setup.
      */
      match /roles_admin/{userId} {
       allow get, list: if isAdmin();
-      // Allow a user to create their own admin document if they are authenticated and are either the first admin ever
-      // or an existing admin is granting them access.
       allow create: if request.auth.uid == userId && (isFirstAdminCreation() || isAdmin());
       allow update, delete: if isAdmin();
     }
   }
 }
+
+    

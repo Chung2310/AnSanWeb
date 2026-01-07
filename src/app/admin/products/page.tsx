@@ -8,6 +8,7 @@ import {
   query,
   orderBy,
   Firestore,
+  getDoc,
 } from 'firebase/firestore';
 
 import { Badge } from '@/components/ui/badge';
@@ -51,25 +52,25 @@ import { ProductForm } from '@/components/admin/products/product-form';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { deleteDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
-import type { Wine } from '@/lib/types';
+import type { Product, ProductDetail, FullProduct } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminProductsPage() {
   const { onOpen } = useProductDialog();
   const firestore = useFirestore();
 
-  const winesCollection = useMemoFirebase(
-    () => collection(firestore, 'wines'),
+  const productsCollection = useMemoFirebase(
+    () => collection(firestore, 'products'),
     [firestore]
   );
-  const winesQuery = useMemoFirebase(
-    () => winesCollection && query(winesCollection, orderBy('createdAt', 'desc')),
-    [winesCollection]
+  const productsQuery = useMemoFirebase(
+    () => productsCollection && query(productsCollection, orderBy('createdAt', 'desc')),
+    [productsCollection]
   );
   
-  const { data: products, isLoading } = useCollection<Wine>(winesQuery);
+  const { data: products, isLoading } = useCollection<Product>(productsQuery);
 
-  const [deleteCandidate, setDeleteCandidate] = useState<Wine | null>(null);
+  const [deleteCandidate, setDeleteCandidate] = useState<Product | null>(null);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -93,18 +94,32 @@ export default function AdminProductsPage() {
     onOpen();
   };
 
-  const handleEdit = (product: Wine) => {
-    onOpen(product.id, product);
+  const handleEdit = async (product: Product) => {
+    if (!firestore) return;
+    const detailDocRef = doc(firestore, 'product_details', product.id);
+    const detailSnap = await getDoc(detailDocRef);
+    const detailData = detailSnap.exists() ? detailSnap.data() as ProductDetail : null;
+
+    const fullProduct: FullProduct = {
+      ...product,
+      ...(detailData || { description: '' }),
+    };
+
+    onOpen(product.id, fullProduct);
   };
 
-  const handleDelete = (product: Wine) => {
+  const handleDelete = (product: Product) => {
     setDeleteCandidate(product);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteCandidate || !firestore) return;
-    const docRef = doc(firestore, 'wines', deleteCandidate.id);
-    deleteDocumentNonBlocking(docRef);
+    const productDocRef = doc(firestore, 'products', deleteCandidate.id);
+    const detailDocRef = doc(firestore, 'product_details', deleteCandidate.id);
+    
+    await deleteDocumentNonBlocking(productDocRef);
+    await deleteDocumentNonBlocking(detailDocRef);
+    setDeleteCandidate(null);
   };
 
   return (
@@ -247,3 +262,5 @@ export default function AdminProductsPage() {
     </>
   );
 }
+
+    
