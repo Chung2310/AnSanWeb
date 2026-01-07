@@ -45,7 +45,18 @@ const mainNavLinks = [
 ];
 
 const categoryNavLinks = [
-    { href: '/danh-muc/wine', label: 'RƯỢU VANG' },
+    { 
+      href: '/danh-muc/ruou-vang', 
+      label: 'RƯỢU VANG',
+      sublinks: [
+        { href: '/danh-muc/ruou-vang/vang-duc', label: 'VANG ĐỨC' },
+        { href: '/danh-muc/ruou-vang/vang-nga', label: 'VANG NGA' },
+        { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
+        { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
+        { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
+        { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
+      ]
+    },
     {
       href: '/danh-muc/spirits',
       label: 'RƯỢU MẠNH',
