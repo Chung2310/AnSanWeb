@@ -30,7 +30,7 @@ export default function ProductsPage() {
     )
   }
   
-  const filteredProducts = products?.filter(wine => wine.nameVN.toLowerCase().includes('john walker')) || [];
+  const filteredProducts = products?.filter(wine => wine.tags?.includes('john-walker')) || [];
 
   return (
     <ProductListing 

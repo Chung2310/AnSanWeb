@@ -30,7 +30,7 @@ export default function ProductsPage() {
     )
   }
   
-  const lakesProducts = products?.filter(wine => wine.nameVN.includes('The Lakes')) || [];
+  const lakesProducts = products?.filter(wine => wine.tags?.includes('lakes')) || [];
 
   return (
     <ProductListing 
