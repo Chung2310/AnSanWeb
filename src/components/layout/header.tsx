@@ -50,8 +50,8 @@ const categoryNavLinks = [
       href: '/danh-muc/spirits', 
       label: 'Rượu Mạnh',
       sublinks: [
-        { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
-        { href: '/danh-muc/ruou-manh/john-walker', label: 'JHON WALKER' },
+        { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S FINEST" },
+        { href: '/danh-muc/ruou-manh/john-walker', label: 'JOHN WALKER' },
         { href: '/danh-muc/ruou-manh/mortlach', label: 'MORTLACH' },
         { href: '/danh-muc/ruou-manh/ruou-chivas', label: 'RƯỢU CHIVAS' },
         { href: '/danh-muc/ruou-manh/ruou-royal', label: 'RƯỢU ROYAL' },
