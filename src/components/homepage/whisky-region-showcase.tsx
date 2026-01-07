@@ -47,6 +47,7 @@ export default function WhiskyRegionShowcase() {
   
   const defaultImage = getImage('featured-macallan-25');
   const [activeImage, setActiveImage] = useState<ImagePlaceholder | undefined>(defaultImage);
+  const [selectedRegion, setSelectedRegion] = useState('SCOTCH WHISKY');
 
   useEffect(() => {
     if (isInView) {
@@ -54,15 +55,12 @@ export default function WhiskyRegionShowcase() {
     }
   }, [isInView, mainControls]);
   
-  const handleMouseEnter = (imageId: string) => {
+  const handleClick = (imageId: string, regionName: string) => {
     const image = getImage(imageId);
     if (image) {
       setActiveImage(image);
+      setSelectedRegion(regionName);
     }
-  };
-  
-  const handleMouseLeave = () => {
-    setActiveImage(defaultImage);
   };
 
   if (!defaultImage) return null;
@@ -105,10 +103,9 @@ export default function WhiskyRegionShowcase() {
             <motion.div 
               key={region.name} 
               variants={itemVariants}
-              onMouseEnter={() => handleMouseEnter(region.imageId)}
-              onMouseLeave={handleMouseLeave}
+              onClick={() => handleClick(region.imageId, region.name)}
               className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 ${
-                  region.prominent
+                  selectedRegion === region.name
                     ? 'text-6xl text-white'
                     : 'text-5xl text-white/60'
                 }`}
