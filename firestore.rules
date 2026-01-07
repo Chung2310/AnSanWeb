@@ -5,21 +5,21 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isAdmin() {
+      // Check if the user has an admin role document
       return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
     // Products: Public read, admin write
     match /products/{productId} {
-      allow get: if true;
+      allow get: if true; // Allow everyone to read product details
       allow list: if true;
       allow create, update, delete: if isAdmin();
     }
 
-    // Product Details: Public read, admin write
     match /product_details/{productId} {
-      allow get: if true;
-      allow list: if true;
-      allow create, update, delete: if isAdmin();
+        allow get: if true;
+        allow list: if true;
+        allow create, update, delete: if isAdmin();
     }
 
     // Categories: Public read, admin write
@@ -28,21 +28,19 @@ service cloud.firestore {
       allow list: if true;
       allow create, update, delete: if isAdmin();
     }
-
-    // Admin collection: only admins can read, nobody can write from client
+    
+    // Admins: Only admins can read their own entry, nobody can write from client
     match /admins/{userId} {
-      allow get: if isAdmin();
-      allow list, create, update, delete: if false;
+      allow get: if request.auth.uid == userId && isAdmin();
+      allow list, create, update, delete: if false; // Prevent client-side role creation
     }
   }
 }
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // Allow public read access to all files
     match /{allPaths=**} {
       allow read: if true;
-      // Allow writes only if the user is authenticated (i.e., our admin)
       allow write: if request.auth != null;
     }
   }
