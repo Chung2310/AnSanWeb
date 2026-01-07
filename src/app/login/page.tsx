@@ -16,7 +16,7 @@ import { useState, type FormEvent, useEffect } from 'react';
 import Logo from '@/components/logo';
 import { useAuth, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@ansan.com');
@@ -53,7 +53,7 @@ export default function LoginPage() {
                 
                 // Grant admin role to the new user
                 const adminDocRef = doc(firestore, 'roles_admin', newUserCredential.user.uid);
-                await setDoc(adminDocRef, { role: 'admin', createdAt: new Date() });
+                await setDoc(adminDocRef, { role: 'admin', createdAt: serverTimestamp() });
 
                 login(newUserCredential.user);
                 router.push('/admin');
