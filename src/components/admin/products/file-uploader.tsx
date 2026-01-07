@@ -67,7 +67,7 @@ export default function FileUploader({ fieldName, onFieldChange }: FileUploaderP
       <div className="w-full aspect-video border-2 border-dashed border-muted-foreground/30 rounded-lg flex items-center justify-center relative group">
         {preview ? (
           <>
-            <Image src={preview} alt="Preview" fill objectFit="contain" className="rounded-lg" />
+            <Image src={preview} alt="Preview" fill className="object-contain rounded-lg" />
             <Button
               type="button"
               variant="destructive"

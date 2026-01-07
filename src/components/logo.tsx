@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
@@ -7,8 +8,8 @@ export default function Logo({ className }: { className?: string }) {
       <Image
         src="/logo.png"
         alt="AnSan Logo"
-        layout="fill"
-        objectFit="contain"
+        fill
+        className="object-contain"
       />
     </div>
   );
