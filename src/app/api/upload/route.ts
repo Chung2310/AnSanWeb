@@ -2,21 +2,23 @@ import { NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
 import { Readable } from 'stream';
 
-// Initialize Firebase Admin SDK
-// This should only run once.
+// This is the correct way to initialize the admin SDK.
+// It will automatically use the service account credentials provided
+// by the environment (e.g., in a Cloud Function, App Engine, or via GOOGLE_APPLICATION_CREDENTIALS).
 if (!admin.apps.length) {
   try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string);
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     });
   } catch (error: any) {
     console.error('Firebase Admin Initialization Error:', error.message);
   }
 }
 
+// Get the default bucket from the initialized app.
+// Ensure the bucket is retrieved only after initialization.
 const bucket = admin.storage().bucket();
+
 
 export async function POST(request: Request) {
   try {
