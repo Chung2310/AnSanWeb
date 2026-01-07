@@ -27,6 +27,7 @@ export function useUploadStorage(): UploadResult {
       if (!firebaseApp) {
         return reject(new Error('Firebase app is not initialized.'));
       }
+      // Get storage instance here to ensure firebaseApp is ready.
       const storage = getStorage(firebaseApp);
       
       if (!file) {
