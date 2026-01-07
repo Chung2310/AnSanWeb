@@ -1,20 +1,20 @@
 
 import { NextResponse } from 'next/server';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase-admin/storage';
-import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
+import * as storageAdmin from 'firebase-admin/storage';
+import * as appAdmin from 'firebase-admin/app';
 import { firebaseConfig } from '@/firebase/config';
 
 // Function to initialize Firebase Admin SDK
-function initializeAdminApp(): App {
+function initializeAdminApp(): appAdmin.App {
   const adminAppName = 'admin-upload';
-  const existingApp = getApps().find(app => app.name === adminAppName);
+  const existingApp = appAdmin.getApps().find(app => app.name === adminAppName);
   if (existingApp) {
     return existingApp;
   }
 
   // In a managed environment like App Hosting, the SDK can auto-discover credentials.
   // We don't need to pass a service account key explicitly.
-  return initializeApp({
+  return appAdmin.initializeApp({
     storageBucket: firebaseConfig.storageBucket,
   }, adminAppName);
 }
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         throw new Error("Admin SDK initialization failed.");
     }
 
-    const storage = getStorage(adminApp);
+    const storage = storageAdmin.getStorage(adminApp);
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
@@ -41,13 +41,13 @@ export async function POST(request: Request) {
     const fileExtension = file.name.split('.').pop();
     const fileName = `${fileId}.${fileExtension}`;
     const storagePath = `products/${fileName}`;
-    const fileRef = ref(storage.bucket(), storagePath);
+    const fileRef = storageAdmin.ref(storage.bucket(), storagePath);
 
-    await uploadBytes(fileRef, buffer, {
+    await storageAdmin.uploadBytes(fileRef, buffer, {
       contentType: file.type,
     });
 
-    const downloadURL = await getDownloadURL(fileRef);
+    const downloadURL = await storageAdmin.getDownloadURL(fileRef);
 
     return NextResponse.json({
       url: downloadURL,
@@ -56,6 +56,10 @@ export async function POST(request: Request) {
 
   } catch (e: any) {
     console.error('Upload API Error:', e);
-    return NextResponse.json({ error: `Upload failed: ${e.message}` }, { status: 500 });
+    // Ensure we don't leak internal implementation details in the error response
+    const errorMessage = e.message.includes('is not a function') 
+        ? 'Internal server error during file upload.' 
+        : `Upload failed: ${e.message}`;
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
