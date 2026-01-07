@@ -17,143 +17,56 @@
  *
  * Key Security Decisions:
  * - Administrator privileges are determined by the existence of a user's UID in the
- *   /roles_admin collection. This is a highly performant and secure method for role checking.
- * - Public list access is safely enabled on content collections (/wines, /categories, /blogPosts)
+ *   /admins collection. This is a highly performant and secure method for role checking.
+ * - Public list access is safely enabled on content collections (/products, /categories, /blogPosts)
  *   because all documents within them are intended for public viewing.
  * - List access is denied for all non-administrators on private data collections
  *   (/contacts, /newsletterSubscriptions) to prevent data leakage.
  * - Anonymous or unauthenticated users are permitted to create documents in the
  *   /contacts and /newsletterSubscriptions collections to support public-facing forms.
- *
- * Denormalization for Authorization:
- * The /roles_admin/{userId} collection is the primary example of denormalization.
- * Instead of storing a role on a user profile document and requiring a `get()` call,
- * we use the existence of a document in this dedicated collection. This allows for
- * a simple, fast, and non-billable `exists()` check within the rules to grant
- * administrative powers.
- *
- * Structural Segregation:
- * The ruleset clearly separates public content (wines) from private submissions (contacts).
- * This segregation into different top-level collections allows for simple, broad
- * rules on each collection path without the risk of accidentally exposing private
- * data that might exist in a mixed-content collection.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // -------------------------------------------------------------------------
-    // Helper Functions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checks if the user is authenticated.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * Checks if the user has administrative privileges.
-     * Admin status is granted by the existence of a document in the /roles_admin collection
-     * where the document ID matches the user's UID.
-     */
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-
-    // -------------------------------------------------------------------------
-    // Public Content Collections (Admin-Managed)
-    // -------------------------------------------------------------------------
-
-    /**
-     * @description Controls access to wine product data. Wines are public to view but can only be managed by administrators.
-     * @path /wines/{wineId}
-     * @allow (get) Any user, signed-in or anonymous, can read a wine document.
-     * @deny (create) A signed-in, non-admin user cannot create a new wine document.
-     * @principle Public read access for content, with writes restricted to privileged roles.
-     */
-    match /wines/{wineId} {
+    match /products/{productId} {
       allow get, list: if true;
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && resource != null;
+      allow create, update, delete: if isAdmin();
     }
 
-    /**
-     * @description Controls access to wine categories. Categories are public to view but can only be managed by administrators.
-     * @path /categories/{categoryId}
-     * @allow (list) Any user, signed-in or anonymous, can list all categories.
-     * @deny (update) A signed-in, non-admin user cannot update an existing category.
-     * @principle Public read access for content, with writes restricted to privileged roles.
-     */
     match /categories/{categoryId} {
       allow get, list: if true;
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && resource != null;
+      allow create, update, delete: if isAdmin();
     }
-
-    /**
-     * @description Controls access to blog posts. Posts are public to view but can only be managed by administrators.
-     * @path /blogPosts/{blogPostId}
-     * @allow (get) Any user, signed-in or anonymous, can read a blog post.
-     * @deny (delete) A signed-in, non-admin user cannot delete a blog post.
-     * @principle Public read access for content, with writes restricted to privileged roles.
-     */
+    
+    match /product_details/{productId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
     match /blogPosts/{blogPostId} {
       allow get, list: if true;
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && resource != null;
+      allow create, update, delete: if isAdmin();
     }
 
-
-    // -------------------------------------------------------------------------
-    // User Submission Collections (Public Create, Admin Read/Manage)
-    // -------------------------------------------------------------------------
-
-    /**
-     * @description Controls access to contact form submissions. Anyone can submit a message, but only admins can read or manage them.
-     * @path /contacts/{contactId}
-     * @allow (create) An unauthenticated user can create a contact message.
-     * @deny (get) A signed-in, non-admin user cannot read a contact message.
-     * @principle Allows open data submission while ensuring the privacy of the submitted information.
-     */
     match /contacts/{contactId} {
-      allow get, list: if isAdmin();
+      allow read: if isAdmin();
       allow create: if true;
-      allow update, delete: if isAdmin() && resource != null;
+      allow update, delete: if isAdmin();
     }
 
-    /**
-     * @description Controls access to newsletter subscriptions. Anyone can subscribe, but only admins can view the subscriber list.
-     * @path /newsletterSubscriptions/{subscriptionId}
-     * @allow (create) An unauthenticated user can create a subscription.
-     * @deny (list) A signed-in, non-admin user cannot list all subscriptions.
-     * @principle Allows open data submission while ensuring the privacy of the submitted information.
-     */
     match /newsletterSubscriptions/{subscriptionId} {
-      allow get, list: if isAdmin();
+      allow read: if isAdmin();
       allow create: if true;
-      allow update, delete: if isAdmin() && resource != null;
+      allow update, delete: if isAdmin();
     }
 
-
-    // -------------------------------------------------------------------------
-    // Administrative Collections
-    // -------------------------------------------------------------------------
-
-    /**
-     * @description Manages admin role assignments. Only existing admins can view or modify the list of administrators.
-     * @path /roles_admin/{userId}
-     * @allow (create) An admin user can create a document to grant another user admin rights.
-     * @deny (get) A non-admin user cannot check if another user is an admin.
-     * @principle Secures role management by restricting it to already-privileged users.
-     */
-    match /roles_admin/{userId} {
-      allow get, list: if isAdmin();
-      allow create: if isAdmin();
-      allow update, delete: if isAdmin() && resource != null;
+    match /admins/{userId} {
+      allow read, write: if isAdmin();
     }
-
   }
 }
