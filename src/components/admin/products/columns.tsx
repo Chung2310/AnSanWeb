@@ -18,11 +18,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { deleteDocumentNonBlocking } from '@/firebase';
-import { doc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useDeleteProduct } from '@/hooks/use-delete-product';
 
 const formatPrice = (price: number) => {
+    if (isNaN(price)) return '';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 };
 
@@ -99,12 +98,7 @@ export const columns: ColumnDef<Product>[] = [
     header: 'Hành động',
     cell: function Cell({ row }) {
       const product = row.original;
-      const firestore = useFirestore();
-
-      const handleDelete = () => {
-        const productDocRef = doc(firestore, 'products', product.id);
-        deleteDocumentNonBlocking(productDocRef);
-      };
+      const { deleteProduct, isDeleting } = useDeleteProduct();
 
       return (
         <div className="flex items-center space-x-2">
@@ -125,16 +119,17 @@ export const columns: ColumnDef<Product>[] = [
               <AlertDialogHeader>
                 <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn sản phẩm khỏi cơ sở dữ liệu.
+                  Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả hình ảnh liên quan khỏi máy chủ.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Hủy</AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={handleDelete}
+                  onClick={() => deleteProduct(product)}
+                  disabled={isDeleting}
                   className="bg-destructive hover:bg-destructive/90"
                 >
-                  Xóa
+                  {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -144,3 +139,5 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
 ];
+
+    
