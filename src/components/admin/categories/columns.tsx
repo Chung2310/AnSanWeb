@@ -25,35 +25,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
-import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 
-const DeleteCategoryButton = ({ category }: { category: Category }) => {
-    const { toast } = useToast();
-    const firestore = useFirestore();
+const DeleteCategoryButton = ({ category, onDelete }: { category: Category, onDelete: (category: Category) => void }) => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
         setIsDeleting(true);
         try {
-            const categoryDocRef = doc(firestore, 'categories', category.id);
-            await deleteDoc(categoryDocRef);
-            toast({
-                title: 'Thành công',
-                description: `Danh mục "${category.name}" đã được xóa.`,
-            });
-            // This will trigger a re-render via the useCategories hook
-        } catch (error) {
-            console.error("Error deleting category:", error);
-            toast({
-                variant: 'destructive',
-                title: 'Lỗi',
-                description: 'Không thể xóa danh mục. Vui lòng thử lại.',
-            });
+            await onDelete(category);
         } finally {
-            setIsDeleting(false);
+            // It's possible the component unmounts before this runs if the table re-renders fast
+            if (document.getElementById(`delete-btn-${category.id}`)) {
+               setIsDeleting(false);
+            }
         }
     };
 
@@ -63,6 +48,7 @@ const DeleteCategoryButton = ({ category }: { category: Category }) => {
             <DropdownMenuItem
               onSelect={(e) => e.preventDefault()}
               className="text-destructive"
+              id={`delete-btn-${category.id}`}
             >
               Xóa danh mục
             </DropdownMenuItem>
@@ -90,7 +76,7 @@ const DeleteCategoryButton = ({ category }: { category: Category }) => {
 };
 
 
-export const columns = (categoryMap: Map<string, string>): ColumnDef<Category>[] => [
+export const columns = (categoryMap: Map<string, string>, onDelete: (category: Category) => void): ColumnDef<Category>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -148,7 +134,7 @@ export const columns = (categoryMap: Map<string, string>): ColumnDef<Category>[]
                 </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DeleteCategoryButton category={category} />
+                <DeleteCategoryButton category={category} onDelete={onDelete} />
             </DropdownMenuContent>
         </DropdownMenu>
       );
