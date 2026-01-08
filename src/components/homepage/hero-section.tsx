@@ -188,7 +188,7 @@ export default function HeroSection() {
                             alt={image.description}
                             fill
                             className="object-cover"
-                            sizes="100vw"
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             priority
                             data-ai-hint={image.imageHint}
                         />
