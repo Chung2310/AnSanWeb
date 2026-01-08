@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProducts } from '@/hooks/use-products';
 import { Separator } from '@/components/ui/separator';
-import type { TastingNotes, ProductStructuredDetails, FullProduct } from '@/lib/types';
+import type { ProductStructuredDetails, FullProduct } from '@/lib/types';
 import ProductInfoSection from '@/components/product-info-section';
 import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
@@ -36,7 +36,7 @@ function ProductDetailPageSkeleton() {
   );
 }
 
-const generateProductDetails = (product: FullProduct): { notes: TastingNotes, details: ProductStructuredDetails } => {
+const generateProductDetails = (product: FullProduct): ProductStructuredDetails => {
     const findAttr = (...labels: string[]) => {
       if (!product.attributes) return 'Đang cập nhật';
       for (const label of labels) {
@@ -50,35 +50,29 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
     const extractFromDescription = (...keywords: string[]): string | undefined => {
         if (!product.description) return undefined;
         for (const keyword of keywords) {
-            const regex = new RegExp(`•\\s*${keyword}\\s*:\\s*([^•\\n]+)`);
+            // Regex to find "• Keyword: Value" or "Keyword: Value"
+            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:\\s*([^•\\n]+)`);
             const match = product.description.match(regex);
             if (match) return match[1].trim().replace(/\.$/, '');
         }
         return undefined;
     };
     
-    const notes: TastingNotes = {
-        brand: findAttr("thương hiệu"),
-        chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất") || extractFromDescription('Xuất xứ'),
-        caskType: findAttr("loại thùng"),
-        nose: extractFromDescription('Hương vị', 'Hương vị thưởng thức'),
-        palate: extractFromDescription('Hương vị', 'Hương vị thưởng thức'),
-        finish: extractFromDescription('Hậu vị'),
-        color: extractFromDescription('Màu sắc', 'Màu sắc của vang'),
-    };
-
     const paragraphs = product.description ? [product.description] : [];
 
     const details: ProductStructuredDetails = {
         title: product.nameVN,
         paragraphs: paragraphs,
         details: product.attributes || [],
+        brand: findAttr("thương hiệu"),
+        chillFiltered: findAttr("lọc lạnh"),
+        region: findAttr("vùng sản xuất", 'xuất xứ'),
+        caskType: findAttr("loại thùng"),
         tastingNote: {
-            nose: notes.nose || 'Đang cập nhật',
-            palate: notes.palate || 'Đang cập nhật',
-            finish: notes.finish || 'Đang cập nhật',
-            color: notes.color
+            nose: extractFromDescription('Hương thơm', 'Mùi hương', 'Hương vị'),
+            palate: extractFromDescription('Vị', 'Hương vị'),
+            finish: extractFromDescription('Hậu vị'),
+            color: extractFromDescription('Màu sắc'),
         },
         conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || undefined,
         howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
@@ -86,11 +80,11 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
         storage: findAttr("bảo quản") || extractFromDescription('Bảo quản')
     };
 
-    return { notes, details };
+    return details;
 }
 
 function ProductDetailView({ product }: { product: FullProduct }) {
-  const { details } = React.useMemo(() => generateProductDetails(product), [product]);
+  const details = React.useMemo(() => generateProductDetails(product), [product]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -245,7 +239,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
           </div>
         </div>
       </div>
-      <ProductInfoSection notes={details} />
+      <ProductInfoSection details={details} />
       <ProductDetailDescription details={details} />
       <FaqSection />
     </>

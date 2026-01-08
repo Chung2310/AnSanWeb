@@ -25,12 +25,16 @@ export type ProductStructuredDetails = {
   foodPairing?: string;
   storage?: string;
   tastingNote: {
-    nose: string;
-    palate: string;
-    finish: string;
+    nose?: string;
+    palate?: string;
+    finish?: string;
     color?: string;
   };
   conclusion?: string;
+  brand?: string;
+  chillFiltered?: string;
+  region?: string;
+  caskType?: string;
 };
 
 export type ProductAttribute = {

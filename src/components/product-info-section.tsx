@@ -43,17 +43,16 @@ const ColorIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const InfoItem = ({ label, value }: { label: string, value?: string }) => {
-    if (!value || value === 'Đang cập nhật') return null;
     return (
         <div className="text-center">
             <p className="text-xs uppercase tracking-widest" style={{color: '#8a7d6a'}}>{label}</p>
-            <p className="mt-1 font-bold text-sm" style={{color: '#5a5a5a'}}>{value}</p>
+            <p className="mt-1 font-bold text-sm" style={{color: '#5a5a5a'}}>{value || 'Đang cập nhật'}</p>
         </div>
     );
 };
 
 const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string, text?: string }) => {
-    if (!text || text === 'Đang cập nhật') return null;
+    if (!text) return null;
     return (
         <div className="p-8" style={{backgroundColor: '#F5F1EB'}}>
             <div className="flex justify-center mb-4">
@@ -66,22 +65,26 @@ const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string,
 };
 
 
-export default function ProductInfoSection({ notes }: { notes: ProductStructuredDetails }) {
+export default function ProductInfoSection({ details }: { details: ProductStructuredDetails }) {
+    const { brand, chillFiltered, region, caskType, tastingNote } = details;
+    
     const noteCards = [
-        { icon: <NoseIcon />, title: "Mùi hương", text: notes.tastingNote.nose },
-        { icon: <PalateIcon />, title: "Hương vị", text: notes.tastingNote.palate },
-        { icon: <FinishIcon />, title: "Hậu vị", text: notes.tastingNote.finish },
-        { icon: <ColorIcon />, title: "Màu sắc", text: notes.tastingNote.color },
-    ].filter(card => card.text && card.text !== 'Đang cập nhật');
+        { icon: <NoseIcon />, title: "MÙI HƯƠNG", text: tastingNote?.nose },
+        { icon: <PalateIcon />, title: "HƯƠNG VỊ", text: tastingNote?.palate },
+        { icon: <FinishIcon />, title: "HẬU VỊ", text: tastingNote?.finish },
+        { icon: <ColorIcon />, title: "MÀU SẮC", text: tastingNote?.color },
+    ].filter(card => card.text);
     
     const infoItems = [
-        { label: "Thương hiệu", value: notes.details.find(d => d.label.toLowerCase() === 'thương hiệu')?.value },
-        { label: "Lọc lạnh", value: notes.details.find(d => d.label.toLowerCase() === 'lọc lạnh')?.value },
-        { label: "Vùng sản xuất", value: notes.details.find(d => d.label.toLowerCase() === 'vùng sản xuất' || d.label.toLowerCase() === 'xuất xứ')?.value },
-        { label: "Loại thùng", value: notes.details.find(d => d.label.toLowerCase() === 'loại thùng')?.value },
-    ].filter(item => item.value && item.value !== 'Đang cập nhật');
+        { label: "THƯƠNG HIỆU", value: brand },
+        { label: "LỌC LẠNH", value: chillFiltered },
+        { label: "VÙNG SẢN XUẤT", value: region },
+        { label: "LOẠI THÙNG", value: caskType },
+    ].filter(item => item.value);
 
-    if (noteCards.length === 0 && infoItems.length === 0) return null;
+    const hasAnyInfo = infoItems.length > 0 || noteCards.length > 0;
+
+    if (!hasAnyInfo) return null;
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
