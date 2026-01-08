@@ -38,24 +38,26 @@ function ProductDetailPageSkeleton() {
 
 const generateProductDetails = (product: FullProduct): ProductStructuredDetails => {
     const findAttr = (...labels: string[]) => {
-      if (!product.attributes) return 'Đang cập nhật';
+      if (!product.attributes) return undefined;
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
         if (found && found.value) return found.value;
       }
-      return 'Đang cập nhật';
+      return undefined;
     };
     
     const extractFromDescription = (...keywords: string[]): string | undefined => {
         if (!product.description) return undefined;
         for (const keyword of keywords) {
-            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:\\s*([^•\\n]+)`, 'i');
+            // This regex looks for the keyword, optional colon, and captures the text until the next bullet point or newline.
+            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:?\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match) return match[1].trim().replace(/\.$/, '');
         }
         return undefined;
     };
     
+    // The main description is just the raw description text. The component will handle rendering.
     const paragraphs = product.description ? [product.description] : [];
 
     const details: ProductStructuredDetails = {
@@ -72,10 +74,10 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
             finish: extractFromDescription('Hậu vị'),
             color: extractFromDescription('Màu sắc'),
         },
-        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận'),
-        howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
-        foodPairing: findAttr("kết hợp món ăn") || extractFromDescription('Kết hợp món ăn'),
-        storage: findAttr("bảo quản") || extractFromDescription('Bảo quản')
+        conclusion: extractFromDescription("kết luận"),
+        howToEnjoy: extractFromDescription("cách thưởng thức"),
+        foodPairing: extractFromDescription("kết hợp món ăn"),
+        storage: extractFromDescription("bảo quản")
     };
 
     return details;
@@ -126,7 +128,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     if (product.description) {
         for (const label of labels) {
             // Regex to find "Label: Value" pattern, ignoring case and surrounding characters
-            const regex = new RegExp(`(?:•\\s*|\\n|^)${label}\\s*:\\s*([^•\\n]+)`, 'i');
+            const regex = new RegExp(`(?:•\\s*|\\n|^)${label}\\s*:?\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match && match[1]) return match[1].trim().replace(/\.$/, '');
         }
