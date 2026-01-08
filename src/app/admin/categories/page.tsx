@@ -61,7 +61,6 @@ export default function CategoriesAdminPage() {
                 const addCategoriesRecursive = async (categoryList: any[], parentId: string | null) => {
                     for (const cat of categoryList) {
                         const slug = slugify(cat.name, { lower: true, strict: true, locale: 'vi' });
-                        // Correctly generate a new document reference with an auto-id
                         const newDocRef = doc(categoriesCollectionRef);
                         
                         batch.set(newDocRef, {
@@ -82,7 +81,6 @@ export default function CategoriesAdminPage() {
                 try {
                     await batch.commit();
                     console.log('Initial categories populated successfully.');
-                    // Optionally, trigger a refresh of the categories list
                     window.location.reload();
                 } catch (error) {
                     console.error('Error populating initial categories:', error);
@@ -104,7 +102,6 @@ export default function CategoriesAdminPage() {
             title: 'Thành công',
             description: `Danh mục "${category.name}" đã được xóa.`,
         });
-        // The useCategories hook will automatically update the list
     } catch (error) {
         console.error("Error deleting category:", error);
         toast({
