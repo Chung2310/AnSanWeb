@@ -63,6 +63,7 @@ const imageInfoSchema = z.object({
 });
 
 const formSchema = z.object({
+  id: z.string().optional(), // Add ID field
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
@@ -164,7 +165,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       try {
         const uploadedImages = await Promise.all(uploadPromises);
         const currentImages = form.getValues('detailImages') || [];
-        form.setValue('detailImages', [...currentImages, ...uploadedImages]);
+        form.setValue('detailImages', [...currentImages, ...uploadedImages.filter((img): img is ImageInfo => !!img)]);
         // Refresh previews with final URLs
         setDetailImagePreviews(form.getValues('detailImages')?.map(img => img.url) || []);
       } catch (error) {
@@ -185,21 +186,21 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     try {
       if (initialData) {
         // Logic for UPDATING an existing product
-        const updateData = {
+        const updateData: Partial<ProductFormValues> = {
           ...data,
           price: Number(data.price),
-          secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : null,
+          secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
           updatedAt: serverTimestamp(),
         };
         const productRef = doc(firestore, 'products', initialData.id);
-        await updateDoc(productRef, updateData);
+        await updateDoc(productRef, updateData as any);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
       } else {
         // Logic for CREATING a new product
         const createData = {
             ...data,
             price: Number(data.price),
-            secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : null,
+            secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         };
@@ -441,3 +442,5 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
+
+    
