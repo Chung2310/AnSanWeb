@@ -67,6 +67,7 @@ const formSchema = z.object({
   id: z.string().optional(),
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
+  shortDescription: z.string().optional(),
   price: z.preprocess(
     (val) => (val === "" || val === null || val === undefined ? undefined : parseFloat(String(val))),
     z.number({ required_error: "Giá là bắt buộc."}).positive({ message: 'Giá phải là số dương.' })
@@ -106,6 +107,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     defaultValues: initialData
       ? {
           ...initialData,
+          shortDescription: initialData.shortDescription || '',
           description: initialData.description || '',
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
@@ -118,6 +120,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       : {
           nameVN: '',
           slug: '',
+          shortDescription: '',
           price: '' as any,
           priceDescription: '',
           secondaryPrice: '' as any,
@@ -242,7 +245,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               <CardContent className="space-y-4">
                 <FormField control={form.control} name="nameVN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm</FormLabel><FormControl><Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabel>Đường dẫn (Slug)</FormLabel><FormControl><Input placeholder="the-macallan-18" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                
+                <FormField control={form.control} name="shortDescription" render={({ field }) => (<FormItem><FormLabel>Mô tả ngắn gọn</FormLabel><FormControl><Textarea placeholder="Mô tả ngắn gọn, hấp dẫn về sản phẩm..." {...field} rows={3} /></FormControl><FormMessage /></FormItem>)} />
+
                 <Card>
                   <CardHeader><CardTitle className="text-lg">Giá sản phẩm</CardTitle></CardHeader>
                   <CardContent className="space-y-6">
