@@ -52,14 +52,13 @@ const InfoItem = ({ label, value }: { label: string, value?: string }) => {
 };
 
 const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string, text?: string }) => {
-    if (!text) return null;
     return (
         <div className="p-8" style={{backgroundColor: '#F5F1EB'}}>
             <div className="flex justify-center mb-4">
                 {icon}
             </div>
             <h3 className="text-center font-bold uppercase tracking-widest text-xs mb-3" style={{color: '#8a7d6a'}}>{title}</h3>
-            <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text}</p>
+            <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text || 'Đang cập nhật'}</p>
         </div>
     );
 };
@@ -73,18 +72,14 @@ export default function ProductInfoSection({ details }: { details: ProductStruct
         { icon: <PalateIcon />, title: "HƯƠNG VỊ", text: tastingNote?.palate },
         { icon: <FinishIcon />, title: "HẬU VỊ", text: tastingNote?.finish },
         { icon: <ColorIcon />, title: "MÀU SẮC", text: tastingNote?.color },
-    ].filter(card => card.text);
+    ];
     
     const infoItems = [
         { label: "THƯƠNG HIỆU", value: brand },
         { label: "LỌC LẠNH", value: chillFiltered },
         { label: "VÙNG SẢN XUẤT", value: region },
         { label: "LOẠI THÙNG", value: caskType },
-    ].filter(item => item.value);
-
-    const hasAnyInfo = infoItems.length > 0 || noteCards.length > 0;
-
-    if (!hasAnyInfo) return null;
+    ];
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
@@ -93,23 +88,17 @@ export default function ProductInfoSection({ details }: { details: ProductStruct
                     Thông Tin Sản Phẩm
                 </h2>
 
-                {infoItems.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto">
-                       {infoItems.map(item => <InfoItem key={item.label} {...item} />)}
-                    </div>
-                )}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto">
+                   {infoItems.map(item => <InfoItem key={item.label} {...item} />)}
+                </div>
                 
-                {infoItems.length > 0 && noteCards.length > 0 && (
-                    <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />
-                )}
+                <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />
                 
-                {noteCards.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {noteCards.map((card, index) => (
-                            <NoteCard key={index} {...card} />
-                        ))}
-                    </div>
-                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {noteCards.map((card, index) => (
+                        <NoteCard key={index} {...card} />
+                    ))}
+                </div>
             </div>
         </section>
     );
