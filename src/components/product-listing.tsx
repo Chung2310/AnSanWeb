@@ -14,6 +14,9 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -98,6 +101,42 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
   </div>
 );
 
+const CategoryFilterDropdown = ({ title, options, onFilterChange, activeFilters }: {
+    title: string;
+    options: { label: string; value: string; count: number; }[];
+    onFilterChange: (group: string, value: string) => void;
+    activeFilters: string[];
+}) => {
+    const selectedCategoryLabels = activeFilters.join(', ');
+
+    return (
+        <div className="mb-8">
+            <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">{title}</h3>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-between rounded-none">
+                        <span className="truncate">{selectedCategoryLabels || "Chọn danh mục"}</span>
+                        <ChevronDown className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64 bg-white">
+                    <DropdownMenuLabel>Chọn danh mục</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {options.map((option) => (
+                        <DropdownMenuCheckboxItem
+                            key={option.value}
+                            checked={activeFilters.includes(option.label)}
+                            onCheckedChange={() => onFilterChange(title, option.label)}
+                        >
+                            {option.label} ({option.count})
+                        </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
+    );
+};
+
 export default function ProductListing({ initialProducts, title, bannerData }: ProductListingProps) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
@@ -173,7 +212,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       if (group === "DANH MỤC SẢN PHẨM") {
         const categorySlugs = values.map(v => filtersData["DANH MỤC SẢN PHẨM"].find(c => c.label === v)?.value).filter(Boolean);
         if(categorySlugs.length > 0) {
-            products = products.filter(p => p.tags?.some(t => categorySlugs.includes(t)));
+            products = products.filter(p => p.tags?.some(t => categorySlugs.includes(t as string)));
         }
       }
       if (group === "KHOẢNG GIÁ") {
@@ -261,15 +300,28 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
-            {Object.entries(filtersData).map(([groupTitle, options]) => (
-              <FilterGroup 
-                key={groupTitle} 
-                title={groupTitle} 
-                options={options.map(opt => (typeof opt === 'string' ? {label: opt} : { ...opt, label: opt.label }))}
-                onFilterChange={handleFilterChange}
-                activeFilters={activeFilters[groupTitle] || []}
-              />
-            ))}
+            {Object.entries(filtersData).map(([groupTitle, options]) => {
+              if (groupTitle === "DANH MỤC SẢN PHẨM") {
+                  return (
+                      <CategoryFilterDropdown
+                          key={groupTitle}
+                          title={groupTitle}
+                          options={options}
+                          onFilterChange={handleFilterChange}
+                          activeFilters={activeFilters[groupTitle] || []}
+                      />
+                  );
+              }
+              return (
+                  <FilterGroup
+                      key={groupTitle}
+                      title={groupTitle}
+                      options={options.map(opt => (typeof opt === 'string' ? { label: opt } : { ...opt, label: opt.label }))}
+                      onFilterChange={handleFilterChange}
+                      activeFilters={activeFilters[groupTitle] || []}
+                  />
+              );
+            })}
           </div>
 
           <div className="lg:col-span-3">
