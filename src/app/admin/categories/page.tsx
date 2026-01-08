@@ -7,7 +7,7 @@ import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
 import { useEffect } from 'react';
-import { writeBatch, collection } from 'firebase/firestore';
+import { writeBatch, collection, doc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
 
@@ -59,6 +59,7 @@ export default function CategoriesAdminPage() {
                 const addCategoriesRecursive = async (categoryList: any[], parentId: string | null) => {
                     for (const cat of categoryList) {
                         const slug = slugify(cat.name, { lower: true, strict: true, locale: 'vi' });
+                        // Correctly generate a new document reference with an auto-id
                         const newDocRef = doc(categoriesCollectionRef);
                         
                         batch.set(newDocRef, {
@@ -72,13 +73,6 @@ export default function CategoriesAdminPage() {
                         }
                     }
                 };
-                
-                // Helper to get doc ref since we can't use await in the loop directly with batch
-                const doc = (collectionRef: any) => {
-                    const { id, path } = collectionRef.doc();
-                    return { id, path, parent: collectionRef, ...collectionRef.doc(id) };
-                };
-
 
                 await addCategoriesRecursive(initialCategoryData, null);
 
