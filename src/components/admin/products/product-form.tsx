@@ -135,29 +135,42 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const productData = {
-        nameVN: data.nameVN,
-        slug: data.slug,
-        price: Number(data.price),
-        description: data.description || '',
-        image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
-        status: data.status,
-        isFeatured: data.isFeatured,
-        isNew: data.isNew,
-        attributes: data.attributes || [],
-        tags: data.tags || [],
-        updatedAt: serverTimestamp(),
-      };
-
       if (initialData) {
+        // Logic for UPDATING an existing product
+        const updateData = {
+          nameVN: data.nameVN,
+          slug: data.slug,
+          price: Number(data.price),
+          description: data.description || '',
+          image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
+          status: data.status,
+          isFeatured: data.isFeatured,
+          isNew: data.isNew,
+          attributes: data.attributes || [],
+          tags: data.tags || [],
+          updatedAt: serverTimestamp(),
+        };
         const productRef = doc(firestore, 'products', initialData.id);
-        await updateDoc(productRef, productData);
+        await updateDoc(productRef, updateData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
-
       } else {
+        // Logic for CREATING a new product
+        const createData = {
+            nameVN: data.nameVN,
+            slug: data.slug,
+            price: Number(data.price),
+            description: data.description || '',
+            image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
+            status: data.status,
+            isFeatured: data.isFeatured,
+            isNew: data.isNew,
+            attributes: data.attributes || [],
+            tags: data.tags || [],
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+        };
         const collectionRef = collection(firestore, 'products');
-        const finalData = { ...productData, createdAt: serverTimestamp() };
-        await addDoc(collectionRef, finalData);
+        await addDoc(collectionRef, createData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
       }
       router.push('/admin/products');
@@ -339,5 +352,3 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
-
-    
