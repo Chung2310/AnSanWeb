@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -67,12 +68,11 @@ function ProductDetailPageSkeleton() {
 }
 
 const generateProductDetails = (product: FullProduct): ProductStructuredDetails => {
-    const extractFromDescription = (...keywords: string[]): string | undefined => {
-        if (!product.description) return undefined;
+    const extractFromDescription = (description: string | undefined, ...keywords: string[]): string | undefined => {
+        if (!description) return undefined;
         for (const keyword of keywords) {
-            // Updated regex to capture text after a colon, ignoring the label itself
-            const regex = new RegExp(`(?:${keyword})\\s*:\\s*([^•\\n]+)`, 'i');
-            const match = product.description.match(regex);
+            const regex = new RegExp(`(?:${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
+            const match = description.match(regex);
             if (match && match[1]) {
                 return match[1].trim().replace(/\.$/, '').trim();
             }
@@ -97,18 +97,18 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         details: product.attributes || [],
         brand: findAttr("thương hiệu"),
         chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription('Xuất xứ', 'Vùng'),
+        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription(product.description, 'Xuất xứ', 'Vùng'),
         caskType: findAttr("loại thùng"),
         tastingNote: {
-            nose: extractFromDescription('Hương thơm', 'Mùi hương'),
-            palate: extractFromDescription('Vị giác', 'Vị', 'Hương vị thưởng thức'),
-            finish: extractFromDescription('Hậu vị'),
-            color: extractFromDescription('Màu sắc'),
+            nose: extractFromDescription(product.description, 'Hương thơm', 'Mùi hương'),
+            palate: extractFromDescription(product.description, 'Vị giác', 'Vị', 'Hương vị thưởng thức'),
+            finish: extractFromDescription(product.description, 'Hậu vị'),
+            color: extractFromDescription(product.description, 'Màu sắc'),
         },
-        conclusion: extractFromDescription("kết luận"),
-        howToEnjoy: extractFromDescription("cách thưởng thức", "Thưởng thức"),
-        foodPairing: extractFromDescription("kết hợp món ăn"),
-        storage: extractFromDescription("bảo quản")
+        conclusion: extractFromDescription(product.description, "kết luận"),
+        howToEnjoy: extractFromDescription(product.description, "cách thưởng thức", "Thưởng thức"),
+        foodPairing: extractFromDescription(product.description, "kết hợp món ăn"),
+        storage: extractFromDescription(product.description, "bảo quản")
     };
 
     return details;
@@ -162,7 +162,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     }
     if (product.description) {
         for (const label of labels) {
-            // Regex to find label and capture value after colon
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match && match[1]) {
@@ -182,7 +181,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                 <div className="md:col-start-1 row-start-1">
                     <div className="md:sticky top-24 space-y-4">
                         {allImages.map((image, index) => (
-                        <div key={index} className="rounded-lg p-8 h-screen flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, #e6dace, #d1c0a8)'}}>
+                        <div key={index} className="rounded-lg bg-white p-8 h-screen flex items-center justify-center">
                             <Image
                             src={image.url}
                             alt={`${product.nameVN} - ảnh ${index + 1}`}
