@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,7 +56,7 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     <div className="flex flex-wrap gap-2">
       {options.map((option, index) => {
         const isActive = activeFilters.includes(option.label);
-        if (option.count === 0) return null;
+        if (option.count === 0 && !isActive) return null;
 
         return (
           <Button
@@ -85,6 +85,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
     const dynamicFilters = useMemo(() => {
+        if (!products || products.length === 0) return {};
         const currentCategoryTag = products[0]?.tags?.find(tag => Object.keys(subCategoryMap).includes(tag));
         if (!currentCategoryTag) return {};
         
@@ -166,7 +167,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
         return filtered;
       }, [products, activeFilters, dynamicFilters]);
 
-      useMemo(() => {
+      useEffect(() => {
         onFilterChange(filteredProducts);
       }, [filteredProducts, onFilterChange]);
 
@@ -184,10 +185,20 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
                 />
             ))}
             {Object.entries(staticFiltersData).map(([groupTitle, options]) => (
-                <FilterGroup
+                 <FilterGroup
                     key={groupTitle}
                     title={groupTitle}
-                    options={options.map(opt => ({ label: opt.label, count: 1 }))} // Static filters dont need count
+                    options={options.map(opt => {
+                        let count = 0;
+                        if (groupTitle === 'KHOẢNG GIÁ' && opt.value) {
+                            count = products.filter(p => p.price >= opt.value[0] && p.price < opt.value[1]).length;
+                        } else {
+                            // This is a simplification. For other static filters, you'd need more specific logic.
+                            // For now, we show all options if there are products.
+                           count = products.length > 0 ? 1 : 0;
+                        }
+                        return { label: opt.label, count };
+                    })}
                     onFilterChange={handleFilterChange}
                     activeFilters={activeFilters[groupTitle] || []}
                 />
