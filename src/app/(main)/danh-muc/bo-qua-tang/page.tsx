@@ -35,7 +35,6 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={giftSetProducts}
-      title="Bộ Quà Tặng"
     />
   );
 }
