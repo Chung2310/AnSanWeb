@@ -120,17 +120,11 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
       return { label: brand, count: count };
     }).filter(brand => brand.count > 0);
 
-    const categoriesWithCount = (categories || []).map(cat => {
-        const count = clientProducts.filter(p => p.tags?.includes(cat.slug)).length;
-        return { label: cat.name, value: cat.slug, count: count };
-    }).filter(cat => cat.count > 0);
-
     return {
       "THƯƠNG HIỆU": brandsInProducts,
-      "DANH MỤC SẢN PHẨM": categoriesWithCount,
       ...staticFiltersData
     }
-  }, [clientProducts, categories]);
+  }, [clientProducts]);
 
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -171,12 +165,6 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         products = products.filter(p => {
           return values.some(v => p.nameVN.toUpperCase().includes(v));
         });
-      }
-      if (group === "DANH MỤC SẢN PHẨM") {
-        const categorySlugs = values.map(v => filtersData["DANH MỤC SẢN PHẨM"].find(c => c.label === v)?.value).filter(Boolean);
-        if(categorySlugs.length > 0) {
-            products = products.filter(p => p.tags?.some(t => categorySlugs.includes(t as string)));
-        }
       }
       if (group === "KHOẢNG GIÁ") {
           const priceRanges = values.map(v => staticFiltersData["KHOẢNG GIÁ"].find(opt => opt.label === v)?.value);
@@ -232,7 +220,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [clientProducts, activeFilters, activeSort, activeCategory, categories, filtersData]);
+  }, [clientProducts, activeFilters, activeSort, activeCategory, categories]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
