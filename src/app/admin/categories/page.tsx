@@ -11,11 +11,18 @@ import { writeBatch, collection, doc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
 import type { Category } from '@/lib/types';
+import { useDeleteCategory } from '@/hooks/use-delete-category';
 
 // Data based on header navigation
 const initialCategoryData = [
     { name: 'RƯỢU VANG', slug: 'ruou-vang', children: [
-        { name: 'VANG Ý', slug: 'vang-y' },
+        { name: 'VANG Ý', slug: 'vang-y', children: [
+            { name: 'VANG VÙNG PIEMONTE', slug: 'vang-vung-piemonte' },
+            { name: 'VANG VÙNG TOSCANA', slug: 'vang-vung-toscana' },
+            { name: 'VANG VÙNG VENETO', slug: 'vang-vung-veneto' },
+            { name: 'VANG VÙNG PUGLIA', slug: 'vang-vung-puglia' },
+            { name: 'VANG VÙNG SICILIA', slug: 'vang-vung-sicilia' },
+        ]},
         { name: 'VANG PHÁP', slug: 'vang-phap' },
         { name: 'VANG TÂY BAN NHA', slug: 'vang-tay-ban-nha' },
         { name: 'VANG ÚC', slug: 'vang-uc' },
@@ -42,6 +49,7 @@ const initialCategoryData = [
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const { firestore } = useFirebase();
+    const { deleteCategory, isDeleting } = useDeleteCategory();
     
     const categoryMap = useMemo(() => {
       if (!categories) return new Map<string, string>();
