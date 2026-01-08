@@ -34,7 +34,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { FullProduct, ImageInfo } from '@/lib/types';
+import type { FullProduct, ImageInfo, Category } from '@/lib/types';
 import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import {
@@ -46,9 +46,9 @@ import {
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import slugify from 'slugify';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { allTags } from '@/lib/tags-data';
+import { useCategories } from '@/hooks/use-categories';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { Progress } from '@/components/ui/progress';
@@ -98,6 +98,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const firestore = useFirestore();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const { startUpload, progress, isUploading } = useUploadStorage();
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(initialData?.image?.url || null);
   const [detailImagePreviews, setDetailImagePreviews] = useState<string[]>(initialData?.detailImages?.map(img => img.url) || []);
@@ -140,6 +141,26 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     control: form.control,
     name: 'attributes',
   });
+  
+  const categoryTree = useMemo(() => {
+    if (!categories) return [];
+    const map: { [key: string]: Category & { children: Category[] } } = {};
+    const roots: (Category & { children: Category[] })[] = [];
+
+    categories.forEach(cat => {
+      map[cat.id] = { ...cat, children: [] };
+    });
+
+    categories.forEach(cat => {
+      if (cat.parentId && map[cat.parentId]) {
+        map[cat.parentId].children.push(map[cat.id]);
+      } else {
+        roots.push(map[cat.id]);
+      }
+    });
+
+    return roots;
+  }, [categories]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -234,6 +255,37 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         });
     }
   };
+  
+    const renderCategoryCheckboxes = (categories: (Category & { children: Category[] })[], level = 0) => {
+        return categories.map(category => (
+            <div key={category.id} style={{ marginLeft: `${level * 1.5}rem` }}>
+                <FormField
+                    control={form.control}
+                    name="tags"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value?.includes(category.id)}
+                                    onCheckedChange={(checked) => {
+                                        return checked
+                                            ? field.onChange([...(field.value || []), category.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                    (value) => value !== category.id
+                                                )
+                                            );
+                                    }}
+                                />
+                            </FormControl>
+                            <FormLabel className="font-normal">{category.name}</FormLabel>
+                        </FormItem>
+                    )}
+                />
+                {category.children.length > 0 && renderCategoryCheckboxes(category.children, level + 1)}
+            </div>
+        ));
+    };
 
   return (
     <Form {...form}>
@@ -389,59 +441,25 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                     </FormItem>
                  )} />
-
-                <FormField
-                  control={form.control}
-                  name="tags"
-                  render={() => (
-                    <FormItem>
-                      <div className="mb-4">
-                        <FormLabel className='text-base'>Tags (Loại sản phẩm)</FormLabel>
+                
+                <FormItem>
+                    <div className="mb-4">
+                        <FormLabel className='text-base'>Danh mục</FormLabel>
                         <FormDescription>
-                          Chọn các tags phù hợp. Dùng để lọc sản phẩm theo loại.
+                          Chọn các danh mục phù hợp cho sản phẩm này.
                         </FormDescription>
-                      </div>
-                       <ScrollArea className="h-48 rounded-md border">
-                          <div className="p-4 grid grid-cols-2 gap-2">
-                          {allTags.map((tag) => (
-                            <FormField
-                              key={tag.id}
-                              control={form.control}
-                              name="tags"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={tag.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(tag.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), tag.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== tag.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {tag.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
+                    </div>
+                    <ScrollArea className="h-48 rounded-md border">
+                        <div className="p-4">
+                            {isLoadingCategories ? (
+                                <p>Đang tải danh mục...</p>
+                            ) : (
+                                renderCategoryCheckboxes(categoryTree)
+                            )}
                         </div>
-                      </ScrollArea>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </ScrollArea>
+                    <FormMessage />
+                </FormItem>
               </CardContent>
             </Card>
           </div>

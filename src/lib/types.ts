@@ -1,4 +1,5 @@
 
+
 export type ImageInfo = {
   url: string;
   path: string;
@@ -57,7 +58,7 @@ export type Product = {
   detailImages?: ImageInfo[]; // Detail Page Images
   isFeatured?: boolean;
   isNew?: boolean;
-  tags?: string[];
+  tags?: string[]; // These will be category IDs
   attributes: ProductAttribute[];
   categoryIds?: string[];
   createdAt?: any;
@@ -78,7 +79,8 @@ export type Category = {
   slug: string;
   description?: string;
   image?: ImageInfo | null;
-  status: 'active' | 'inactive';
+  status?: 'active' | 'inactive';
+  parentId?: string | null;
 };
 
 export type BlogPost = {
