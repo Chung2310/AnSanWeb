@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Package, FileText, LogOut } from 'lucide-react';
+import { Home, Package, FileText, LogOut, Tags } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from '../logo';
 import { useAuthStore } from '@/stores/auth-store';
@@ -10,6 +10,7 @@ import { useAuthStore } from '@/stores/auth-store';
 const navLinks = [
   { href: '/admin', label: 'Dashboard', icon: Home },
   { href: '/admin/products', label: 'Sản phẩm', icon: Package },
+  { href: '/admin/categories', label: 'Danh mục', icon: Tags },
   { href: '/admin/blog', label: 'Bài viết', icon: FileText },
 ];
 

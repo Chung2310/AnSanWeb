@@ -17,7 +17,7 @@
         "isFeatured": { "type": "boolean", "description": "Indicates if the wine is featured." },
         "isNew": { "type": "boolean", "description": "Indicates if the wine is a new arrival." },
         "status": { "type": "string", "enum": ["published", "draft"] },
-        "tags": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Holds the category IDs" },
         "attributes": { 
           "type": "array", 
           "items": { 
@@ -25,7 +25,6 @@
             "properties": { "label": { "type": "string" }, "value": { "type": "string" } }
           } 
         },
-        "categoryIds": { "type": "array", "items": { "type": "string" } },
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
@@ -35,11 +34,12 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
-      "description": "Represents a category of wines.",
+      "description": "Represents a category of wines, which can be hierarchical.",
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
-        "slug": { "type": "string" }
+        "slug": { "type": "string" },
+        "parentId": { "type": ["string", "null"], "description": "The ID of the parent category, if any." }
       },
       "required": ["id", "name", "slug"]
     },
@@ -88,7 +88,7 @@
     },
     "/categories/{categoryId}": {
       "schema": { "$ref": "#/entities/Category" },
-      "description": "Stores wine categories."
+      "description": "Stores product categories in a hierarchical structure."
     },
     "/blogPosts/{blogPostId}": {
       "schema": { "$ref": "#/entities/BlogPost" },
