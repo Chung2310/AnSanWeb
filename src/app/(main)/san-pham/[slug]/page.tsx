@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
