@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -19,6 +17,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from '@/components/ui/card';
 import {
   Select,
@@ -33,7 +32,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { FullProduct } from '@/lib/types';
+import type { FullProduct, ImageInfo } from '@/lib/types';
 import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import {
@@ -57,17 +56,18 @@ const productAttributeSchema = z.object({
   value: z.string().min(1, 'Giá trị không được để trống'),
 });
 
+const imageInfoSchema = z.object({
+    url: z.string(),
+    path: z.string().optional(),
+});
+
 const formSchema = z.object({
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
   description: z.string().optional(),
-  image: z
-    .object({
-      url: z.string(),
-      path: z.string().optional(),
-    })
-    .nullable(),
+  image: imageInfoSchema.nullable(), // Cover Image
+  detailImages: z.array(imageInfoSchema).optional(), // Detail Images
   status: z.enum(['published', 'draft']),
   isFeatured: z.boolean(),
   isNew: z.boolean(),
@@ -86,7 +86,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const router = useRouter();
   const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
+  const [coverImagePreview, setCoverImagePreview] = useState<string | null>(initialData?.image?.url || null);
+  const [detailImagePreviews, setDetailImagePreviews] = useState<string[]>(initialData?.detailImages?.map(img => img.url) || []);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -97,6 +98,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
+          detailImages: initialData.detailImages || [],
         }
       : {
           nameVN: '',
@@ -104,6 +106,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           price: 0,
           description: '',
           image: null,
+          detailImages: [],
           status: 'published',
           isFeatured: false,
           isNew: true,
@@ -123,30 +126,48 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     form.setValue('slug', slugify(name, { lower: true, strict: true }));
   };
   
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-
+      setCoverImagePreview(URL.createObjectURL(file));
       try {
         const imageInfo = await startUpload(file, 'products');
         if (imageInfo) {
           form.setValue('image', { url: imageInfo.url, path: imageInfo.path });
-          setImagePreview(imageInfo.url);
+          setCoverImagePreview(imageInfo.url);
         }
       } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Lỗi tải lên',
-          description: 'Không thể tải ảnh lên. Vui lòng thử lại.',
-        });
-        setImagePreview(null);
+        toast({ variant: 'destructive', title: 'Lỗi tải lên', description: 'Không thể tải ảnh bìa.' });
+        setCoverImagePreview(null);
       }
     }
+  };
+
+  const handleDetailImagesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const newPreviews = Array.from(files).map(file => URL.createObjectURL(file));
+      setDetailImagePreviews(prev => [...prev, ...newPreviews]);
+
+      const uploadPromises = Array.from(files).map(file => startUpload(file, 'products/details'));
+      
+      try {
+        const uploadedImages = await Promise.all(uploadPromises);
+        const currentImages = form.getValues('detailImages') || [];
+        form.setValue('detailImages', [...currentImages, ...uploadedImages]);
+        // Refresh previews with final URLs
+        setDetailImagePreviews(form.getValues('detailImages')?.map(img => img.url) || []);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Lỗi tải lên', description: 'Không thể tải lên một hoặc nhiều ảnh chi tiết.' });
+      }
+    }
+  };
+
+  const removeDetailImage = (index: number) => {
+    const currentImages = form.getValues('detailImages') || [];
+    const newImages = currentImages.filter((_, i) => i !== index);
+    form.setValue('detailImages', newImages);
+    setDetailImagePreviews(newImages.map(img => img.url));
   };
 
 
@@ -155,16 +176,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       if (initialData) {
         // Logic for UPDATING an existing product
         const updateData = {
-          nameVN: data.nameVN,
-          slug: data.slug,
+          ...data,
           price: Number(data.price),
-          description: data.description || '',
-          image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
-          status: data.status,
-          isFeatured: data.isFeatured,
-          isNew: data.isNew,
-          attributes: data.attributes || [],
-          tags: data.tags || [],
           updatedAt: serverTimestamp(),
         };
         const productRef = doc(firestore, 'products', initialData.id);
@@ -173,16 +186,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       } else {
         // Logic for CREATING a new product
         const createData = {
-            nameVN: data.nameVN,
-            slug: data.slug,
+            ...data,
             price: Number(data.price),
-            description: data.description || '',
-            image: data.image && data.image.url ? { url: data.image.url, path: data.image.path || '' } : null,
-            status: data.status,
-            isFeatured: data.isFeatured,
-            isNew: data.isNew,
-            attributes: data.attributes || [],
-            tags: data.tags || [],
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         };
@@ -236,62 +241,74 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
           <div className="space-y-8">
              <Card>
-              <CardHeader>
-                <CardTitle>Hình ảnh</CardTitle>
-              </CardHeader>
-              <CardContent>
-                 <div className="space-y-4">
-                  {imagePreview && (
-                    <div className="relative">
-                      <Image
-                        src={imagePreview}
-                        alt="Xem trước ảnh"
-                        width={200}
-                        height={200}
-                        className="w-full rounded-md object-contain aspect-square"
-                      />
-                       <Button
-                        variant="destructive"
-                        size="icon"
-                        className="absolute right-2 top-2 h-6 w-6"
-                        onClick={() => {
-                          setImagePreview(null);
-                          form.setValue('image', null);
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={() => (
-                      <FormItem>
-                        <FormLabel htmlFor="image-upload" className="cursor-pointer">
-                            <div className="flex items-center justify-center border-2 border-dashed p-4 text-center text-muted-foreground hover:bg-accent">
-                                <Upload className="mr-2 h-4 w-4" />
-                                <span>{isUploading ? 'Đang tải lên...' : 'Tải ảnh lên'}</span>
-                            </div>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="image-upload"
-                            type="file"
-                            className="sr-only"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            disabled={isUploading}
-                          />
-                        </FormControl>
-                        {isUploading && <Progress value={progress} />}
-                        <FormMessage />
-                      </FormItem>
+                <CardHeader>
+                    <CardTitle>Ảnh bìa</CardTitle>
+                    <CardDescription>Ảnh đại diện cho sản phẩm ở trang danh sách.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                    {coverImagePreview && (
+                        <div className="relative">
+                        <Image src={coverImagePreview} alt="Xem trước ảnh bìa" width={200} height={200} className="w-full rounded-md object-contain aspect-square" />
+                        <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { setCoverImagePreview(null); form.setValue('image', null); }}>
+                            <X className="h-4 w-4" />
+                        </Button>
+                        </div>
                     )}
-                  />
-                </div>
-              </CardContent>
+                    <FormField control={form.control} name="image" render={() => (
+                        <FormItem>
+                            <FormLabel htmlFor="cover-image-upload" className="cursor-pointer">
+                                <div className="flex items-center justify-center border-2 border-dashed p-4 text-center text-muted-foreground hover:bg-accent">
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    <span>{isUploading ? 'Đang tải...' : 'Tải ảnh bìa'}</span>
+                                </div>
+                            </FormLabel>
+                            <FormControl>
+                                <Input id="cover-image-upload" type="file" className="sr-only" accept="image/*" onChange={handleCoverImageUpload} disabled={isUploading} />
+                            </FormControl>
+                            {isUploading && progress > 0 && <Progress value={progress} />}
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                    </div>
+                </CardContent>
             </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Ảnh trang chi tiết</CardTitle>
+                    <CardDescription>Các ảnh bổ sung hiển thị trên trang chi tiết sản phẩm.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-3 gap-4">
+                        {detailImagePreviews.map((previewUrl, index) => (
+                            <div key={index} className="relative">
+                                <Image src={previewUrl} alt={`Xem trước ảnh chi tiết ${index + 1}`} width={100} height={100} className="w-full rounded-md object-contain aspect-square"/>
+                                <Button variant="destructive" size="icon" className="absolute right-1 top-1 h-5 w-5" onClick={() => removeDetailImage(index)}>
+                                    <X className="h-3 w-3" />
+                                </Button>
+                            </div>
+                        ))}
+                        </div>
+                         <FormField control={form.control} name="detailImages" render={() => (
+                            <FormItem>
+                                <FormLabel htmlFor="detail-images-upload" className="cursor-pointer">
+                                    <div className="flex items-center justify-center border-2 border-dashed p-4 text-center text-muted-foreground hover:bg-accent">
+                                        <Upload className="mr-2 h-4 w-4" />
+                                        <span>{isUploading ? 'Đang tải...' : 'Thêm ảnh chi tiết'}</span>
+                                    </div>
+                                </FormLabel>
+                                <FormControl>
+                                    <Input id="detail-images-upload" type="file" className="sr-only" accept="image/*" multiple onChange={handleDetailImagesUpload} disabled={isUploading} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                    </div>
+                </CardContent>
+            </Card>
+
 
             <Card>
               <CardHeader><CardTitle>Trạng thái & Phân loại</CardTitle></CardHeader>
