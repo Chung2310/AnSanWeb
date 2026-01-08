@@ -51,7 +51,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
             palate: notes.palate,
             finish: notes.finish,
         },
-        conclusion: findAttr("kết luận"),
+        conclusion: findAttr("kết luận") || "Chưa có kết luận.",
         howToEnjoy: findAttr("cách thưởng thức"),
         foodPairing: findAttr("kết hợp món ăn"),
         storage: findAttr("bảo quản")
@@ -60,29 +60,10 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
     return { notes, details };
 }
 
-
-export default function ProductDetailPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const { products, isLoading } = useProducts();
-
-  const product = useMemo(() => {
-    if (!products) return null;
-    return products.find((p) => p.slug === slug) || null;
-  }, [products, slug]);
-
+function ProductDetailView({ product }: { product: FullProduct }) {
   const { notes, details } = useMemo(() => {
-    if (!product) return { notes: null, details: null };
     return generateProductDetails(product);
   }, [product]);
-
-  if (isLoading) {
-    return <ProductDetailPageSkeleton />;
-  }
-
-  if (!product || !notes || !details) {
-    notFound();
-  }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -140,4 +121,33 @@ export default function ProductDetailPage() {
       <FaqSection />
     </>
   );
+}
+
+
+export default function ProductDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const { products, isLoading } = useProducts();
+
+  const product = useMemo(() => {
+    if (isLoading || !products) return undefined;
+    return products.find((p) => p.slug === slug) || null;
+  }, [products, slug, isLoading]);
+
+  if (isLoading) {
+    return <ProductDetailPageSkeleton />;
+  }
+
+  // After loading, if product is explicitly null, it means we didn't find it.
+  if (product === null) {
+    notFound();
+  }
+
+  // If product is found, render the view.
+  if (product) {
+    return <ProductDetailView product={product} />;
+  }
+
+  // Default to skeleton while product is undefined (initial state)
+  return <ProductDetailPageSkeleton />;
 }
