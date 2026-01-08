@@ -40,30 +40,46 @@ function ProductDetailPageSkeleton() {
 const generateProductDetails = (product: FullProduct): { notes: TastingNotes, details: ProductStructuredDetails } => {
     const findAttr = (label: string) => product.attributes?.find(a => a.label.toLowerCase() === label.toLowerCase())?.value || 'Đang cập nhật';
     
+    // Helper to extract info from description string
+    const extractFromDescription = (keyword: string): string | undefined => {
+        if (!product.description) return undefined;
+        const regex = new RegExp(`•\\s*${keyword}:\\s*([^•]+)`);
+        const match = product.description.match(regex);
+        return match ? match[1].trim().replace(/\.$/, '') : undefined;
+    };
+    
     const notes: TastingNotes = {
         brand: findAttr("thương hiệu"),
         chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất"),
+        region: findAttr("vùng sản xuất") || extractFromDescription('Xuất xứ'),
         caskType: findAttr("loại thùng"),
-        nose: findAttr("mùi hương"),
-        palate: findAttr("hương vị"),
-        finish: findAttr("hậu vị"),
-        color: findAttr("màu sắc"),
+        nose: extractFromDescription('Mùi hương'),
+        palate: extractFromDescription('Hương vị'),
+        finish: extractFromDescription('Hậu vị'),
+        color: extractFromDescription('Màu sắc'),
     };
+
+    const paragraphs = product.description
+      ? product.description
+          .split('•')
+          .map(s => s.trim())
+          .filter(s => s && !s.includes(':'))
+      : [];
+
 
     const details: ProductStructuredDetails = {
         title: product.nameVN,
-        paragraphs: product.description ? product.description.split('\n\n') : [],
+        paragraphs: paragraphs,
         details: product.attributes || [],
         tastingNote: {
-            nose: notes.nose,
-            palate: notes.palate,
-            finish: notes.finish,
+            nose: notes.nose || 'Đang cập nhật',
+            palate: notes.palate || 'Đang cập nhật',
+            finish: notes.finish || 'Đang cập nhật',
         },
-        conclusion: findAttr("kết luận") || "Chưa có kết luận.",
-        howToEnjoy: findAttr("cách thưởng thức"),
-        foodPairing: findAttr("kết hợp món ăn"),
-        storage: findAttr("bảo quản")
+        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || "Chưa có kết luận.",
+        howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
+        foodPairing: findAttr("kết hợp món ăn") || extractFromDescription('Kết hợp món ăn'),
+        storage: findAttr("bảo quản") || extractFromDescription('Bảo quản')
     };
 
     return { notes, details };

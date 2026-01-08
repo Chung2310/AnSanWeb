@@ -5,8 +5,8 @@ import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const DetailSection = ({ title, content }: { title: string, content?: string }) => {
-    if (!content) return null;
+const DetailSection = ({ title, content }: { title: string, content?: string | null }) => {
+    if (!content || content === 'Đang cập nhật') return null;
     return (
         <div className="mb-6">
             <h3 className="font-bold text-lg mb-4">{title}</h3>
@@ -21,8 +21,15 @@ export default function ProductDetailDescription({ details }: { details: Product
     const { title, paragraphs, details: detailList, tastingNote, howToEnjoy, foodPairing, storage, conclusion } = details;
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // If there are no paragraphs or other details to show, don't render the component.
-    const hasContent = paragraphs.length > 0 || (detailList && detailList.length > 0) || tastingNote || howToEnjoy || foodPairing || storage || conclusion;
+    const hasContent = 
+      (paragraphs && paragraphs.length > 0 && paragraphs.some(p => p.trim() !== '')) || 
+      (detailList && detailList.length > 0) || 
+      (tastingNote && (tastingNote.nose !== 'Đang cập nhật' || tastingNote.palate !== 'Đang cập nhật' || tastingNote.finish !== 'Đang cập nhật')) || 
+      howToEnjoy || 
+      foodPairing || 
+      storage || 
+      (conclusion && conclusion !== "Chưa có kết luận.");
+
     if (!hasContent) {
         return null;
     }
@@ -74,13 +81,13 @@ export default function ProductDetailDescription({ details }: { details: Product
                                     </>
                                 )}
                                 
-                                {tastingNote && (
+                                {tastingNote && (tastingNote.nose !== 'Đang cập nhật' || tastingNote.palate !== 'Đang cập nhật' || tastingNote.finish !== 'Đang cập nhật') && (
                                     <>
                                         <h3 className="font-bold text-lg mt-10 mb-4">Tasting Note Chi Tiết</h3>
                                         <div className="space-y-4">
-                                            <p><span className="font-semibold">Mùi hương:</span> {tastingNote.nose}</p>
-                                            <p><span className="font-semibold">Hương vị:</span> {tastingNote.palate}</p>
-                                            <p><span className="font-semibold">Hậu vị:</span> {tastingNote.finish}</p>
+                                            {tastingNote.nose && tastingNote.nose !== 'Đang cập nhật' && <p><span className="font-semibold">Mùi hương:</span> {tastingNote.nose}</p>}
+                                            {tastingNote.palate && tastingNote.palate !== 'Đang cập nhật' && <p><span className="font-semibold">Hương vị:</span> {tastingNote.palate}</p>}
+                                            {tastingNote.finish && tastingNote.finish !== 'Đang cập nhật' && <p><span className="font-semibold">Hậu vị:</span> {tastingNote.finish}</p>}
                                         </div>
                                     </>
                                 )}
@@ -92,7 +99,7 @@ export default function ProductDetailDescription({ details }: { details: Product
                                 </div>
 
 
-                                {conclusion && (
+                                {conclusion && conclusion !== "Chưa có kết luận." && (
                                     <>
                                         <h3 className="font-bold text-lg mt-10 mb-4">Kết Luận:</h3>
                                         <p className="leading-relaxed">{conclusion}</p>
