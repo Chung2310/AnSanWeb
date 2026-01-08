@@ -34,7 +34,7 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { FullProduct } from '@/lib/types';
-import { Trash, X } from 'lucide-react';
+import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import {
   doc,
@@ -49,6 +49,8 @@ import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { allTags } from '@/lib/tags-data';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useUploadStorage } from '@/hooks/use-upload-storage';
+import { Progress } from '@/components/ui/progress';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -62,7 +64,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   image: z
     .object({
-      url: z.string().url({ message: "Vui lòng nhập một URL hợp lệ." }).or(z.literal('')),
+      url: z.string(),
       path: z.string().optional(),
     })
     .nullable(),
@@ -83,6 +85,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const firestore = useFirestore();
+  const { startUpload, progress, isUploading } = useUploadStorage();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
 
   const form = useForm<ProductFormValues>({
@@ -93,14 +96,14 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           description: initialData.description || '',
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
-          image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : { url: '', path: '' },
+          image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
         }
       : {
           nameVN: '',
           slug: '',
           price: 0,
           description: '',
-          image: { url: '', path: '' },
+          image: null,
           status: 'published',
           isFeatured: false,
           isNew: true,
@@ -120,15 +123,29 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     form.setValue('slug', slugify(name, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g }));
   };
   
-  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value;
-    if (url) {
-        form.setValue('image.url', url);
-        form.setValue('image.path', url); // Use URL as path
-        setImagePreview(url);
-    } else {
-        form.setValue('image', null);
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      try {
+        const imageInfo = await startUpload(file, 'products');
+        if (imageInfo) {
+          form.setValue('image', { url: imageInfo.url, path: imageInfo.path });
+          setImagePreview(imageInfo.url);
+        }
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Lỗi tải lên',
+          description: 'Không thể tải ảnh lên. Vui lòng thử lại.',
+        });
         setImagePreview(null);
+      }
     }
   };
 
@@ -218,35 +235,56 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           </div>
 
           <div className="space-y-8">
-            <Card>
-              <CardHeader><CardTitle>Hình ảnh</CardTitle></CardHeader>
+             <Card>
+              <CardHeader>
+                <CardTitle>Hình ảnh</CardTitle>
+              </CardHeader>
               <CardContent>
                  <div className="space-y-4">
                   {imagePreview && (
                     <div className="relative">
-                      <Image src={imagePreview} alt="Xem trước ảnh" width={200} height={200} className="w-full rounded-md object-contain" />
-                       <Button variant="destructive" size="icon" className="absolute right-2 top-2 h-6 w-6" onClick={() => { handleImageUrlChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>) }}>
+                      <Image
+                        src={imagePreview}
+                        alt="Xem trước ảnh"
+                        width={200}
+                        height={200}
+                        className="w-full rounded-md object-contain aspect-square"
+                      />
+                       <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute right-2 top-2 h-6 w-6"
+                        onClick={() => {
+                          setImagePreview(null);
+                          form.setValue('image', null);
+                        }}
+                      >
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
                   )}
                   <FormField
                     control={form.control}
-                    name="image.url"
-                    render={({ field }) => (
+                    name="image"
+                    render={() => (
                       <FormItem>
-                        <FormLabel>URL hình ảnh</FormLabel>
+                        <FormLabel htmlFor="image-upload" className="cursor-pointer">
+                            <div className="flex items-center justify-center border-2 border-dashed p-4 text-center text-muted-foreground hover:bg-accent">
+                                <Upload className="mr-2 h-4 w-4" />
+                                <span>{isUploading ? 'Đang tải lên...' : 'Tải ảnh lên'}</span>
+                            </div>
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="https://example.com/image.png"
-                            {...field}
-                            value={field.value || ''}
-                            onChange={handleImageUrlChange}
+                            id="image-upload"
+                            type="file"
+                            className="sr-only"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={isUploading}
                           />
                         </FormControl>
-                        <FormDescription>
-                          Dán URL hình ảnh sản phẩm vào đây.
-                        </FormDescription>
+                        {isUploading && <Progress value={progress} />}
                         <FormMessage />
                       </FormItem>
                     )}
