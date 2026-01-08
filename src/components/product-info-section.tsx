@@ -43,7 +43,7 @@ const ColorIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const InfoItem = ({ label, value }: { label: string, value?: string }) => {
-    if (!value) return null;
+    if (!value || value === 'Đang cập nhật') return null;
     return (
         <div className="text-center">
             <p className="text-xs uppercase tracking-widest" style={{color: '#8a7d6a'}}>{label}</p>
@@ -66,15 +66,22 @@ const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string,
 };
 
 
-export default function ProductInfoSection({ notes }: { notes: TastingNotes }) {
+export default function ProductInfoSection({ notes }: { notes: ProductStructuredDetails }) {
     const noteCards = [
-        { icon: <NoseIcon />, title: "Mùi hương", text: notes.nose },
-        { icon: <PalateIcon />, title: "Hương vị", text: notes.palate },
-        { icon: <FinishIcon />, title: "Hậu vị", text: notes.finish },
-        { icon: <ColorIcon />, title: "Màu sắc", text: notes.color },
+        { icon: <NoseIcon />, title: "Mùi hương", text: notes.tastingNote.nose },
+        { icon: <PalateIcon />, title: "Hương vị", text: notes.tastingNote.palate },
+        { icon: <FinishIcon />, title: "Hậu vị", text: notes.tastingNote.finish },
+        { icon: <ColorIcon />, title: "Màu sắc", text: notes.tastingNote.color },
     ].filter(card => card.text && card.text !== 'Đang cập nhật');
     
-    if (noteCards.length === 0) return null;
+    const infoItems = [
+        { label: "Thương hiệu", value: notes.brand },
+        { label: "Lọc lạnh", value: notes.chillFiltered },
+        { label: "Vùng sản xuất", value: notes.region },
+        { label: "Loại thùng", value: notes.caskType },
+    ].filter(item => item.value && item.value !== 'Đang cập nhật');
+
+    if (noteCards.length === 0 && infoItems.length === 0) return null;
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
@@ -83,20 +90,23 @@ export default function ProductInfoSection({ notes }: { notes: TastingNotes }) {
                     Thông Tin Sản Phẩm
                 </h2>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto">
-                    <InfoItem label="Thương hiệu" value={notes.brand} />
-                    <InfoItem label="Lọc lạnh" value={notes.chillFiltered} />
-                    <InfoItem label="Vùng sản xuất" value={notes.region} />
-                    <InfoItem label="Loại thùng" value={notes.caskType} />
-                </div>
+                {infoItems.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto">
+                       {infoItems.map(item => <InfoItem key={item.label} {...item} />)}
+                    </div>
+                )}
                 
-                <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />
+                {infoItems.length > 0 && noteCards.length > 0 && (
+                    <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />
+                )}
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {noteCards.map((card, index) => (
-                        <NoteCard key={index} {...card} />
-                    ))}
-                </div>
+                {noteCards.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {noteCards.map((card, index) => (
+                            <NoteCard key={index} {...card} />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );

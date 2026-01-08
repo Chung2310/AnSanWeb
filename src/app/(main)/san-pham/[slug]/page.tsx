@@ -38,14 +38,24 @@ function ProductDetailPageSkeleton() {
 }
 
 const generateProductDetails = (product: FullProduct): { notes: TastingNotes, details: ProductStructuredDetails } => {
-    const findAttr = (label: string) => product.attributes?.find(a => a.label.toLowerCase() === label.toLowerCase())?.value || 'Đang cập nhật';
+    const findAttr = (...labels: string[]) => {
+      if (!product.attributes) return 'Đang cập nhật';
+      for (const label of labels) {
+        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+        if (found && found.value) return found.value;
+      }
+      return 'Đang cập nhật';
+    };
     
     // Helper to extract info from description string
-    const extractFromDescription = (keyword: string): string | undefined => {
+    const extractFromDescription = (...keywords: string[]): string | undefined => {
         if (!product.description) return undefined;
-        const regex = new RegExp(`•\\s*${keyword}:\\s*([^•]+)`);
-        const match = product.description.match(regex);
-        return match ? match[1].trim().replace(/\.$/, '') : undefined;
+        for (const keyword of keywords) {
+            const regex = new RegExp(`•\\s*${keyword}\\s*:\\s*([^•\\n]+)`);
+            const match = product.description.match(regex);
+            if (match) return match[1].trim().replace(/\.$/, '');
+        }
+        return undefined;
     };
     
     const notes: TastingNotes = {
@@ -53,15 +63,15 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
         chillFiltered: findAttr("lọc lạnh"),
         region: findAttr("vùng sản xuất") || extractFromDescription('Xuất xứ'),
         caskType: findAttr("loại thùng"),
-        nose: extractFromDescription('Hương vị'),
-        palate: extractFromDescription('Hương vị'),
+        nose: extractFromDescription('Hương vị', 'Hương vị thưởng thức'),
+        palate: extractFromDescription('Hương vị', 'Hương vị thưởng thức'),
         finish: extractFromDescription('Hậu vị'),
-        color: extractFromDescription('Màu sắc'),
+        color: extractFromDescription('Màu sắc', 'Màu sắc của vang'),
     };
 
     const paragraphs = product.description
       ? product.description
-          .split('•')
+          .split(/•|\n/)
           .map(s => s.trim())
           .filter(s => s && !s.includes(':'))
       : [];
@@ -76,7 +86,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
             palate: notes.palate || 'Đang cập nhật',
             finish: notes.finish || 'Đang cập nhật',
         },
-        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || "Chưa có kết luận.",
+        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || undefined,
         howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
         foodPairing: findAttr("kết hợp món ăn") || extractFromDescription('Kết hợp món ăn'),
         storage: findAttr("bảo quản") || extractFromDescription('Bảo quản')

@@ -28,8 +28,9 @@ export type ProductStructuredDetails = {
     nose: string;
     palate: string;
     finish: string;
+    color?: string;
   };
-  conclusion: string;
+  conclusion?: string;
 };
 
 export type ProductAttribute = {
