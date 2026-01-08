@@ -46,22 +46,19 @@ const InfoItem = ({ label, value }: { label: string, value?: string }) => {
     return (
         <div className="text-center">
             <p className="text-xs uppercase tracking-widest" style={{color: '#8a7d6a'}}>{label}</p>
-            <p className="mt-1 font-bold text-sm" style={{color: '#5a5a5a'}}>{value || 'Đang cập nhật'}</p>
+            <p className="mt-1 font-bold text-sm" style={{color: '#5a5a5a'}}>{value || 'NONE'}</p>
         </div>
     );
 };
 
 const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string, text?: string }) => {
-    if (!text) {
-        return null;
-    }
     return (
         <div className="p-8" style={{backgroundColor: '#F5F1EB'}}>
             <div className="flex justify-center mb-4">
                 {icon}
             </div>
             <h3 className="text-center font-bold uppercase tracking-widest text-xs mb-3" style={{color: '#8a7d6a'}}>{title}</h3>
-            <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text}</p>
+            <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text || 'NONE'}</p>
         </div>
     );
 };
@@ -84,8 +81,6 @@ export default function ProductInfoSection({ details }: { details: ProductStruct
         { label: "LOẠI THÙNG", value: caskType },
     ];
 
-    const hasNoteInfo = noteCards.some(card => !!card.text);
-
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
             <div className="container">
@@ -97,7 +92,7 @@ export default function ProductInfoSection({ details }: { details: ProductStruct
                    {infoItems.map(item => <InfoItem key={item.label} {...item} />)}
                 </div>
                 
-                {hasNoteInfo && <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />}
+                <Separator className="max-w-xs mx-auto my-12 bg-gray-200" />
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {noteCards.map((card, index) => (
