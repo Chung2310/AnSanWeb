@@ -175,8 +175,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     <>
       <div className="bg-white text-black">
         <div className="container mx-auto max-w-7xl py-12 md:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12">
-                <div className="lg:col-span-1">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-12">
+                <div className="lg:col-span-3">
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
                         <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center">
@@ -193,7 +193,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-1 row-start-1 lg:row-start-auto">
+                <div className="lg:col-span-2 row-start-1 lg:row-start-auto">
                     <div className="md:sticky md:top-24 space-y-6">
                         <Breadcrumb>
                             <BreadcrumbList>
@@ -332,4 +332,3 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
-
