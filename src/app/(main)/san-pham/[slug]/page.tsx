@@ -115,11 +115,23 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags]);
   
   const getAttribute = (...labels: string[]) => {
-    if (!product.attributes) return 'N/A';
-    for (const label of labels) {
-      const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-      if (found && found.value) return found.value;
+    // 1. Search in structured attributes first
+    if (product.attributes) {
+      for (const label of labels) {
+        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+        if (found && found.value) return found.value;
+      }
     }
+    // 2. If not found, search in the description text
+    if (product.description) {
+        for (const label of labels) {
+            // Regex to find "Label: Value" pattern, ignoring case and surrounding characters
+            const regex = new RegExp(`(?:•\\s*|\\n|^)${label}\\s*:\\s*([^•\\n]+)`, 'i');
+            const match = product.description.match(regex);
+            if (match && match[1]) return match[1].trim().replace(/\.$/, '');
+        }
+    }
+    // 3. If still not found, return 'N/A'
     return 'N/A';
   }
 
