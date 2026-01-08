@@ -37,6 +37,21 @@ function ProductDetailPageSkeleton() {
 }
 
 const generateProductDetails = (product: FullProduct): ProductStructuredDetails => {
+    
+    const extractFromDescription = (...keywords: string[]): string | undefined => {
+        if (!product.description) return undefined;
+        for (const keyword of keywords) {
+            // This regex looks for the keyword, optional colon, and captures the text until the next bullet point or newline.
+            const regex = new RegExp(`(?:•\\s*|\\n|^)${keyword}\\s*:?\\s*([^•\\n]+)`, 'i');
+            const match = product.description.match(regex);
+            if (match && match[1]) {
+                // Further clean up the matched value
+                return match[1].replace(new RegExp(`^${keyword}\\s*:?`, 'i'), '').trim().replace(/\.$/, '');
+            }
+        }
+        return undefined;
+    };
+    
     const findAttr = (...labels: string[]) => {
       if (!product.attributes) return undefined;
       for (const label of labels) {
@@ -46,18 +61,6 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
       return undefined;
     };
     
-    const extractFromDescription = (...keywords: string[]): string | undefined => {
-        if (!product.description) return undefined;
-        for (const keyword of keywords) {
-            // This regex looks for the keyword, optional colon, and captures the text until the next bullet point or newline.
-            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:?\\s*([^•\\n]+)`, 'i');
-            const match = product.description.match(regex);
-            if (match) return match[1].trim().replace(/\.$/, '');
-        }
-        return undefined;
-    };
-    
-    // The main description is just the raw description text. The component will handle rendering.
     const paragraphs = product.description ? [product.description] : [];
 
     const details: ProductStructuredDetails = {
@@ -75,7 +78,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
             color: extractFromDescription('Màu sắc'),
         },
         conclusion: extractFromDescription("kết luận"),
-        howToEnjoy: extractFromDescription("cách thưởng thức"),
+        howToEnjoy: extractFromDescription("cách thưởng thức", "Thưởng thức"),
         foodPairing: extractFromDescription("kết hợp món ăn"),
         storage: extractFromDescription("bảo quản")
     };
@@ -128,9 +131,14 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     if (product.description) {
         for (const label of labels) {
             // Regex to find "Label: Value" pattern, ignoring case and surrounding characters
-            const regex = new RegExp(`(?:•\\s*|\\n|^)${label}\\s*:?\\s*([^•\\n]+)`, 'i');
+            const regex = new RegExp(`(?:•\\s*|\\n|^)${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\s*:?\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
-            if (match && match[1]) return match[1].trim().replace(/\.$/, '');
+            if (match && match[1]) {
+                 const value = match[1].trim();
+                 // If the value itself contains the label (due to broad regex), remove it.
+                 const valueWithoutLabel = value.replace(new RegExp(`^${label}\\s*:?`, 'i'), '').trim();
+                 return valueWithoutLabel.replace(/\.$/, '');
+            }
         }
     }
     // 3. If still not found, return 'N/A'
@@ -193,7 +201,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ CỒN</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ', 'nồng độ cồn', 'alc')}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
