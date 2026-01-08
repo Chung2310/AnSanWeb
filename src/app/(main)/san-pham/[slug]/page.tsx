@@ -168,7 +168,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('Dung tích') || '700ml'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('Dung tích') || 'N/A'}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
