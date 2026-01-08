@@ -6,7 +6,7 @@ import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useCallback } from 'react';
 import { writeBatch, collection, doc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
@@ -17,11 +17,8 @@ import { useDeleteCategory } from '@/hooks/use-delete-category';
 const initialCategoryData = [
     { name: 'RƯỢU VANG', slug: 'ruou-vang', children: [
         { name: 'VANG Ý', slug: 'vang-y', children: [
-            { name: 'VANG VÙNG PIEMONTE', slug: 'vang-vung-piemonte' },
-            { name: 'VANG VÙNG TOSCANA', slug: 'vang-vung-toscana' },
-            { name: 'VANG VÙNG VENETO', slug: 'vang-vung-veneto' },
-            { name: 'VANG VÙNG PUGLIA', slug: 'vang-vung-puglia' },
-            { name: 'VANG VÙNG SICILIA', slug: 'vang-vung-sicilia' },
+            { name: 'Organic grande alberone', slug: 'organic-grande-alberone' },
+            { name: 'SPARKLING', slug: 'sparkling' },
         ]},
         { name: 'VANG PHÁP', slug: 'vang-phap' },
         { name: 'VANG TÂY BAN NHA', slug: 'vang-tay-ban-nha' },
@@ -49,7 +46,6 @@ const initialCategoryData = [
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const { firestore } = useFirebase();
-    const { deleteCategory, isDeleting } = useDeleteCategory();
     
     const categoryMap = useMemo(() => {
       if (!categories) return new Map<string, string>();

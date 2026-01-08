@@ -57,11 +57,8 @@ const categoryNavLinks = [
                 href: '/danh-muc/ruou-vang/vang-y', 
                 label: 'VANG Ý',
                 sublinks: [
-                    { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'VANG VÙNG PIEMONTE' },
-                    { href: '/danh-muc/ruou-vang/vang-y/toscana', label: 'VANG VÙNG TOSCANA' },
-                    { href: '/danh-muc/ruou-vang/vang-y/veneto', label: 'VANG VÙNG VENETO' },
-                    { href: '/danh-muc/ruou-vang/vang-y/puglia', label: 'VANG VÙNG PUGLIA' },
-                    { href: '/danh-muc/ruou-vang/vang-y/sicilia', label: 'VANG VÙNG SICILIA' },
+                    { href: '/danh-muc/ruou-vang/vang-y/organic-grande-alberone', label: 'Organic grande alberone' },
+                    { href: '/danh-muc/ruou-vang/vang-y/sparkling', label: 'SPARKLING' },
                 ]
             },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
