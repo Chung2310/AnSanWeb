@@ -30,7 +30,8 @@ export default function ProductsPage() {
     )
   }
   
-  const cigarProducts = products?.filter(wine => wine.tags?.includes('cigar')) || [];
+  const cigarTags = ['cigar', 'cigar-hanos', 'cigar-lotus', 'cigar-vinaboss'];
+  const cigarProducts = products?.filter(wine => wine.tags?.some(tag => cigarTags.includes(tag))) || [];
 
   return (
     <ProductListing 
