@@ -186,8 +186,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     try {
       if (initialData) {
         // Logic for UPDATING an existing product
-        const updateData: Partial<ProductFormValues> = {
+        const updateData: Partial<ProductFormValues> & { id?: string } = {
           ...data,
+          id: initialData.id,
           price: Number(data.price),
           secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
           updatedAt: serverTimestamp(),
@@ -442,5 +443,3 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
-
-    
