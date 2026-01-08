@@ -25,7 +25,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useCategories } from '@/hooks/use-categories';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -45,6 +44,7 @@ const DeleteCategoryButton = ({ category }: { category: Category }) => {
                 title: 'Thành công',
                 description: `Danh mục "${category.name}" đã được xóa.`,
             });
+            // This will trigger a re-render via the useCategories hook
         } catch (error) {
             console.error("Error deleting category:", error);
             toast({
@@ -90,7 +90,7 @@ const DeleteCategoryButton = ({ category }: { category: Category }) => {
 };
 
 
-export const columns: ColumnDef<Category>[] = [
+export const columns = (categoryMap: Map<string, string>): ColumnDef<Category>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -122,11 +122,9 @@ export const columns: ColumnDef<Category>[] = [
     accessorKey: 'parentId',
     header: 'Danh mục cha',
     cell: ({ row }) => {
-        const { categories } = useCategories();
         const parentId = row.original.parentId;
         if (!parentId) return '—';
-        const parent = categories?.find(c => c.id === parentId);
-        return parent ? parent.name : 'Không tìm thấy';
+        return categoryMap.get(parentId) || 'Không tìm thấy';
     }
   },
   {

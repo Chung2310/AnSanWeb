@@ -6,21 +6,16 @@ import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { writeBatch, collection, doc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
+import type { Category } from '@/lib/types';
 
 // Data based on header navigation
 const initialCategoryData = [
     { name: 'RƯỢU VANG', children: [
-        { name: 'VANG Ý', children: [
-            { name: 'VANG VÙNG PIEMONTE' },
-            { name: 'VANG VÙNG TOSCANA' },
-            { name: 'VANG VÙNG VENETO' },
-            { name: 'VANG VÙNG PUGLIA' },
-            { name: 'VANG VÙNG SICILIA' },
-        ]},
+        { name: 'VANG Ý' },
         { name: 'VANG PHÁP' },
         { name: 'VANG TÂY BAN NHA' },
         { name: 'VANG ÚC' },
@@ -47,6 +42,11 @@ const initialCategoryData = [
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const { firestore } = useFirebase();
+    
+    const categoryMap = useMemo(() => {
+      if (!categories) return new Map();
+      return new Map(categories.map(c => [c.id, c.name]));
+    }, [categories]);
 
     useEffect(() => {
         // Function to populate initial categories if the collection is empty
@@ -105,6 +105,10 @@ export default function CategoriesAdminPage() {
       </div>
     );
   }
+
+  const tableData: Category[] = categories || [];
+
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -117,7 +121,7 @@ export default function CategoriesAdminPage() {
         </Button>
       </div>
       <div className="mt-6">
-        <DataTable columns={columns} data={categories || []} />
+        <DataTable columns={columns(categoryMap)} data={tableData} />
       </div>
     </div>
   );
