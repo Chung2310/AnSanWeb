@@ -23,6 +23,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { ChevronRight } from 'lucide-react';
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,6 +58,9 @@ export function DataTable<TData, TValue>({
       },
     },
   });
+
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const totalPages = table.getPageCount();
 
   return (
     <div className="rounded-md border bg-card">
@@ -110,23 +116,30 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 p-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Trước
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Sau
-        </Button>
+       <div className="flex items-center justify-end space-x-2 p-4">
+         {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-6 mt-4 text-lg text-muted-foreground">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
+                    <button
+                        key={pageNumber}
+                        onClick={() => table.setPageIndex(pageNumber - 1)}
+                        className={cn(
+                            "font-headline font-bold transition-colors hover:text-foreground",
+                            currentPage === pageNumber ? "text-foreground underline underline-offset-4" : ""
+                        )}
+                    >
+                        {pageNumber}
+                    </button>
+                ))}
+                <button
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                    className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+            </div>
+        )}
       </div>
     </div>
   );
