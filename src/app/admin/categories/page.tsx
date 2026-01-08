@@ -114,6 +114,8 @@ export default function CategoriesAdminPage() {
         });
     }
   }, [firestore, toast]);
+  
+  const memoizedColumns = useMemo(() => columns(categoryMap, handleDeleteCategory), [categoryMap, handleDeleteCategory]);
 
 
   if (isLoading) {
@@ -145,7 +147,7 @@ export default function CategoriesAdminPage() {
         </Button>
       </div>
       <div className="mt-6">
-        <DataTable columns={columns(categoryMap, handleDeleteCategory)} data={tableData} />
+        <DataTable columns={memoizedColumns} data={tableData} />
       </div>
     </div>
   );
