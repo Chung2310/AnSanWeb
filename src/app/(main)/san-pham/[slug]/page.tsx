@@ -6,12 +6,12 @@ import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProducts } from '@/hooks/use-products';
+import { useCategories } from '@/hooks/use-categories';
 import { Separator } from '@/components/ui/separator';
 import type { ProductStructuredDetails, FullProduct, ImageInfo } from '@/lib/types';
 import ProductInfoSection from '@/components/product-info-section';
 import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
-import { allTags } from '@/lib/tags-data';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Phone, MessageSquare, Award, CircleDollarSign, Users, Truck, GlassWater } from 'lucide-react';
@@ -114,6 +114,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
 }
 
 function ProductDetailView({ product }: { product: FullProduct }) {
+  const { categories } = useCategories();
   const details = React.useMemo(() => generateProductDetails(product), [product]);
   const allImages = React.useMemo(() => {
     const images: ImageInfo[] = [];
@@ -126,31 +127,26 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
   
-  const getTagInfo = (tagId: string) => allTags.find(t => t.id === tagId);
+  const getCategoryInfo = (tagId: string) => categories?.find(c => c.id === tagId);
 
   const breadcrumbs = React.useMemo(() => {
     const paths = [{ label: 'TRANG CHỦ', href: '/' }];
-    const worldTag = product.tags?.find(t => getTagInfo(t)?.id === 'world');
-    const scotchTag = product.tags?.find(t => getTagInfo(t)?.id === 'scotch');
-    const mainWhiskyCat = worldTag || scotchTag;
+    if (!product.tags || !categories) return paths;
 
-    if (mainWhiskyCat) {
-        const mainCatInfo = getTagInfo(mainWhiskyCat);
-        if (mainCatInfo) {
-            paths.push({ label: mainCatInfo.label.toUpperCase(), href: `/danh-muc/${mainCatInfo.id}` });
-        }
-    }
+    const getPath = (categoryId: string): { label: string; href: string }[] => {
+      const category = categories.find(c => c.id === categoryId);
+      if (!category) return [];
+      const parentPath = category.parentId ? getPath(category.parentId) : [];
+      return [...parentPath, { label: category.name.toUpperCase(), href: `/danh-muc/${category.slug}` }];
+    };
 
-    const subCategoryTag = product.tags?.find(t => t !== worldTag && t !== scotchTag && getTagInfo(t));
-    if (subCategoryTag) {
-        const subCatInfo = getTagInfo(subCategoryTag);
-        if (subCatInfo) {
-             paths.push({ label: subCatInfo.label.toUpperCase(), href: `/danh-muc/world-whisky/${subCatInfo.id}` }); // Assuming structure
-        }
+    const primaryTag = product.tags[0];
+    if (primaryTag) {
+      paths.push(...getPath(primaryTag));
     }
     
     return paths;
-  }, [product.tags]);
+  }, [product.tags, categories]);
   
   const getAttribute = (...labels: string[]): string => {
     if (product.attributes) {
@@ -205,7 +201,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                     <Link href={crumb.href}>{crumb.label}</Link>
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
-                                {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                                {index < breadcrumbs.length && index !== breadcrumbs.length -1 && <BreadcrumbSeparator />}
                                 </React.Fragment>
                             ))}
                             <BreadcrumbSeparator />
