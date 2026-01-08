@@ -1,5 +1,5 @@
 'use client';
-import type { TastingNotes } from "@/lib/types";
+import type { ProductStructuredDetails } from "@/lib/types";
 import { Separator } from "./ui/separator";
 
 const NoseIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -75,10 +75,10 @@ export default function ProductInfoSection({ notes }: { notes: ProductStructured
     ].filter(card => card.text && card.text !== 'Đang cập nhật');
     
     const infoItems = [
-        { label: "Thương hiệu", value: notes.brand },
-        { label: "Lọc lạnh", value: notes.chillFiltered },
-        { label: "Vùng sản xuất", value: notes.region },
-        { label: "Loại thùng", value: notes.caskType },
+        { label: "Thương hiệu", value: notes.details.find(d => d.label.toLowerCase() === 'thương hiệu')?.value },
+        { label: "Lọc lạnh", value: notes.details.find(d => d.label.toLowerCase() === 'lọc lạnh')?.value },
+        { label: "Vùng sản xuất", value: notes.details.find(d => d.label.toLowerCase() === 'vùng sản xuất' || d.label.toLowerCase() === 'xuất xứ')?.value },
+        { label: "Loại thùng", value: notes.details.find(d => d.label.toLowerCase() === 'loại thùng')?.value },
     ].filter(item => item.value && item.value !== 'Đang cập nhật');
 
     if (noteCards.length === 0 && infoItems.length === 0) return null;
