@@ -72,21 +72,39 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   return (
     <>
       <div className="bg-white text-black">
-        <div className="container mx-auto max-w-4xl py-12 md:py-20">
+        <div className="container mx-auto max-w-5xl py-12 md:py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             {/* Image Column */}
-            {product.image?.url && (
-              <div className="bg-secondary rounded-lg p-8 sticky top-24">
-                <Image
-                  src={product.image.url}
-                  alt={product.nameVN}
-                  width={800}
-                  height={800}
-                  className="w-full h-auto object-contain aspect-square"
-                  priority
-                />
-              </div>
-            )}
+            <div className='sticky top-24'>
+              {product.image?.url && (
+                <div className="bg-secondary rounded-lg p-8 ">
+                  <Image
+                    src={product.image.url}
+                    alt={product.nameVN}
+                    width={800}
+                    height={800}
+                    className="w-full h-auto object-contain aspect-square"
+                    priority
+                  />
+                </div>
+              )}
+               {/* Detail Images Gallery */}
+              {product.detailImages && product.detailImages.length > 0 && (
+                <div className="mt-4 grid grid-cols-3 gap-4">
+                  {product.detailImages.map((img, index) => (
+                    <div key={index} className="bg-secondary rounded-lg p-2">
+                       <Image
+                        src={img.url}
+                        alt={`${product.nameVN} detail image ${index + 1}`}
+                        width={200}
+                        height={200}
+                        className="w-full h-auto object-contain aspect-square"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Details Column */}
             <div className="space-y-6">

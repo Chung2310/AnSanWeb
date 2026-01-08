@@ -43,7 +43,8 @@ export type Product = {
   slug: string;
   price: number;
   description: string;
-  image: ImageInfo | null;
+  image: ImageInfo | null; // Cover Image
+  detailImages?: ImageInfo[]; // Detail Page Images
   isFeatured?: boolean;
   isNew?: boolean;
   tags?: string[];
