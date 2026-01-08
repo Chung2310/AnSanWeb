@@ -80,7 +80,10 @@ export default function BlogForm({ initialData }: BlogFormProps) {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
     form.setValue('title', title);
-    form.setValue('slug', slugify(title, { lower: true, strict: true, locale: 'vi' }));
+    const slug = slugify(title, { lower: true, strict: true, locale: 'vi' });
+    if (slug) {
+        form.setValue('slug', slug);
+    }
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,6 +117,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         const processedData = {
             ...data,
             categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
+            slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
         };
 
       if (initialData && initialData.id) {
@@ -164,6 +168,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                           placeholder="Vd: Cách phân biệt Scotch và Bourbon"
                           {...field}
                           onChange={handleTitleChange}
+                          onBlur={handleTitleChange}
                         />
                       </FormControl>
                       <FormMessage />
