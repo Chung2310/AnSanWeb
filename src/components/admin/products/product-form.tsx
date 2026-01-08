@@ -68,19 +68,12 @@ const formSchema = z.object({
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess(
-    (a) => parseFloat(z.string().parse(a)),
-    z.number().positive({ message: 'Giá phải là số dương.' })
+    (val) => (val === "" ? undefined : parseFloat(String(val))),
+    z.number({ required_error: "Giá là bắt buộc."}).positive({ message: 'Giá phải là số dương.' })
   ),
   priceDescription: z.string().optional(),
   secondaryPrice: z.preprocess(
-    (a) => {
-        const value = z.string().optional().parse(a);
-        if (value === '' || value === undefined || value === null) {
-            return undefined;
-        }
-        const parsed = parseFloat(value);
-        return isNaN(parsed) ? undefined : parsed;
-    }, 
+    (val) => (val === "" || val === null || val === undefined ? undefined : parseFloat(String(val))),
     z.number().positive('Giá phải là số dương.').optional()
   ),
   secondaryPriceDescription: z.string().optional(),
@@ -125,7 +118,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       : {
           nameVN: '',
           slug: '',
-          price: '' as any,
+          price: undefined,
           priceDescription: '',
           secondaryPrice: undefined,
           secondaryPriceDescription: '',
@@ -198,14 +191,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const onSubmit = async (data: ProductFormValues) => {
     try {
       if (initialData) {
-        // Create a copy for modification
         const updateData: any = {
           ...data,
           price: Number(data.price),
           secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
           updatedAt: serverTimestamp(),
         };
-        // Do not include 'id' in the data sent to updateDoc
         delete updateData.id; 
 
         const productRef = doc(firestore, 'products', initialData.id);
@@ -254,7 +245,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormLabel>Giá chính</FormLabel>
                       <FormDescription>Giá mặc định của sản phẩm.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="800000" {...field} onChange={e => field.onChange(e.target.value === '' ? undefined : e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
@@ -262,7 +253,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
                       <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} onChange={e => field.onChange(e.target.value === '' ? undefined : e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
