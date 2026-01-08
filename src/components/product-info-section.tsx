@@ -38,7 +38,7 @@ const ColorIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <path d="M33.75 25V33.75C33.75 33.75 28.75 37.5 28.75 40V45H43.75V40C43.75 37.5 38.75 33.75 38.75 33.75V25" stroke="#8A7D6A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M21.25 21.25C21.25 21.25 23.125 18.75 27.5 18.75C31.875 18.75 33.75 21.25 33.75 21.25V25H21.25V21.25Z" stroke="#8A7D6A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M27.5 18.75C27.5 16.25 23.75 13.75 21.25 12.5C18.75 11.25 16.25 11.25 16.25 12.5C16.25 13.75 18.75 16.25 20 18.75" stroke="#8A7D6A" strokeWidth="1sem" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M27.5 18.75C27.5 16.25 23.75 13.75 21.25 12.5C18.75 11.25 16.25 11.25 16.25 12.5C16.25 13.75 18.75 16.25 20 18.75" stroke="#8A7D6A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 );
 
@@ -52,15 +52,18 @@ const InfoItem = ({ label, value }: { label: string, value?: string }) => {
     );
 };
 
-const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string, text: string }) => (
-    <div className="p-8" style={{backgroundColor: '#F5F1EB'}}>
-        <div className="flex justify-center mb-4">
-            {icon}
+const NoteCard = ({ icon, title, text }: { icon: React.ReactNode, title: string, text?: string }) => {
+    if (!text || text === 'Đang cập nhật') return null;
+    return (
+        <div className="p-8" style={{backgroundColor: '#F5F1EB'}}>
+            <div className="flex justify-center mb-4">
+                {icon}
+            </div>
+            <h3 className="text-center font-bold uppercase tracking-widest text-xs mb-3" style={{color: '#8a7d6a'}}>{title}</h3>
+            <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text}</p>
         </div>
-        <h3 className="text-center font-bold uppercase tracking-widest text-xs mb-3" style={{color: '#8a7d6a'}}>{title}</h3>
-        <p className="text-center text-sm leading-relaxed" style={{color: '#5a5a5a'}}>{text}</p>
-    </div>
-);
+    );
+};
 
 
 export default function ProductInfoSection({ notes }: { notes: TastingNotes }) {
@@ -69,8 +72,10 @@ export default function ProductInfoSection({ notes }: { notes: TastingNotes }) {
         { icon: <PalateIcon />, title: "Hương vị", text: notes.palate },
         { icon: <FinishIcon />, title: "Hậu vị", text: notes.finish },
         { icon: <ColorIcon />, title: "Màu sắc", text: notes.color },
-    ];
+    ].filter(card => card.text && card.text !== 'Đang cập nhật');
     
+    if (noteCards.length === 0) return null;
+
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
             <div className="container">

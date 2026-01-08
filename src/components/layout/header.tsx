@@ -115,18 +115,18 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
               <ChevronDown className="h-4 w-4 ml-1" />
             </Button>
           </DropdownMenuTrigger>
+           <DropdownMenuContent 
+              onMouseEnter={() => setOpen(true)} 
+              onMouseLeave={() => setOpen(false)}
+              className="bg-white"
+            >
+              {sublinks.map(link => (
+                <DropdownMenuItem key={link.href} asChild>
+                  <Link href={link.href}>{link.label}</Link>
+                </DropdownMenuItem>
+              ))}
+          </DropdownMenuContent>
         </div>
-        <DropdownMenuContent 
-          onMouseEnter={() => setOpen(true)} 
-          onMouseLeave={() => setOpen(false)}
-          className="bg-white"
-        >
-          {sublinks.map(link => (
-            <DropdownMenuItem key={link.href} asChild>
-              <Link href={link.href}>{link.label}</Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
       </DropdownMenu>
     );
   }
