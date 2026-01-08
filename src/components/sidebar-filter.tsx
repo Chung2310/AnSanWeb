@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useMemo, useEffect } from "react";
-import type { Product } from "@/lib/types";
+import type { Product, Category } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { allTags } from "@/lib/tags-data";
+import { useCategories } from "@/hooks/use-categories";
+
 
 type ActiveFilters = {
   [key: string]: string[];
@@ -36,12 +37,26 @@ const staticFiltersData = {
     ],
 };
 
-const subCategoryMap: Record<string, string[]> = {
-    'cigar': ['cigar-hanos', 'cigar-lotus', 'cigar-vinaboss'],
-    'ruou-vang': ['y', 'phap', 'tay-ban-nha', 'uc', 'nga', 'duc'],
-    'ruou-manh': ['ballantines', 'john-walker', 'mortlach', 'chivas', 'royal-salute', 'singleton'],
-    'scotch-whisky': ['campbeltown', 'highland', 'islands', 'islay', 'lowland', 'speyside'],
-    'world-whisky': ['ireland', 'bourbon', 'japan', 'lakes'],
+const getSubCategoryMap = (allCategories: Category[] | null | undefined): Record<string, string[]> => {
+    if (!allCategories) return {};
+    const map: Record<string, string[]> = {};
+    allCategories.forEach(cat => {
+        if (cat.parentId) {
+            if (!map[cat.parentId]) {
+                map[cat.parentId] = [];
+            }
+            map[cat.parentId].push(cat.id);
+        }
+    });
+
+    const finalMap: Record<string, string[]> = {};
+    allCategories.forEach(cat => {
+      if (!cat.parentId && map[cat.id]) {
+        finalMap[cat.slug] = allCategories.filter(c => c.parentId === cat.id).map(c => c.id);
+      }
+    });
+
+    return finalMap;
 };
 
 
@@ -83,20 +98,26 @@ interface SidebarFilterProps {
 
 export default function SidebarFilter({ products, onFilterChange }: SidebarFilterProps) {
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
+    const { categories: allCategories } = useCategories();
 
     const dynamicFilters = useMemo(() => {
-        if (!products || products.length === 0) return {};
-        const currentCategoryTag = products[0]?.tags?.find(tag => Object.keys(subCategoryMap).includes(tag));
-        if (!currentCategoryTag) return {};
-        
-        const subCategorySlugs = subCategoryMap[currentCategoryTag] || [];
-        const subCategoryOptions = subCategorySlugs.map(slug => {
-            const tagInfo = allTags.find(t => t.id === slug);
-            if (!tagInfo) return null;
+        if (!products || products.length === 0 || !allCategories) return {};
 
-            const count = products.filter(p => p.tags?.includes(slug)).length;
-            return { label: tagInfo.label, value: slug, count };
-        }).filter((opt): opt is { label: string, value: string, count: number } => opt !== null);
+        const subCategoryMap = getSubCategoryMap(allCategories);
+        const currentCategory = allCategories.find(cat => products.every(p => p.tags?.includes(cat.id)));
+        
+        if (!currentCategory) return {};
+        
+        const subCategoryIds = subCategoryMap[currentCategory.slug];
+        if (!subCategoryIds) return {};
+
+        const subCategoryOptions = subCategoryIds.map(id => {
+            const catInfo = allCategories.find(c => c.id === id);
+            if (!catInfo) return null;
+
+            const count = products.filter(p => p.tags?.includes(id)).length;
+            return { label: catInfo.name, value: id, count };
+        }).filter((opt): opt is { label: string, value: string, count: number } => opt !== null && opt.count > 0);
 
         if (subCategoryOptions.length === 0) return {};
 
@@ -104,7 +125,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
             "PHÂN LOẠI": subCategoryOptions
         };
 
-    }, [products]);
+    }, [products, allCategories]);
 
     const handleFilterChange = (group: string, value: string) => {
         setActiveFilters(prev => {
@@ -124,12 +145,12 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
           if (values.length === 0) return;
     
           if (group === "PHÂN LOẠI") {
-            const valueSlugs = (dynamicFilters["PHÂN LOẠI"] || [])
+            const valueIds = (dynamicFilters["PHÂN LOẠI"] || [])
               .filter(opt => values.includes(opt.label))
               .map(opt => opt.value);
             
-            if (valueSlugs.length > 0) {
-              filtered = filtered.filter(p => p.tags?.some(t => valueSlugs.includes(t)));
+            if (valueIds.length > 0) {
+              filtered = filtered.filter(p => p.tags?.some(t => valueIds.includes(t)));
             }
           }
 
