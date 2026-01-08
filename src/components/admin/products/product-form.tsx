@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -66,7 +67,7 @@ const formSchema = z.object({
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
   priceDescription: z.string().optional(),
-  secondaryPrice: z.preprocess((a) => a ? parseFloat(z.string().parse(a)) : undefined, z.number().positive('Giá phải là số dương.').optional()),
+  secondaryPrice: z.preprocess((a) => (a === '' || a === undefined || a === null) ? undefined : parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.').optional()),
   secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
   image: imageInfoSchema.nullable(), // Cover Image
@@ -101,7 +102,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           priceDescription: initialData.priceDescription || '',
-          secondaryPrice: initialData.secondaryPrice || undefined,
+          secondaryPrice: initialData.secondaryPrice || '',
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
@@ -109,9 +110,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       : {
           nameVN: '',
           slug: '',
-          price: 0,
+          price: '' as any,
           priceDescription: '',
-          secondaryPrice: undefined,
+          secondaryPrice: '' as any,
           secondaryPriceDescription: '',
           description: '',
           image: null,
@@ -187,6 +188,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         const updateData = {
           ...data,
           price: Number(data.price),
+          secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : null,
           updatedAt: serverTimestamp(),
         };
         const productRef = doc(firestore, 'products', initialData.id);
@@ -197,6 +199,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         const createData = {
             ...data,
             price: Number(data.price),
+            secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : null,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         };
