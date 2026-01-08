@@ -9,6 +9,7 @@ import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { Skeleton } from './ui/skeleton';
 import { sampleBlogPosts } from '@/lib/placeholder-data';
+import { Calendar } from 'lucide-react';
 
 const allCategories = [
     'DISTILLERIES',
@@ -21,13 +22,13 @@ const allCategories = [
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
-    const month = `TH${date.getMonth() + 1}`;
-    return { day, month };
-}
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
 
 const BlogCard = ({ post }: { post: BlogPost }) => {
-    const { day, month } = formatDate(post.date);
-
     return (
         <Link href={`/tin-tuc/${post.slug}`} className="group block">
             <div className="relative">
@@ -43,21 +44,16 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
                         />
                     )}
                 </div>
-                <div 
-                    className="absolute top-4 left-0 bg-white text-center font-bold"
-                    style={{
-                        padding: '5px 10px 5px 10px',
-                        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)'
-                    }}
-                >
-                    <div className="text-xl leading-none" style={{color: '#8a7d6a'}}>{day}</div>
-                    <div className="text-xs leading-none" style={{color: '#8a7d6a'}}>{month}</div>
-                </div>
             </div>
             <div className="mt-4 text-left">
-                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#8a7d6a' }}>
-                    {post.categories.join(' ')}
-                </p>
+                <div className="flex items-center text-xs font-bold uppercase tracking-widest gap-2" style={{ color: '#8a7d6a' }}>
+                    <span>{post.categories.join(' / ')}</span>
+                    <span className="font-sans">|</span>
+                    <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        <span>{formatDate(post.date)}</span>
+                    </div>
+                </div>
                 <h2 className="font-headline text-xl font-black uppercase mt-2 text-neutral-700 group-hover:text-primary transition-colors">
                     {post.title}
                 </h2>
