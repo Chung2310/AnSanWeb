@@ -53,7 +53,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
 
     const details: ProductStructuredDetails = {
         title: product.nameVN,
-        paragraphs: product.description ? product.description.split('\n\n') : ["Chưa có mô tả chi tiết cho sản phẩm này."],
+        paragraphs: product.description ? product.description.split('\n\n') : [],
         details: product.attributes || [],
         tastingNote: {
             nose: notes.nose,
@@ -150,13 +150,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
               <h1 className="font-headline text-5xl font-bold text-gray-800">
                 {product.nameVN}
               </h1>
-
-              {product.description && (
-                  <div 
-                      className="prose prose-sm dark:prose-invert max-w-none text-gray-600 leading-relaxed" 
-                      dangerouslySetInnerHTML={{ __html: product.description.substring(0, 300).concat('...').replace(/\n/g, '<br />') }}
-                  />
-              )}
 
               <Separator />
 

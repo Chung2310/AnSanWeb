@@ -21,6 +21,12 @@ export default function ProductDetailDescription({ details }: { details: Product
     const { title, paragraphs, details: detailList, tastingNote, howToEnjoy, foodPairing, storage, conclusion } = details;
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // If there are no paragraphs or other details to show, don't render the component.
+    const hasContent = paragraphs.length > 0 || (detailList && detailList.length > 0) || tastingNote || howToEnjoy || foodPairing || storage || conclusion;
+    if (!hasContent) {
+        return null;
+    }
+
     const previewParagraphs = paragraphs.slice(0, 2);
     const remainingParagraphs = paragraphs.slice(2);
 
