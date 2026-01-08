@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React from 'react';
@@ -225,7 +224,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
                         <Separator />
 
-                        <div className="flex justify-between items-center text-center">
+                        <div className="flex justify-between items-center text-center w-full">
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
                                 <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
@@ -333,3 +332,5 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
+    
