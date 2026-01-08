@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -224,7 +225,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
                         <Separator />
 
-                        <div className="grid grid-cols-4 gap-4 text-center">
+                        <div className="flex justify-between items-center text-center">
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
                                 <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
