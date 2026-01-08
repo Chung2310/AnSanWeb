@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -53,7 +53,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
         chillFiltered: findAttr("lọc lạnh"),
         region: findAttr("vùng sản xuất") || extractFromDescription('Xuất xứ'),
         caskType: findAttr("loại thùng"),
-        nose: extractFromDescription('Mùi hương'),
+        nose: extractFromDescription('Hương vị'),
         palate: extractFromDescription('Hương vị'),
         finish: extractFromDescription('Hậu vị'),
         color: extractFromDescription('Màu sắc'),
@@ -86,7 +86,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
 }
 
 function ProductDetailView({ product }: { product: FullProduct }) {
-  const { details } = useMemo(() => generateProductDetails(product), [product]);
+  const { details } = React.useMemo(() => generateProductDetails(product), [product]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -94,7 +94,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   
   const getTagInfo = (tagId: string) => allTags.find(t => t.id === tagId);
 
-  const breadcrumbs = useMemo(() => {
+  const breadcrumbs = React.useMemo(() => {
     const paths = [{ label: 'TRANG CHỦ', href: '/' }];
     const worldTag = product.tags?.find(t => getTagInfo(t)?.id === 'world');
     const scotchTag = product.tags?.find(t => getTagInfo(t)?.id === 'scotch');
@@ -119,12 +119,12 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags]);
   
   const getAttribute = (...labels: string[]) => {
-    if (!product.attributes) return null;
+    if (!product.attributes) return 'N/A';
     for (const label of labels) {
       const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-      if (found) return found.value;
+      if (found && found.value) return found.value;
     }
-    return null;
+    return 'N/A';
   }
 
 
@@ -179,15 +179,15 @@ function ProductDetailView({ product }: { product: FullProduct }) {
               <div className="grid grid-cols-4 gap-4 text-center">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age') || 'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ CỒN</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ', 'nồng độ cồn', 'alc') || 'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ', 'nồng độ cồn', 'alc')}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume') || 'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume')}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
@@ -220,7 +220,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     <div className="space-y-4 text-sm">
                         <div className="flex items-start gap-4">
                             <ShoppingCart className="h-5 w-5 mt-0.5 text-primary"/>
-                            <span>Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km nội thành Hà Nội</span>
+                            <span>Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km</span>
                         </div>
                         <div className="flex items-start gap-4">
                             <Award className="h-5 w-5 mt-0.5 text-primary"/>
@@ -241,6 +241,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
           </div>
         </div>
       </div>
+      <ProductInfoSection notes={details} />
       <ProductDetailDescription details={details} />
       <FaqSection />
     </>
@@ -253,7 +254,7 @@ export default function ProductDetailPage() {
   const slug = params.slug as string;
   const { products, isLoading } = useProducts();
 
-  const product = useMemo(() => {
+  const product = React.useMemo(() => {
     if (isLoading || !products) return undefined;
     return products.find((p) => p.slug === slug) || null;
   }, [products, slug, isLoading]);
