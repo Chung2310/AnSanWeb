@@ -142,7 +142,10 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
     const primaryTag = product.tags[0];
     if (primaryTag) {
-      paths.push(...getPath(primaryTag));
+      const categoryInfo = categories.find(c => c.id === primaryTag);
+      if (categoryInfo) {
+        paths.push(...getPath(categoryInfo.id));
+      }
     }
     
     return paths;
@@ -172,17 +175,17 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     <>
       <div className="bg-white text-black">
         <div className="container mx-auto max-w-7xl py-12 md:py-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-                <div className="md:col-start-1 row-start-1">
-                    <div className="md:sticky top-24 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12">
+                <div className="lg:col-span-1">
+                    <div className="space-y-4">
                         {allImages.map((image, index) => (
-                        <div key={index} className="rounded-lg bg-white p-8 h-screen flex items-center justify-center">
+                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center">
                             <Image
                             src={image.url}
                             alt={`${product.nameVN} - ảnh ${index + 1}`}
-                            width={800}
-                            height={800}
-                            className="w-full h-auto object-contain max-h-[80vh]"
+                            width={1000}
+                            height={1000}
+                            className="w-full h-auto object-contain"
                             priority={index === 0}
                             />
                         </div>
@@ -190,7 +193,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     </div>
                 </div>
 
-                <div className="md:col-start-2 row-start-1">
+                <div className="lg:col-span-1 row-start-1 lg:row-start-auto">
                     <div className="md:sticky md:top-24 space-y-6">
                         <Breadcrumb>
                             <BreadcrumbList>
@@ -329,3 +332,4 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
