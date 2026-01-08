@@ -30,13 +30,12 @@ export default function ProductsPage() {
     )
   }
 
-  const italianWineTags = ['y', 'piemonte', 'toscana', 'veneto', 'puglia', 'sicilia'];
-  const italianWines = products?.filter(wine => wine.tags?.some(tag => italianWineTags.includes(tag))) || [];
+  const filteredProducts = products?.filter(wine => wine.tags?.includes('puglia')) || [];
 
   return (
     <ProductListing 
-      initialProducts={italianWines}
-      title="Vang Ý"
+      initialProducts={filteredProducts}
+      title="Vang Vùng Puglia"
     />
   );
 }

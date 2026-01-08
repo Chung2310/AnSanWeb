@@ -11,6 +11,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu"
 import { Input } from '../ui/input';
 import { useEffect, useState } from 'react';
@@ -49,7 +53,17 @@ const categoryNavLinks = [
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
-            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
+            { 
+                href: '/danh-muc/ruou-vang/vang-y', 
+                label: 'VANG Ý',
+                sublinks: [
+                    { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'VANG VÙNG PIEMONTE' },
+                    { href: '/danh-muc/ruou-vang/vang-y/toscana', label: 'VANG VÙNG TOSCANA' },
+                    { href: '/danh-muc/ruou-vang/vang-y/veneto', label: 'VANG VÙNG VENETO' },
+                    { href: '/danh-muc/ruou-vang/vang-y/puglia', label: 'VANG VÙNG PUGLIA' },
+                    { href: '/danh-muc/ruou-vang/vang-y/sicilia', label: 'VANG VÙNG SICILIA' },
+                ]
+            },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
             { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
             { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
@@ -82,7 +96,7 @@ const categoryNavLinks = [
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
 ];
 
-const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
+const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[], className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isActive = pathname.startsWith(href);
@@ -121,9 +135,26 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
               className="bg-white"
             >
               {sublinks.map(link => (
-                <DropdownMenuItem key={link.href} asChild>
-                  <Link href={link.href}>{link.label}</Link>
-                </DropdownMenuItem>
+                link.sublinks ? (
+                  <DropdownMenuSub key={link.href}>
+                    <DropdownMenuSubTrigger>
+                      <span>{link.label}</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        {link.sublinks.map(subLink => (
+                          <DropdownMenuItem key={subLink.href} asChild>
+                            <Link href={subLink.href}>{subLink.label}</Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                ) : (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </DropdownMenuItem>
+                )
               ))}
           </DropdownMenuContent>
         </div>
