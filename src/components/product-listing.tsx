@@ -9,15 +9,6 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import { useCategories } from "@/hooks/use-categories";
 import CategoryNav from "./category-nav";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 
 const staticFiltersData = {
@@ -108,7 +99,6 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const productsPerPage = 18;
 
   const [clientProducts, setClientProducts] = useState(initialProducts);
-  const { categories } = useCategories();
 
   useEffect(() => {
     setClientProducts(initialProducts);
@@ -139,23 +129,15 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   };
 
   const handleCategoryNavSelect = (slug: string | null) => {
+    // This function is now primarily for updating the visual state of the nav,
+    // as filtering logic is handled by Next.js routing.
+    // We keep setActiveCategory for visual indication on the CategoryNav
     setActiveCategory(slug);
-    // Reset sidebar category filter when using top nav
-    setActiveFilters(prev => ({...prev, "DANH MỤC SẢN PHẨM": []}));
     setCurrentPage(1);
   };
 
   const filteredAndSortedProducts = useMemo(() => {
     let products = [...clientProducts];
-    
-    // Category filter from top nav
-    if (activeCategory) {
-        const selectedCategory = categories?.find(c => c.slug === activeCategory);
-        if (selectedCategory) {
-           products = products.filter(p => p.tags?.includes(selectedCategory.slug));
-        }
-    }
-
 
     // Filtering logic from sidebar
     Object.entries(activeFilters).forEach(([group, values]) => {
@@ -220,7 +202,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
 
     return products;
-  }, [clientProducts, activeFilters, activeSort, activeCategory, categories]);
+  }, [clientProducts, activeFilters, activeSort]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / productsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
