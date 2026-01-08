@@ -23,7 +23,6 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Oswald:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
       </head>
       <body
         className={cn(
