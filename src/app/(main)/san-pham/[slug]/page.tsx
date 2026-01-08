@@ -102,10 +102,13 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return paths;
   }, [product.tags]);
   
-  const getAttribute = (label: string) => {
+  const getAttribute = (...labels: string[]) => {
     if (!product.attributes) return null;
-    const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-    return found?.value;
+    for (const label of labels) {
+      const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+      if (found) return found.value;
+    }
+    return null;
   }
 
 
@@ -160,15 +163,15 @@ function ProductDetailView({ product }: { product: FullProduct }) {
               <div className="grid grid-cols-4 gap-4 text-center">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('Tuổi rượu') || getAttribute('age') || 'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age') || 'N/A'}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ CỒN</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('Nồng độ') || getAttribute('Nồng độ cồn') ||'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ', 'nồng độ cồn', 'alc') || 'N/A'}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('Dung tích') || 'N/A'}</p>
+                    <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume') || 'N/A'}</p>
                   </div>
                    <div>
                     <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
