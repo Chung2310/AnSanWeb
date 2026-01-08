@@ -28,7 +28,7 @@ export default function ProductDetailDescription({ details }: { details: Product
       howToEnjoy || 
       foodPairing || 
       storage || 
-      (conclusion && conclusion !== "Chưa có kết luận.");
+      conclusion;
 
     if (!hasContent) {
         return null;
@@ -41,7 +41,7 @@ export default function ProductDetailDescription({ details }: { details: Product
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
             <div className="container max-w-4xl mx-auto">
                 <h2 className="text-center font-headline text-4xl font-black uppercase mb-10" style={{color: '#5a5a5a'}}>
-                    Chi Tiết Sản Phẩm
+                    Mô Tả Chi Tiết
                 </h2>
                 
                 <div className="text-left text-base leading-relaxed" style={{color: '#5a5a5a'}}>
@@ -99,7 +99,7 @@ export default function ProductDetailDescription({ details }: { details: Product
                                 </div>
 
 
-                                {conclusion && conclusion !== "Chưa có kết luận." && (
+                                {conclusion && (
                                     <>
                                         <h3 className="font-bold text-lg mt-10 mb-4">Kết Luận:</h3>
                                         <p className="leading-relaxed">{conclusion}</p>
