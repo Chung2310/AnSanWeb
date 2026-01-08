@@ -1,3 +1,4 @@
+
 export type ImageInfo = {
   url: string;
   path: string;
@@ -41,9 +42,9 @@ export type Product = {
   id: string;
   nameVN: string;
   slug: string;
-  price: number;
+  price: any;
   priceDescription?: string;
-  secondaryPrice?: number;
+  secondaryPrice?: any;
   secondaryPriceDescription?: string;
   description: string;
   image: ImageInfo | null; // Cover Image
