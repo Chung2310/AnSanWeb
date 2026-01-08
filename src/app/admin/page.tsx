@@ -3,7 +3,6 @@
 import { useState, useMemo } from 'react';
 import { useProducts } from '@/hooks/use-products';
 import { useCategories } from '@/hooks/use-categories';
-import { sampleBlogPosts } from '@/lib/placeholder-data';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Users, Package, FileText } from 'lucide-react';
 import Link from 'next/link';
@@ -15,11 +14,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 export default function AdminDashboard() {
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
-  const { blogPosts, isLoading: isLoadingBlogs } = { blogPosts: sampleBlogPosts, isLoading: false };
+  const { blogPosts, isLoading: isLoadingBlogs } = useBlogPosts();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 

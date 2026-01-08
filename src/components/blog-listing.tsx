@@ -5,11 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from '@/lib/utils';
 import type { BlogPost } from '@/lib/types';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy } from 'firebase/firestore';
 import { Skeleton } from './ui/skeleton';
-import { sampleBlogPosts } from '@/lib/placeholder-data';
 import { Calendar } from 'lucide-react';
+import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 const allCategories = [
     'DISTILLERIES',
@@ -19,8 +17,9 @@ const allCategories = [
     'WHISKY REVIEW',
 ];
 
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+const formatDate = (dateValue: any) => {
+    if (!dateValue) return '';
+    const date = dateValue.toDate ? dateValue.toDate() : new Date(dateValue);
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -81,10 +80,7 @@ interface BlogListingProps {
 
 export default function BlogListing({ defaultCategory = null }: BlogListingProps) {
     const [activeCategory, setActiveCategory] = useState<string | null>(defaultCategory);
-    
-    // Use placeholder data instead of Firestore
-    const blogPosts = sampleBlogPosts;
-    const isLoading = false;
+    const { blogPosts, isLoading } = useBlogPosts();
 
     const getCategoryCount = (category: string) => {
         if (!blogPosts) return 0;

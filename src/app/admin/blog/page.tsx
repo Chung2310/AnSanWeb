@@ -5,11 +5,10 @@ import Link from 'next/link';
 import { DataTable } from '@/components/admin/blog/data-table';
 import { columns } from '@/components/admin/blog/columns';
 import { Skeleton } from '@/components/ui/skeleton';
-import { sampleBlogPosts } from '@/lib/placeholder-data';
+import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 export default function BlogAdminPage() {
-    const isLoading = false;
-    const blogPosts = sampleBlogPosts;
+    const { blogPosts, isLoading } = useBlogPosts();
 
   if (isLoading) {
     return (
