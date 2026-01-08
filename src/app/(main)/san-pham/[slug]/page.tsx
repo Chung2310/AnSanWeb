@@ -46,12 +46,10 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
       return 'Đang cập nhật';
     };
     
-    // Helper to extract info from description string
     const extractFromDescription = (...keywords: string[]): string | undefined => {
         if (!product.description) return undefined;
         for (const keyword of keywords) {
-            // Regex to find "• Keyword: Value" or "Keyword: Value"
-            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:\\s*([^•\\n]+)`);
+            const regex = new RegExp(`(?:•\\s*)?${keyword}\\s*:\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match) return match[1].trim().replace(/\.$/, '');
         }
@@ -66,7 +64,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         details: product.attributes || [],
         brand: findAttr("thương hiệu"),
         chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất", 'xuất xứ'),
+        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription('Xuất xứ', 'Vùng sản xuất'),
         caskType: findAttr("loại thùng"),
         tastingNote: {
             nose: extractFromDescription('Hương thơm', 'Mùi hương', 'Hương vị'),
@@ -74,7 +72,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
             finish: extractFromDescription('Hậu vị'),
             color: extractFromDescription('Màu sắc'),
         },
-        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || undefined,
+        conclusion: findAttr("kết luận") || extractFromDescription('Kết luận'),
         howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
         foodPairing: findAttr("kết hợp món ăn") || extractFromDescription('Kết hợp món ăn'),
         storage: findAttr("bảo quản") || extractFromDescription('Bảo quản')
