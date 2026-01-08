@@ -63,7 +63,7 @@ const imageInfoSchema = z.object({
 });
 
 const formSchema = z.object({
-  id: z.string().optional(), // Add ID field
+  id: z.string().optional(),
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
@@ -71,8 +71,8 @@ const formSchema = z.object({
   secondaryPrice: z.preprocess((a) => (a === '' || a === undefined || a === null) ? undefined : parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.').optional()),
   secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
-  image: imageInfoSchema.nullable(), // Cover Image
-  detailImages: z.array(imageInfoSchema).optional(), // Detail Images
+  image: imageInfoSchema.nullable(),
+  detailImages: z.array(imageInfoSchema).optional(),
   status: z.enum(['published', 'draft']),
   isFeatured: z.boolean(),
   isNew: z.boolean(),
@@ -166,7 +166,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         const uploadedImages = await Promise.all(uploadPromises);
         const currentImages = form.getValues('detailImages') || [];
         form.setValue('detailImages', [...currentImages, ...uploadedImages.filter((img): img is ImageInfo => !!img)]);
-        // Refresh previews with final URLs
         setDetailImagePreviews(form.getValues('detailImages')?.map(img => img.url) || []);
       } catch (error) {
         toast({ variant: 'destructive', title: 'Lỗi tải lên', description: 'Không thể tải lên một hoặc nhiều ảnh chi tiết.' });
@@ -185,19 +184,18 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const onSubmit = async (data: ProductFormValues) => {
     try {
       if (initialData) {
-        // Logic for UPDATING an existing product
-        const updateData: Partial<ProductFormValues> & { id?: string } = {
+        const updateData: Omit<ProductFormValues, 'id'> & { updatedAt: any } = {
           ...data,
-          id: initialData.id,
           price: Number(data.price),
           secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
           updatedAt: serverTimestamp(),
         };
+        delete (updateData as any).id; 
+
         const productRef = doc(firestore, 'products', initialData.id);
-        await updateDoc(productRef, updateData as any);
+        await updateDoc(productRef, updateData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
       } else {
-        // Logic for CREATING a new product
         const createData = {
             ...data,
             price: Number(data.price),
@@ -205,6 +203,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         };
+        delete (createData as any).id;
         const collectionRef = collection(firestore, 'products');
         await addDoc(collectionRef, createData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
@@ -212,7 +211,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       router.push('/admin/products');
       router.refresh();
     } catch (error) {
-      console.error(error);
+      console.error("Error saving product:", error);
       toast({
         variant: 'destructive',
         title: 'Đã có lỗi xảy ra',
