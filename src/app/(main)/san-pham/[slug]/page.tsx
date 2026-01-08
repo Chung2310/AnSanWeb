@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useMemo } from 'react';
@@ -31,7 +29,7 @@ function ProductDetailPageSkeleton() {
 }
 
 const generateProductDetails = (product: FullProduct): { notes: TastingNotes, details: ProductStructuredDetails } => {
-    const findAttr = (label: string) => product.attributes.find(a => a.label.toLowerCase() === label.toLowerCase())?.value || 'Đang cập nhật';
+    const findAttr = (label: string) => product.attributes?.find(a => a.label.toLowerCase() === label.toLowerCase())?.value || 'Đang cập nhật';
     
     const notes: TastingNotes = {
         brand: findAttr("thương hiệu"),
@@ -47,7 +45,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
     const details: ProductStructuredDetails = {
         title: product.nameVN,
         paragraphs: product.description ? product.description.split('\n\n') : ["Chưa có mô tả chi tiết cho sản phẩm này."],
-        details: product.attributes,
+        details: product.attributes || [],
         tastingNote: {
             nose: notes.nose,
             palate: notes.palate,
