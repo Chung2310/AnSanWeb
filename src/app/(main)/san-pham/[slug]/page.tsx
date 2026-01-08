@@ -112,9 +112,18 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                 <h1 className="font-headline text-3xl md:text-4xl font-bold text-gray-800">
                   {product.nameVN}
                 </h1>
-                <p className="text-3xl font-semibold text-primary mt-4">
-                  {formatPrice(product.price)}
-                </p>
+                <div className="mt-4">
+                  <p className="text-3xl font-semibold text-primary">
+                    {formatPrice(product.price)}
+                    {product.priceDescription && <span className="text-xl text-muted-foreground ml-2">{product.priceDescription}</span>}
+                  </p>
+                  {product.secondaryPrice && (
+                    <p className="text-2xl font-semibold text-primary mt-2">
+                      {formatPrice(product.secondaryPrice)}
+                      {product.secondaryPriceDescription && <span className="text-lg text-muted-foreground ml-2">{product.secondaryPriceDescription}</span>}
+                    </p>
+                  )}
+                </div>
               </div>
               
               {product.description && (
