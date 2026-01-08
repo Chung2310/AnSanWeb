@@ -28,6 +28,24 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useDeleteBlogPost } from '@/hooks/use-delete-blog-post';
 
+const safeGetDate = (dateObj: any): Date | null => {
+    if (!dateObj) return null;
+    // Firestore Timestamp
+    if (typeof dateObj.toDate === 'function') {
+        return dateObj.toDate();
+    }
+    // String or number
+    const date = new Date(dateObj);
+    if (!isNaN(date.getTime())) {
+        return date;
+    }
+    // Handle Firestore Timestamp nested in object (from JSON serialization)
+    if(dateObj.seconds) {
+        return new Date(dateObj.seconds * 1000);
+    }
+    return null;
+}
+
 export const columns: ColumnDef<BlogPost>[] = [
   {
     id: 'select',
@@ -78,9 +96,8 @@ export const columns: ColumnDef<BlogPost>[] = [
     accessorKey: 'date',
     header: 'Ngày đăng',
      cell: ({ row }) => {
-        const dateObj = row.original.date as any;
-        if (!dateObj) return 'N/A';
-        const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
+        const date = safeGetDate(row.original.date);
+        if (!date) return 'N/A';
         return date.toLocaleDateString('vi-VN');
     }
   },
