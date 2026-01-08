@@ -9,6 +9,13 @@ export const allTags = [
     { id: 'nga', label: 'Vang Nga' },
     { id: 'duc', label: 'Vang Đức' },
 
+    // Italian Wine Regions
+    { id: 'piemonte', label: 'Vang Vùng Piemonte' },
+    { id: 'toscana', label: 'Vang Vùng Toscana' },
+    { id: 'veneto', label: 'Vang Vùng Veneto' },
+    { id: 'puglia', label: 'Vang Vùng Puglia' },
+    { id: 'sicilia', label: 'Vang Vùng Sicilia' },
+
     // Rượu Mạnh
     { id: 'spirits', label: 'Spirits (Chung)' },
     { id: 'armagnac', label: 'Armagnac' },
