@@ -30,7 +30,8 @@ export default function ProductsPage() {
     )
   }
   
-  const spiritsProducts = products?.filter(wine => wine.tags?.includes('spirits')) || [];
+  const spiritTags = ['spirits', 'john-walker', 'chivas', 'mortlach', 'ballantines', 'royal-salute', 'singleton'];
+  const spiritsProducts = products?.filter(wine => wine.tags?.some(tag => spiritTags.includes(tag))) || [];
 
   return (
     <ProductListing 
