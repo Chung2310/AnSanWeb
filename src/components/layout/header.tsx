@@ -80,7 +80,6 @@ const categoryNavLinks = [
     },
     { href: '/danh-muc/bo-qua-tang', label: 'BỘ QUÀ TẶNG' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
-    { href: '/danh-muc/set-thu-ruou', label: 'SET THỬ RƯỢU' },
 ];
 
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string}[], className?: string }) => {
