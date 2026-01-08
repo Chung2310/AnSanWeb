@@ -96,7 +96,7 @@ const categoryNavLinks = [
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
 ];
 
-const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[], className?: string }) => {
+const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[] | undefined, className?: string }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isActive = pathname.startsWith(href);
