@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -69,11 +70,11 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
     const extractFromDescription = (...keywords: string[]): string | undefined => {
         if (!product.description) return undefined;
         for (const keyword of keywords) {
-            const regex = new RegExp(`(?:•\\s*|\\n|^)(${keyword})\\s*:?\\s*([^•\\n]+)`, 'i');
+            // Updated regex to capture text after a colon, ignoring the label itself
+            const regex = new RegExp(`(?:${keyword})\\s*:\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
-            if (match && match[2]) {
-                 const value = match[2].trim().replace(/\.$/, '').replace(new RegExp(`^${keyword}\\s*:?`, 'i'), '').trim();
-                 return value;
+            if (match && match[1]) {
+                return match[1].trim().replace(/\.$/, '').trim();
             }
         }
         return undefined;
@@ -161,11 +162,11 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     }
     if (product.description) {
         for (const label of labels) {
-            const regex = new RegExp(`(?:•\\s*|\\n|^)${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\s*:?\\s*([^•\\n]+)`, 'i');
+            // Regex to find label and capture value after colon
+            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match && match[1]) {
-                 const value = match[1].trim().replace(/\.$/, '').replace(new RegExp(`^${label}\\s*:?`, 'i'), '').trim().replace(/^cồn:\s*/i, '');
-                 return value;
+                 return match[1].trim().replace(/\.$/, '');
             }
         }
     }
@@ -330,3 +331,5 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
+    
