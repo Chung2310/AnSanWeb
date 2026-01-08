@@ -1,6 +1,6 @@
 'use client';
-import { useCategories } from '@/hooks/use-categories';
 import { useProducts } from '@/hooks/use-products';
+import { useCategories } from '@/hooks/use-categories';
 import { cn } from '@/lib/utils';
 import {
     DropdownMenu,
@@ -21,7 +21,7 @@ interface CategoryNavProps {
 const mainCategoriesConfig = [
     {
         label: "Rượu Vang",
-        slug: "wine",
+        slug: "ruou-vang",
         subCategories: [
             { label: 'VANG Ý', href: '/danh-muc/ruou-vang/vang-y' },
             { label: 'VANG PHÁP', href: '/danh-muc/ruou-vang/vang-phap' },
@@ -33,7 +33,7 @@ const mainCategoriesConfig = [
     },
     {
         label: "Rượu Mạnh",
-        slug: "spirits",
+        slug: "ruou-manh",
         subCategories: [
             { label: "BALLANTINE'S FINEST", href: '/danh-muc/ruou-manh/ballantines-finest' },
             { label: 'JOHN WALKER', href: '/danh-muc/ruou-manh/john-walker' },
@@ -72,7 +72,8 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
             if (cat.subCategories) {
                 // For parent categories, count products that have ANY of the subcategory tags
                  const subCategorySlugs = categories?.filter(c => cat.subCategories.some(sc => sc.label.toLowerCase() === c.name.toLowerCase() || sc.href.includes(c.slug))).map(c => c.slug) || [];
-                 counts[cat.slug] = products.filter(p => p.tags?.some(t => subCategorySlugs.includes(t)) || p.tags?.includes(cat.slug)).length;
+                 const allRelatedSlugs = [...subCategorySlugs, cat.slug];
+                 counts[cat.slug] = products.filter(p => p.tags?.some(t => allRelatedSlugs.includes(t))).length;
             } else {
                 counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
             }
