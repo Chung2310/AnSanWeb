@@ -42,6 +42,9 @@ export type Product = {
   nameVN: string;
   slug: string;
   price: number;
+  priceDescription?: string;
+  secondaryPrice?: number;
+  secondaryPriceDescription?: string;
   description: string;
   image: ImageInfo | null; // Cover Image
   detailImages?: ImageInfo[]; // Detail Page Images

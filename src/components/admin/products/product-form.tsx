@@ -65,6 +65,9 @@ const formSchema = z.object({
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
+  priceDescription: z.string().optional(),
+  secondaryPrice: z.preprocess((a) => a ? parseFloat(z.string().parse(a)) : undefined, z.number().positive('Giá phải là số dương.').optional()),
+  secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
   image: imageInfoSchema.nullable(), // Cover Image
   detailImages: z.array(imageInfoSchema).optional(), // Detail Images
@@ -97,6 +100,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           description: initialData.description || '',
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
+          priceDescription: initialData.priceDescription || '',
+          secondaryPrice: initialData.secondaryPrice || undefined,
+          secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
         }
@@ -104,6 +110,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           nameVN: '',
           slug: '',
           price: 0,
+          priceDescription: '',
+          secondaryPrice: undefined,
+          secondaryPriceDescription: '',
           description: '',
           image: null,
           detailImages: [],
@@ -217,7 +226,29 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               <CardContent className="space-y-4">
                 <FormField control={form.control} name="nameVN" render={({ field }) => (<FormItem><FormLabel>Tên sản phẩm</FormLabel><FormControl><Input placeholder="Vd: The Macallan 18" {...field} onChange={handleNameChange} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabel>Đường dẫn (Slug)</FormLabel><FormControl><Input placeholder="the-macallan-18" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={form.control} name="price" render={({ field }) => (<FormItem><FormLabel>Giá</FormLabel><FormControl><Input type="number" placeholder="0" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                
+                <Card>
+                  <CardHeader><CardTitle className="text-lg">Giá sản phẩm</CardTitle></CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <FormLabel>Giá chính</FormLabel>
+                      <FormDescription>Giá mặc định của sản phẩm.</FormDescription>
+                      <div className="flex gap-4 mt-2">
+                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      </div>
+                    </div>
+                     <div>
+                      <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
+                      <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
+                      <div className="flex gap-4 mt-2">
+                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Mô tả chi tiết</FormLabel><FormControl><Textarea placeholder="Mô tả chi tiết về sản phẩm..." {...field} rows={15} /></FormControl><FormMessage /></FormItem>)} />
               </CardContent>
             </Card>
