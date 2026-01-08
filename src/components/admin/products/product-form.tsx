@@ -67,7 +67,10 @@ const formSchema = z.object({
   id: z.string().optional(),
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
-  price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
+  price: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().positive({ message: 'Giá phải là số dương.' })
+  ),
   priceDescription: z.string().optional(),
   secondaryPrice: z.preprocess(
     (a) => {
@@ -114,7 +117,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           priceDescription: initialData.priceDescription || '',
-          secondaryPrice: initialData.secondaryPrice || '',
+          secondaryPrice: initialData.secondaryPrice || undefined,
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
@@ -124,7 +127,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           slug: '',
           price: '' as any,
           priceDescription: '',
-          secondaryPrice: '' as any,
+          secondaryPrice: undefined,
           secondaryPriceDescription: '',
           description: '',
           image: null,
@@ -259,7 +262,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
                       <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} value={field.value === undefined ? '' : field.value} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
