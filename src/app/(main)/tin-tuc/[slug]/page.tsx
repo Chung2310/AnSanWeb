@@ -7,10 +7,9 @@ import { Calendar, User } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
 import type { BlogPost } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import { collection, query, where } from "firebase/firestore";
+import { useBlogPosts } from "@/hooks/use-blog-posts";
 
 // This is a placeholder for a function that would parse content and extract headings
 const generateHeadings = (content: string) => {
@@ -67,15 +66,13 @@ const PostPageSkeleton = () => (
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const firestore = useFirestore();
+  const { blogPosts, isLoading } = useBlogPosts();
 
-  const postsQuery = useMemoFirebase(
-    () => firestore && query(collection(firestore, 'blogPosts'), where('slug', '==', slug)),
-    [firestore, slug]
-  );
-  
-  const { data: posts, isLoading } = useCollection<BlogPost>(postsQuery);
-  const post = posts?.[0];
+  const post = useMemo(() => {
+    if (!blogPosts) return undefined;
+    return blogPosts.find(p => p.slug === slug);
+  }, [blogPosts, slug]);
+
 
   if (isLoading) {
     return <PostPageSkeleton />;
