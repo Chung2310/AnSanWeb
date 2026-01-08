@@ -62,6 +62,24 @@ const PostPageSkeleton = () => (
     </div>
 )
 
+const safeGetDate = (dateObj: any): Date | null => {
+    if (!dateObj) return null;
+    // Firestore Timestamp
+    if (typeof dateObj.toDate === 'function') {
+        return dateObj.toDate();
+    }
+    // String or number
+    const date = new Date(dateObj);
+    if (!isNaN(date.getTime())) {
+        return date;
+    }
+    // Handle Firestore Timestamp nested in object (from JSON serialization)
+    if(dateObj.seconds) {
+        return new Date(dateObj.seconds * 1000);
+    }
+    return null;
+}
+
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -83,9 +101,9 @@ export default function BlogPostPage() {
   }
 
   const headings = generateHeadings(post.content || ""); 
-  const dateObj = post.date as any;
-  const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
-  const formattedDate = `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+  const date = safeGetDate(post.date);
+  const formattedDate = date ? `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}` : '';
+
 
   return (
     <div className="bg-white text-black py-16">
