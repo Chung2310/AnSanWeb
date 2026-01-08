@@ -41,12 +41,9 @@ import {
   collection,
   serverTimestamp,
   addDoc,
-  setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
-import {
-  updateDocumentNonBlocking,
-} from '@/firebase/non-blocking-updates';
 import slugify from 'slugify';
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -154,8 +151,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       if (initialData) {
         const productRef = doc(firestore, 'products', initialData.id);
-        const finalData = { ...productData, createdAt: initialData.createdAt };
-        await setDoc(productRef, finalData);
+        await updateDoc(productRef, productData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
 
       } else {
@@ -343,3 +339,5 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     </Form>
   );
 }
+
+    
