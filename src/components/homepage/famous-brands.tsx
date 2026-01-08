@@ -89,14 +89,16 @@ export default function FamousBrands() {
               if (!logo) return null;
               return (
                 <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/5 pl-4 flex justify-center">
-                  <Image
-                    src={logo.imageUrl}
-                    alt={logo.description}
-                    width={150}
-                    height={80}
-                    className="object-contain"
-                    data-ai-hint={logo.imageHint}
-                  />
+                   <div className="relative h-20 w-36">
+                    <Image
+                      src={logo.imageUrl}
+                      alt={logo.description}
+                      fill
+                      sizes="(max-width: 768px) 33vw, 20vw"
+                      className="object-contain"
+                      data-ai-hint={logo.imageHint}
+                    />
+                  </div>
                 </CarouselItem>
               )
             })}
