@@ -1,6 +1,5 @@
 'use client';
 import { useProducts } from '@/hooks/use-products';
-import { useCategories } from '@/hooks/use-categories';
 import { cn } from '@/lib/utils';
 import {
     DropdownMenu,
@@ -108,7 +107,11 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                         if (cat.subCategories) {
                              return (
                                 <DropdownMenu key={cat.slug} open={openDropdown === cat.slug} onOpenChange={(isOpen) => setOpenDropdown(isOpen ? cat.slug : null)}>
-                                    <DropdownMenuTrigger asChild>
+                                    <div 
+                                        onMouseEnter={() => setOpenDropdown(cat.slug)}
+                                        onMouseLeave={() => setOpenDropdown(null)}
+                                        className="flex items-center"
+                                    >
                                         <Button
                                             variant="ghost"
                                             asChild
@@ -120,17 +123,32 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                         >
                                             <Link href={cat.href || '#'}>
                                                 {cat.label} ({count})
-                                                <ChevronDown className={cn("h-4 w-4 ml-1 transition-transform", openDropdown === cat.slug && "rotate-180")} />
                                             </Link>
                                         </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-white">
-                                        {cat.subCategories.map(subLink => (
-                                            <DropdownMenuItem key={subLink.href} asChild>
-                                                <Link href={subLink.href}>{subLink.label}</Link>
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className={cn(
+                                                    "p-0 h-auto no-focus-border transition-colors whitespace-nowrap text-sm uppercase font-semibold text-gray-500",
+                                                    isActive ? "text-black font-bold" : "",
+                                                    'hover:text-black hover:bg-transparent'
+                                                )}
+                                            >
+                                                <ChevronDown className={cn("h-4 w-4 ml-1 transition-transform", openDropdown === cat.slug && "rotate-180")} />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent 
+                                            className="bg-white"
+                                            onMouseEnter={() => setOpenDropdown(cat.slug)}
+                                            onMouseLeave={() => setOpenDropdown(null)}
+                                        >
+                                            {cat.subCategories.map(subLink => (
+                                                <DropdownMenuItem key={subLink.href} asChild>
+                                                    <Link href={subLink.href}>{subLink.label}</Link>
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </div>
                                 </DropdownMenu>
                             )
                         }
