@@ -107,7 +107,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                       </h2>
                       <div 
                           className="prose prose-sm dark:prose-invert max-w-none text-gray-600 leading-relaxed" 
-                          dangerouslySetInnerHTML={{ __html: product.description.split('\n').slice(0, 3).join('<br />') + '...' }}
+                          dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br />') }}
                       >
                       </div>
                   </div>
