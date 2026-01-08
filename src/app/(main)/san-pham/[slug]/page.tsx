@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -174,8 +175,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   return (
     <>
       <div className="bg-white text-black">
-        <div className="container mx-auto max-w-7xl py-12 md:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-12">
+        <div className="py-12 md:py-20 px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-12 max-w-screen-2xl mx-auto">
                 <div className="lg:col-span-3">
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
