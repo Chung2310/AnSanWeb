@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -233,23 +234,23 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 
                 <Card>
                   <CardHeader><CardTitle className="text-lg">Giá sản phẩm</CardTitle></CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
+                  <CardContent className="space-y-6">
+                    <FormItem>
                       <FormLabel>Giá chính</FormLabel>
                       <FormDescription>Giá mặc định của sản phẩm.</FormDescription>
                       <div className="flex gap-4 mt-2">
                         <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
-                    </div>
-                     <div>
+                    </FormItem>
+                     <FormItem>
                       <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
                       <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
                       <div className="flex gap-4 mt-2">
                         <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
-                    </div>
+                    </FormItem>
                   </CardContent>
                 </Card>
 
@@ -380,7 +381,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   render={() => (
                     <FormItem>
                       <div className="mb-4">
-                        <FormLabel>Tags (Loại sản phẩm)</FormLabel>
+                        <FormLabel className='text-base'>Tags (Loại sản phẩm)</FormLabel>
                         <FormDescription>
                           Chọn các tags phù hợp. Dùng để lọc sản phẩm theo loại.
                         </FormDescription>
