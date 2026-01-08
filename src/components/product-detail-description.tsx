@@ -33,9 +33,13 @@ export default function ProductDetailDescription({ details }: { details: Product
     if (!hasContent) {
         return null;
     }
+    
+    // Always show all paragraphs now, but control visibility with expander
+    const allParagraphs = paragraphs;
 
-    const previewParagraphs = paragraphs.slice(0, 2);
-    const remainingParagraphs = paragraphs.slice(2);
+    // Show first two paragraphs if not expanded
+    const displayParagraphs = isExpanded ? allParagraphs : allParagraphs.slice(0, 2);
+
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
@@ -47,8 +51,8 @@ export default function ProductDetailDescription({ details }: { details: Product
                 <div className="text-left text-base leading-relaxed" style={{color: '#5a5a5a'}}>
                     <h3 className="font-bold text-lg mb-6">{title}</h3>
 
-                    {previewParagraphs.map((p, i) => (
-                        <p key={`p1-${i}`} className="mb-4">{p}</p>
+                    {displayParagraphs.map((p, i) => (
+                        <p key={`p1-${i}`} className="mb-4" dangerouslySetInnerHTML={{ __html: p.replace(/\n/g, '<br />') }}></p>
                     ))}
 
                     <AnimatePresence initial={false}>
@@ -64,8 +68,8 @@ export default function ProductDetailDescription({ details }: { details: Product
                                 transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
                                 className="overflow-hidden"
                             >
-                                {remainingParagraphs.map((p, i) => (
-                                    <p key={`p2-${i}`} className="mb-4">{p}</p>
+                                {allParagraphs.slice(2).map((p, i) => (
+                                    <p key={`p2-${i}`} className="mb-4" dangerouslySetInnerHTML={{ __html: p.replace(/\n/g, '<br />') }}></p>
                                 ))}
 
                                 {detailList && detailList.length > 0 && (
@@ -109,17 +113,19 @@ export default function ProductDetailDescription({ details }: { details: Product
                         )}
                     </AnimatePresence>
                 </div>
-                <div className="text-center mt-8">
-                    <Button 
-                        variant="ghost" 
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="font-bold text-sm tracking-widest hover:bg-transparent"
-                        style={{color: '#5a5a5a'}}
-                    >
-                        {isExpanded ? 'THU GỌN' : 'XEM THÊM'}
-                        {isExpanded ? <ChevronUp className="w-5 h-5 ml-2" /> : <ChevronDown className="w-5 h-5 ml-2" />}
-                    </Button>
-                </div>
+                {allParagraphs.length > 2 && (
+                    <div className="text-center mt-8">
+                        <Button 
+                            variant="ghost" 
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="font-bold text-sm tracking-widest hover:bg-transparent"
+                            style={{color: '#5a5a5a'}}
+                        >
+                            {isExpanded ? 'THU GỌN' : 'XEM THÊM'}
+                            {isExpanded ? <ChevronUp className="w-5 h-5 ml-2" /> : <ChevronDown className="w-5 h-5 ml-2" />}
+                        </Button>
+                    </div>
+                )}
             </div>
         </section>
     );

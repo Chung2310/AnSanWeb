@@ -27,7 +27,6 @@ function ProductDetailPageSkeleton() {
         <div className="space-y-6">
           <Skeleton className="h-6 w-1/2" />
           <Skeleton className="h-12 w-3/4" />
-          <Skeleton className="h-24 w-full" />
           <Skeleton className="h-8 w-1/4" />
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
@@ -69,13 +68,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
         color: extractFromDescription('Màu sắc', 'Màu sắc của vang'),
     };
 
-    const paragraphs = product.description
-      ? product.description
-          .split(/•|\n/)
-          .map(s => s.trim())
-          .filter(s => s && !s.includes(':'))
-      : [];
-
+    const paragraphs = product.description ? [product.description] : [];
 
     const details: ProductStructuredDetails = {
         title: product.nameVN,
@@ -85,6 +78,7 @@ const generateProductDetails = (product: FullProduct): { notes: TastingNotes, de
             nose: notes.nose || 'Đang cập nhật',
             palate: notes.palate || 'Đang cập nhật',
             finish: notes.finish || 'Đang cập nhật',
+            color: notes.color
         },
         conclusion: findAttr("kết luận") || extractFromDescription('Kết luận') || undefined,
         howToEnjoy: findAttr("cách thưởng thức") || extractFromDescription('Cách thưởng thức'),
