@@ -23,6 +23,7 @@ const mainCategoriesConfig = [
         label: "Rượu Vang",
         slug: "ruou-vang",
         href: '/danh-muc/ruou-vang',
+        tags: ['wine', 'y', 'phap', 'tay-ban-nha', 'uc', 'nga', 'duc'],
         subCategories: [
             { label: 'VANG Ý', href: '/danh-muc/ruou-vang/vang-y' },
             { label: 'VANG PHÁP', href: '/danh-muc/ruou-vang/vang-phap' },
@@ -36,6 +37,7 @@ const mainCategoriesConfig = [
         label: "Rượu Mạnh",
         slug: "ruou-manh",
         href: '/danh-muc/ruou-manh',
+        tags: ['spirits', 'john-walker', 'chivas', 'mortlach', 'ballantines', 'royal-salute', 'singleton', 'armagnac', 'scotch', 'world'],
         subCategories: [
             { label: "BALLANTINE'S FINEST", href: '/danh-muc/ruou-manh/ballantines-finest' },
             { label: 'JOHN WALKER', href: '/danh-muc/ruou-manh/john-walker' },
@@ -49,21 +51,21 @@ const mainCategoriesConfig = [
         label: "Cigar",
         slug: "cigar",
         href: "/danh-muc/cigar",
+        tags: ['cigar', 'cigar-hanos', 'cigar-lotus', 'cigar-vinaboss'],
         subCategories: [
             { label: 'Cigar Hanos', href: '/danh-muc/cigar/hanos' },
             { label: 'Cigar Lotus', href: '/danh-muc/cigar/lotus' },
             { label: "Cigar Vinaboss's", href: '/danh-muc/cigar/vinaboss' },
         ]
     },
-    { label: "Bộ Quà Tặng", slug: "bo-qua-tang", href: "/danh-muc/bo-qua-tang" },
-    { label: "Khắc Tên Lên Chai", slug: "khac-ten-len-chai", href: "/danh-muc/khac-ten-len-chai" },
-    { label: "Set Thử Rượu", slug: "set-thu-ruou", href: "/danh-muc/set-thu-ruou" },
+    { label: "Bộ Quà Tặng", slug: "bo-qua-tang", href: "/danh-muc/bo-qua-tang", tags: ['gift-set'] },
+    { label: "Khắc Tên Lên Chai", slug: "khac-ten-len-chai", href: "/danh-muc/khac-ten-len-chai", tags: ['engraving'] },
+    { label: "Set Thử Rượu", slug: "set-thu-ruou", href: "/danh-muc/set-thu-ruou", tags: ['tasting-set'] },
 ];
 
 
 export default function CategoryNav({ onCategorySelect, selectedCategory }: CategoryNavProps) {
     const { products, isLoading: isLoadingProducts } = useProducts();
-    const { categories, isLoading: isLoadingCategories } = useCategories();
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const categoryCounts = useMemo(() => {
@@ -72,17 +74,14 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
         const counts: { [key: string]: number } = {};
     
         mainCategoriesConfig.forEach(cat => {
-            if (cat.subCategories) {
-                // For parent categories, count products that have ANY of the subcategory tags
-                 const subCategorySlugs = categories?.filter(c => cat.subCategories.some(sc => sc.label.toLowerCase() === c.name.toLowerCase() || sc.href.includes(c.slug))).map(c => c.slug) || [];
-                 const allRelatedSlugs = [...subCategorySlugs, cat.slug];
-                 counts[cat.slug] = products.filter(p => p.tags?.some(t => allRelatedSlugs.includes(t))).length;
+            if (cat.tags) {
+                 counts[cat.slug] = products.filter(p => p.tags?.some(t => cat.tags.includes(t))).length;
             } else {
                 counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
             }
         });
         return counts;
-    }, [products, isLoadingProducts, categories]);
+    }, [products, isLoadingProducts]);
 
     
     const allProductsCount = products?.length || 0;
