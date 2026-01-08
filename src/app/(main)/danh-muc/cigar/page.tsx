@@ -36,7 +36,6 @@ export default function ProductsPage() {
   return (
     <ProductListing 
       initialProducts={cigarProducts}
-      title="Cigar"
     />
   );
 }
