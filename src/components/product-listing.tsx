@@ -85,12 +85,14 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   return (
     <div className="bg-white text-black">
       {bannerData ? <CategoryBanner {...bannerData} /> : (
-         <div className="container pt-12 text-left">
-             <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
+         <div className="border-b border-t">
+            <div className="container flex h-16 items-center">
+                <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
+            </div>
          </div>
       )}
       
-      <CategoryNav onCategorySelect={() => {}} selectedCategory={null} />
+      {!bannerData && <CategoryNav onCategorySelect={() => {}} selectedCategory={null} />}
       
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
