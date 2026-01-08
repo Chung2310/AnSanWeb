@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import ImageExtension from '@tiptap/extension-image';
 import {
   Bold,
   Italic,
@@ -12,11 +13,46 @@ import {
   List,
   ListOrdered,
   Quote,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Toggle } from '@/components/ui/toggle';
+import { useUploadStorage } from '@/hooks/use-upload-storage';
+import { useCallback } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
+  const { startUpload, isUploading } = useUploadStorage();
+  const { toast } = useToast();
+
+  const addImage = useCallback(async () => {
+    if (!editor) return;
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        try {
+          const imageInfo = await startUpload(file, 'blog-content');
+          if (imageInfo) {
+            editor.chain().focus().setImage({ src: imageInfo.url }).run();
+          }
+        } catch (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Lỗi tải lên',
+            description: 'Không thể tải ảnh lên. Vui lòng thử lại.',
+          });
+        }
+      }
+    };
+    input.click();
+  }, [editor, startUpload, toast]);
+
+
   if (!editor) {
     return null;
   }
@@ -92,6 +128,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <Quote className="h-4 w-4" />
       </Toggle>
+      <Toggle
+        size="sm"
+        onPressedChange={addImage}
+        disabled={isUploading}
+      >
+        <ImageIcon className="h-4 w-4" />
+      </Toggle>
     </div>
   );
 };
@@ -103,7 +146,13 @@ interface RichTextEditorProps {
 
 export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+        StarterKit, 
+        ImageExtension.configure({
+            inline: false, // Allows images to be on their own line
+            allowBase64: true, // This is important for pasting images
+        })
+    ],
     content: value,
     editorProps: {
       attributes: {
