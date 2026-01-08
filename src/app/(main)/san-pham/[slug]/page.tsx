@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React from 'react';
@@ -103,7 +102,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
             nose: extractFromDescription(product.description, 'Hương thơm', 'Mùi hương'),
             palate: extractFromDescription(product.description, 'Vị giác', 'Vị', 'Hương vị thưởng thức'),
             finish: extractFromDescription(product.description, 'Hậu vị'),
-            color: extractFromDescription(product.description, 'Màu sắc'),
+            color: extractFromDescription(product.description, 'Màu sắc', 'của vang'),
         },
         conclusion: extractFromDescription(product.description, "kết luận"),
         howToEnjoy: extractFromDescription(product.description, "cách thưởng thức", "Thưởng thức"),
@@ -330,5 +329,7 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
+    
 
     
