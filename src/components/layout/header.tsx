@@ -227,8 +227,8 @@ export default function Header() {
       {/* Category Nav */}
       {isHydrated && (
         <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
-            <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
-                <nav className="flex items-center gap-8">
+            <div className="container flex h-auto min-h-14 items-center justify-center py-2">
+                <nav className="flex items-center gap-8 flex-wrap justify-center">
                     {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
                 </nav>
             </div>
