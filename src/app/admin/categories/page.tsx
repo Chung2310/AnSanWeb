@@ -6,47 +6,45 @@ import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useEffect, useMemo, useCallback } from 'react';
-import { writeBatch, collection, doc, deleteDoc } from 'firebase/firestore';
+import { useEffect, useMemo } from 'react';
+import { writeBatch, collection, doc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
 import type { Category } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
 
 // Data based on header navigation
 const initialCategoryData = [
-    { name: 'RƯỢU VANG', children: [
-        { name: 'VANG Ý' },
-        { name: 'VANG PHÁP' },
-        { name: 'VANG TÂY BAN NHA' },
-        { name: 'VANG ÚC' },
-        { name: 'VANG NGA' },
-        { name: 'VANG ĐỨC' },
+    { name: 'RƯỢU VANG', slug: 'ruou-vang', children: [
+        { name: 'VANG Ý', slug: 'vang-y' },
+        { name: 'VANG PHÁP', slug: 'vang-phap' },
+        { name: 'VANG TÂY BAN NHA', slug: 'vang-tay-ban-nha' },
+        { name: 'VANG ÚC', slug: 'vang-uc' },
+        { name: 'VANG NGA', slug: 'vang-nga' },
+        { name: 'VANG ĐỨC', slug: 'vang-duc' },
     ]},
-    { name: 'RƯỢU MẠNH', children: [
-        { name: "BALLANTINE'S" },
-        { name: 'JOHN WALKER' },
-        { name: 'MORTLACH' },
-        { name: 'CHIVAS' },
-        { name: 'ROYAL SALUTE' },
-        { name: 'THE SINGLETON' },
+    { name: 'RƯỢU MẠNH', slug: 'ruou-manh', children: [
+        { name: "BALLANTINE'S", slug: 'ballantines' },
+        { name: 'JOHN WALKER', slug: 'john-walker' },
+        { name: 'MORTLACH', slug: 'mortlach' },
+        { name: 'CHIVAS', slug: 'chivas' },
+        { name: 'ROYAL SALUTE', slug: 'royal-salute' },
+        { name: 'THE SINGLETON', slug: 'the-singleton' },
     ]},
-    { name: 'CIGAR', children: [
-        { name: 'Cigar Hanos' },
-        { name: 'Cigar Lotus' },
-        { name: "Cigar Vinaboss's" },
+    { name: 'CIGAR', slug: 'cigar', children: [
+        { name: 'Cigar Hanos', slug: 'cigar-hanos' },
+        { name: 'Cigar Lotus', slug: 'cigar-lotus' },
+        { name: "Cigar Vinaboss's", slug: 'cigar-vinaboss' },
     ]},
-    { name: 'BỘ QUÀ TẶNG' },
-    { name: 'KHẮC TÊN LÊN CHAI' },
+    { name: 'BỘ QUÀ TẶNG', slug: 'bo-qua-tang' },
+    { name: 'KHẮC TÊN LÊN CHAI', slug: 'khac-ten-len-chai' },
 ];
 
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const { firestore } = useFirebase();
-    const { toast } = useToast();
     
     const categoryMap = useMemo(() => {
-      if (!categories) return new Map();
+      if (!categories) return new Map<string, string>();
       return new Map(categories.map(c => [c.id, c.name]));
     }, [categories]);
 
@@ -60,7 +58,7 @@ export default function CategoriesAdminPage() {
 
                 const addCategoriesRecursive = async (categoryList: any[], parentId: string | null) => {
                     for (const cat of categoryList) {
-                        const slug = slugify(cat.name, { lower: true, strict: true, locale: 'vi' });
+                        const slug = cat.slug || slugify(cat.name, { lower: true, strict: true, locale: 'vi' });
                         const newDocRef = doc(categoriesCollectionRef);
                         
                         batch.set(newDocRef, {
@@ -81,41 +79,23 @@ export default function CategoriesAdminPage() {
                 try {
                     await batch.commit();
                     console.log('Initial categories populated successfully.');
-                    window.location.reload();
+                    // The useCategories hook will automatically refetch, no need to reload
                 } catch (error) {
                     console.error('Error populating initial categories:', error);
                 }
             }
         };
 
-        if (!isLoading) {
+        if (!isLoading && categories?.length === 0) {
             populateInitialCategories();
         }
     }, [categories, isLoading, firestore]);
 
-  const handleDeleteCategory = useCallback(async (category: Category) => {
-    if (!firestore) return;
-    try {
-        const categoryDocRef = doc(firestore, 'categories', category.id);
-        await deleteDoc(categoryDocRef);
-        toast({
-            title: 'Thành công',
-            description: `Danh mục "${category.name}" đã được xóa.`,
-        });
-    } catch (error) {
-        console.error("Error deleting category:", error);
-        toast({
-            variant: 'destructive',
-            title: 'Lỗi',
-            description: 'Không thể xóa danh mục. Vui lòng thử lại.',
-        });
-    }
-  }, [firestore, toast]);
   
-  const memoizedColumns = useMemo(() => columns(categoryMap, handleDeleteCategory), [categoryMap, handleDeleteCategory]);
+  const memoizedColumns = useMemo(() => columns(categoryMap), [categoryMap]);
 
 
-  if (isLoading) {
+  if (isLoading && !categories) {
     return (
       <div>
         <div className="flex items-center justify-between">

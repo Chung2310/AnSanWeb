@@ -25,8 +25,63 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useDeleteCategory } from '@/hooks/use-delete-category';
 
-export const columns = (categoryMap: Map<string, string>, onDelete: (category: Category) => void): ColumnDef<Category>[] => [
+const ActionsCell = ({ row }: { row: { original: Category } }) => {
+  const category = row.original;
+  const { deleteCategory, isDeleting } = useDeleteCategory();
+
+  return (
+    <AlertDialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+          <DropdownMenuItem asChild>
+            <Link href={`/admin/categories/${category.id}/edit`}>
+              Chỉnh sửa
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <AlertDialogTrigger asChild>
+             <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="text-destructive"
+            >
+              Xóa danh mục
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+        </DropdownMenuContent>
+      </DropdownMenu>
+       <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Hành động này không thể được hoàn tác. Nó sẽ xóa vĩnh viễn danh mục.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Hủy</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => deleteCategory(category)}
+            disabled={isDeleting}
+            className="bg-destructive hover:bg-destructive/90"
+          >
+            {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+
+export const columns = (categoryMap: Map<string, string>): ColumnDef<Category>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -65,55 +120,6 @@ export const columns = (categoryMap: Map<string, string>, onDelete: (category: C
   },
   {
     id: 'actions',
-    cell: function Cell({ row }) {
-      const category = row.original;
-
-      return (
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-              <DropdownMenuItem asChild>
-                <Link href={`/admin/categories/${category.id}/edit`}>
-                  Chỉnh sửa
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <AlertDialogTrigger asChild>
-                 <DropdownMenuItem
-                  onSelect={(e) => e.preventDefault()}
-                  className="text-destructive"
-                >
-                  Xóa danh mục
-                </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-           <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Hành động này không thể được hoàn tác. Nó sẽ xóa vĩnh viễn danh mục.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => onDelete(category)}
-                className="bg-destructive hover:bg-destructive/90"
-              >
-                Xóa vĩnh viễn
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      );
-    },
+    cell: ActionsCell,
   },
 ];
