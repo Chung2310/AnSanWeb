@@ -95,11 +95,11 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         details: product.attributes || [],
         brand: findAttr("thương hiệu"),
         chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription('Xuất xứ', 'Vùng sản xuất'),
+        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription('Xuất xứ', 'Vùng'),
         caskType: findAttr("loại thùng"),
         tastingNote: {
             nose: extractFromDescription('Hương thơm', 'Mùi hương'),
-            palate: extractFromDescription('Vị', 'Hương vị', 'Vị giác'),
+            palate: extractFromDescription('Vị giác', 'Vị'),
             finish: extractFromDescription('Hậu vị'),
             color: extractFromDescription('Màu sắc'),
         },
@@ -152,26 +152,22 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags]);
   
   const getAttribute = (...labels: string[]) => {
-    // 1. Search in structured attributes first
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
         if (found && found.value) return found.value;
       }
     }
-    // 2. If not found, search in the description text
     if (product.description) {
         for (const label of labels) {
             const regex = new RegExp(`(?:•\\s*|\\n|^)${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\s*:?\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
             if (match && match[1]) {
-                 const value = match[1].trim();
-                 // Remove the label itself from the beginning of the value
-                 return value.replace(new RegExp(`^${label}\\s*:?`, 'i'), '').trim().replace(/\.$/, '');
+                 const value = match[1].trim().replace(new RegExp(`^${label}\\s*:?`, 'i'), '').trim().replace(/\.$/, '').replace(/^cồn:\s*/i, '');
+                 return value;
             }
         }
     }
-    // 3. If still not found, return 'N/A'
     return 'N/A';
   }
 
@@ -180,121 +176,121 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     <>
       <div className="bg-white text-black">
         <div className="container mx-auto max-w-7xl py-12 md:py-20">
-          <div className="flex flex-col md:flex-row gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
             
-            <div className="md:w-1/2">
-                <div className="md:sticky md:top-24 space-y-4">
-                  {allImages.map((image, index) => (
-                    <div key={index} className="rounded-lg p-8" style={{ background: 'linear-gradient(to bottom right, #e6dace, #d1c0a8)'}}>
-                      <Image
-                        src={image.url}
-                        alt={`${product.nameVN} - ảnh ${index + 1}`}
-                        width={800}
-                        height={800}
-                        className="w-full h-auto object-contain aspect-square"
-                        priority={index === 0}
-                      />
+            <div className="md:col-start-2 row-start-1">
+                <div className="md:sticky md:top-24 space-y-6">
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      {breadcrumbs.map((crumb, index) => (
+                        <React.Fragment key={crumb.href}>
+                          <BreadcrumbItem>
+                            <BreadcrumbLink asChild>
+                              <Link href={crumb.href}>{crumb.label}</Link>
+                            </BreadcrumbLink>
+                          </BreadcrumbItem>
+                          {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                        </React.Fragment>
+                      ))}
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>{product.nameVN.toUpperCase()}</BreadcrumbPage>
+                      </BreadcrumbItem>
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                  
+                  <h1 className="font-headline text-5xl font-bold text-gray-800">
+                    {product.nameVN}
+                  </h1>
+
+                  <Separator />
+
+                  <div className="grid grid-cols-4 gap-4 text-center">
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
+                        <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ</p>
+                        <p className="font-bold text-lg mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
+                        <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume')}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
+                        <p className="font-bold text-lg mt-1">{product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}</p>
+                      </div>
+                  </div>
+
+                  <Separator />
+                  
+                  <p className="text-4xl font-bold text-primary">
+                      {formatPrice(product.price)}
+                  </p>
+
+                  <Separator />
+
+                  <div>
+                    <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button variant="outline" className="justify-center text-center h-14"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</Button>
+                        <Button variant="outline" className="justify-center text-center h-14"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</Button>
+                        <Button variant="outline" className="justify-center text-center h-14"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</Button>
+                        <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-5 w-5"/> WHATSAPP</Button>
                     </div>
-                  ))}
+                  </div>
+
+                    <Separator />
+
+                    <div>
+                        <h3 className="font-bold uppercase tracking-wider mb-4">Giá độc quyền trên website</h3>
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                            <div className="flex items-start gap-3">
+                                <Truck className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km</span>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <GlassWater className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>UỐNG THỬ MIỄN PHÍ tại showroom Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn - Tỉnh Bắc Ninh</span>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <Award className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>Cam kết 100% sản phẩm CHẤT LƯỢNG</span>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <CircleDollarSign className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>Cam kết giá bán CẠNH TRANH</span>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <CompensationIcon className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>Cam kết bồi thường nếu xảy ra vấn đề trong quá trình vận chuyển</span>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <Users className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <span>Nhiều chương trình sinh hoạt cộng đồng gia tăng trải nghiệm khách hàng</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            {/* Details Column */}
-            <div className="md:w-1/2 space-y-6">
-              <Breadcrumb>
-                <BreadcrumbList>
-                  {breadcrumbs.map((crumb, index) => (
-                    <React.Fragment key={crumb.href}>
-                      <BreadcrumbItem>
-                        <BreadcrumbLink asChild>
-                          <Link href={crumb.href}>{crumb.label}</Link>
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                      {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-                    </React.Fragment>
-                  ))}
-                   <BreadcrumbSeparator />
-                   <BreadcrumbItem>
-                    <BreadcrumbPage>{product.nameVN.toUpperCase()}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-              
-              <h1 className="font-headline text-5xl font-bold text-gray-800">
-                {product.nameVN}
-              </h1>
-
-              <Separator />
-
-              <div className="grid grid-cols-4 gap-4 text-center">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
+            
+            <div className="md:col-start-1 row-start-1">
+              <div className="md:sticky top-24 space-y-4">
+                {allImages.map((image, index) => (
+                  <div key={index} className="rounded-lg p-8 h-screen flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, #e6dace, #d1c0a8)'}}>
+                    <Image
+                      src={image.url}
+                      alt={`${product.nameVN} - ảnh ${index + 1}`}
+                      width={800}
+                      height={800}
+                      className="w-full h-auto object-contain max-h-[80vh]"
+                      priority={index === 0}
+                    />
                   </div>
-                   <div>
-                    <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
-                  </div>
-                   <div>
-                    <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
-                    <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume')}</p>
-                  </div>
-                   <div>
-                    <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
-                    <p className="font-bold text-lg mt-1">{product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}</p>
-                  </div>
+                ))}
               </div>
-
-               <Separator />
-               
-               <p className="text-4xl font-bold text-primary">
-                  {formatPrice(product.price)}
-               </p>
-
-              <Separator />
-
-               <div>
-                 <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
-                 <div className="grid grid-cols-2 gap-4">
-                    <Button variant="outline" className="justify-center text-center h-14"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</Button>
-                    <Button variant="outline" className="justify-center text-center h-14"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</Button>
-                    <Button variant="outline" className="justify-center text-center h-14"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</Button>
-                    <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-5 w-5"/> WHATSAPP</Button>
-                 </div>
-               </div>
-
-                <Separator />
-
-                <div>
-                    <h3 className="font-bold uppercase tracking-wider mb-4">Giá độc quyền trên website</h3>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
-                        <div className="flex items-start gap-3">
-                            <Truck className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <GlassWater className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>UỐNG THỬ MIỄN PHÍ tại showroom Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn - Tỉnh Bắc Ninh</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <Award className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>Cam kết 100% sản phẩm CHẤT LƯỢNG</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <CircleDollarSign className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>Cam kết giá bán CẠNH TRANH</span>
-                        </div>
-                         <div className="flex items-start gap-3">
-                            <CompensationIcon className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>Cam kết bồi thường nếu xảy ra vấn đề trong quá trình vận chuyển</span>
-                        </div>
-                         <div className="flex items-start gap-3">
-                            <Users className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>Nhiều chương trình sinh hoạt cộng đồng gia tăng trải nghiệm khách hàng</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
           </div>
         </div>
