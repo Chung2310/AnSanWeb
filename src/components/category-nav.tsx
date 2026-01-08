@@ -22,6 +22,7 @@ const mainCategoriesConfig = [
     {
         label: "Rượu Vang",
         slug: "ruou-vang",
+        href: '/danh-muc/ruou-vang',
         subCategories: [
             { label: 'VANG Ý', href: '/danh-muc/ruou-vang/vang-y' },
             { label: 'VANG PHÁP', href: '/danh-muc/ruou-vang/vang-phap' },
@@ -34,6 +35,7 @@ const mainCategoriesConfig = [
     {
         label: "Rượu Mạnh",
         slug: "ruou-manh",
+        href: '/danh-muc/ruou-manh',
         subCategories: [
             { label: "BALLANTINE'S FINEST", href: '/danh-muc/ruou-manh/ballantines-finest' },
             { label: 'JOHN WALKER', href: '/danh-muc/ruou-manh/john-walker' },
@@ -46,6 +48,7 @@ const mainCategoriesConfig = [
     {
         label: "Cigar",
         slug: "cigar",
+        href: "/danh-muc/cigar",
         subCategories: [
             { label: 'Cigar Hanos', href: '/danh-muc/cigar/hanos' },
             { label: 'Cigar Lotus', href: '/danh-muc/cigar/lotus' },
@@ -87,17 +90,16 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
     return (
         <div className="border-b border-t">
             <div className="container py-4 flex items-center gap-8 text-sm uppercase font-semibold text-gray-500">
-                <h2 className="font-bold text-black whitespace-nowrap">Danh mục</h2>
                 <div className="flex-grow flex items-center gap-x-6 overflow-x-auto">
-                    <button
+                    <Link
+                        href="/danh-muc-san-pham"
                         className={cn(
                             "hover:text-black transition-colors whitespace-nowrap",
                             selectedCategory === null ? "text-black font-bold" : ""
                         )}
-                        onClick={() => onCategorySelect(null)}
                     >
                         Tất cả ({allProductsCount})
-                    </button>
+                    </Link>
                     {mainCategoriesConfig.map(cat => {
                         const count = categoryCounts[cat.slug] || 0;
                         if (count === 0 && !isLoadingProducts) return null;
@@ -110,15 +112,17 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                     <DropdownMenuTrigger asChild>
                                         <Button
                                             variant="ghost"
-                                            onClick={() => onCategorySelect(cat.slug)}
+                                            asChild
                                             className={cn(
-                                                "p-0 h-auto no-focus-border transition-colors whitespace-nowrap",
+                                                "p-0 h-auto no-focus-border transition-colors whitespace-nowrap text-sm uppercase font-semibold text-gray-500",
                                                 isActive ? "text-black font-bold" : "",
                                                 'hover:text-black hover:bg-transparent'
                                             )}
                                         >
-                                            {cat.label} ({count})
-                                            <ChevronDown className={cn("h-4 w-4 ml-1 transition-transform", openDropdown === cat.slug && "rotate-180")} />
+                                            <Link href={cat.href || '#'}>
+                                                {cat.label} ({count})
+                                                <ChevronDown className={cn("h-4 w-4 ml-1 transition-transform", openDropdown === cat.slug && "rotate-180")} />
+                                            </Link>
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="bg-white">
@@ -140,12 +144,6 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                     "hover:text-black transition-colors whitespace-nowrap",
                                     isActive ? "text-black font-bold" : ""
                                 )}
-                                onClick={(e) => {
-                                    if (!cat.href) {
-                                        e.preventDefault();
-                                        onCategorySelect(cat.slug);
-                                    }
-                                }}
                             >
                                 {cat.label} ({count})
                             </Link>
