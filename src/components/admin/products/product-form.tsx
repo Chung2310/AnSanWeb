@@ -118,9 +118,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       : {
           nameVN: '',
           slug: '',
-          price: '' as any, // Initialize with empty string
+          price: '' as any,
           priceDescription: '',
-          secondaryPrice: '' as any, // Initialize with empty string
+          secondaryPrice: '' as any,
           secondaryPriceDescription: '',
           description: '',
           image: null,
@@ -190,35 +190,45 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const finalData: any = {
-        ...data,
-        price: Number(data.price),
-        secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
-        updatedAt: serverTimestamp(),
-      };
-      
-      if (initialData) {
-        delete finalData.id; 
+        const finalData = { ...data } as any;
 
-        const productRef = doc(firestore, 'products', initialData.id);
-        await updateDoc(productRef, finalData);
-        toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
-      } else {
-        delete finalData.id;
-        finalData.createdAt = serverTimestamp();
-        const collectionRef = collection(firestore, 'products');
-        await addDoc(collectionRef, finalData);
-        toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
-      }
-      router.push('/admin/products');
-      router.refresh();
+        // Convert prices to numbers, handle empty strings
+        finalData.price = Number(data.price);
+        if (data.secondaryPrice) {
+            finalData.secondaryPrice = Number(data.secondaryPrice);
+        } else {
+            delete finalData.secondaryPrice; // Remove field if empty
+        }
+        
+        if(!data.secondaryPriceDescription) {
+            delete finalData.secondaryPriceDescription;
+        }
+
+        finalData.updatedAt = serverTimestamp();
+        
+        if (initialData) {
+            const productId = initialData.id;
+            delete finalData.id;
+
+            const productRef = doc(firestore, 'products', productId);
+            await updateDoc(productRef, finalData);
+            toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
+        } else {
+            delete finalData.id;
+            finalData.createdAt = serverTimestamp();
+            const collectionRef = collection(firestore, 'products');
+            await addDoc(collectionRef, finalData);
+            toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
+        }
+        router.push('/admin/products');
+        router.refresh();
     } catch (error) {
-      console.error("Error saving product:", error);
-      toast({
-        variant: 'destructive',
-        title: 'Đã có lỗi xảy ra',
-        description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
-      });
+        console.error("Error saving product:", error);
+        toast({
+            variant: 'destructive',
+            title: 'Đã có lỗi xảy ra',
+            description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
+        });
     }
   };
 
