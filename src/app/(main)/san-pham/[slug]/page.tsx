@@ -265,7 +265,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         </div>
                         <div className="flex items-start gap-3">
                             <GlassWater className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                            <span>UỐNG THỬ MIỄN PHÍ tại showroom 31 Nguyễn Gia Thiều, Hà Nội</span>
+                            <span>UỐNG THỬ MIỄN PHÍ tại showroom Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn - Tỉnh Bắc Ninh</span>
                         </div>
                         <div className="flex items-start gap-3">
                             <Award className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
@@ -325,5 +325,3 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
-
-    
