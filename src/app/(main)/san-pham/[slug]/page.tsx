@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProducts } from '@/hooks/use-products';
 import { Separator } from '@/components/ui/separator';
-import type { ProductStructuredDetails, FullProduct } from '@/lib/types';
+import type { ProductStructuredDetails, FullProduct, ImageInfo } from '@/lib/types';
 import ProductInfoSection from '@/components/product-info-section';
 import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
@@ -98,7 +98,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription('Xuất xứ', 'Vùng sản xuất'),
         caskType: findAttr("loại thùng"),
         tastingNote: {
-            nose: extractFromDescription('Hương thơm', 'Mùi hương', 'Hương vị'),
+            nose: extractFromDescription('Hương thơm', 'Mùi hương'),
             palate: extractFromDescription('Vị', 'Hương vị', 'Vị giác'),
             finish: extractFromDescription('Hậu vị'),
             color: extractFromDescription('Màu sắc'),
@@ -114,6 +114,12 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
 
 function ProductDetailView({ product }: { product: FullProduct }) {
   const details = React.useMemo(() => generateProductDetails(product), [product]);
+  const allImages = React.useMemo(() => {
+    const images: ImageInfo[] = [];
+    if (product.image) images.push(product.image);
+    if (product.detailImages) images.push(...product.detailImages);
+    return images;
+  }, [product]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -160,6 +166,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             const match = product.description.match(regex);
             if (match && match[1]) {
                  const value = match[1].trim();
+                 // Remove the label itself from the beginning of the value
                  return value.replace(new RegExp(`^${label}\\s*:?`, 'i'), '').trim().replace(/\.$/, '');
             }
         }
@@ -173,25 +180,27 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     <>
       <div className="bg-white text-black">
         <div className="container mx-auto max-w-7xl py-12 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            {/* Image Column */}
-            <div className='sticky top-24'>
-              {product.image?.url && (
-                <div className="rounded-lg p-8" style={{ background: 'linear-gradient(to bottom right, #e6dace, #d1c0a8)'}}>
-                  <Image
-                    src={product.image.url}
-                    alt={product.nameVN}
-                    width={800}
-                    height={800}
-                    className="w-full h-auto object-contain aspect-square"
-                    priority
-                  />
+          <div className="flex flex-col md:flex-row gap-12">
+            
+            <div className="md:w-1/2">
+                <div className="md:sticky md:top-24 space-y-4">
+                  {allImages.map((image, index) => (
+                    <div key={index} className="rounded-lg p-8" style={{ background: 'linear-gradient(to bottom right, #e6dace, #d1c0a8)'}}>
+                      <Image
+                        src={image.url}
+                        alt={`${product.nameVN} - ảnh ${index + 1}`}
+                        width={800}
+                        height={800}
+                        className="w-full h-auto object-contain aspect-square"
+                        priority={index === 0}
+                      />
+                    </div>
+                  ))}
                 </div>
-              )}
             </div>
 
             {/* Details Column */}
-            <div className="space-y-6">
+            <div className="md:w-1/2 space-y-6">
               <Breadcrumb>
                 <BreadcrumbList>
                   {breadcrumbs.map((crumb, index) => (
