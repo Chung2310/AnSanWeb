@@ -84,6 +84,12 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'status',
     header: 'Trạng thái',
+    cell: ({ row }) => {
+        const status = row.getValue('status')
+        if (status === 'published') return 'Đã xuất bản'
+        if (status === 'draft') return 'Bản nháp'
+        return status as string
+    }
   },
    {
     accessorKey: 'createdAt',
