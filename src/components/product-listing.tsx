@@ -5,11 +5,11 @@ import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Product, Category } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Check } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import { useCategories } from "@/hooks/use-categories";
 import CategoryNav from "./category-nav";
-
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 const staticFiltersData = {
     "ĐỘ TUỔI": [
@@ -56,6 +56,46 @@ interface ProductListingProps {
     bannerData?: CategoryBannerProps;
 }
 
+const BrandFilterDropdown = ({ options, onFilterChange, activeFilters }: {
+    options: any[];
+    onFilterChange: (group: string, value: string) => void;
+    activeFilters: string[];
+}) => {
+    return (
+        <div className="mb-8">
+            <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">THƯƠNG HIỆU</h3>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-between rounded-none">
+                        <span>{activeFilters.length > 0 ? `${activeFilters.length} đã chọn` : "Chọn thương hiệu"}</span>
+                        <ChevronDown className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] max-h-60 overflow-y-auto">
+                    <DropdownMenuLabel>Lọc theo thương hiệu</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {options.map((option, index) => {
+                        const label = option.label;
+                        if (option.count === 0) return null;
+                        
+                        return (
+                            <DropdownMenuCheckboxItem
+                                key={index}
+                                checked={activeFilters.includes(label)}
+                                onCheckedChange={() => onFilterChange("THƯƠNG HIỆU", label)}
+                                onSelect={(e) => e.preventDefault()} // Prevent closing on select
+                            >
+                                {label} ({option.count})
+                            </DropdownMenuCheckboxItem>
+                        );
+                    })}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
+    );
+};
+
+
 const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     title: string;
     options: any[];
@@ -94,7 +134,6 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
 export default function ProductListing({ initialProducts, title, bannerData }: ProductListingProps) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
 
@@ -108,7 +147,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     const brandsInProducts = allBrands.map(brand => {
       const count = clientProducts.filter(product => product.nameVN.toUpperCase().includes(brand)).length;
       return { label: brand, count: count };
-    }).filter(brand => brand.count > 0);
+    });
 
     return {
       "THƯƠNG HIỆU": brandsInProducts,
@@ -128,11 +167,7 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     setCurrentPage(1); // Reset to first page on filter change
   };
 
-  const handleCategoryNavSelect = (slug: string | null) => {
-    // This function is now primarily for updating the visual state of the nav,
-    // as filtering logic is handled by Next.js routing.
-    // We keep setActiveCategory for visual indication on the CategoryNav
-    setActiveCategory(slug);
+  const handleCategoryNavSelect = () => {
     setCurrentPage(1);
   };
 
@@ -227,21 +262,33 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
          </div>
       )}
       
-      <CategoryNav onCategorySelect={handleCategoryNavSelect} selectedCategory={activeCategory} />
+      <CategoryNav onCategorySelect={handleCategoryNavSelect} selectedCategory={null} />
       
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
-            {Object.entries(filtersData).map(([groupTitle, options]) => (
-                <FilterGroup
-                    key={groupTitle}
-                    title={groupTitle}
-                    options={options.map(opt => (typeof opt === 'string' ? { label: opt } : { ...opt, label: opt.label }))}
-                    onFilterChange={handleFilterChange}
-                    activeFilters={activeFilters[groupTitle] || []}
-                />
-            ))}
+            {Object.entries(filtersData).map(([groupTitle, options]) => {
+                if (groupTitle === 'THƯƠNG HIỆU') {
+                    return (
+                        <BrandFilterDropdown
+                            key={groupTitle}
+                            options={options.map(opt => ({ ...opt, label: opt.label }))}
+                            onFilterChange={handleFilterChange}
+                            activeFilters={activeFilters[groupTitle] || []}
+                        />
+                    );
+                }
+                return (
+                    <FilterGroup
+                        key={groupTitle}
+                        title={groupTitle}
+                        options={options.map(opt => (typeof opt === 'string' ? { label: opt } : { ...opt, label: opt.label }))}
+                        onFilterChange={handleFilterChange}
+                        activeFilters={activeFilters[groupTitle] || []}
+                    />
+                );
+            })}
           </div>
 
           <div className="lg:col-span-3">
