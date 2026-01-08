@@ -17,25 +17,21 @@ const generateHeadings = (content: string) => {
     // For now, we'll use a static example based on the UI.
     const headings = [];
     const contentToParse = content || "";
-    const matches = contentToParse.matchAll(/<h([2-3]) id="([^"]+)">([^<]+)<\/h\1>/g);
-    for (const match of matches) {
-        headings.push({
-            level: parseInt(match[1]),
-            id: match[2],
-            text: match[3],
-        });
-    }
-    // if no headings found, create some from text
-    if (headings.length === 0) {
-        const lines = contentToParse.split('\n');
-        // get first 4 non-empty lines
-        const a = lines.filter(line => line.trim() !== '').slice(1, 5);
-        return a.map((line, i) => ({
-            id: `heading-${i}`,
-            text: line.substring(0, 50),
-            level: 2,
-        }));
-    }
+    if (typeof window === 'undefined') return [];
+    
+    const doc = new DOMParser().parseFromString(contentToParse, 'text/html');
+    const headingElements = doc.querySelectorAll('h1, h2, h3');
+
+    headingElements.forEach((heading, index) => {
+      const id = heading.textContent ? heading.textContent.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') : `heading-${index}`;
+      heading.id = id;
+      headings.push({
+          level: parseInt(heading.tagName.substring(1)),
+          id: id,
+          text: heading.textContent || '',
+      });
+    });
+
     return headings;
 }
 
@@ -129,9 +125,9 @@ export default function BlogPostPage() {
                     )}
                     
                     <article 
-                        className="prose prose-lg max-w-none" 
+                        className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700" 
                         style={{color: '#5a5a5a'}}
-                        dangerouslySetInnerHTML={{ __html: (post.content || "").replace(/\n/g, '<br />') }}
+                        dangerouslySetInnerHTML={{ __html: post.content || "" }}
                     >
                     </article>
                 </div>
