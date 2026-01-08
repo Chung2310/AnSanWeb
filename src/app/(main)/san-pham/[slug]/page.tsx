@@ -152,7 +152,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return paths;
   }, [product.tags]);
   
-  const getAttribute = (...labels: string[]) => {
+  const getAttribute = (...labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
@@ -218,6 +218,10 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         <h1 className="font-headline text-5xl font-bold text-gray-800">
                             {product.nameVN}
                         </h1>
+
+                        {product.shortDescription && (
+                          <p className="text-lg text-muted-foreground">{product.shortDescription}</p>
+                        )}
 
                         <Separator />
 
@@ -329,7 +333,3 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
-
-    
-
-    

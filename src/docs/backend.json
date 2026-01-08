@@ -1,0 +1,102 @@
+
+{
+  "entities": {
+    "Wine": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Wine",
+      "type": "object",
+      "description": "Represents a wine product.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the wine product." },
+        "nameVN": { "type": "string", "description": "Wine name in Vietnamese." },
+        "slug": { "type": "string", "description": "URL-friendly slug for the wine product." },
+        "shortDescription": { "type": "string", "description": "A brief summary of the product, displayed under the title on the detail page." },
+        "price": { "type": "number", "description": "Price of the wine." },
+        "description": { "type": "string", "description": "Detailed description for the wine product." },
+        "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
+        "isFeatured": { "type": "boolean", "description": "Indicates if the wine is featured." },
+        "isNew": { "type": "boolean", "description": "Indicates if the wine is a new arrival." },
+        "status": { "type": "string", "enum": ["published", "draft"] },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "attributes": { 
+          "type": "array", 
+          "items": { 
+            "type": "object", 
+            "properties": { "label": { "type": "string" }, "value": { "type": "string" } }
+          } 
+        },
+        "categoryIds": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "nameVN", "slug", "price", "status"]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a category of wines.",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "slug": { "type": "string" }
+      },
+      "required": ["id", "name", "slug"]
+    },
+    "BlogPost": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BlogPost",
+      "type": "object",
+      "description": "Represents a blog post or article.",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "content": { "type": "string" },
+        "image": { "type": "object", "properties": { "imageUrl": { "type": "string" }, "path": { "type": "string" } } },
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "categories": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "title", "slug", "excerpt", "author", "date", "categories"]
+    },
+    "Contact": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Contact",
+      "type": "object",
+      "description": "Represents a contact message from a user.",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "message", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password"
+    ]
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Wine" },
+      "description": "Stores all wine product information, including listing and detail data."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Stores wine categories."
+    },
+    "/blogPosts/{blogPostId}": {
+      "schema": { "$ref": "#/entities/BlogPost" },
+      "description": "Stores blog posts."
+    },
+    "/contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/Contact" },
+      "description": "Stores contact form submissions."
+    }
+  }
+}

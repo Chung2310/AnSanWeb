@@ -47,6 +47,7 @@ export type Product = {
   id: string;
   nameVN: string;
   slug: string;
+  shortDescription?: string;
   price: number;
   priceDescription?: string;
   secondaryPrice?: number;
