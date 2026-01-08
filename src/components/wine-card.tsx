@@ -8,6 +8,7 @@ type WineCardProps = {
 
 export default function WineCard({ product }: WineCardProps) {
   const formatPrice = (price: number) => {
+    if (isNaN(price)) return '';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
@@ -27,7 +28,18 @@ export default function WineCard({ product }: WineCardProps) {
           <h3 className="mt-2 font-bold text-lg leading-tight text-black uppercase group-hover:text-primary">
             {product.nameVN}
           </h3>
-          <p className="mt-2 text-base font-semibold text-gray-800">{formatPrice(product.price)}</p>
+          <div className="mt-2 text-base font-semibold text-gray-800">
+             <p>
+                {formatPrice(product.price)}
+                {product.priceDescription && <span className="text-sm font-normal ml-1">{product.priceDescription}</span>}
+              </p>
+              {product.secondaryPrice && (
+                <p className="mt-1">
+                  {formatPrice(product.secondaryPrice)}
+                  {product.secondaryPriceDescription && <span className="text-sm font-normal ml-1">{product.secondaryPriceDescription}</span>}
+                </p>
+              )}
+          </div>
         </div>
       </Link>
     </div>
