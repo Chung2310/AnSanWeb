@@ -69,7 +69,17 @@ const formSchema = z.object({
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   price: z.preprocess((a) => parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.')),
   priceDescription: z.string().optional(),
-  secondaryPrice: z.preprocess((a) => (a === '' || a === undefined || a === null) ? undefined : parseFloat(z.string().parse(a)), z.number().positive('Giá phải là số dương.').optional()),
+  secondaryPrice: z.preprocess(
+    (a) => {
+        const value = z.string().optional().parse(a);
+        if (value === '' || value === undefined || value === null) {
+            return undefined;
+        }
+        const parsed = parseFloat(value);
+        return isNaN(parsed) ? undefined : parsed;
+    }, 
+    z.number().positive('Giá phải là số dương.').optional()
+  ),
   secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
   image: imageInfoSchema.nullable(),
@@ -185,26 +195,28 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const onSubmit = async (data: ProductFormValues) => {
     try {
       if (initialData) {
-        const updateData: Omit<ProductFormValues, 'id'> & { updatedAt: any } = {
+        // Create a copy for modification
+        const updateData: any = {
           ...data,
           price: Number(data.price),
           secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
           updatedAt: serverTimestamp(),
         };
-        delete (updateData as any).id; 
+        // Do not include 'id' in the data sent to updateDoc
+        delete updateData.id; 
 
         const productRef = doc(firestore, 'products', initialData.id);
         await updateDoc(productRef, updateData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
       } else {
-        const createData = {
+        const createData: any = {
             ...data,
             price: Number(data.price),
             secondaryPrice: data.secondaryPrice ? Number(data.secondaryPrice) : undefined,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         };
-        delete (createData as any).id;
+        delete createData.id;
         const collectionRef = collection(firestore, 'products');
         await addDoc(collectionRef, createData);
         toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
@@ -247,7 +259,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
                       <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} value={field.value === undefined ? '' : field.value} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
