@@ -6,11 +6,12 @@ import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useEffect, useMemo } from 'react';
-import { writeBatch, collection, doc } from 'firebase/firestore';
+import { useEffect, useMemo, useCallback } from 'react';
+import { writeBatch, collection, doc, deleteDoc } from 'firebase/firestore';
 import { useFirebase } from '@/firebase';
 import slugify from 'slugify';
 import type { Category } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
 
 // Data based on header navigation
 const initialCategoryData = [
@@ -42,6 +43,7 @@ const initialCategoryData = [
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const { firestore } = useFirebase();
+    const { toast } = useToast();
     
     const categoryMap = useMemo(() => {
       if (!categories) return new Map();
@@ -63,6 +65,7 @@ export default function CategoriesAdminPage() {
                         const newDocRef = doc(categoriesCollectionRef);
                         
                         batch.set(newDocRef, {
+                            id: newDocRef.id,
                             name: cat.name,
                             slug: slug,
                             parentId: parentId,
@@ -91,6 +94,27 @@ export default function CategoriesAdminPage() {
             populateInitialCategories();
         }
     }, [categories, isLoading, firestore]);
+
+  const handleDeleteCategory = useCallback(async (category: Category) => {
+    if (!firestore) return;
+    try {
+        const categoryDocRef = doc(firestore, 'categories', category.id);
+        await deleteDoc(categoryDocRef);
+        toast({
+            title: 'Thành công',
+            description: `Danh mục "${category.name}" đã được xóa.`,
+        });
+        // The useCategories hook will automatically update the list
+    } catch (error) {
+        console.error("Error deleting category:", error);
+        toast({
+            variant: 'destructive',
+            title: 'Lỗi',
+            description: 'Không thể xóa danh mục. Vui lòng thử lại.',
+        });
+    }
+  }, [firestore, toast]);
+
 
   if (isLoading) {
     return (
@@ -121,7 +145,7 @@ export default function CategoriesAdminPage() {
         </Button>
       </div>
       <div className="mt-6">
-        <DataTable columns={columns(categoryMap)} data={tableData} />
+        <DataTable columns={columns(categoryMap, handleDeleteCategory)} data={tableData} />
       </div>
     </div>
   );
