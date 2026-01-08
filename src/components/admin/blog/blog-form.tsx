@@ -24,6 +24,7 @@ import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { Progress } from '@/components/ui/progress';
 import slugify from 'slugify';
 import { useState } from 'react';
+import RichTextEditor from './rich-text-editor';
 
 const formSchema = z.object({
   title: z.string().min(2, { message: 'Tiêu đề phải có ít nhất 2 ký tự.' }),
@@ -191,7 +192,10 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                     <FormItem>
                       <FormLabel>Nội dung</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Viết nội dung bài viết của bạn ở đây..." {...field} rows={15} />
+                        <RichTextEditor
+                          value={field.value || ''}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
