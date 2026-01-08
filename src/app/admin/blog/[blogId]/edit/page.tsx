@@ -2,18 +2,23 @@
 
 import { useParams } from 'next/navigation';
 import BlogForm from '@/components/admin/blog/blog-form';
-import { useMemo } from 'react';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
-import { sampleBlogPosts } from '@/lib/placeholder-data';
 import type { BlogPost } from '@/lib/types';
+import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
+import { doc } from 'firebase/firestore';
 
 export default function EditBlogPage() {
   const params = useParams();
   const { blogId } = params;
+  const firestore = useFirestore();
   
-  const isLoading = false;
-  const post = useMemo(() => sampleBlogPosts.find(p => p.id === blogId), [blogId]);
+  const postRef = useMemoFirebase(
+    () => (blogId ? doc(firestore, 'blogPosts', blogId as string) : null),
+    [firestore, blogId]
+  );
+  
+  const { data: post, isLoading } = useDoc<BlogPost>(postRef);
 
 
   if (isLoading) {

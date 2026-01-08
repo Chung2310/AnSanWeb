@@ -5,19 +5,18 @@ import { Separator } from "./ui/separator";
 import { Calendar, Newspaper } from "lucide-react";
 import type { BlogPost } from "@/lib/types";
 import { Skeleton } from "./ui/skeleton";
-import { sampleBlogPosts } from "@/lib/placeholder-data";
+import { useBlogPosts } from "@/hooks/use-blog-posts";
 
 export default function PostSidebar({ currentPostId }: { currentPostId: string }) {
-    // Use placeholder data
-    const isLoading = false;
-    const allRecentPosts = sampleBlogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const { blogPosts: allRecentPosts, isLoading } = useBlogPosts();
 
     const recentPosts = allRecentPosts
         ?.filter(p => p.id !== currentPostId)
         .slice(0, 4);
     
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
+    const formatDate = (dateValue: any) => {
+        if (!dateValue) return '';
+        const date = dateValue.toDate ? dateValue.toDate() : new Date(dateValue);
         return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
     }
 

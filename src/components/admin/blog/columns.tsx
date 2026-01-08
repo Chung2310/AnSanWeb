@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useDeleteBlogPost } from '@/hooks/use-delete-blog-post';
 
 export const columns: ColumnDef<BlogPost>[] = [
   {
@@ -77,7 +78,9 @@ export const columns: ColumnDef<BlogPost>[] = [
     accessorKey: 'date',
     header: 'Ngày đăng',
      cell: ({ row }) => {
-        const date = new Date(row.original.date);
+        const dateObj = row.original.date as any;
+        if (!dateObj) return 'N/A';
+        const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
         return date.toLocaleDateString('vi-VN');
     }
   },
@@ -85,11 +88,7 @@ export const columns: ColumnDef<BlogPost>[] = [
     id: 'actions',
     cell: function Cell({ row }) {
       const post = row.original;
-
-      const handleDelete = () => {
-        // Placeholder for delete logic
-        console.log("Deleting post:", post.id);
-      };
+      const { deleteBlogPost, isDeleting } = useDeleteBlogPost();
 
       return (
         <AlertDialog>
@@ -119,16 +118,17 @@ export const columns: ColumnDef<BlogPost>[] = [
             <AlertDialogHeader>
               <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
               <AlertDialogDescription>
-                Hành động này không thể được hoàn tác.
+                Hành động này không thể được hoàn tác. Nó sẽ xóa vĩnh viễn bài viết và các ảnh liên quan.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Hủy</AlertDialogCancel>
               <AlertDialogAction
-                onClick={handleDelete}
+                onClick={() => deleteBlogPost(post)}
+                disabled={isDeleting}
                 className="bg-destructive hover:bg-destructive/90"
               >
-                Xóa
+                {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

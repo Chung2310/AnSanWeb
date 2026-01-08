@@ -7,9 +7,10 @@ import { Calendar, User } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
 import type { BlogPost } from "@/lib/types";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { sampleBlogPosts } from "@/lib/placeholder-data";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import { collection, query, where } from "firebase/firestore";
 
 // This is a placeholder for a function that would parse content and extract headings
 const generateHeadings = (content: string) => {
@@ -66,11 +67,15 @@ const PostPageSkeleton = () => (
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  
-  // Use placeholder data instead of Firestore
-  const isLoading = false;
-  const post = useMemo(() => sampleBlogPosts.find(p => p.slug === slug), [slug]);
+  const firestore = useFirestore();
 
+  const postsQuery = useMemoFirebase(
+    () => firestore && query(collection(firestore, 'blogPosts'), where('slug', '==', slug)),
+    [firestore, slug]
+  );
+  
+  const { data: posts, isLoading } = useCollection<BlogPost>(postsQuery);
+  const post = posts?.[0];
 
   if (isLoading) {
     return <PostPageSkeleton />;
@@ -81,7 +86,8 @@ export default function BlogPostPage() {
   }
 
   const headings = generateHeadings(post.content || ""); 
-  const date = new Date(post.date);
+  const dateObj = post.date as any;
+  const date = dateObj.toDate ? dateObj.toDate() : new Date(dateObj);
   const formattedDate = `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 
   return (

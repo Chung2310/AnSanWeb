@@ -25,8 +25,11 @@ import { Progress } from '@/components/ui/progress';
 import slugify from 'slugify';
 import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
 
 const formSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(2, { message: 'Tiêu đề phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   author: z.string().min(2, { message: 'Tên tác giả là bắt buộc.' }),
@@ -51,6 +54,7 @@ interface BlogFormProps {
 export default function BlogForm({ initialData }: BlogFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.imageUrl || null);
   const [categoriesInput, setCategoriesInput] = useState(initialData?.categories.join(', ') || '');
@@ -76,7 +80,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
     form.setValue('title', title);
-    form.setValue('slug', slugify(title, { lower: true, strict: true }));
+    form.setValue('slug', slugify(title, { lower: true, strict: true, locale: 'vi' }));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,15 +113,22 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     try {
         const processedData = {
             ...data,
-            date: new Date().toISOString(),
             categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
         };
 
-      if (initialData) {
-        console.log('Updating post:', processedData);
+      if (initialData && initialData.id) {
+        const postRef = doc(firestore, 'blogPosts', initialData.id);
+        await updateDoc(postRef, {
+            ...processedData,
+            date: serverTimestamp(), // Use server timestamp to update the date
+        });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
       } else {
-        console.log('Creating post:', processedData);
+        const collectionRef = collection(firestore, 'blogPosts');
+        await addDoc(collectionRef, {
+            ...processedData,
+            date: serverTimestamp(),
+        });
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
       }
       router.push('/admin/blog');
@@ -221,6 +232,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                         className="w-full rounded-md object-cover aspect-video"
                       />
                        <Button
+                        type="button"
                         variant="destructive"
                         size="icon"
                         className="absolute right-2 top-2 h-6 w-6"
