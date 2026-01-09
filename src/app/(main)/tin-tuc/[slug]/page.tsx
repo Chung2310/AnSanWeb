@@ -48,18 +48,6 @@ function PostDetailView({ post }: { post: BlogPost }) {
                         </h1>
 
                         <p className="text-lg text-muted-foreground italic mb-8">{post.excerpt}</p>
-
-                        {post.image && post.image.url && (
-                             <Image 
-                                src={post.image.url} 
-                                alt={post.title}
-                                width={1200}
-                                height={600}
-                                className="w-full rounded-lg my-8"
-                                data-ai-hint={post.image.imageHint}
-                                priority
-                            />
-                        )}
                         
                         {post.content && (
                             <article 
