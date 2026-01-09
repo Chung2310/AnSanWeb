@@ -2,7 +2,6 @@
 
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { User, Calendar } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import type { BlogPost } from "@/lib/types";
