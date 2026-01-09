@@ -5,34 +5,14 @@ import Image from "next/image";
 import { User, Calendar } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import type { BlogPost } from "@/lib/types";
-import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useBlogPosts } from "@/hooks/use-blog-posts";
+import Lottie from 'lottie-react';
+import loadingAnimation from '@/components/loading.json';
+import { useBlogPostBySlug } from "@/hooks/use-blog-post-by-slug";
 
 const PostPageSkeleton = () => (
-    <div className="bg-white text-black py-16">
-        <div className="container max-w-screen-xl">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <div className="lg:col-span-8">
-                    <div className="flex items-center space-x-6 mb-6">
-                        <Skeleton className="h-4 w-24" />
-                        <Skeleton className="h-4 w-24" />
-                    </div>
-                    <Skeleton className="h-12 w-full mb-8" />
-                    <Skeleton className="h-[400px] w-full mb-10" />
-                    <div className="space-y-4">
-                        <Skeleton className="h-6 w-full" />
-                        <Skeleton className="h-6 w-5/6" />
-                        <Skeleton className="h-6 w-full" />
-                        <Skeleton className="h-6 w-4/6" />
-                        <Skeleton className="h-6 w-full" />
-                    </div>
-                </div>
-                <div className="lg:col-span-4">
-                    <Skeleton className="h-96 w-full" />
-                </div>
-            </div>
-        </div>
+    <div className="flex h-screen w-full items-center justify-center bg-white">
+        <Lottie animationData={loadingAnimation} className="h-32 w-32" />
     </div>
 );
 
@@ -104,20 +84,15 @@ function PostDetailView({ post }: { post: BlogPost }) {
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const { blogPosts, isLoading } = useBlogPosts();
-
-  const post = useMemo(() => {
-    if (isLoading || !blogPosts) return undefined;
-    return blogPosts.find(p => p.slug === slug);
-  }, [blogPosts, slug, isLoading]);
-
+  const { post, isLoading, error } = useBlogPostBySlug(slug);
 
   if (isLoading) {
     return <PostPageSkeleton />;
   }
 
-  // After loading, if the post is not found in the array, then it's a 404.
-  if (!post) {
+  // After loading, if there's an error or the post is null (not found), show 404.
+  if (error || !post) {
+    console.error("Error fetching post or post not found:", error);
     notFound();
   }
 
