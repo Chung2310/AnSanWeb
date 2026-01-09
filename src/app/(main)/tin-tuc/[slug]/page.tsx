@@ -3,11 +3,11 @@
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, User } from "lucide-react";
+import { User } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
 import type { BlogPost } from "@/lib/types";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogPosts } from "@/hooks/use-blog-posts";
 
@@ -62,25 +62,6 @@ const PostPageSkeleton = () => (
     </div>
 )
 
-const safeGetDate = (dateObj: any): Date | null => {
-    if (!dateObj) return null;
-    // Firestore Timestamp
-    if (typeof dateObj.toDate === 'function') {
-        return dateObj.toDate();
-    }
-    // String or number
-    const date = new Date(dateObj);
-    if (!isNaN(date.getTime())) {
-        return date;
-    }
-    // Handle Firestore Timestamp nested in object (from JSON serialization)
-    if(dateObj.seconds) {
-        return new Date(dateObj.seconds * 1000);
-    }
-    return null;
-}
-
-
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -101,8 +82,6 @@ export default function BlogPostPage() {
   }
 
   const headings = generateHeadings(post.content || ""); 
-  const date = safeGetDate(post.date);
-  const formattedDate = date ? `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}` : '';
 
 
   return (
@@ -116,10 +95,6 @@ export default function BlogPostPage() {
                         <div className="flex items-center gap-2">
                            <User className="h-4 w-4" />
                            <span>BY {post.author || 'AnSan'}</span>
-                        </div>
-                         <div className="flex items-center gap-2">
-                           <Calendar className="h-4 w-4" />
-                           <span>{formattedDate}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             {post.categories.map(cat => (

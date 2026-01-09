@@ -6,7 +6,6 @@ import Image from "next/image";
 import { cn } from '@/lib/utils';
 import type { BlogPost } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
-import { Calendar } from 'lucide-react';
 import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 const allCategories = [
@@ -16,16 +15,6 @@ const allCategories = [
     'WHISKY BASICS',
     'WHISKY REVIEW',
 ];
-
-const formatDate = (dateValue: any) => {
-    if (!dateValue) return '';
-    const date = dateValue.toDate ? dateValue.toDate() : new Date(dateValue);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-};
-
 
 const BlogCard = ({ post }: { post: BlogPost }) => {
     return (
@@ -47,11 +36,6 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
             <div className="mt-4 text-left">
                 <div className="flex items-center text-xs font-bold uppercase tracking-widest gap-2" style={{ color: '#8a7d6a' }}>
                     <span>{post.categories.join(' / ')}</span>
-                    <span className="font-sans">|</span>
-                    <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        <span>{formatDate(post.date)}</span>
-                    </div>
                 </div>
                 <h2 className="font-headline text-xl font-black uppercase mt-2 text-neutral-700 group-hover:text-primary transition-colors">
                     {post.title}

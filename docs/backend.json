@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Wine": {
@@ -9,13 +10,14 @@
         "id": { "type": "string", "description": "Unique identifier for the wine product." },
         "nameVN": { "type": "string", "description": "Wine name in Vietnamese." },
         "slug": { "type": "string", "description": "URL-friendly slug for the wine product." },
+        "shortDescription": { "type": "string", "description": "A brief summary of the product, displayed under the title on the detail page." },
         "price": { "type": "number", "description": "Price of the wine." },
         "description": { "type": "string", "description": "Detailed description for the wine product." },
         "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
         "isFeatured": { "type": "boolean", "description": "Indicates if the wine is featured." },
         "isNew": { "type": "boolean", "description": "Indicates if the wine is a new arrival." },
         "status": { "type": "string", "enum": ["published", "draft"] },
-        "tags": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Holds the category IDs" },
         "attributes": { 
           "type": "array", 
           "items": { 
@@ -23,7 +25,6 @@
             "properties": { "label": { "type": "string" }, "value": { "type": "string" } }
           } 
         },
-        "categoryIds": { "type": "array", "items": { "type": "string" } },
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
@@ -33,11 +34,12 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Category",
       "type": "object",
-      "description": "Represents a category of wines.",
+      "description": "Represents a category of wines, which can be hierarchical.",
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
-        "slug": { "type": "string" }
+        "slug": { "type": "string" },
+        "parentId": { "type": ["string", "null"], "description": "The ID of the parent category, if any." }
       },
       "required": ["id", "name", "slug"]
     },
@@ -54,10 +56,9 @@
         "content": { "type": "string" },
         "image": { "type": "object", "properties": { "imageUrl": { "type": "string" }, "path": { "type": "string" } } },
         "author": { "type": "string" },
-        "date": { "type": "string", "format": "date-time" },
         "categories": { "type": "array", "items": { "type": "string" } }
       },
-      "required": ["id", "title", "slug", "excerpt", "author", "date", "categories"]
+      "required": ["id", "title", "slug", "excerpt", "author", "categories"]
     },
     "Contact": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -86,7 +87,7 @@
     },
     "/categories/{categoryId}": {
       "schema": { "$ref": "#/entities/Category" },
-      "description": "Stores wine categories."
+      "description": "Stores product categories in a hierarchical structure."
     },
     "/blogPosts/{blogPostId}": {
       "schema": { "$ref": "#/entities/BlogPost" },
