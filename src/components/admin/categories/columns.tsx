@@ -34,9 +34,8 @@ const ActionsCell = ({ row }: { row: { original: Category } }) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleDelete = () => {
-    deleteCategory(category, () => {
-      setIsAlertOpen(false);
-    });
+    setIsAlertOpen(false);
+    deleteCategory(category);
   };
 
   return (
