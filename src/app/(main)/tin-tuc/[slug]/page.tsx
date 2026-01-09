@@ -1,6 +1,6 @@
 'use client'
 
-import { notFound, useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import Image from "next/image";
 import { User, Calendar } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
@@ -90,11 +90,9 @@ export default function BlogPostPage() {
     return <PostPageSkeleton />;
   }
 
-  // After loading, if there's an error OR the post is explicitly null, show 404.
+  // After loading, if there's an error or the post is null (not found), show 404.
   if (error || !post) {
-    if (error) {
-        console.error("Error fetching post:", error);
-    }
+    console.error("Error fetching post or post not found:", error);
     notFound();
   }
 
