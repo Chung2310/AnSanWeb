@@ -1,23 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu, ChevronRight } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuPortal,
-} from "@/components/ui/dropdown-menu"
 import { Input } from '../ui/input';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import { useHydration } from '@/hooks/use-hydration';
 
@@ -39,11 +29,11 @@ const mainNavLinks = [
     href: '/tin-tuc',
     label: 'Kiến thức Whisky',
     sublinks: [
-      { href: '/kien-thuc/distilleries', label: 'Distilleries' },
-      { href: '/kien-thuc/news', label: 'News' },
-      { href: '/kien-thuc/spirits', label: 'Spirits' },
-      { href: '/kien-thuc/whisky-basics', label: 'Whisky Basics' },
-      { href: '/kien-thuc/whisky-review', label: 'Whisky Review' },
+      { href: '/tin-tuc/distilleries', label: 'Distilleries' },
+      { href: '/tin-tuc/news', label: 'News' },
+      { href: '/tin-tuc/spirits', label: 'Spirits' },
+      { href: '/tin-tuc/whisky-basics', label: 'Whisky Basics' },
+      { href: '/tin-tuc/whisky-review', label: 'Whisky Review' },
     ],
   },
 ];
@@ -119,23 +109,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
                        role="menuitem"
                      >
                        {link.label}
-                       {link.sublinks && <ChevronRight className="h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2" />}
                      </Link>
-                     {link.sublinks && (
-                        <div className="absolute left-full top-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity">
-                           <div className="py-1">
-                             {link.sublinks.map(subLink => (
-                               <Link
-                                 key={subLink.href}
-                                 href={subLink.href}
-                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                               >
-                                 {subLink.label}
-                               </Link>
-                             ))}
-                           </div>
-                         </div>
-                     )}
                   </div>
                ))}
              </div>
