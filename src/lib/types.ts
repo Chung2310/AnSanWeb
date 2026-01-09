@@ -96,6 +96,7 @@ export type BlogPost = {
   } | null;
   categories: string[];
   createdAt?: any; // Standardized field for creation date
+  date?: string;
 };
 
 export type Testimonial = {
