@@ -53,14 +53,7 @@ const categoryNavLinks = [
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
-            { 
-                href: '/danh-muc/ruou-vang/vang-y', 
-                label: 'VANG Ý',
-                sublinks: [
-                    { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'Organic grande alberone' },
-                    { href: '/danh-muc/ruou-vang/vang-y/puglia', label: 'SPARKLING' },
-                ]
-            },
+            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
             { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
             { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },

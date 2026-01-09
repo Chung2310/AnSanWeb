@@ -16,10 +16,7 @@ import { useDeleteCategory } from '@/hooks/use-delete-category';
 // Data based on header navigation
 const initialCategoryData = [
     { name: 'RƯỢU VANG', slug: 'ruou-vang', children: [
-        { name: 'VANG Ý', slug: 'vang-y', children: [
-            { name: 'Organic grande alberone', slug: 'organic-grande-alberone' },
-            { name: 'SPARKLING', slug: 'sparkling' },
-        ]},
+        { name: 'VANG Ý', slug: 'vang-y' },
         { name: 'VANG PHÁP', slug: 'vang-phap' },
         { name: 'VANG TÂY BAN NHA', slug: 'vang-tay-ban-nha' },
         { name: 'VANG ÚC', slug: 'vang-uc' },
