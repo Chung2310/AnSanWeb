@@ -25,7 +25,7 @@ export function useBlogPostBySlug(slug: string | null) {
         limit(1) // Since slug should be unique, we only need 1 document
       );
     },
-    [blogPostsCollection, slug] // IMPORTANT: slug is now a dependency
+    [blogPostsCollection, slug]
   );
 
   const { data, isLoading, error } = useCollection<BlogPost>(blogPostQuery);
