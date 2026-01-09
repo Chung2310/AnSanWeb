@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { collection, query, where, limit } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import type { BlogPost } from '@/lib/types';
 
@@ -20,8 +20,7 @@ export function useBlogPostBySlug(slug: string | null) {
       }
       return query(
         blogPostsCollection, 
-        where('slug', '==', slug), 
-        limit(1)
+        where('slug', '==', slug)
       );
     },
     [blogPostsCollection, slug]
