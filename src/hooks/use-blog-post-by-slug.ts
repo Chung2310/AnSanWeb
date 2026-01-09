@@ -18,11 +18,10 @@ export function useBlogPostBySlug(slug: string | null) {
       if (!blogPostsCollection || !slug) {
         return null;
       }
-      // Query for the specific post using its slug
       return query(
         blogPostsCollection, 
         where('slug', '==', slug),
-        limit(1) // Since slug should be unique, we only need 1 document
+        limit(1)
       );
     },
     [blogPostsCollection, slug]
@@ -30,7 +29,6 @@ export function useBlogPostBySlug(slug: string | null) {
 
   const { data, isLoading, error } = useCollection<BlogPost>(blogPostQuery);
 
-  // The hook returns an array, so we extract the first (and only) element
   const post = useMemo(() => (data && data.length > 0 ? data[0] : null), [data]);
 
   return { post, isLoading, error };
