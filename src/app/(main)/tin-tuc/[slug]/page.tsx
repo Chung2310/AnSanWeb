@@ -5,7 +5,6 @@ import Image from "next/image";
 import { User, Calendar } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import type { BlogPost } from "@/lib/types";
-import { Skeleton } from "@/components/ui/skeleton";
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import { useBlogPostBySlug } from "@/hooks/use-blog-post-by-slug";
