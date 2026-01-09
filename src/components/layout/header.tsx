@@ -27,14 +27,7 @@ const mainNavLinks = [
   },
   {
     href: '/tin-tuc',
-    label: 'Kiến thức Whisky',
-    sublinks: [
-      { href: '/tin-tuc?category=DISTILLERIES', label: 'Distilleries' },
-      { href: '/tin-tuc?category=NEWS', label: 'News' },
-      { href: '/tin-tuc?category=SPIRITS', label: 'Spirits' },
-      { href: '/tin-tuc?category=WHISKY BASICS', label: 'Whisky Basics' },
-      { href: '/tin-tuc?category=WHISKY REVIEW', label: 'Whisky Review' },
-    ],
+    label: 'Tin Tức',
   },
 ];
 
@@ -42,35 +35,14 @@ const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
-        sublinks: [
-            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
-            { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
-            { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
-            { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
-            { href: '/danh-muc/ruou-vang/vang-nga', label: 'VANG NGA' },
-            { href: '/danh-muc/ruou-vang/vang-duc', label: 'VANG ĐỨC' },
-        ]
     },
     {
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
-        sublinks: [
-            { href: '/danh-muc/ruou-manh/ballantines-finest', label: "BALLANTINE'S" },
-            { href: '/danh-muc/ruou-manh/john-walker', label: 'JOHN WALKER' },
-            { href: '/danh-muc/ruou-manh/mortlach', label: 'MORTLACH' },
-            { href: '/danh-muc/ruou-manh/chivas', label: 'CHIVAS' },
-            { href: '/danh-muc/ruou-manh/royal-salute', label: 'ROYAL SALUTE' },
-            { href: '/danh-muc/ruou-manh/the-singleton', label: 'THE SINGLETON' },
-        ]
     },
      {
         href: '/danh-muc/cigar',
         label: 'CIGAR',
-        sublinks: [
-            { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
-            { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
-            { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
-        ]
     },
     { href: '/danh-muc/bo-qua-tang', label: 'BỘ QUÀ TẶNG' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
