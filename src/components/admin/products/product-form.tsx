@@ -241,10 +241,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             delete finalData.id;
             finalData.createdAt = serverTimestamp();
             const collectionRef = collection(firestore, 'products');
-            await addDoc(collectionRef, finalData);
+            const newDoc = await addDoc(collectionRef, finalData);
+            await updateDoc(newDoc, { id: newDoc.id });
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
-        router.push('/admin/products');
+        router.back();
         router.refresh();
     } catch (error) {
         console.error("Error saving product:", error);
@@ -468,7 +469,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Đang lưu...' : initialData ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
             </Button>
-            <Button type="button" variant="outline" onClick={() => router.push('/admin/products')}>
+            <Button type="button" variant="outline" onClick={() => router.back()}>
                 Hủy
             </Button>
         </div>

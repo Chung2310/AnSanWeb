@@ -129,13 +129,14 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
       } else {
         const collectionRef = collection(firestore, 'blogPosts');
-        await addDoc(collectionRef, {
+        const newDoc = await addDoc(collectionRef, {
             ...processedData,
             date: serverTimestamp(),
         });
+        await updateDoc(newDoc, { id: newDoc.id });
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
       }
-      router.push('/admin/blog');
+      router.back();
       router.refresh();
     } catch (error) {
       console.error(error);
