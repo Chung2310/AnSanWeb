@@ -29,7 +29,7 @@ export function useBlogPostBySlug(slug: string | null) {
 
   const { data, isLoading, error } = useCollection<BlogPost>(blogPostQuery);
 
-  const post = useMemo(() => (data && data.length > 0 ? data[0] : null), [data]);
+  const post = data?.[0] || null;
 
   return { post, isLoading, error };
 }
