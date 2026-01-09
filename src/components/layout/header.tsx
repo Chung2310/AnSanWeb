@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
