@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Separator } from "./ui/separator";
-import { Newspaper } from "lucide-react";
+import { Newspaper, Calendar } from "lucide-react";
 import type { BlogPost } from "@/lib/types";
 import { Skeleton } from "./ui/skeleton";
 import { useBlogPosts } from "@/hooks/use-blog-posts";
@@ -34,19 +34,31 @@ export default function PostSidebar({ currentPostId }: { currentPostId: string }
                         <p>Không có bài viết nào.</p>
                     </div>
                 )}
-                {!isLoading && recentPosts?.map((post, index) => (
-                    <div key={post.id}>
-                        <Link href={`/tin-tuc/${post.slug}`} className="group block">
-                            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#8a7d6a' }}>
-                                {post.categories.join(', ')}
-                            </p>
-                            <h4 className="font-bold uppercase text-sm mt-2 text-neutral-700 group-hover:text-primary transition-colors">
-                                {post.title}
-                            </h4>
-                        </Link>
-                        {index < recentPosts.length - 1 && <Separator className="mt-6" />}
-                    </div>
-                ))}
+                {!isLoading && recentPosts?.map((post, index) => {
+                    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
+                    return (
+                        <div key={post.id}>
+                            <Link href={`/tin-tuc/${post.slug}`} className="group block">
+                                <div className="text-xs font-bold uppercase tracking-widest flex items-center gap-4" style={{ color: '#8a7d6a' }}>
+                                    <span>{post.categories.join(', ')}</span>
+                                    {postDate && (
+                                        <>
+                                            <span className="text-neutral-400">|</span>
+                                            <div className="flex items-center gap-1.5">
+                                                <Calendar className="h-3.5 w-3.5" />
+                                                <span>{postDate}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                <h4 className="font-bold uppercase text-sm mt-2 text-neutral-700 group-hover:text-primary transition-colors">
+                                    {post.title}
+                                </h4>
+                            </Link>
+                            {index < recentPosts.length - 1 && <Separator className="mt-6" />}
+                        </div>
+                    )
+                })}
             </div>
         </aside>
     );

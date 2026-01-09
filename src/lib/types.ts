@@ -3,7 +3,6 @@
 export type ImageInfo = {
   url: string;
   path: string;
-  imageUrl?: string;
   imageHint?: string;
 };
 
@@ -91,11 +90,12 @@ export type BlogPost = {
   excerpt: string;
   content?: string;
   image: {
-    imageUrl: string;
-    imageHint: string;
+    url: string; // Changed from imageUrl
+    imageHint?: string;
     path?: string;
   } | null;
   categories: string[];
+  createdAt?: any; // Added for sorting
 };
 
 export type Testimonial = {

@@ -55,7 +55,7 @@ export const columns: ColumnDef<BlogPost>[] = [
       const image = row.original.image;
       return image ? (
         <Image
-          src={image.imageUrl}
+          src={image.url}
           alt={row.original.title}
           width={80}
           height={60}
@@ -75,6 +75,16 @@ export const columns: ColumnDef<BlogPost>[] = [
     header: 'Tác giả',
   },
   {
+    accessorKey: 'createdAt',
+    header: 'Ngày tạo',
+    cell: ({ row }) => {
+      const { createdAt } = row.original;
+      if (!createdAt) return 'N/A';
+      const date = typeof createdAt.toDate === 'function' ? createdAt.toDate() : new Date(createdAt);
+      return date.toLocaleDateString('vi-VN');
+    }
+  },
+  {
     id: 'actions',
     cell: function Cell({ row }) {
       const post = row.original;
@@ -91,6 +101,11 @@ export const columns: ColumnDef<BlogPost>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <Link href={`/tin-tuc/${post.slug}`} target="_blank">
+                  Xem bài viết
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/admin/blog/${post.id}/edit`}>
                   Chỉnh sửa

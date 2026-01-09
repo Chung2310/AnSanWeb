@@ -23,7 +23,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
                 <div className="aspect-[4/3] overflow-hidden">
                     {post.image && (
                         <Image 
-                            src={post.image.imageUrl}
+                            src={post.image.url}
                             alt={post.title}
                             width={600}
                             height={400}
