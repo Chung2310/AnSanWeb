@@ -89,7 +89,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
         toast({ title: 'Thành công', description: 'Danh mục đã được tạo.' });
       }
       router.back();
-      router.refresh();
     } catch (error) {
       console.error("Error saving category:", error);
       toast({

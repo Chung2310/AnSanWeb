@@ -246,7 +246,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
         router.back();
-        router.refresh();
     } catch (error) {
         console.error("Error saving product:", error);
         toast({

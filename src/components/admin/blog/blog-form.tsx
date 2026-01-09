@@ -137,7 +137,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
       }
       router.back();
-      router.refresh();
     } catch (error) {
       console.error(error);
       toast({
