@@ -116,6 +116,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     try {
         const processedData = {
             ...data,
+            content: data.content || '',
             categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
             slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
         };
