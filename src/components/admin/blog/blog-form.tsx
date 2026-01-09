@@ -25,7 +25,7 @@ import { Progress } from '@/components/ui/progress';
 import slugify from 'slugify';
 import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 
 const formSchema = z.object({
@@ -112,11 +112,11 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormValues) => {
     try {
-        const processedData = {
-            ...data,
-            content: data.content || '',
-            categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
-        };
+      const processedData = {
+          ...data,
+          content: data.content || '',
+          categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
+      };
 
       if (initialData && initialData.id) {
         const postRef = doc(firestore, 'blogPosts', initialData.id);
@@ -129,7 +129,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         const collectionRef = collection(firestore, 'blogPosts');
         const newDocRef = doc(collectionRef); // Create a reference with an ID first
         
-        await updateDoc(newDocRef, {
+        await setDoc(newDocRef, {
             ...processedData,
             id: newDocRef.id,
             date: serverTimestamp(),
