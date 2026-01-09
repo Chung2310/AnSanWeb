@@ -57,8 +57,8 @@ const categoryNavLinks = [
                 href: '/danh-muc/ruou-vang/vang-y', 
                 label: 'VANG Ý',
                 sublinks: [
-                    { href: '/danh-muc/ruou-vang/vang-y/organic-grande-alberone', label: 'Organic grande alberone' },
-                    { href: '/danh-muc/ruou-vang/vang-y/sparkling', label: 'SPARKLING' },
+                    { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'Organic grande alberone' },
+                    { href: '/danh-muc/ruou-vang/vang-y/puglia', label: 'SPARKLING' },
                 ]
             },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
@@ -95,7 +95,6 @@ const categoryNavLinks = [
 
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[] | undefined, className?: string }) => {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
   const isActive = pathname.startsWith(href);
 
   const linkClasses = cn(
@@ -106,64 +105,45 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
 
   if (sublinks) {
     return (
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <div 
-          onMouseEnter={() => setOpen(true)} 
-          onMouseLeave={() => setOpen(false)} 
-          className="flex items-center"
-        >
-          <Link
-            href={href}
-            className={linkClasses}
-          >
-            {label}
-          </Link>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className={cn("p-0 h-auto no-focus-border", linkClasses)}
-            >
-              <ChevronDown className="h-4 w-4 ml-1" />
-            </Button>
-          </DropdownMenuTrigger>
-           <DropdownMenuContent 
-              onMouseEnter={() => setOpen(true)} 
-              onMouseLeave={() => setOpen(false)}
-              className="bg-white"
-            >
-              {sublinks.map(link => (
-                link.sublinks ? (
-                  <DropdownMenuSub key={link.href}>
-                    <DropdownMenuSubTrigger>
-                      <span>{link.label}</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        {link.sublinks.map(subLink => (
-                          <DropdownMenuItem key={subLink.href} asChild>
-                            <Link href={subLink.href}>{subLink.label}</Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                ) : (
-                  <DropdownMenuItem key={link.href} asChild>
-                    <Link href={link.href}>{link.label}</Link>
-                  </DropdownMenuItem>
-                )
-              ))}
-          </DropdownMenuContent>
-        </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="flex items-center cursor-pointer">
+            <Link href={href} className={linkClasses}>
+              {label}
+            </Link>
+            <ChevronDown className={cn("h-4 w-4 ml-1", linkClasses)} />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-white">
+          {sublinks.map((link) => (
+            link.sublinks ? (
+              <DropdownMenuSub key={link.href}>
+                <DropdownMenuSubTrigger>
+                  <span>{link.label}</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    {link.sublinks.map((subLink) => (
+                      <DropdownMenuItem key={subLink.href} asChild>
+                        <Link href={subLink.href}>{subLink.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+            ) : (
+              <DropdownMenuItem key={link.href} asChild>
+                <Link href={link.href}>{link.label}</Link>
+              </DropdownMenuItem>
+            )
+          ))}
+        </DropdownMenuContent>
       </DropdownMenu>
     );
   }
 
   return (
-    <Link
-      href={href}
-      className={linkClasses}
-    >
+    <Link href={href} className={linkClasses}>
       {label}
     </Link>
   );
