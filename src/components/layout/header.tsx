@@ -53,14 +53,7 @@ const categoryNavLinks = [
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
-            { 
-              href: '/danh-muc/ruou-vang/vang-y', 
-              label: 'VANG Ý',
-              sublinks: [
-                { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'Organic grande alberone' },
-                { href: '/danh-muc/ruou-vang/vang-y/toscana', label: 'SPARKLING' },
-              ]
-            },
+            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
             { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
             { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
@@ -106,49 +99,49 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
 
   if (sublinks) {
     return (
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <div 
-            onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={() => setIsOpen(false)}
-            className="flex items-center cursor-pointer"
-          >
-            <Link href={href} className={linkClasses}>
-              {label}
-              <ChevronDown className="h-4 w-4 ml-1" />
-            </Link>
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          className="bg-white"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
-          align="start"
-        >
-          {sublinks.map((link) => (
-            link.sublinks ? (
-              <DropdownMenuSub key={link.href}>
-                <DropdownMenuSubTrigger>
-                  <Link href={link.href} className="w-full text-left">{link.label}</Link>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    {link.sublinks.map((subLink) => (
-                      <DropdownMenuItem key={subLink.href} asChild>
-                        <Link href={subLink.href}>{subLink.label}</Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-            ) : (
-              <DropdownMenuItem key={link.href} asChild>
-                <Link href={link.href}>{link.label}</Link>
-              </DropdownMenuItem>
-            )
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div 
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="relative"
+      >
+        <Link href={href} className={linkClasses}>
+          {label}
+          <ChevronDown className="h-4 w-4 ml-1" />
+        </Link>
+        {isOpen && (
+           <div className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
+             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+               {sublinks.map((link) => (
+                  <div key={link.href} className="relative group">
+                     <Link 
+                       href={link.href} 
+                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                       role="menuitem"
+                     >
+                       {link.label}
+                       {link.sublinks && <ChevronRight className="h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2" />}
+                     </Link>
+                     {link.sublinks && (
+                        <div className="absolute left-full top-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity">
+                           <div className="py-1">
+                             {link.sublinks.map(subLink => (
+                               <Link
+                                 key={subLink.href}
+                                 href={subLink.href}
+                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                               >
+                                 {subLink.label}
+                               </Link>
+                             ))}
+                           </div>
+                         </div>
+                     )}
+                  </div>
+               ))}
+             </div>
+           </div>
+        )}
+      </div>
     );
   }
 
