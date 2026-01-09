@@ -81,13 +81,14 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
         toast({ title: 'Thành công', description: 'Danh mục đã được cập nhật.' });
       } else {
         const collectionRef = collection(firestore, 'categories');
-        await addDoc(collectionRef, {
+        const newDoc = await addDoc(collectionRef, {
             ...data,
             parentId: data.parentId || null,
         });
+        await updateDoc(newDoc, { id: newDoc.id });
         toast({ title: 'Thành công', description: 'Danh mục đã được tạo.' });
       }
-      router.push('/admin/categories');
+      router.back();
       router.refresh();
     } catch (error) {
       console.error("Error saving category:", error);
