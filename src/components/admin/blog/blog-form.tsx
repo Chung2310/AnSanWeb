@@ -116,18 +116,20 @@ export default function BlogForm({ initialData }: BlogFormProps) {
           ...data,
           content: data.content || '',
           categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
+          slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
       };
 
       if (initialData && initialData.id) {
         const postRef = doc(firestore, 'blogPosts', initialData.id);
         await updateDoc(postRef, {
             ...processedData,
-            date: serverTimestamp(), // Use server timestamp to update the date
+            date: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
+        router.back();
       } else {
         const collectionRef = collection(firestore, 'blogPosts');
-        const newDocRef = doc(collectionRef); // Create a reference with an ID first
+        const newDocRef = doc(collectionRef);
         
         processedData.id = newDocRef.id;
 
@@ -137,8 +139,8 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         });
 
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
+        router.back();
       }
-      router.back();
     } catch (error) {
       console.error(error);
       toast({
