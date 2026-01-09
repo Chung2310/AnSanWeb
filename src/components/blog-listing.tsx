@@ -18,7 +18,6 @@ const allCategories = [
 ];
 
 const BlogCard = ({ post }: { post: BlogPost }) => {
-    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
     return (
         <Link href={`/tin-tuc/${post.slug}`} className="group block">
             <div className="relative">
@@ -92,7 +91,7 @@ function BlogListingContent() {
         <div className="container py-12 bg-white text-black">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-10">
                 <h1 className="font-headline text-xl font-black uppercase text-neutral-700 mb-4 md:mb-0">
-                    Tin Tức Mới Nhất
+                    TIN TỨC MỚI NHẤT
                 </h1>
                 <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-widest">
                     <button 
