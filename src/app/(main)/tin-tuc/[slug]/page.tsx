@@ -90,7 +90,7 @@ export default function BlogPostPage() {
     return <PostPageSkeleton />;
   }
 
-  // After loading, if there's an error or the post is null, show 404.
+  // After loading, if there's an error OR if loading is finished and there's still no post, show 404.
   if (error || !post) {
     if (process.env.NODE_ENV === 'development') {
       console.error("Error fetching post or post not found:", error);
