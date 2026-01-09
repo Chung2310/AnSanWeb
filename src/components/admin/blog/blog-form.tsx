@@ -81,9 +81,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     const title = e.target.value;
     form.setValue('title', title);
     const slug = slugify(title, { lower: true, strict: true, locale: 'vi' });
-    if (slug) {
-        form.setValue('slug', slug);
-    }
+    form.setValue('slug', slug);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +116,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             ...data,
             content: data.content || '',
             categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
-            slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
         };
 
       if (initialData && initialData.id) {
@@ -130,11 +127,14 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
       } else {
         const collectionRef = collection(firestore, 'blogPosts');
-        const newDoc = await addDoc(collectionRef, {
+        const newDocRef = doc(collectionRef); // Create a reference with an ID first
+        
+        await updateDoc(newDocRef, {
             ...processedData,
+            id: newDocRef.id,
             date: serverTimestamp(),
         });
-        await updateDoc(newDoc, { id: newDoc.id });
+
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
       }
       router.back();
@@ -169,7 +169,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                           placeholder="Vd: Cách phân biệt Scotch và Bourbon"
                           {...field}
                           onChange={handleTitleChange}
-                          onBlur={handleTitleChange}
                         />
                       </FormControl>
                       <FormMessage />
