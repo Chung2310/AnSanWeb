@@ -14,7 +14,7 @@ export function useDeleteBlogPost() {
   const { user } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const deleteBlogPost = async (post: BlogPost) => {
+  const deleteBlogPost = async (post: BlogPost, onSuccess?: () => void) => {
     if (!user || !post.id) {
         toast({
             variant: 'destructive',
@@ -26,19 +26,18 @@ export function useDeleteBlogPost() {
 
     setIsDeleting(true);
     try {
+      if (onSuccess) onSuccess();
+
       const storage = getStorage(firebaseApp);
       
-      // Delete associated images from storage
       const imageDeletePromises: Promise<void>[] = [];
       if (post.image?.path) {
         const imageRef = ref(storage, post.image.path);
         imageDeletePromises.push(deleteObject(imageRef).catch(e => console.error(`Failed to delete image ${post.image?.path}`, e)));
       }
-      // You can also add logic here to parse post.content and delete any images uploaded via the rich text editor if their paths are stored.
 
       await Promise.all(imageDeletePromises);
       
-      // Delete Firestore Document
       const postDocRef = doc(firestore, 'blogPosts', post.id);
       await deleteDoc(postDocRef);
 

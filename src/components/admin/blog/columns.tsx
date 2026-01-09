@@ -27,6 +27,69 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useDeleteBlogPost } from '@/hooks/use-delete-blog-post';
+import { useState } from 'react';
+
+const ActionsCell = ({ row }: { row: { original: BlogPost } }) => {
+    const post = row.original;
+    const { deleteBlogPost, isDeleting } = useDeleteBlogPost();
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+    const handleDelete = () => {
+        deleteBlogPost(post, () => {
+          setIsAlertOpen(false);
+        });
+    };
+
+    return (
+        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/tin-tuc/${post.slug}`} target="_blank">
+                            Xem bài viết
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/admin/blog/${post.id}/edit`}>
+                            Chỉnh sửa
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <AlertDialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive">
+                            Xóa bài viết
+                        </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Hành động này không thể được hoàn tác. Nó sẽ xóa vĩnh viễn bài viết và các ảnh liên quan.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Hủy</AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="bg-destructive hover:bg-destructive/90"
+                    >
+                        {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+}
 
 export const columns: ColumnDef<BlogPost>[] = [
   {
@@ -87,59 +150,6 @@ export const columns: ColumnDef<BlogPost>[] = [
   },
   {
     id: 'actions',
-    cell: function Cell({ row }) {
-      const post = row.original;
-      const { deleteBlogPost, isDeleting } = useDeleteBlogPost();
-
-      return (
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-              <DropdownMenuItem asChild>
-                <Link href={`/tin-tuc/${post.slug}`} target="_blank">
-                  Xem bài viết
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/admin/blog/${post.id}/edit`}>
-                  Chỉnh sửa
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem className="text-destructive">
-                  Xóa bài viết
-                </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Hành động này không thể được hoàn tác. Nó sẽ xóa vĩnh viễn bài viết và các ảnh liên quan.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => deleteBlogPost(post)}
-                disabled={isDeleting}
-                className="bg-destructive hover:bg-destructive/90"
-              >
-                {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      );
-    },
+    cell: ActionsCell,
   },
 ];

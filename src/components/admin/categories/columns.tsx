@@ -26,13 +26,21 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useDeleteCategory } from '@/hooks/use-delete-category';
+import { useState } from 'react';
 
 const ActionsCell = ({ row }: { row: { original: Category } }) => {
   const category = row.original;
   const { deleteCategory, isDeleting } = useDeleteCategory();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  const handleDelete = () => {
+    deleteCategory(category, () => {
+      setIsAlertOpen(false);
+    });
+  };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -68,7 +76,7 @@ const ActionsCell = ({ row }: { row: { original: Category } }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => deleteCategory(category)}
+            onClick={handleDelete}
             disabled={isDeleting}
             className="bg-destructive hover:bg-destructive/90"
           >
