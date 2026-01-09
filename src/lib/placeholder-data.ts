@@ -779,7 +779,7 @@ export const sampleBlogPosts: BlogPost[] = [
       url: "https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/blog%2F1c5cbd8d-1c27-41d0-a867-b2844e389fc1-RUOU-CHVAS-18-HOP-QUA-2026%20(1).jpg?alt=media&token=9bb18db1-dcfd-48ab-9d27-28d20111fd4d",
       path: "blog/1c5cbd8d-1c27-41d0-a867-b2844e389fc1-RUOU-CHVAS-18-HOP-QUA-2026 (1).jpg"
     },
-    categories: [],
+    categories: ['NEWS'],
   }
 ];
 
