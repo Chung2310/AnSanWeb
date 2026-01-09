@@ -87,19 +87,16 @@ export default function BlogPostPage() {
   const slug = params.slug as string;
   const { post, isLoading, error } = useBlogPostBySlug(slug);
 
-  // 1. Handle Loading State
   if (isLoading) {
     return <PostPageSkeleton />;
   }
 
-  // 2. Handle Not Found or Error State (only after loading is complete)
-  if (!post || error) {
+  if (!isLoading && (!post || error)) {
     if (process.env.NODE_ENV === 'development') {
       console.error(`Post not found or error for slug: ${slug}`, error);
     }
     notFound();
   }
 
-  // 3. Render Post Detail View if post exists
-  return <PostDetailView post={post} />;
+  return post ? <PostDetailView post={post} /> : <PostPageSkeleton />;
 }
