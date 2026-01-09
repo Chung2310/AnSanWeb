@@ -55,7 +55,7 @@ export default function PostSidebar({ currentPostId }: { currentPostId: string }
                                     {post.title}
                                 </h4>
                             </Link>
-                            {index < recentPosts.length - 1 && <Separator className="mt-6" />}
+                            {index < (recentPosts.length - 1) && <Separator className="mt-6" />}
                         </div>
                     )
                 })}

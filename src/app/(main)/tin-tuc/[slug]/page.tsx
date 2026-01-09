@@ -44,9 +44,11 @@ function PostDetailView({ post }: { post: BlogPost }) {
                             )}
                         </div>
                         
-                        <h1 className="font-headline text-4xl font-black uppercase text-neutral-700 mb-8">
+                        <h1 className="font-headline text-4xl font-black uppercase text-neutral-700 mb-4">
                             {post.title}
                         </h1>
+
+                        <p className="text-lg text-muted-foreground italic mb-8">{post.excerpt}</p>
 
                         {post.image && post.image.url && (
                              <Image 
