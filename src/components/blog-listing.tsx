@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from '@/lib/utils';
 import type { BlogPost } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
 import { useBlogPosts } from '@/hooks/use-blog-posts';
-import { usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const allCategories = [
     'DISTILLERIES',
@@ -22,8 +22,8 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
     return (
         <Link href={`/tin-tuc/${post.slug}`} className="group block">
             <div className="relative">
-                <div className="aspect-[4/3] overflow-hidden">
-                    {post.image && (
+                {post.image && (
+                    <div className="aspect-[4/3] overflow-hidden">
                         <Image 
                             src={post.image.url}
                             alt={post.title}
@@ -32,8 +32,8 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             data-ai-hint={post.image.imageHint || 'blog post'}
                         />
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
             <div className="mt-4 text-left">
                 <div className="flex items-center text-xs font-bold uppercase tracking-widest gap-2" style={{ color: '#8a7d6a' }}>
@@ -59,35 +59,40 @@ const BlogCardSkeleton = () => (
     </div>
 );
 
-
-interface BlogListingProps {
-    defaultCategory?: string | null;
-}
-
-export default function BlogListing({ defaultCategory = null }: BlogListingProps) {
-    const [activeCategory, setActiveCategory] = useState<string | null>(defaultCategory);
+function BlogListingContent() {
+    const searchParams = useSearchParams();
+    const initialCategory = searchParams.get('category');
+    
+    const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory);
     const { blogPosts, isLoading } = useBlogPosts();
-    const pathname = usePathname();
-    const isBlogIndex = pathname === '/tin-tuc';
+
+    useEffect(() => {
+        setActiveCategory(initialCategory);
+    }, [initialCategory]);
 
     const getCategoryCount = (category: string) => {
         if (!blogPosts) return 0;
         return blogPosts.filter(post => post.categories.includes(category)).length;
     }
     
-    const filteredPosts = activeCategory
-        ? blogPosts?.filter(post => post.categories.includes(activeCategory))
-        : blogPosts;
+    const filteredPosts = useMemo(() => {
+        if (!blogPosts) return [];
+        if (!activeCategory) return blogPosts;
+        return blogPosts.filter(post => post.categories.includes(activeCategory));
+    }, [blogPosts, activeCategory]);
 
     const handleCategoryClick = (category: string | null) => {
         setActiveCategory(category);
+         // Update URL without reloading the page
+        const newUrl = category ? `/tin-tuc?category=${category}` : '/tin-tuc';
+        window.history.pushState({}, '', newUrl);
     };
 
     return (
         <div className="container py-12 bg-white text-black">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-10">
                 <h1 className="font-headline text-xl font-black uppercase text-neutral-700 mb-4 md:mb-0">
-                    {isBlogIndex ? 'Tin Tức Mới Nhất' : 'Danh mục bài viết'}
+                    Tin Tức Mới Nhất
                 </h1>
                 <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-widest">
                     <button 
@@ -118,14 +123,6 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
                 </div>
             </div>
             
-            {defaultCategory && !activeCategory && (
-                 <div className="text-center mb-10">
-                     <h1 className="font-headline text-4xl font-bold uppercase text-neutral-800">
-                         Kiến thức {defaultCategory.toLowerCase().replace(/^\w/, c => c.toUpperCase())}
-                     </h1>
-                 </div>
-            )}
-            
             <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
                 {isLoading ? (
                     Array.from({ length: 6 }).map((_, i) => <BlogCardSkeleton key={i} />)
@@ -134,7 +131,18 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
                         <BlogCard key={post.id} post={post} />
                     ))
                 )}
+                 {!isLoading && filteredPosts?.length === 0 && (
+                    <p className="text-center col-span-full text-muted-foreground">Không có bài viết nào trong danh mục này.</p>
+                )}
             </div>
         </div>
+    )
+}
+
+export default function BlogListing() {
+    return (
+        <Suspense fallback={<div>Đang tải...</div>}>
+            <BlogListingContent />
+        </Suspense>
     )
 }

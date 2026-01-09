@@ -29,11 +29,11 @@ const mainNavLinks = [
     href: '/tin-tuc',
     label: 'Kiến thức Whisky',
     sublinks: [
-      { href: '/tin-tuc/danh-muc/distilleries', label: 'Distilleries' },
-      { href: '/tin-tuc/danh-muc/news', label: 'News' },
-      { href: '/tin-tuc/danh-muc/spirits', label: 'Spirits' },
-      { href: '/tin-tuc/danh-muc/whisky-basics', label: 'Whisky Basics' },
-      { href: '/tin-tuc/danh-muc/whisky-review', label: 'Whisky Review' },
+      { href: '/tin-tuc?category=DISTILLERIES', label: 'Distilleries' },
+      { href: '/tin-tuc?category=NEWS', label: 'News' },
+      { href: '/tin-tuc?category=SPIRITS', label: 'Spirits' },
+      { href: '/tin-tuc?category=WHISKY BASICS', label: 'Whisky Basics' },
+      { href: '/tin-tuc?category=WHISKY REVIEW', label: 'Whisky Review' },
     ],
   },
 ];
