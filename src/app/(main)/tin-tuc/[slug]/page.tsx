@@ -92,7 +92,9 @@ export default function BlogPostPage() {
 
   // After loading, if there's an error or the post is null, show 404.
   if (error || !post) {
-    console.error("Error fetching post or post not found:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error fetching post or post not found:", error);
+    }
     notFound();
   }
 
