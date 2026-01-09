@@ -53,7 +53,14 @@ const categoryNavLinks = [
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
-            { href: '/danh-muc/ruou-vang/vang-y', label: 'VANG Ý' },
+            { 
+              href: '/danh-muc/ruou-vang/vang-y', 
+              label: 'VANG Ý',
+              sublinks: [
+                { href: '/danh-muc/ruou-vang/vang-y/piemonte', label: 'Organic grande alberone' },
+                { href: '/danh-muc/ruou-vang/vang-y/toscana', label: 'SPARKLING' },
+              ]
+            },
             { href: '/danh-muc/ruou-vang/vang-phap', label: 'VANG PHÁP' },
             { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'VANG TÂY BAN NHA' },
             { href: '/danh-muc/ruou-vang/vang-uc', label: 'VANG ÚC' },
@@ -88,31 +95,41 @@ const categoryNavLinks = [
 
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[] | undefined, className?: string }) => {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
   const isActive = pathname.startsWith(href);
 
   const linkClasses = cn(
-    'transition-colors text-sm font-medium uppercase',
+    'transition-colors text-sm font-medium uppercase flex items-center',
     isActive ? 'text-foreground' : 'text-header-nav hover:text-header-nav-hover',
     className
   );
 
   if (sublinks) {
     return (
-      <DropdownMenu>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center cursor-pointer">
+          <div 
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
+            className="flex items-center cursor-pointer"
+          >
             <Link href={href} className={linkClasses}>
               {label}
+              <ChevronDown className="h-4 w-4 ml-1" />
             </Link>
-            <ChevronDown className={cn("h-4 w-4 ml-1", linkClasses)} />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-white">
+        <DropdownMenuContent 
+          className="bg-white"
+          onMouseEnter={() => setIsOpen(true)}
+          onMouseLeave={() => setIsOpen(false)}
+          align="start"
+        >
           {sublinks.map((link) => (
             link.sublinks ? (
               <DropdownMenuSub key={link.href}>
                 <DropdownMenuSubTrigger>
-                  <span>{link.label}</span>
+                  <Link href={link.href} className="w-full text-left">{link.label}</Link>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
