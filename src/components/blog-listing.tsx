@@ -18,6 +18,7 @@ const allCategories = [
 ];
 
 const BlogCard = ({ post }: { post: BlogPost }) => {
+    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
     return (
         <Link href={`/tin-tuc/${post.slug}`} className="group block">
             <div className="relative">
