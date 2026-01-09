@@ -90,7 +90,7 @@ export type BlogPost = {
   slug: string;
   excerpt: string;
   content?: string;
-  date: string;
+  date: any;
   image: {
     imageUrl: string;
     imageHint: string;
