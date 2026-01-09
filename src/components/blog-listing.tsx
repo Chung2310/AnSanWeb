@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import type { BlogPost } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
 import { useBlogPosts } from '@/hooks/use-blog-posts';
+import { usePathname } from 'next/navigation';
 
 const allCategories = [
     'DISTILLERIES',
@@ -65,6 +66,8 @@ interface BlogListingProps {
 export default function BlogListing({ defaultCategory = null }: BlogListingProps) {
     const [activeCategory, setActiveCategory] = useState<string | null>(defaultCategory);
     const { blogPosts, isLoading } = useBlogPosts();
+    const pathname = usePathname();
+    const isBlogIndex = pathname === '/tin-tuc';
 
     const getCategoryCount = (category: string) => {
         if (!blogPosts) return 0;
@@ -83,7 +86,7 @@ export default function BlogListing({ defaultCategory = null }: BlogListingProps
         <div className="container py-12 bg-white text-black">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-10">
                 <h1 className="font-headline text-xl font-black uppercase text-neutral-700 mb-4 md:mb-0">
-                    Danh mục bài viết
+                    {isBlogIndex ? 'Tin Tức Mới Nhất' : 'Danh mục bài viết'}
                 </h1>
                 <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-widest">
                     <button 
