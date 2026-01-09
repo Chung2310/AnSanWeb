@@ -41,7 +41,10 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
                 <h2 className="font-headline text-xl font-black uppercase mt-2 text-neutral-700 group-hover:text-primary transition-colors">
                     {post.title}
                 </h2>
-                <p className="text-xs font-bold uppercase tracking-widest mt-3" style={{ color: '#8a7d6a' }}>
+                <p className="text-sm text-neutral-600 mt-3 line-clamp-2">
+                    {post.excerpt}
+                </p>
+                <p className="text-xs font-bold uppercase tracking-widest mt-4" style={{ color: '#8a7d6a' }}>
                     ĐỌC TIẾP
                 </p>
             </div>
@@ -54,6 +57,7 @@ const BlogCardSkeleton = () => (
         <Skeleton className="aspect-[4/3] w-full" />
         <Skeleton className="h-4 w-1/3" />
         <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-10 w-full" />
         <Skeleton className="h-4 w-1/4" />
     </div>
 );
