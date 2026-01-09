@@ -1,15 +1,20 @@
 'use client';
 
-import { collection, query } from 'firebase/firestore';
+import { collection, query, orderBy } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import type { BlogPost } from '@/lib/types';
 
 export function useBlogPosts() {
   const firestore = useFirestore();
 
-  const blogPostsQuery = useMemoFirebase(
+  const blogPostsCollection = useMemoFirebase(
     () => collection(firestore, 'blogPosts'),
     [firestore]
+  );
+  
+  const blogPostsQuery = useMemoFirebase(
+    () => blogPostsCollection && query(blogPostsCollection, orderBy('createdAt', 'desc')),
+    [blogPostsCollection]
   );
 
   const { data: blogPosts, isLoading, error } = useCollection<BlogPost>(blogPostsQuery);

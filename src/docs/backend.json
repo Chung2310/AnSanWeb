@@ -54,12 +54,12 @@
         "slug": { "type": "string" },
         "excerpt": { "type": "string" },
         "content": { "type": "string" },
-        "image": { "type": "object", "properties": { "imageUrl": { "type": "string" }, "path": { "type": "string" } } },
+        "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
         "author": { "type": "string" },
-        "date": { "type": "string", "format": "date-time" },
-        "categories": { "type": "array", "items": { "type": "string" } }
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "title", "slug", "excerpt", "author", "date", "categories"]
+      "required": ["id", "title", "slug", "excerpt", "author", "categories"]
     },
     "Contact": {
       "$schema": "http://json-schema.org/draft-07/schema#",

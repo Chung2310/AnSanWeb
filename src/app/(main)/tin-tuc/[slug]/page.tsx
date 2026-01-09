@@ -3,7 +3,7 @@
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "lucide-react";
+import { User, Calendar } from "lucide-react";
 import PostSidebar from "@/components/post-sidebar";
 import TableOfContents from "@/components/table-of-contents";
 import type { BlogPost } from "@/lib/types";
@@ -82,6 +82,7 @@ export default function BlogPostPage() {
   }
 
   const headings = generateHeadings(post.content || ""); 
+  const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
 
 
   return (
@@ -96,6 +97,12 @@ export default function BlogPostPage() {
                            <User className="h-4 w-4" />
                            <span>BY {post.author || 'AnSan'}</span>
                         </div>
+                         {postDate && (
+                            <div className="flex items-center gap-2">
+                                <Calendar className="h-4 w-4" />
+                                <span>{postDate}</span>
+                            </div>
+                        )}
                         <div className="flex items-center gap-2">
                             {post.categories.map(cat => (
                                 <Link key={cat} href="#" className="hover:text-black">{cat}</Link>
@@ -111,7 +118,7 @@ export default function BlogPostPage() {
                     
                     {post.image && (
                          <Image 
-                            src={post.image.imageUrl} 
+                            src={post.image.url} 
                             alt={post.title}
                             width={1200}
                             height={600}

@@ -37,7 +37,7 @@ const formSchema = z.object({
   content: z.string().optional(),
   image: z
     .object({
-      imageUrl: z.string(),
+      url: z.string(),
       path: z.string().optional(),
       imageHint: z.string().optional(),
     })
@@ -56,7 +56,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
   const router = useRouter();
   const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.imageUrl || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
   const [categoriesInput, setCategoriesInput] = useState(initialData?.categories.join(', ') || '');
 
   const form = useForm<BlogFormValues>({
@@ -96,7 +96,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
       try {
         const imageInfo = await startUpload(file, 'blog');
         if (imageInfo) {
-          form.setValue('image', { imageUrl: imageInfo.url, path: imageInfo.path });
+          form.setValue('image', { url: imageInfo.url, path: imageInfo.path });
           setImagePreview(imageInfo.url);
         }
       } catch (error) {
@@ -112,7 +112,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormValues) => {
     try {
-      const processedData: Partial<BlogFormValues> & { categories: string[] } = {
+      const processedData: Partial<BlogPost> = {
           ...data,
           content: data.content || '',
           categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
@@ -123,6 +123,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         const postRef = doc(firestore, 'blogPosts', initialData.id);
         await updateDoc(postRef, {
             ...processedData,
+            updatedAt: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
         router.back();
@@ -134,6 +135,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
         await setDoc(newDocRef, {
             ...processedData,
+            createdAt: serverTimestamp(),
         });
 
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
