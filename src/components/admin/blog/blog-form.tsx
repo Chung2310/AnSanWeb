@@ -123,7 +123,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         const postRef = doc(firestore, 'blogPosts', initialData.id);
         await updateDoc(postRef, {
             ...processedData,
-            date: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
         router.back();
@@ -135,7 +134,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
         await setDoc(newDocRef, {
             ...processedData,
-            date: serverTimestamp(),
         });
 
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
