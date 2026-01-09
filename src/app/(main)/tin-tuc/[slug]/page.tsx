@@ -91,12 +91,12 @@ export default function BlogPostPage() {
     return <PostPageSkeleton />;
   }
 
-  if (!isLoading && (!post || error)) {
+  if (error || !post) {
     if (process.env.NODE_ENV === 'development') {
       console.error(`Post not found or error for slug: ${slug}`, error);
     }
     notFound();
   }
 
-  return post ? <PostDetailView post={post} /> : <PostPageSkeleton />;
+  return <PostDetailView post={post} />;
 }
