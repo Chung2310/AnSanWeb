@@ -13,7 +13,7 @@ export function useDeleteCategory() {
   const { user } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const deleteCategory = async (category: Category) => {
+  const deleteCategory = async (category: Category, onSuccess?: () => void) => {
     if (!user || !category.id) {
         toast({
             variant: 'destructive',
@@ -25,6 +25,8 @@ export function useDeleteCategory() {
 
     setIsDeleting(true);
     try {
+      if (onSuccess) onSuccess();
+
       const categoryDocRef = doc(firestore, 'categories', category.id);
       await deleteDoc(categoryDocRef);
 
@@ -41,9 +43,6 @@ export function useDeleteCategory() {
         description: 'Không thể xóa danh mục. Vui lòng thử lại.',
       });
     } finally {
-      // It's important to set isDeleting to false, but the component might unmount
-      // before this is called if the list re-renders. The key is that the state
-      // is isolated to the button instance.
       setIsDeleting(false);
     }
   };
