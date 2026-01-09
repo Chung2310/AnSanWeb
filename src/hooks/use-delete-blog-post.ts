@@ -14,7 +14,7 @@ export function useDeleteBlogPost() {
   const { user } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const deleteBlogPost = async (post: BlogPost, onSuccess?: () => void) => {
+  const deleteBlogPost = async (post: BlogPost) => {
     if (!user || !post.id) {
         toast({
             variant: 'destructive',
@@ -26,8 +26,6 @@ export function useDeleteBlogPost() {
 
     setIsDeleting(true);
     try {
-      if (onSuccess) onSuccess();
-
       const storage = getStorage(firebaseApp);
       
       const imageDeletePromises: Promise<void>[] = [];

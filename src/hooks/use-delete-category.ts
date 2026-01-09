@@ -13,7 +13,7 @@ export function useDeleteCategory() {
   const { user } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const deleteCategory = async (category: Category, onSuccess?: () => void) => {
+  const deleteCategory = async (category: Category) => {
     if (!user || !category.id) {
         toast({
             variant: 'destructive',
@@ -25,8 +25,6 @@ export function useDeleteCategory() {
 
     setIsDeleting(true);
     try {
-      if (onSuccess) onSuccess();
-
       const categoryDocRef = doc(firestore, 'categories', category.id);
       await deleteDoc(categoryDocRef);
 
