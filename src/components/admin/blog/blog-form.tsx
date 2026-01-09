@@ -112,7 +112,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormValues) => {
     try {
-      const processedData = {
+      const processedData: Partial<BlogFormValues> & { categories: string[] } = {
           ...data,
           content: data.content || '',
           categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
@@ -129,9 +129,10 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         const collectionRef = collection(firestore, 'blogPosts');
         const newDocRef = doc(collectionRef); // Create a reference with an ID first
         
+        processedData.id = newDocRef.id;
+
         await setDoc(newDocRef, {
             ...processedData,
-            id: newDocRef.id,
             date: serverTimestamp(),
         });
 
