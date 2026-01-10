@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -21,10 +22,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 interface DataTableProps<TData, TValue> {
@@ -36,6 +38,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -51,6 +58,10 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
+      pagination: {
+        pageIndex: parseInt(page, 10) - 1,
+        pageSize: 15,
+      },
     },
     initialState: {
       pagination: {
@@ -58,9 +69,23 @@ export function DataTable<TData, TValue>({
       },
     },
   });
+  
+  useEffect(() => {
+    const currentPageFromUrl = parseInt(page, 10);
+    const tablePageIndex = table.getState().pagination.pageIndex + 1;
+    if (currentPageFromUrl !== tablePageIndex) {
+       table.setPageIndex(currentPageFromUrl - 1);
+    }
+  }, [page, table]);
 
   const currentPage = table.getState().pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
+
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      router.push(`${pathname}?page=${pageNumber}`);
+    }
+  };
 
   return (
     <div className="rounded-md border bg-card">
@@ -122,7 +147,7 @@ export function DataTable<TData, TValue>({
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
                     <button
                         key={pageNumber}
-                        onClick={() => table.setPageIndex(pageNumber - 1)}
+                        onClick={() => handlePageChange(pageNumber)}
                         className={cn(
                             "font-headline font-bold transition-colors hover:text-foreground",
                             currentPage === pageNumber ? "text-foreground underline underline-offset-4" : ""
@@ -132,7 +157,7 @@ export function DataTable<TData, TValue>({
                     </button>
                 ))}
                 <button
-                    onClick={() => table.nextPage()}
+                    onClick={() => handlePageChange(currentPage + 1)}
                     disabled={!table.getCanNextPage()}
                     className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
                 >

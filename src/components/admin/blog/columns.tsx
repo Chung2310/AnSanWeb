@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -28,15 +29,17 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useDeleteBlogPost } from '@/hooks/use-delete-blog-post';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const ActionsCell = ({ row }: { row: { original: BlogPost } }) => {
     const post = row.original;
     const { deleteBlogPost, isDeleting } = useDeleteBlogPost();
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') ?? '1';
 
     const handleDelete = () => {
-        setIsAlertOpen(false);
-        deleteBlogPost(post);
+        deleteBlogPost(post, () => setIsAlertOpen(false));
     };
 
     return (
@@ -56,7 +59,7 @@ const ActionsCell = ({ row }: { row: { original: BlogPost } }) => {
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href={`/admin/blog/${post.id}/edit`}>
+                        <Link href={`/admin/blog/${post.id}/edit?page=${page}`}>
                             Chỉnh sửa
                         </Link>
                     </DropdownMenuItem>

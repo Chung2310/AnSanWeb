@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -23,7 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category } from '@/lib/types';
 import slugify from 'slugify';
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -46,6 +47,7 @@ interface CategoryFormProps {
 export default function CategoryForm({ initialData }: CategoryFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
 
@@ -71,6 +73,11 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     }
   };
 
+  const getRedirectUrl = () => {
+    const page = searchParams.get('page');
+    return page ? `/admin/categories?page=${page}` : '/admin/categories';
+  };
+
   const onSubmit = async (data: CategoryFormValues) => {
     try {
       if (initialData && initialData.id) {
@@ -89,7 +96,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
         await updateDoc(newDoc, { id: newDoc.id });
         toast({ title: 'Thành công', description: 'Danh mục đã được tạo.' });
       }
-      router.push('/admin/categories');
+      router.push(getRedirectUrl());
     } catch (error) {
       console.error("Error saving category:", error);
       toast({

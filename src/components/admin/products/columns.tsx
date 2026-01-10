@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -19,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useDeleteProduct } from '@/hooks/use-delete-product';
+import { useSearchParams } from 'next/navigation';
 
 const formatPrice = (price: number) => {
     if (isNaN(price)) return '';
@@ -99,11 +101,13 @@ export const columns: ColumnDef<Product>[] = [
     cell: function Cell({ row }) {
       const product = row.original;
       const { deleteProduct, isDeleting } = useDeleteProduct();
+      const searchParams = useSearchParams();
+      const page = searchParams.get('page') ?? '1';
 
       return (
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="icon" asChild>
-            <Link href={`/admin/products/${product.id}/edit`}>
+            <Link href={`/admin/products/${product.id}/edit?page=${page}`}>
               <Pencil className="h-4 w-4" />
               <span className="sr-only">Chỉnh sửa</span>
             </Link>
@@ -139,5 +143,3 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
 ];
-
-    
