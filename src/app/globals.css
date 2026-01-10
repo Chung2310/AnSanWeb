@@ -92,10 +92,10 @@
 
 @layer utilities {
   .text-header-nav {
-    color: #666666d9;
+    @apply text-foreground/60;
   }
   .hover\\:text-header-nav-hover:hover {
-    color: #000;
+    @apply text-foreground;
   }
   .no-focus-border:focus-visible {
     box-shadow: none !important;

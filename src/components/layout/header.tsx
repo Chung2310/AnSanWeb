@@ -188,7 +188,7 @@ export default function Header() {
                           <h3 className="font-bold uppercase mb-4">Danh mục</h3>
                            <nav className="flex flex-col space-y-3">
                             {categoryNavLinks.map(link => (
-                               <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-md uppercase">{link.label}</Link>
+                               <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-sm font-medium uppercase text-header-nav">{link.label}</Link>
                             ))}
                           </nav>
                         </div>
