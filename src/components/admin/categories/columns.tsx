@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -27,15 +28,17 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useDeleteCategory } from '@/hooks/use-delete-category';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const ActionsCell = ({ row }: { row: { original: Category } }) => {
   const category = row.original;
   const { deleteCategory, isDeleting } = useDeleteCategory();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
 
   const handleDelete = () => {
-    setIsAlertOpen(false);
-    deleteCategory(category);
+    deleteCategory(category, () => setIsAlertOpen(false));
   };
 
   return (
@@ -50,7 +53,7 @@ const ActionsCell = ({ row }: { row: { original: Category } }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Hành động</DropdownMenuLabel>
           <DropdownMenuItem asChild>
-            <Link href={`/admin/categories/${category.id}/edit`}>
+            <Link href={`/admin/categories/${category.id}/edit?page=${page}`}>
               Chỉnh sửa
             </Link>
           </DropdownMenuItem>

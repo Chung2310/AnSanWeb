@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -17,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { BlogPost } from '@/lib/types';
 import { Upload, X } from 'lucide-react';
 import Image from 'next/image';
@@ -55,6 +56,7 @@ interface BlogFormProps {
 export default function BlogForm({ initialData }: BlogFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
@@ -111,6 +113,11 @@ export default function BlogForm({ initialData }: BlogFormProps) {
     }
   };
 
+  const getRedirectUrl = () => {
+    const page = searchParams.get('page');
+    return page ? `/admin/blog?page=${page}` : '/admin/blog';
+  };
+
   const onSubmit = async (data: BlogFormValues) => {
     try {
       const processedData: Partial<BlogPost> = {
@@ -127,7 +134,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             updatedAt: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
-        router.push('/admin/blog');
       } else {
         const collectionRef = collection(firestore, 'blogPosts');
         const newDocRef = doc(collectionRef);
@@ -140,8 +146,8 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         });
 
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
-        router.push('/admin/blog');
       }
+      router.push(getRedirectUrl());
     } catch (error) {
       console.error(error);
       toast({

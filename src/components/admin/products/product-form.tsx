@@ -33,7 +33,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { FullProduct, ImageInfo, Category } from '@/lib/types';
 import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
@@ -97,6 +97,7 @@ interface ProductFormProps {
 export default function ProductForm({ initialData }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const { startUpload, progress, isUploading } = useUploadStorage();
@@ -211,6 +212,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     setDetailImagePreviews(newImages.map(img => img.url));
   };
 
+  const getRedirectUrl = () => {
+    const page = searchParams.get('page');
+    return page ? `/admin/products?page=${page}` : '/admin/products';
+  };
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -245,7 +250,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             await updateDoc(newDoc, { id: newDoc.id });
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
-        router.push('/admin/products');
+        router.push(getRedirectUrl());
     } catch (error) {
         console.error("Error saving product:", error);
         toast({
@@ -468,7 +473,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Đang lưu...' : initialData ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
             </Button>
-            <Button type="button" variant="outline" onClick={() => router.push('/admin/products')}>
+            <Button type="button" variant="outline" onClick={() => router.push(getRedirectUrl())}>
                 Hủy
             </Button>
         </div>
