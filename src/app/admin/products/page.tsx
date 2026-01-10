@@ -7,7 +7,8 @@ import { DataTable } from '@/components/admin/products/data-table';
 import { columns } from '@/components/admin/products/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import type { Category } from '@/lib/types';
 import {
   Select,
   SelectContent,
@@ -21,15 +22,43 @@ export default function ProductsAdminPage() {
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
 
+  const getDescendantIds = useCallback((parentId: string, allCategories: Category[]): string[] => {
+    const descendantIds: string[] = [];
+    const queue: string[] = [parentId];
+    const visited: Set<string> = new Set();
+    visited.add(parentId);
+
+    while (queue.length > 0) {
+      const currentId = queue.shift()!;
+      
+      const children = allCategories.filter(cat => cat.parentId === currentId);
+      for (const child of children) {
+        if (!visited.has(child.id)) {
+          descendantIds.push(child.id);
+          queue.push(child.id);
+          visited.add(child.id);
+        }
+      }
+    }
+    return descendantIds;
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    if (!products) {
+    if (!products || !categories) {
       return [];
     }
     if (selectedCategoryId === 'all') {
       return products;
     }
-    return products.filter((p) => p.tags?.includes(selectedCategoryId));
-  }, [products, selectedCategoryId]);
+
+    const allChildIds = getDescendantIds(selectedCategoryId, categories);
+    const categoryIdsToFilter = [selectedCategoryId, ...allChildIds];
+    
+    return products.filter((p) => 
+      p.tags?.some(tagId => categoryIdsToFilter.includes(tagId))
+    );
+
+  }, [products, categories, selectedCategoryId, getDescendantIds]);
 
   const isLoading = isLoadingProducts || isLoadingCategories;
 
@@ -57,7 +86,7 @@ export default function ProductsAdminPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả danh mục</SelectItem>
-                {categories?.map((cat) => (
+                {categories?.filter(c => !c.parentId).map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
                     {cat.name}
                   </SelectItem>
