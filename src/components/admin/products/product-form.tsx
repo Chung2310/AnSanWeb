@@ -245,7 +245,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             await updateDoc(newDoc, { id: newDoc.id });
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
-        router.back();
+        router.push('/admin/products');
     } catch (error) {
         console.error("Error saving product:", error);
         toast({
@@ -468,7 +468,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Đang lưu...' : initialData ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
             </Button>
-            <Button type="button" variant="outline" onClick={() => router.back()}>
+            <Button type="button" variant="outline" onClick={() => router.push('/admin/products')}>
                 Hủy
             </Button>
         </div>
