@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -88,7 +89,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
         await updateDoc(newDoc, { id: newDoc.id });
         toast({ title: 'Thành công', description: 'Danh mục đã được tạo.' });
       }
-      router.back();
+      router.push('/admin/categories');
     } catch (error) {
       console.error("Error saving category:", error);
       toast({

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -126,7 +127,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             updatedAt: serverTimestamp(),
         });
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
-        router.back();
+        router.push('/admin/blog');
       } else {
         const collectionRef = collection(firestore, 'blogPosts');
         const newDocRef = doc(collectionRef);
@@ -139,7 +140,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
         });
 
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
-        router.back();
+        router.push('/admin/blog');
       }
     } catch (error) {
       console.error(error);
