@@ -35,14 +35,35 @@ const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
+        sublinks: [
+            { href: '/danh-muc/ruou-vang/vang-y', label: 'Vang Ý' },
+            { href: '/danh-muc/ruou-vang/vang-phap', label: 'Vang Pháp' },
+            { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'Vang Tây Ban Nha' },
+            { href: '/danh-muc/ruou-vang/vang-uc', label: 'Vang Úc' },
+            { href: '/danh-muc/ruou-vang/vang-nga', label: 'Vang Nga' },
+            { href: '/danh-muc/ruou-vang/vang-duc', label: 'Vang Đức' },
+        ],
     },
     {
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
+        sublinks: [
+            { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
+            { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
+            { href: '/danh-muc/ruou-manh/mortlach', label: 'Mortlach' },
+            { href: '/danh-muc/ruou-manh/chivas', label: 'Chivas' },
+            { href: '/danh-muc/ruou-manh/royal-salute', label: 'Royal Salute' },
+            { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
+        ]
     },
      {
         href: '/danh-muc/cigar',
         label: 'CIGAR',
+        sublinks: [
+            { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
+            { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
+            { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
+        ]
     },
     { href: '/danh-muc/bo-qua-tang', label: 'BỘ QUÀ TẶNG' },
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
