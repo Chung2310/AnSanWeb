@@ -11,15 +11,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 const heroSlides = [
     {
         imageId: 'hero-macallan',
-        label: 'Macallan 84',
-        href: 'https://youtu.be/hBG0J3qLLuA?si=B5h9_53jgFCKnIAP',
-        tag: 'Macallan 84',
-        titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI',
-        titleAccent: 'ANSAN',
-        description: 'Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!',
+        label: 'Master of Wine',
+        href: '/danh-muc-san-pham',
+        tag: 'Master of wine',
+        titleLine1: 'Master of wine',
+        titleAccent: '',
+        description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
         bgColor: 'bg-primary',
         textColor: 'text-white',
-        external: true
     },
     {
         imageId: 'hero-sale',
@@ -133,7 +132,7 @@ export default function HeroSection() {
                                                     <motion.h1 variants={textItemVariants} className="mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline">
                                                         {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
@@ -219,4 +218,5 @@ export default function HeroSection() {
     
 
     
+
 
