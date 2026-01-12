@@ -7,14 +7,15 @@ import type { Product } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
-import { ProductPagination } from "./product-pagination";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
 
 interface ProductListingProps {
     initialProducts: Product[];
-    title?: string;
+    title: string;
     bannerData?: CategoryBannerProps;
     itemsPerPage?: number;
 }
@@ -23,33 +24,27 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-  
-  // This useEffect was causing the pagination to reset on every render.
-  // It is now removed. The state will naturally reset when the component
-  // is unmounted and remounted on category navigation.
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  //   setActiveFilters({});
-  // }, [initialProducts]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+    setActiveFilters({});
+  }, [initialProducts]);
 
   const filteredProducts = useMemo(() => {
-    if (!initialProducts) return [];
     if (Object.keys(activeFilters).length === 0) {
       return initialProducts;
     }
 
     let filtered = [...initialProducts];
 
-    // Price range filtering
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
         const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
         return option?.value;
-    }).filter(Boolean) as [number, number][];
+    }).filter(Boolean);
 
     if (priceRanges && priceRanges.length > 0) {
         filtered = filtered.filter(p => 
-            priceRanges.some(range => p.price >= range[0] && p.price < range[1])
+            priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
         );
     }
     
@@ -74,7 +69,6 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
         });
         break;
       default:
-        // Default sorting can be added here if needed
         break;
     }
 
@@ -104,6 +98,42 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+    return (
+      <nav aria-label="Product pagination" className="flex items-center justify-center gap-2 mt-12 text-lg">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </Button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          <Button
+            key={page}
+            variant={currentPage === page ? 'outline' : 'ghost'}
+            onClick={() => handlePageChange(page)}
+            className={cn('h-auto px-4 py-2 font-headline font-bold transition-colors hover:text-foreground', currentPage === page ? 'text-foreground underline underline-offset-4' : 'text-muted-foreground')}
+          >
+            {page}
+          </Button>
+        ))}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </Button>
+      </nav>
+    );
+  };
 
   return (
     <div className="bg-white text-black">
@@ -152,11 +182,7 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
                 </div>
             )}
 
-            <ProductPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            {renderPagination()}
           </div>
         </div>
       </div>
