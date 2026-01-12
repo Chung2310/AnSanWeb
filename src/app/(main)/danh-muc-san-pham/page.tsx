@@ -2,13 +2,9 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ProductPagination } from '@/components/product-pagination';
-import React from 'react';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const productsPerPage = 12;
 
   if (isLoading) {
     return (
@@ -33,35 +29,12 @@ export default function ProductsPage() {
       </div>
     )
   }
-  
-  const totalProducts = products?.length || 0;
-  const totalPages = Math.ceil(totalProducts / productsPerPage);
-
-  const paginatedProducts = products?.slice(
-      (currentPage - 1) * productsPerPage,
-      currentPage * productsPerPage
-  ) || [];
 
   return (
-    <div>
-        <ProductListing 
-          initialProducts={paginatedProducts}
-          title="Tất cả sản phẩm"
-        />
-        {/* Example Usage of ProductPagination */}
-        <div className="container pb-12">
-            <h2 className="text-2xl font-bold mt-12 mb-4 text-center">Example: Reusable Pagination Component</h2>
-            <div className="p-6 border rounded-lg bg-secondary">
-                <p className="text-center text-sm text-muted-foreground mb-4">
-                    Total Products: {totalProducts}, Products Per Page: {productsPerPage}
-                </p>
-                <ProductPagination 
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
-        </div>
-    </div>
+    <ProductListing 
+      initialProducts={products || []}
+      title="Tất cả sản phẩm"
+      itemsPerPage={12}
+    />
   );
 }
