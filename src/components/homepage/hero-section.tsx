@@ -14,8 +14,8 @@ const heroSlides = [
         label: 'Macallan 84',
         href: 'https://youtu.be/hBG0J3qLLuA?si=B5h9_53jgFCKnIAP',
         tag: 'Macallan 84',
-        titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI AnSan',
-        titleAccent: '',
+        titleLine1: 'CHAI WHISKY GIÀ NHẤT THẾ GIỚI ĐÃ CÓ MẶT TẠI',
+        titleAccent: 'ANSAN',
         description: 'Hãy chờ đón video bật mí siêu phẩm này trên youtube của chúng tôi nhé!',
         bgColor: 'bg-primary',
         textColor: 'text-white',
@@ -61,18 +61,7 @@ const heroSlides = [
         href: '/danh-muc/wine',
         tag: 'WINE',
         titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
-        titleAccent: 'AnSan CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
-        description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
-        bgColor: 'bg-primary',
-        textColor: 'text-white'
-    },
-    {
-        imageId: 'hero-lakes',
-        label: 'LAKES MỚI',
-        href: '/danh-muc/world-whisky/whisky-the-lakes',
-        tag: 'LAKES MỚI',
-        titleLine1: 'ANH EM HỌ CỦA',
-        titleAccent: 'THE LAKES NO.7 BỚT CAY THÊM ÊM ÁI',
+        titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
         description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
         bgColor: 'bg-primary',
         textColor: 'text-white'
@@ -81,7 +70,7 @@ const heroSlides = [
 
 const containerVariants = {
     initial: {},
-    animate: { transition: { staggerChildren: 0.2, delayChildren: 0.8 } },
+    animate: { transition: { staggerChildren: 0.3, delayChildren: 0.8 } },
     exit: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
 };
 
@@ -122,6 +111,7 @@ export default function HeroSection() {
                                 key={index}
                                 initial="initial"
                                 animate={isActive ? 'animate' : 'initial'}
+                                exit="exit"
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
@@ -140,7 +130,7 @@ export default function HeroSection() {
                                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-xl text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-5xl lg:text-6xl font-black leading-tight uppercase font-headline">
+                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline">
                                                         {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
                                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
