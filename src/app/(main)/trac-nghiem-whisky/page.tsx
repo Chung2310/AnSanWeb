@@ -93,13 +93,13 @@ export default function WhiskyQuizPage() {
   const isQuizFinished = currentStep === quizQuestions.length;
 
   return (
-    <div className="bg-black text-white min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4">
+    <div className="bg-white text-black min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-3xl">
         {!isQuizFinished ? (
           <>
             <div className="text-center mb-12">
-              <p className="text-sm uppercase tracking-widest text-white/50">CÂU HỎI {currentStep + 1}/{quizQuestions.length}</p>
-              <h1 className="font-headline text-3xl md:text-4xl font-bold mt-2 text-white">
+              <p className="text-sm uppercase tracking-widest text-black/50">CÂU HỎI {currentStep + 1}/{quizQuestions.length}</p>
+              <h1 className="font-headline text-3xl md:text-4xl font-bold mt-2 text-black">
                 {quizQuestions[currentStep].question}
               </h1>
             </div>
@@ -112,8 +112,8 @@ export default function WhiskyQuizPage() {
                     key={index}
                     onClick={() => handleAnswerSelect(quizQuestions[currentStep].id, answer)}
                     className={cn(
-                      'p-6 text-left border border-white/20 hover:border-white/60 transition-all duration-300',
-                      isSelected ? 'bg-white text-black font-bold' : 'bg-transparent text-white'
+                      'p-6 text-left border border-black/20 hover:border-black/60 transition-all duration-300',
+                      isSelected ? 'bg-black text-white font-bold' : 'bg-transparent text-black'
                     )}
                   >
                     <span className="text-lg">{answer}</span>
@@ -123,13 +123,13 @@ export default function WhiskyQuizPage() {
             </div>
 
             <div className="mt-8">
-              <Progress value={progressValue} className="w-full h-1 bg-white/20" />
+              <Progress value={progressValue} className="w-full h-1 bg-black/20" />
               <div className="flex justify-between items-center mt-6">
-                <Button variant="ghost" onClick={prevStep} disabled={currentStep === 0} className="hover:bg-white/10 text-white">
+                <Button variant="ghost" onClick={prevStep} disabled={currentStep === 0} className="hover:bg-black/10 text-black">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   TRỞ LẠI
                 </Button>
-                <Button onClick={nextStep} className="bg-white text-black hover:bg-white/90">
+                <Button onClick={nextStep} className="bg-black text-white hover:bg-black/90">
                   {currentStep === quizQuestions.length - 1 ? 'HOÀN THÀNH' : 'TIẾP THEO'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -137,45 +137,45 @@ export default function WhiskyQuizPage() {
             </div>
           </>
         ) : (
-          <div className="w-full max-w-xl mx-auto p-8 md:p-12" style={{ backgroundColor: '#4a4a3a' }}>
+          <div className="w-full max-w-xl mx-auto p-8 md:p-12" style={{ backgroundColor: '#f0f0f0' }}>
             <div className="text-center">
-              <h2 className="font-headline text-4xl font-black uppercase text-white">NHẬN KẾT QUẢ NGAY!</h2>
-              <p className="mt-2 text-white/80">Vui lòng điền đầy đủ thông tin để nhận kết quả</p>
+              <h2 className="font-headline text-4xl font-black uppercase text-black">NHẬN KẾT QUẢ NGAY!</h2>
+              <p className="mt-2 text-black/80">Vui lòng điền đầy đủ thông tin để nhận kết quả</p>
             </div>
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-bold uppercase tracking-wider text-white mb-2">HỌ VÀ TÊN *</label>
+                <label htmlFor="name" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">HỌ VÀ TÊN *</label>
                 <Input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="bg-white/10 border-0 border-b-2 border-white/40 rounded-none focus:ring-0 focus:border-white text-white placeholder-white/50"
+                  className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
                   placeholder=""
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-bold uppercase tracking-wider text-white mb-2">ĐỊA CHỈ EMAIL *</label>
+                <label htmlFor="email" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">ĐỊA CHỈ EMAIL *</label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                   className="bg-white/10 border-0 border-b-2 border-white/40 rounded-none focus:ring-0 focus:border-white text-white placeholder-white/50"
+                   className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
                   placeholder=""
                 />
               </div>
               <div className="text-center">
-                 <p className="text-xs text-white/60 mb-6">
+                 <p className="text-xs text-black/60 mb-6">
                     BẰNG VIỆC NHẤN 'NHẬN KẾT QUẢ', BẠN ĐỒNG Ý VỚI <a href="#" className="underline">ĐIỀU KHOẢN VÀ ĐIỀU KIỆN</a> CỦA CHÚNG TÔI.
                 </p>
-                <Button type="submit" className="bg-white text-black font-bold uppercase tracking-widest px-8 py-6 rounded-sm hover:bg-gray-200">
+                <Button type="submit" className="bg-black text-white font-bold uppercase tracking-widest px-8 py-6 rounded-sm hover:bg-gray-800">
                   Nhận Kết Quả
                 </Button>
               </div>
             </form>
              <div className="text-center mt-8">
-                <Button variant="link" onClick={prevStep} className="text-white/70 hover:text-white">
+                <Button variant="link" onClick={prevStep} className="text-black/70 hover:text-black">
                     Quay lại câu hỏi
                 </Button>
             </div>
