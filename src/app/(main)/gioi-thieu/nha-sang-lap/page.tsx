@@ -1,9 +1,6 @@
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function FounderPage() {
-    const founderImage = PlaceHolderImages.find(p => p.id === 'avatar-1');
-
     return (
         <>
             <div className="bg-primary text-primary-foreground py-20">
@@ -18,27 +15,24 @@ export default function FounderPage() {
                 <div className="container">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
                         <div className="md:col-span-1">
-                            {founderImage && (
-                                <Image 
-                                    src={founderImage.imageUrl}
-                                    alt="Nhà sáng lập AnSan"
-                                    width={500}
-                                    height={500}
-                                    className="rounded-full w-full aspect-square object-cover shadow-2xl"
-                                    data-ai-hint={founderImage.imageHint}
-                                />
-                            )}
+                            <Image 
+                                src="/images/Tabi-2014-600x900.jpg"
+                                alt="Nhà sáng lập AnSan - Ông Phạm Đăng Thành"
+                                width={600}
+                                height={900}
+                                className="rounded-lg w-full h-auto object-cover shadow-2xl"
+                            />
                         </div>
                         <div className="md:col-span-2">
-                            <h2 className="font-headline text-4xl font-bold text-foreground">Trần Tuấn Anh</h2>
-                            <p className="text-primary font-semibold mt-1">Nhà Sáng Lập & Chuyên Gia Rượu</p>
+                            <h2 className="font-headline text-4xl font-bold text-foreground">Phạm Đăng Thành</h2>
+                            <p className="text-primary font-semibold mt-1">CEO & Founder</p>
                             <div className="prose prose-lg dark:prose-invert mt-6 max-w-none">
-                                <p>Với hơn một thập kỷ đắm chìm trong thế giới rượu mạnh, anh Trần Tuấn Anh không chỉ là một nhà kinh doanh mà còn là một người kể chuyện, một người truyền cảm hứng. Hành trình của anh bắt đầu từ một niềm đam mê cá nhân, dần trở thành một sứ mệnh - mang những giá trị đích thực của whisky và rượu vang đến với cộng đồng người yêu rượu tại Việt Nam.</p>
-                                <p>Anh tin rằng mỗi chai rượu đều chứa đựng một câu chuyện về lịch sử, văn hóa và nghệ thuật. Chính vì vậy, AnSan được thành lập không chỉ để bán rượu, mà còn để chia sẻ kiến thức, kết nối những con người có cùng đam mê và xây dựng một cộng đồng thưởng thức văn minh, sành điệu.</p>
+                                <p>Rượu vang đến với tôi như một cái duyên. Vào một lần tình cờ của năm 2017 tôi đã được hướng dẫn sử dụng rượu vang đúng chuẩn. Tôi rất bất ngờ tại sao lại có thức uống có cồn tuyệt vời đến như vậy. Từ đó tôi bắt đầu tìm hiểu về rươu vang và rất ngạc nhiên với lợi ích mà chúng mang tới.</p>
+                                <p>Có lẽ rượu vang là 1 trong các số ít thức uống có cồn mà tốt cho sức khoẻ. Tôi đã say mê nó lúc nào không biết! Với niềm đam mê mãnh liệt và mong muốn cung cấp các sản phẩm rượu vang đúng giá trị đúng chất lượng mà Công ty TNHH Thương Mại và Xuất Nhập Khẩu An San ra đời.</p>
+                                <p>Chúng tôi – Rượu vang An San không chỉ bán sản phẩm cho khách hàng mà chính gia đình, bạn bè và người thân biết tới An San đều sử dụng rượu vang. Vậy nên tất cả các sản phẩm bán ra từ An San đều được chọn lọc rất kĩ từ các nhà sản xuất rượu vang trên thế giới và phân phối lại các sản phẩm uy tín từ các nhà nhập khẩu tại Việt Nam.</p>
                                 <blockquote>
-                                    "Đối với tôi, rượu không chỉ là một thức uống. Đó là một hành trình khám phá, một tác phẩm nghệ thuật, và là cầu nối giữa những con người."
+                                    “Rượu vang An San nơi mang đến cho khách hàng không chỉ là thức rượu chính hãng mà hơn cả là nghệ thuật thưởng thức”
                                 </blockquote>
-                                <p>Dưới sự dẫn dắt của anh, AnSan đã và đang khẳng định vị thế của mình là một địa chỉ uy tín, nơi khách hàng không chỉ tìm thấy những sản phẩm chất lượng mà còn nhận được sự tư vấn tận tâm và những trải nghiệm độc đáo.</p>
                             </div>
                         </div>
                     </div>
