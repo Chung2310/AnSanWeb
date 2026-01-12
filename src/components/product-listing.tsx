@@ -54,18 +54,21 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         });
         break;
       default: // MẶC ĐỊNH
-        // Return to the order from initialProducts if no specific sort is active
-        return filteredProducts;
+        // The default order is already present in filteredProducts
+        break;
     }
 
     return products;
   }, [filteredProducts, activeSort]);
 
   const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
-  const paginatedProducts = sortedProducts.slice(
-    (currentPage - 1) * productsPerPage,
-    currentPage * productsPerPage
-  );
+
+  const paginatedProducts = useMemo(() => {
+    return sortedProducts.slice(
+      (currentPage - 1) * productsPerPage,
+      currentPage * productsPerPage
+    );
+  }, [sortedProducts, currentPage, productsPerPage]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
