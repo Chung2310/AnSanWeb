@@ -1,3 +1,4 @@
+
 'use client';
 
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
@@ -99,7 +100,7 @@ export default function GiftSetsSection() {
             GIFT & ACCESSORIES
           </p>
           <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>
-            NHỮNG SET THỬ & QUÀ TẶNG Ý NGHĨA
+            BỘ QUÀ TẶNG TẾT 2026
           </h2>
         </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6 md:grid-cols-2">
