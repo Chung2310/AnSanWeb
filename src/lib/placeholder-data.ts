@@ -167,7 +167,7 @@ export const sampleWines: FullProduct[] = [
   },
   {
     id: '8',
-    nameVN: 'The Lakes Single Malt - BỘ QUÀ TẶNG',
+    nameVN: 'Bộ Quà Tặng Macallan',
     slug: 'the-lakes-gift-set',
     price: 4800000,
     description: 'Bộ quà tặng sang trọng từ The Lakes, lựa chọn hoàn hảo cho những dịp đặc biệt.',
@@ -815,3 +815,4 @@ export const sampleTestimonials: Testimonial[] = [
 
     
     
+
