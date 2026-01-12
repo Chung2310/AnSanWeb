@@ -80,7 +80,7 @@ export default function InfluenceSection() {
           <motion.div variants={itemVariants} className="text-center lg:text-left">
             <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
-              SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA <br /> ANSAN
+              SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
             </h2>
             <motion.div variants={itemVariants} className="mt-8 aspect-w-4 aspect-h-3">
               <Image
