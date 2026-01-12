@@ -7,32 +7,30 @@ import type { Product } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
-import { ProductPagination } from "./product-pagination";
+import { ProductPagination } from "./product-pagination"; // Import component
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
 
 interface ProductListingProps {
     initialProducts: Product[];
-    title?: string;
+    title: string;
     bannerData?: CategoryBannerProps;
-    itemsPerPage?: number;
 }
 
-export default function ProductListing({ initialProducts, title, bannerData, itemsPerPage = 18 }: ProductListingProps) {
+export default function ProductListing({ initialProducts, title, bannerData }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 18;
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   
   useEffect(() => {
     // When the category changes (initialProducts changes), reset to page 1.
     setCurrentPage(1);
-    setActiveFilters({});
   }, [initialProducts]);
 
 
   const filteredProducts = useMemo(() => {
-    if (!initialProducts) return [];
     if (Object.keys(activeFilters).length === 0) {
       return initialProducts;
     }
@@ -43,14 +41,16 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
         const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
         return option?.value;
-    }).filter(Boolean) as [number, number][];
+    }).filter(Boolean);
 
     if (priceRanges && priceRanges.length > 0) {
         filtered = filtered.filter(p => 
-            priceRanges.some(range => p.price >= range[0] && p.price < range[1])
+            priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
         );
     }
     
+    // Other filters can be added here in the same way...
+
     return filtered;
   }, [initialProducts, activeFilters]);
 
@@ -72,25 +72,25 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
         });
         break;
       default:
-        // Default sorting can be added here if needed
         break;
     }
 
     return products;
   }, [filteredProducts, activeSort]);
 
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
 
   const paginatedProducts = useMemo(() => {
     return sortedProducts.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
+      (currentPage - 1) * productsPerPage,
+      currentPage * productsPerPage
     );
-  }, [sortedProducts, currentPage, itemsPerPage]);
+  }, [sortedProducts, currentPage, productsPerPage]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      // Scroll to top when page changes (optional)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
@@ -100,8 +100,8 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
     setActiveFilters(newActiveFilters);
   };
 
-  const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
-  const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
+  const firstItemIndex = (currentPage - 1) * productsPerPage + 1;
+  const lastItemIndex = Math.min(currentPage * productsPerPage, sortedProducts.length);
 
   return (
     <div className="bg-white text-black">
@@ -150,6 +150,7 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
                 </div>
             )}
 
+            {/* Sử dụng ProductPagination component */}
             <ProductPagination
               currentPage={currentPage}
               totalPages={totalPages}
