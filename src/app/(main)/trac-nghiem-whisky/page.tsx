@@ -82,21 +82,21 @@ export default function WhiskyQuizPage() {
   };
 
   return (
-    <div style={{ backgroundColor: '#636146' }} className="text-white min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 py-16">
+    <div className="bg-white text-black min-h-screen flex flex-col items-center p-4 py-16">
       <div className="w-full max-w-3xl mx-auto">
         <div className="text-center mb-12">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 uppercase">
+            <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 uppercase text-gray-800">
                 Khám phá vị Whisky của bạn
             </h1>
-            <p className="mt-4 text-lg text-white/80">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
+            <p className="mt-4 text-lg text-gray-600">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
         </div>
 
         <div className="space-y-12">
             {quizQuestions.map((quizItem, index) => (
                 <div key={quizItem.id}>
                     <div className="text-left mb-6">
-                        <p className="text-sm uppercase tracking-widest text-white/60">CÂU HỎI {index + 1}/{quizQuestions.length}</p>
-                        <h2 className="font-headline text-2xl font-bold mt-2">
+                        <p className="text-sm uppercase tracking-widest text-gray-500">CÂU HỎI {index + 1}/{quizQuestions.length}</p>
+                        <h2 className="font-headline text-2xl font-bold mt-2 text-gray-800">
                             {quizItem.question}
                         </h2>
                     </div>
@@ -109,8 +109,10 @@ export default function WhiskyQuizPage() {
                             key={answerIndex}
                             onClick={() => handleAnswerSelect(quizItem.id, answer)}
                             className={cn(
-                            'p-6 text-left border border-white/30 hover:border-white/80 transition-all duration-300',
-                            isSelected ? 'bg-white text-black font-bold' : 'bg-transparent text-white'
+                            'p-6 text-left border transition-all duration-300',
+                            isSelected 
+                                ? 'bg-primary text-primary-foreground font-bold border-primary' 
+                                : 'bg-white text-black border-gray-300 hover:border-primary'
                             )}
                         >
                             <span className="text-lg">{answer}</span>
@@ -122,7 +124,7 @@ export default function WhiskyQuizPage() {
             ))}
         </div>
 
-        <div className="w-full max-w-xl mx-auto p-8 md:p-12 mt-20" style={{ backgroundColor: '#f0f0f0' }}>
+        <div className="w-full max-w-xl mx-auto p-8 md:p-12 mt-20 bg-secondary">
             <div className="text-center">
               <h2 className="font-headline text-4xl font-black uppercase text-black">NHẬN KẾT QUẢ NGAY!</h2>
               <p className="mt-2 text-black/80">Vui lòng điền đầy đủ thông tin để nhận kết quả</p>
