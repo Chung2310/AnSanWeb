@@ -80,21 +80,21 @@ const heroSlides = [
 ];
 
 const containerVariants = {
-    initial: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
-    animate: { transition: { staggerChildren: 0.1, delayChildren: 0.2, staggerDirection: 1 } },
+    initial: { transition: { staggerChildren: 0.2, staggerDirection: -1 } },
+    animate: { transition: { staggerChildren: 0.2, delayChildren: 0.4, staggerDirection: 1 } },
     exit: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
 };
 
 const textItemVariants = {
     initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: 'easeIn' } },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.4, ease: 'easeIn' } },
 };
 
 const slideVariants = {
     initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { duration: 0.8, ease: 'easeOut' } },
-    exit: { opacity: 0, transition: { duration: 0.4, ease: 'easeIn' } }
+    animate: { opacity: 1, transition: { duration: 1.2, ease: 'easeOut' } },
+    exit: { opacity: 0, transition: { duration: 0.6, ease: 'easeIn' } }
 };
 
 
@@ -104,7 +104,7 @@ export default function HeroSection() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setCurrent((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1));
-        }, 5000);
+        }, 8000); // Increased from 5000ms to 8000ms
         return () => clearTimeout(timer);
     }, [current]);
     
