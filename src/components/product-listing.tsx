@@ -24,12 +24,12 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-
-  // Reset page and filters when the main product list changes (e.g., category navigation)
+  
   useEffect(() => {
-    setActiveFilters({});
+    // When the category changes (initialProducts changes), reset to page 1.
     setCurrentPage(1);
   }, [initialProducts]);
+
 
   const filteredProducts = useMemo(() => {
     if (Object.keys(activeFilters).length === 0) {
