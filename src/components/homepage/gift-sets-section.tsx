@@ -17,14 +17,14 @@ interface GiftSetCardProps {
 const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'gift-set-tasting',
-    category: 'Tasting Sets',
-    title: 'TÌM RA HƯƠNG VỊ LAKES PHÙ HỢP',
-    href: '/danh-muc/set-thu-ruou',
+    category: 'Quà tết Rượu Vang',
+    title: 'BỘ QUÀ TẶNG RƯỢU VANG TẾT 2026',
+    href: '/danh-muc/bo-qua-tang',
   },
   {
     imageId: 'gift-set-lakes-tet',
-    category: 'Gift Set',
-    title: 'BỘ QUÀ TẶNG WHISKY TẾT 2025',
+    category: 'Quà tết Rượu Mạnh',
+    title: 'BỘ QUÀ TẶNG RƯỢU MẠNH TẾT 2026',
     href: '/danh-muc/bo-qua-tang',
   },
 ];
