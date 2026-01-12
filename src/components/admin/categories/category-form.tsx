@@ -27,7 +27,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category } from '@/lib/types';
 import slugify from 'slugify';
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useCategories } from '@/hooks/use-categories';
 
@@ -80,20 +80,23 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
 
   const onSubmit = async (data: CategoryFormValues) => {
     try {
+      const processedData = {
+        ...data,
+        parentId: data.parentId || null,
+      };
+
       if (initialData && initialData.id) {
         const docRef = doc(firestore, 'categories', initialData.id);
-        await updateDoc(docRef, {
-            ...data,
-            parentId: data.parentId || null,
-        });
+        await updateDoc(docRef, processedData);
         toast({ title: 'Thành công', description: 'Danh mục đã được cập nhật.' });
       } else {
         const collectionRef = collection(firestore, 'categories');
-        const newDoc = await addDoc(collectionRef, {
-            ...data,
-            parentId: data.parentId || null,
+        const newDocRef = doc(collectionRef); // Create a reference to get the ID first
+        
+        await setDoc(newDocRef, {
+            ...processedData,
+            id: newDocRef.id, // Add the generated ID to the document data
         });
-        await updateDoc(newDoc, { id: newDoc.id });
         toast({ title: 'Thành công', description: 'Danh mục đã được tạo.' });
       }
       router.push(getRedirectUrl());
