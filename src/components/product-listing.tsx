@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
-import SidebarFilter from "./sidebar-filter";
+import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -23,19 +23,41 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 18;
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
-  const [filteredProducts, setFilteredProducts] = useState(initialProducts);
-  
+  // Reset page and filters when the main product list changes (e.g., category navigation)
   useEffect(() => {
-    setFilteredProducts(initialProducts);
-    setCurrentPage(1); // Reset to page 1 on new category
+    setActiveFilters({});
+    setCurrentPage(1);
   }, [initialProducts]);
 
+  const filteredProducts = useMemo(() => {
+    if (Object.keys(activeFilters).length === 0) {
+      return initialProducts;
+    }
+
+    let filtered = [...initialProducts];
+
+    // Price range filtering
+    const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
+        const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
+        return option?.value;
+    }).filter(Boolean);
+
+    if (priceRanges && priceRanges.length > 0) {
+        filtered = filtered.filter(p => 
+            priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
+        );
+    }
+    
+    // Other filters can be added here in the same way...
+
+    return filtered;
+  }, [initialProducts, activeFilters]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
 
-    // Sorting logic
     switch (activeSort) {
       case "GIÁ TĂNG DẦN":
         products.sort((a, b) => a.price - b.price);
@@ -45,15 +67,12 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
         break;
       case "MỚI NHẤT":
         products.sort((a, b) => {
-            // @ts-ignore
             const dateA = a.createdAt?.seconds ? new Date(a.createdAt.seconds * 1000).getTime() : 0;
-            // @ts-ignore
             const dateB = b.createdAt?.seconds ? new Date(b.createdAt.seconds * 1000).getTime() : 0;
             return dateB - dateA;
         });
         break;
-      default: // MẶC ĐỊNH
-        // The default order is already present in filteredProducts
+      default:
         break;
     }
 
@@ -75,11 +94,10 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
     }
   }
 
-  const handleFilterChange = (newFilteredProducts: Product[]) => {
-    setFilteredProducts(newFilteredProducts);
+  const handleFilterChange = (newActiveFilters: ActiveFilters) => {
     setCurrentPage(1);
+    setActiveFilters(newActiveFilters);
   };
-
 
   const firstItemIndex = (currentPage - 1) * productsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * productsPerPage, sortedProducts.length);
