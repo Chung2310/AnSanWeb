@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 
@@ -41,7 +39,6 @@ type AnswersState = {
 };
 
 export default function WhiskyQuizPage() {
-  const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<AnswersState>({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -54,26 +51,22 @@ export default function WhiskyQuizPage() {
     }));
   };
 
-  const nextStep = () => {
-    if (currentStep < quizQuestions.length) {
-      // Allow moving to the next question even if not answered
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const allAnswered = quizQuestions.every(q => answers[q.id]);
     if (!name || !email) {
       toast({
         variant: 'destructive',
         title: 'Lỗi',
         description: 'Vui lòng điền đầy đủ họ tên và email.',
+      });
+      return;
+    }
+     if (!allAnswered) {
+      toast({
+        variant: 'destructive',
+        title: 'Lỗi',
+        description: 'Vui lòng trả lời tất cả các câu hỏi.',
       });
       return;
     }
@@ -83,61 +76,53 @@ export default function WhiskyQuizPage() {
       description: 'Kết quả trắc nghiệm sẽ sớm được gửi đến email của bạn.',
     });
     // Reset state if needed
-    setCurrentStep(0);
     setAnswers({});
     setName('');
     setEmail('');
   };
 
-  const progressValue = (currentStep / quizQuestions.length) * 100;
-  const isQuizFinished = currentStep === quizQuestions.length;
-
   return (
-    <div className="bg-white text-black min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-3xl">
-        {!isQuizFinished ? (
-          <>
-            <div className="text-center mb-12">
-              <p className="text-sm uppercase tracking-widest text-black/50">CÂU HỎI {currentStep + 1}/{quizQuestions.length}</p>
-              <h1 className="font-headline text-3xl md:text-4xl font-bold mt-2 text-black">
-                {quizQuestions[currentStep].question}
-              </h1>
-            </div>
+    <div className="bg-white text-black min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 py-16">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="text-center mb-12">
+            <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 text-black uppercase">
+                Khám phá vị Whisky của bạn
+            </h1>
+            <p className="mt-4 text-lg text-black/70">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-              {quizQuestions[currentStep].answers.map((answer, index) => {
-                const isSelected = answers[quizQuestions[currentStep].id] === answer;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleAnswerSelect(quizQuestions[currentStep].id, answer)}
-                    className={cn(
-                      'p-6 text-left border border-black/20 hover:border-black/60 transition-all duration-300',
-                      isSelected ? 'bg-black text-white font-bold' : 'bg-transparent text-black'
-                    )}
-                  >
-                    <span className="text-lg">{answer}</span>
-                  </button>
-                );
-              })}
-            </div>
+        <div className="space-y-12">
+            {quizQuestions.map((quizItem, index) => (
+                <div key={quizItem.id}>
+                    <div className="text-left mb-6">
+                        <p className="text-sm uppercase tracking-widest text-black/50">CÂU HỎI {index + 1}/{quizQuestions.length}</p>
+                        <h2 className="font-headline text-2xl font-bold mt-2 text-black">
+                            {quizItem.question}
+                        </h2>
+                    </div>
 
-            <div className="mt-8">
-              <Progress value={progressValue} className="w-full h-1 bg-black/20" />
-              <div className="flex justify-between items-center mt-6">
-                <Button variant="ghost" onClick={prevStep} disabled={currentStep === 0} className="hover:bg-black/10 text-black">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  TRỞ LẠI
-                </Button>
-                <Button onClick={nextStep} className="bg-black text-white hover:bg-black/90">
-                  {currentStep === quizQuestions.length - 1 ? 'HOÀN THÀNH' : 'TIẾP THEO'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="w-full max-w-xl mx-auto p-8 md:p-12" style={{ backgroundColor: '#f0f0f0' }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {quizItem.answers.map((answer, answerIndex) => {
+                        const isSelected = answers[quizItem.id] === answer;
+                        return (
+                        <button
+                            key={answerIndex}
+                            onClick={() => handleAnswerSelect(quizItem.id, answer)}
+                            className={cn(
+                            'p-6 text-left border border-black/20 hover:border-black/60 transition-all duration-300',
+                            isSelected ? 'bg-black text-white font-bold' : 'bg-transparent text-black'
+                            )}
+                        >
+                            <span className="text-lg">{answer}</span>
+                        </button>
+                        );
+                    })}
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <div className="w-full max-w-xl mx-auto p-8 md:p-12 mt-20" style={{ backgroundColor: '#f0f0f0' }}>
             <div className="text-center">
               <h2 className="font-headline text-4xl font-black uppercase text-black">NHẬN KẾT QUẢ NGAY!</h2>
               <p className="mt-2 text-black/80">Vui lòng điền đầy đủ thông tin để nhận kết quả</p>
@@ -174,13 +159,7 @@ export default function WhiskyQuizPage() {
                 </Button>
               </div>
             </form>
-             <div className="text-center mt-8">
-                <Button variant="link" onClick={prevStep} className="text-black/70 hover:text-black">
-                    Quay lại câu hỏi
-                </Button>
-            </div>
           </div>
-        )}
       </div>
     </div>
   );
