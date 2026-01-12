@@ -47,7 +47,7 @@ const heroSlides = [
         label: 'SMWS',
         href: '/blog/5-dieu-ban-khong-biet-ve-smws',
         tag: 'SMWS',
-        titleLine1: 'WHISKY NGUYÊN CHẤT',
+        
         titleAccent: '100% CASK STRENGTH',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         bgColor: 'bg-primary',
@@ -58,8 +58,7 @@ const heroSlides = [
         imageId: 'hero-wine',
         label: 'WINE',
         href: '/danh-muc/wine',
-        tag: 'WINE',
-        titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
+        tag: 'WINE',      
         titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
         bgColor: 'bg-primary',
