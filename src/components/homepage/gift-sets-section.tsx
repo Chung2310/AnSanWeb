@@ -96,9 +96,6 @@ export default function GiftSetsSection() {
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-left mb-12">
-          <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>
-            GIFT & ACCESSORIES
-          </p>
           <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>
             BỘ QUÀ TẶNG TẾT 2026
           </h2>
