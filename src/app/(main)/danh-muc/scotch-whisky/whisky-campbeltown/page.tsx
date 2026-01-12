@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
   const bannerData = categoryData.find(cat => cat.slug === 'whisky-campbeltown');
+  const pageTitle = "Whisky Vùng Campbeltown";
 
   if (isLoading) {
     return (
@@ -36,8 +37,9 @@ export default function ProductsPage() {
 
   return (
     <ProductListing 
+      key={pageTitle}
       initialProducts={campbeltownProducts}
-      title="Whisky Vùng Campbeltown"
+      title={pageTitle}
       bannerData={bannerData}
     />
   );

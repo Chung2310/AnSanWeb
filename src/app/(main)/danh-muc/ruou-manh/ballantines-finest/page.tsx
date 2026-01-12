@@ -5,7 +5,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
-
+  const pageTitle = "Ballantine's Finest";
+  
   if (isLoading) {
     return (
        <div className="container py-12">
@@ -34,8 +35,9 @@ export default function ProductsPage() {
 
   return (
     <ProductListing 
+      key={pageTitle}
       initialProducts={filteredProducts}
-      title="Ballantine's Finest"
+      title={pageTitle}
     />
   );
 }
