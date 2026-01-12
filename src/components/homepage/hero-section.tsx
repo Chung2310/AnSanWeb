@@ -80,8 +80,8 @@ const heroSlides = [
 ];
 
 const containerVariants = {
-    initial: { transition: { staggerChildren: 0.2, staggerDirection: -1 } },
-    animate: { transition: { staggerChildren: 0.2, delayChildren: 0.4, staggerDirection: 1 } },
+    initial: {},
+    animate: { transition: { staggerChildren: 0.2, delayChildren: 0.8 } },
     exit: { transition: { staggerChildren: 0.1, staggerDirection: -1 } },
 };
 
@@ -92,9 +92,9 @@ const textItemVariants = {
 };
 
 const slideVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { duration: 1.2, ease: 'easeOut' } },
-    exit: { opacity: 0, transition: { duration: 0.6, ease: 'easeIn' } }
+    initial: { opacity: 0, zIndex: 0 },
+    animate: { opacity: 1, zIndex: 1, transition: { duration: 1.2, ease: 'easeOut' } },
+    exit: { opacity: 0, zIndex: 0, transition: { duration: 1.2, ease: 'easeIn' } }
 };
 
 
@@ -111,7 +111,7 @@ export default function HeroSection() {
     return (
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full relative">
-                <AnimatePresence>
+                <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
                          const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                          const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
@@ -122,10 +122,8 @@ export default function HeroSection() {
                                 key={index}
                                 initial="initial"
                                 animate={isActive ? 'animate' : 'initial'}
-                                exit="exit"
                                 variants={slideVariants}
                                 className="absolute inset-0"
-                                style={{ zIndex: isActive ? 1 : 0 }}
                             >
                                 <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                                     {/* Left Column: Text */}
@@ -139,13 +137,13 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-base text-white/80 font-headline">
+                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-xl text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-4xl lg:text-5xl font-black leading-tight uppercase font-headline">
+                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-5xl lg:text-6xl font-black leading-tight uppercase font-headline">
                                                         {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-base max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
@@ -203,16 +201,17 @@ export default function HeroSection() {
             </div>
             
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
-                <div className="container mx-auto max-w-screen-xl px-4">
+                <div className="container mx-auto max-w-screen-2xl px-4">
                      <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
                              <div key={slide.label} className="flex items-center">
                                 <button
                                     onClick={() => setCurrent(index)}
                                     className={cn(
-                                        "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 text-xs font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20",
+                                        "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20",
                                         current === index && "border-white bg-white text-black"
                                     )}
+                                    style={{ fontSize: '19px' }}
                                 >
                                     {slide.label}
                                 </button>
@@ -230,3 +229,4 @@ export default function HeroSection() {
     
 
     
+
