@@ -24,11 +24,13 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   
-  useEffect(() => {
-    // When the category changes (initialProducts changes), reset to page 1.
-    setCurrentPage(1);
-    setActiveFilters({});
-  }, [initialProducts]);
+  // This useEffect was causing the pagination to reset on every render.
+  // It is now removed. The state will naturally reset when the component
+  // is unmounted and remounted on category navigation.
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  //   setActiveFilters({});
+  // }, [initialProducts]);
 
 
   const filteredProducts = useMemo(() => {
