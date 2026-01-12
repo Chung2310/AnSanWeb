@@ -91,6 +91,13 @@ const textItemVariants = {
     exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: 'easeIn' } },
 };
 
+const slideVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.8, ease: 'easeOut' } },
+    exit: { opacity: 0, transition: { duration: 0.4, ease: 'easeIn' } }
+};
+
+
 export default function HeroSection() {
     const [current, setCurrent] = useState(0);
 
@@ -101,102 +108,100 @@ export default function HeroSection() {
         return () => clearTimeout(timer);
     }, [current]);
     
-    const currentSlide = heroSlides[current];
-    const image = PlaceHolderImages.find(img => img.id === currentSlide.imageId);
-
-    const linkProps = currentSlide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
-
     return (
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
-            <div className="w-full h-full">
-                <AnimatePresence initial={false} mode="wait">
-                    <motion.div
-                        key={current}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="absolute inset-0"
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                            {/* Left Column: Text */}
-                            <motion.div 
-                                className={cn("flex flex-col justify-center items-center text-center p-8", currentSlide.bgColor, currentSlide.textColor)}
-                                variants={containerVariants}
+            <div className="w-full h-full relative">
+                <AnimatePresence initial={false}>
+                    {heroSlides.map((slide, index) => {
+                         const image = PlaceHolderImages.find(img => img.id === slide.imageId);
+                         const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+                         const isActive = index === current;
+
+                        return (
+                            <motion.div
+                                key={index}
+                                initial="initial"
+                                animate={isActive ? 'animate' : 'initial'}
+                                exit="exit"
+                                variants={slideVariants}
+                                className="absolute inset-0"
+                                style={{ zIndex: isActive ? 1 : 0 }}
                             >
-                               <div className="max-w-md">
-                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80 font-headline">
-                                         {currentSlide.tag}
-                                     </motion.p>
-                                     <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
-                                         {currentSlide.titleLine1} <span className="text-white">{currentSlide.titleAccent}</span>
-                                     </motion.h1>
-                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-sm max-w-xl mx-auto", currentSlide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
-                                         {currentSlide.description}
-                                     </motion.p>
-                                     <motion.div variants={textItemVariants}>
-                                        <Button 
-                                            asChild 
-                                            variant="outline" 
-                                            className={cn(
-                                                "mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105",
-                                                currentSlide.textColor === 'text-white' 
-                                                    ? "border-white text-white hover:bg-white hover:text-black" 
-                                                    : "border-black text-black hover:bg-black hover:text-white"
+                                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                                    {/* Left Column: Text */}
+                                    <div className={cn("flex flex-col justify-center items-center text-center p-8", slide.bgColor, slide.textColor)}>
+                                        <AnimatePresence>
+                                            {isActive && (
+                                                <motion.div 
+                                                    className="max-w-md"
+                                                    variants={containerVariants}
+                                                    initial="initial"
+                                                    animate="animate"
+                                                    exit="exit"
+                                                >
+                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80 font-headline">
+                                                        {slide.tag}
+                                                    </motion.p>
+                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
+                                                        {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
+                                                    </motion.h1>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-sm max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
+                                                        {slide.description}
+                                                    </motion.p>
+                                                    <motion.div variants={textItemVariants}>
+                                                        <Button 
+                                                            asChild 
+                                                            variant="outline" 
+                                                            className={cn(
+                                                                "mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105",
+                                                                slide.textColor === 'text-white' 
+                                                                    ? "border-white text-white hover:bg-white hover:text-black" 
+                                                                    : "border-black text-black hover:bg-black hover:text-white"
+                                                            )}
+                                                        >
+                                                            <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
+                                                        </Button>
+                                                    </motion.div>
+                                                </motion.div>
                                             )}
-                                        >
-                                            <Link href={currentSlide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
-                                        </Button>
-                                     </motion.div>
-                                 </div>
+                                        </AnimatePresence>
+                                    </div>
+                                    {/* Right Column: Image */}
+                                    <div className="relative h-full hidden md:block">
+                                        {image && (
+                                            <Image
+                                                src={image.imageUrl}
+                                                alt={image.description}
+                                                fill
+                                                className="object-cover"
+                                                sizes="50vw"
+                                                priority={isActive}
+                                                data-ai-hint={image.imageHint}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                 {/* Mobile background image */}
+                                <div className="absolute inset-0 md:hidden -z-10">
+                                    {image && (
+                                        <Image
+                                            src={image.imageUrl}
+                                            alt={image.description}
+                                            fill
+                                            className="object-cover"
+                                            sizes="100vw"
+                                            priority={isActive}
+                                            data-ai-hint={image.imageHint}
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/50" />
+                                </div>
                             </motion.div>
-                            {/* Right Column: Image */}
-                            <motion.div 
-                                className="relative h-full hidden md:block"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1, transition: { duration: 0.7, ease: 'easeInOut' } }}
-                                exit={{ opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } }}
-                            >
-                                {image && (
-                                    <Image
-                                        src={image.imageUrl}
-                                        alt={image.description}
-                                        fill
-                                        className="object-cover"
-                                        sizes="50vw"
-                                        priority
-                                        data-ai-hint={image.imageHint}
-                                    />
-                                )}
-                            </motion.div>
-                        </div>
-                    </motion.div>
+                        )
+                    })}
                 </AnimatePresence>
             </div>
             
-             {/* Mobile background image */}
-             <AnimatePresence>
-                <motion.div
-                    key={`mobile-bg-${current}`}
-                    className="absolute inset-0 md:hidden -z-10"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, transition: { duration: 0.7 } }}
-                    exit={{ opacity: 0, transition: { duration: 0.3 } }}
-                >
-                    {image && (
-                        <Image
-                            src={image.imageUrl}
-                            alt={image.description}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            priority
-                            data-ai-hint={image.imageHint}
-                        />
-                    )}
-                    <div className="absolute inset-0 bg-black/50" />
-                </motion.div>
-            </AnimatePresence>
-
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-xl px-4">
                      <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
@@ -222,4 +227,6 @@ export default function HeroSection() {
         </section>
     );
 }
+    
+
     
