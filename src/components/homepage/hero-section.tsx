@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -104,14 +104,14 @@ export default function HeroSection() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setCurrent((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1));
-        }, 8000); // Increased from 5000ms to 8000ms
+        }, 8000);
         return () => clearTimeout(timer);
     }, [current]);
     
     return (
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full relative">
-                <AnimatePresence initial={false}>
+                <AnimatePresence>
                     {heroSlides.map((slide, index) => {
                          const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                          const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
@@ -139,13 +139,13 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/80 font-headline">
+                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-base text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-3xl lg:text-4xl font-black leading-tight uppercase font-headline">
+                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-4xl lg:text-5xl font-black leading-tight uppercase font-headline">
                                                         {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-sm max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-base max-w-xl mx-auto", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
