@@ -40,10 +40,12 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
-          <span>dt@AnSan.co.uk</span>
-          <span>Khu Quy Chế, Từ Sơn, Bắc Ninh</span>
-          <span>0933.333.313</span>
+        <div className="mt-8 text-sm text-black/80 space-y-2">
+            <p className="font-headline text-lg font-bold">Rượu Vang An San</p>
+            <p>Người đại diện: Phạm Đăng Thành</p>
+            <p>Địa chỉ: Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn</p>
+            <p>Hotline: 093 333 33 13</p>
+            <p>Email: ruouvangansan@gmail.com</p>
         </div>
 
         <div className="mt-8 text-xs text-black/60 max-w-4xl mx-auto">
@@ -57,7 +59,7 @@ export default function Footer() {
         <div className="container mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <p className="text-center text-xs text-black/60">
-              2026 &copy; AnSan. MỌI QUYỀN ĐÃ ĐƯỢC BẢO LƯU.
+              2024 &copy; AnSan. MỌI QUYỀN ĐÃ ĐƯỢC BẢO LƯU.
             </p>
 
             <div className="mt-4 flex justify-center text-xs text-black/60 sm:mt-0 sm:justify-start">
