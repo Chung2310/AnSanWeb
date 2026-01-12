@@ -82,21 +82,21 @@ export default function WhiskyQuizPage() {
   };
 
   return (
-    <div className="bg-white text-black min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 py-16">
+    <div style={{ backgroundColor: '#636146' }} className="text-white min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 py-16">
       <div className="w-full max-w-3xl mx-auto">
         <div className="text-center mb-12">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 text-black uppercase">
+            <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 uppercase">
                 Khám phá vị Whisky của bạn
             </h1>
-            <p className="mt-4 text-lg text-black/70">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
+            <p className="mt-4 text-lg text-white/80">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
         </div>
 
         <div className="space-y-12">
             {quizQuestions.map((quizItem, index) => (
                 <div key={quizItem.id}>
                     <div className="text-left mb-6">
-                        <p className="text-sm uppercase tracking-widest text-black/50">CÂU HỎI {index + 1}/{quizQuestions.length}</p>
-                        <h2 className="font-headline text-2xl font-bold mt-2 text-black">
+                        <p className="text-sm uppercase tracking-widest text-white/60">CÂU HỎI {index + 1}/{quizQuestions.length}</p>
+                        <h2 className="font-headline text-2xl font-bold mt-2">
                             {quizItem.question}
                         </h2>
                     </div>
@@ -109,8 +109,8 @@ export default function WhiskyQuizPage() {
                             key={answerIndex}
                             onClick={() => handleAnswerSelect(quizItem.id, answer)}
                             className={cn(
-                            'p-6 text-left border border-black/20 hover:border-black/60 transition-all duration-300',
-                            isSelected ? 'bg-black text-white font-bold' : 'bg-transparent text-black'
+                            'p-6 text-left border border-white/30 hover:border-white/80 transition-all duration-300',
+                            isSelected ? 'bg-white text-black font-bold' : 'bg-transparent text-white'
                             )}
                         >
                             <span className="text-lg">{answer}</span>
