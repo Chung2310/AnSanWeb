@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
+  const pageTitle = "Cigar Hanos";
 
   if (isLoading) {
     return (
@@ -34,8 +35,9 @@ export default function ProductsPage() {
 
   return (
     <ProductListing 
+      key={pageTitle}
       initialProducts={hanosProducts}
-      title="Cigar Hanos"
+      title={pageTitle}
     />
   );
 }
