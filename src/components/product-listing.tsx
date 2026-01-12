@@ -25,11 +25,12 @@ export default function ProductListing({ initialProducts, title, bannerData }: P
   const productsPerPage = 18;
 
   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
-
+  
+  // This effect will run whenever the initialProducts prop changes,
+  // which happens when navigating to a new category page.
   useEffect(() => {
-    // When initialProducts change (e.g., page navigation), reset filters and current products
     setFilteredProducts(initialProducts);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to page 1 on new category
   }, [initialProducts]);
 
 
