@@ -27,7 +27,7 @@ const heroSlides = [
         tag: '10% OFF',
         titleLine1: 'AnSan OUTLET',
         titleAccent: 'SALE 10% OFF',
-        description: 'Tri ân khách hàng với chương trình giảm giá đặc biệt 10% cho các sản phẩm outlet. Đây là cơ hội vàng để bạn sở hữu những chai whisky chất lượng với mức giá cực kỳ hấp dẫn. Khám phá ngay để không bỏ lỡ!',
+        description: 'ANSAN không chỉ mang đến rượu vang, mà còn là cách thể hiện đẳng cấp, sự trân trọng và phong vị sống của người thưởng thức',
         bgColor: 'bg-primary',
         textColor: 'text-white'
     },
@@ -38,7 +38,7 @@ const heroSlides = [
         tag: 'ARMAGNAC',
         titleLine1: 'ARMAGNAC RƯỢU MẠNH',
         titleAccent: 'PHÁP LỊCH SỬ 700 NĂM',
-        description: 'Khám phá Armagnac, loại rượu brandy hay còn gọi là Eau-De-Vie lâu đời nhất của Pháp, với lịch sử hơn 700 năm - có trước cả Cognac hơn 150 năm từ năm 1310. Armagnac là đặc trưng của vùng Gascony, nằm ở phía Tây Nam Bordeaux, nơi nổi tiếng với kỷ lục người dân sống thọ nhất nước Pháp.',
+        description: 'Donnelli không cồn – lựa chọn tinh tế cho những khoảnh khắc nâng ly trọn vẹn, nơi phong vị Ý được thưởng thức theo cách an toàn và lịch lãm',
         bgColor: 'bg-primary',
         textColor: 'text-white'
     },
@@ -49,7 +49,7 @@ const heroSlides = [
         tag: 'SMWS',
         titleLine1: 'WHISKY NGUYÊN CHẤT',
         titleAccent: '100% CASK STRENGTH',
-        description: 'Hiệp hội đóng chai độc lập này mang đến những chai Scotch Whisky nguyên chất 100%, được tuyển chọn kỹ lưỡng từ những thùng rượu hảo hạng nhất. SMWS không chỉ đơn thuần là nơi để thưởng thức Whisky, mà còn là nơi thay đổi hoàn toàn trải nghiệm thẩm Whisky, đưa bạn về với bản chất đích thực của việc thưởng thức Whisky: hương vị.',
+        description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         bgColor: 'bg-primary',
         textColor: 'text-white',
         external: true
@@ -61,7 +61,7 @@ const heroSlides = [
         tag: 'WINE',
         titleLine1: 'KHÔNG CHỈ RƯỢU MẠNH,',
         titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
-        description: 'Chúng tôi không dừng lại ở rượu mạnh mà còn đưa cuộc phiêu lưu của mình sang “vùng đất” tuyển chọn những chai vang thượng hạng từ khắp thế giới. Mỗi chai vang là một tác phẩm nghệ thuật, kể câu chuyện về vùng đất và con người. Khám phá thế giới vang đa sắc màu, cùng chuyên gia tìm kiếm chai vang hoàn hảo cho riêng bạn.',
+        description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
         bgColor: 'bg-primary',
         textColor: 'text-white'
     },
@@ -218,5 +218,3 @@ export default function HeroSection() {
     
 
     
-
-
