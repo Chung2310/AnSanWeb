@@ -322,13 +322,18 @@ export default function BlogForm({ initialData }: BlogFormProps) {
             </Card>
           </div>
         </div>
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting
-            ? 'Đang lưu...'
-            : initialData
-            ? 'Cập nhật bài viết'
-            : 'Tạo bài viết'}
-        </Button>
+        <div className="flex items-center gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting
+                ? 'Đang lưu...'
+                : initialData
+                ? 'Cập nhật bài viết'
+                : 'Tạo bài viết'}
+            </Button>
+            <Button type="button" variant="outline" onClick={() => router.push(getRedirectUrl())}>
+                Hủy
+            </Button>
+        </div>
       </form>
     </Form>
   );
