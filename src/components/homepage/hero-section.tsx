@@ -118,7 +118,7 @@ export default function HeroSection() {
                                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className="mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline">
+                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {slide.label} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
                                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
