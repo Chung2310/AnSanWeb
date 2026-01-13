@@ -179,13 +179,18 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
             />
           </CardContent>
         </Card>
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting
-            ? 'Đang lưu...'
-            : initialData
-            ? 'Cập nhật'
-            : 'Tạo danh mục'}
-        </Button>
+        <div className="flex items-center gap-4">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting
+                ? 'Đang lưu...'
+                : initialData
+                ? 'Cập nhật'
+                : 'Tạo danh mục'}
+            </Button>
+            <Button type="button" variant="outline" onClick={() => router.push(getRedirectUrl())}>
+                Hủy
+            </Button>
+        </div>
       </form>
     </Form>
   );
