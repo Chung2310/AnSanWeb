@@ -26,31 +26,31 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     onFilterChange: (group: string, value: string) => void;
     activeFilters: string[];
 }) => (
-  <div className="mb-8">
-    <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">{title}</h3>
-    <div className="flex flex-col items-start gap-2">
-      {options.map((option, index) => {
-        const isActive = activeFilters.includes(option.label);
-        if (option.count === 0 && !isActive) return null;
+    <div className="border p-4 mb-6">
+        <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">{title}</h3>
+        <div className="flex flex-col items-start gap-2">
+        {options.map((option, index) => {
+            const isActive = activeFilters.includes(option.label);
+            if (option.count === 0 && !isActive) return null;
 
-        return (
-          <Button
-            key={index}
-            variant={isActive ? "default" : "ghost"}
-            className={cn(
-              "rounded-none text-xs h-auto py-1 px-3 justify-start",
-              isActive 
-                ? "font-bold"
-                : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-            )}
-            onClick={() => onFilterChange(title, option.label)}
-          >
-            {`${option.label} (${option.count})`}
-          </Button>
-        )
-      })}
+            return (
+            <Button
+                key={index}
+                variant="ghost"
+                className={cn(
+                "rounded-none text-xs h-auto py-1 px-2 justify-start w-full",
+                isActive 
+                    ? "font-bold text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                )}
+                onClick={() => onFilterChange(title, option.label)}
+            >
+                {`${option.label} (${option.count})`}
+            </Button>
+            )
+        })}
+        </div>
     </div>
-  </div>
 );
 
 interface SidebarFilterProps {
@@ -153,7 +153,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
     }, [products, allCategories, isLoadingCategories, activeFilters]);
 
     return (
-        <div>
+        <div className="w-full">
             <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
             
             {dynamicCategoryFilter}
