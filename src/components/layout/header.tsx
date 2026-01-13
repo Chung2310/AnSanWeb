@@ -21,10 +21,6 @@ const mainNavLinks = [
   { 
     href: '/gioi-thieu', 
     label: 'Về chúng tôi',
-    sublinks: [
-        { href: '/gioi-thieu', label: 'Về AnSan' },
-        { href: '/gioi-thieu/nha-sang-lap', label: 'Về nhà sáng lập' },
-    ]
   },
   {
     href: '/tin-tuc',
