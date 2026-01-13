@@ -2,10 +2,26 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Cigar";
+
+  const cigarProducts = useMemo(() => {
+    if (!products || !categories) return [];
+    const cigarCategory = categories.find(c => c.slug === 'cigar');
+    if (!cigarCategory) return [];
+    
+    const childCategoryIds = categories.filter(c => c.parentId === cigarCategory.id).map(c => c.id);
+    const allCigarIds = [cigarCategory.id, ...childCategoryIds];
+
+    return products.filter(wine => wine.tags?.some(tag => allCigarIds.includes(tag)));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -31,9 +47,6 @@ export default function ProductsPage() {
     )
   }
   
-  const cigarTags = ['cigar', 'cigar-hanos', 'cigar-lotus', 'cigar-vinaboss'];
-  const cigarProducts = products?.filter(wine => wine.tags?.some(tag => cigarTags.includes(tag))) || [];
-
   return (
     <ProductListing 
       key={pageTitle}

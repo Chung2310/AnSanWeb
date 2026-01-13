@@ -2,10 +2,22 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Quà Tết Rượu Mạnh";
+  
+  const giftSetProducts = useMemo(() => {
+    if (!products || !categories) return [];
+    const giftSetCategory = categories.find(c => c.slug === 'gift-set-spirits');
+    if (!giftSetCategory) return [];
+    return products.filter(wine => wine.tags?.includes(giftSetCategory.id));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -30,8 +42,6 @@ export default function ProductsPage() {
       </div>
     )
   }
-
-  const giftSetProducts = products?.filter(wine => wine.tags?.includes('gift-set-spirits')) || [];
 
   return (
     <ProductListing 

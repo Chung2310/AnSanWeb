@@ -2,10 +2,26 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Rượu Vang";
+  
+  const wineProducts = useMemo(() => {
+    if (!products || !categories) return [];
+    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
+    if (!wineCategory) return [];
+
+    const childCategoryIds = categories.filter(c => c.parentId === wineCategory.id).map(c => c.id);
+    const allWineIds = [wineCategory.id, ...childCategoryIds];
+    
+    return products.filter(wine => wine.tags?.some(tag => allWineIds.includes(tag)));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -31,9 +47,6 @@ export default function ProductsPage() {
     )
   }
   
-  const wineTags = ['wine', 'y', 'phap', 'tay-ban-nha', 'uc', 'nga', 'duc'];
-  const wineProducts = products?.filter(wine => wine.tags?.some(tag => wineTags.includes(tag))) || [];
-
   return (
     <ProductListing 
       key={pageTitle}
