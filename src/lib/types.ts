@@ -57,6 +57,7 @@ export type Product = {
   detailImages?: ImageInfo[]; // Detail Page Images
   isFeatured?: boolean;
   isNew?: boolean;
+  bestChoice?: boolean;
   tags?: string[]; // These will be category IDs
   attributes: ProductAttribute[];
   categoryIds?: string[];
@@ -109,3 +110,5 @@ export type Testimonial = {
     imageHint: string,
   };
 };
+
+    
