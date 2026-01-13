@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -46,6 +47,9 @@ export default function FamousBrands() {
     setCurrent(api.selectedScrollSnap())
 
     const onSelect = (api: CarouselApi) => {
+      if (!api) {
+        return;
+      }
       setCurrent(api.selectedScrollSnap())
     }
 
