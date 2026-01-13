@@ -18,14 +18,16 @@ export default function CategoryShowcase() {
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-5 md:gap-6">
           {sampleCategories.map((category) => (
             <Link key={category.id} href={`/danh-muc-san-pham/${category.slug}`} className="group relative block overflow-hidden rounded-lg">
-              <Image
-                src={category.image.imageUrl}
-                alt={category.name}
-                width={800}
-                height={600}
-                className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                data-ai-hint={category.image.imageHint}
-              />
+              {category.image && (
+                <Image
+                  src={category.image.url}
+                  alt={category.name}
+                  width={800}
+                  height={600}
+                  className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  data-ai-hint={category.image.imageHint}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
               <div className="absolute inset-0 flex items-end p-4 md:p-6">
                 <h3 className="font-headline text-xl font-bold text-white transition-transform duration-300 group-hover:-translate-y-1">

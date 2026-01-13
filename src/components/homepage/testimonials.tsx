@@ -40,7 +40,7 @@ export default function Testimonials() {
                       </blockquote>
                       <div className="mt-6 flex items-center">
                         <Avatar>
-                          <AvatarImage src={testimonial.avatar.imageUrl} alt={testimonial.name} data-ai-hint={testimonial.avatar.imageHint} />
+                          <AvatarImage src={testimonial.avatar.url} alt={testimonial.name} data-ai-hint={testimonial.avatar.imageHint} />
                           <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="ml-4">
