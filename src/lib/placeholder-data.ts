@@ -804,7 +804,7 @@ export const sampleTestimonials: Testimonial[] = [
   },
   {
     id: '3',
-    name: 'Anh Quốc Bảo',
+    name: 'Chị Gia Linh',
     title: 'Nhà sưu tập rượu',
     quote: 'Là một nhà sưu tập, tôi đánh giá cao sự đa dạng và chất lượng của các loại rượu vang ở đây. Trang web rất trang nhã và dễ sử dụng.',
     avatar: getImage('avatar-3'),
