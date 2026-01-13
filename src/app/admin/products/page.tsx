@@ -26,7 +26,16 @@ export default function ProductsAdminPage() {
     const descendantIds: string[] = [];
     const queue: string[] = [parentId];
     const visited: Set<string> = new Set();
-    visited.add(parentId);
+    
+    // Find the initial parent category object to check its slug as well
+    const parentCategory = allCategories.find(cat => cat.id === parentId);
+    if(parentCategory) {
+       visited.add(parentCategory.id);
+       if(parentCategory.slug) {
+         visited.add(parentCategory.slug);
+       }
+    }
+
 
     while (queue.length > 0) {
       const currentId = queue.shift()!;
@@ -35,6 +44,9 @@ export default function ProductsAdminPage() {
       for (const child of children) {
         if (!visited.has(child.id)) {
           descendantIds.push(child.id);
+          if (child.slug) {
+            descendantIds.push(child.slug);
+          }
           queue.push(child.id);
           visited.add(child.id);
         }
@@ -50,9 +62,12 @@ export default function ProductsAdminPage() {
     if (selectedCategoryId === 'all') {
       return products;
     }
+    
+    const selectedCategory = categories.find(c => c.id === selectedCategoryId);
+    if (!selectedCategory) return products;
 
     const allChildIds = getDescendantIds(selectedCategoryId, categories);
-    const categoryIdsToFilter = [selectedCategoryId, ...allChildIds];
+    const categoryIdsToFilter = [selectedCategoryId, selectedCategory.slug, ...allChildIds].filter(Boolean);
     
     return products.filter((p) => 
       p.tags?.some(tagId => categoryIdsToFilter.includes(tagId))
