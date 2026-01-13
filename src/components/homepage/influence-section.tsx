@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -118,36 +119,14 @@ export default function InfluenceSection() {
             variants={containerVariants}
             className="flex flex-col justify-center text-gray-700 relative"
           >
-            <motion.div variants={itemVariants} className="text-base leading-relaxed">
+            <motion.div variants={itemVariants} className="text-base leading-relaxed space-y-4">
               <p className="font-bold">VÌ SAO NÊN CHỌN AN SAN</p>
-              <br/>
               <p>An San cam kết “Vang thật – Giá trị thật”. Chúng tôi tuyển chọn rượu vang nhập khẩu chính hãng, nguồn gốc rõ ràng, đến từ các quốc gia danh tiếng như Pháp, Ý, Tây Ban Nha, Úc, Đức…, đầy đủ hoá đơn VAT, được bảo quản và trưng bày theo tiêu chuẩn quốc tế với giá bán cạnh tranh.</p>
-              <br/>
               <p>Khách hàng được thưởng thức rượu miễn phí trước khi mua, đảm bảo lựa chọn đúng gu và đúng giá trị.</p>
-              <br/>
               <p>Dịch vụ tại An San được xây dựng trên sự chuyên nghiệp – tận tâm – am hiểu, với đội ngũ tư vấn giàu kiến thức, hỗ trợ 24/7, giao hàng nhanh chóng</p>
-              <br/>
               <p>Đến An San không chỉ để mua rượu vang, mà để trải nghiệm trọn vẹn nghệ thuật thưởng vang.</p>
             </motion.div>
-            <motion.div variants={itemVariants} className="mt-12">
-              <h3 className="font-bold text-lg tracking-wider uppercase text-gray-800">
-                ĐÁNH DẤU SỰ PHÁT TRIỂN MẠNH MẼ TRÊN<br/>FACEBOOK, INSTAGRAM, TIKTOK & YOUTUBE
-              </h3>
-              <div className="flex space-x-3 mt-4">
-                <Link href="#" className="w-10 h-10 bg-black text-white flex items-center justify-center rounded-md hover:opacity-80 transition-opacity">
-                    <Facebook className="h-5 w-5" />
-                </Link>
-                 <Link href="#" className="w-10 h-10 bg-black text-white flex items-center justify-center rounded-md hover:opacity-80 transition-opacity">
-                    <Instagram className="h-5 w-5" />
-                </Link>
-                 <Link href="#" className="w-10 h-10 bg-black text-white flex items-center justify-center rounded-md hover:opacity-80 transition-opacity">
-                    <TikTokIcon className="h-5 w-5" />
-                </Link>
-                 <Link href="#" className="w-10 h-10 bg-black text-white flex items-center justify-center rounded-md hover:opacity-80 transition-opacity">
-                    <Youtube className="h-5 w-5" />
-                </Link>
-              </div>
-            </motion.div>
+            
             <motion.div variants={containerVariants} className="mt-10 grid grid-cols-2 gap-8">
               <motion.div variants={itemVariants}>
                 <AnimatedNumber to={110000} />
