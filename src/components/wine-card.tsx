@@ -1,6 +1,8 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
+import React from 'react';
 
 type WineCardProps = {
   product: Product;
@@ -12,10 +14,25 @@ export default function WineCard({ product }: WineCardProps) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
+  const isBestChoice = React.useMemo(() => {
+    const bestChoiceProductNames = [
+      "Old Vine Cabernet Sauvignon",
+      "Old Vine Shiraz",
+      "Gigino Grande (Phiên bản kỷ niệm 80 năm) – Vang Đỏ",
+      "Sgarzi Luigi Primitivo di Manduria DOC",
+      "Piandimare \"Tassanera\" Montepulciano d'Abruzzo Riserva",
+      "Enzo Vincenzo Appassimento Puglia IGT",
+      "Grande Alberone Moscato",
+    ].map(name => name.replace(/\u200B/g, '').trim());
+
+    const productName = product.nameVN.replace(/\u200B/g, '').trim();
+    return bestChoiceProductNames.includes(productName);
+  }, [product.nameVN]);
+
   return (
     <div className="group text-center">
       <Link href={`/san-pham/${product.slug}`} className="text-black hover:text-black">
-        <div className="bg-secondary p-4">
+        <div className="bg-secondary p-4 relative">
           <Image
             src={product.image?.url || '/placeholder.svg'}
             alt={product.nameVN}
@@ -23,6 +40,11 @@ export default function WineCard({ product }: WineCardProps) {
             height={800}
             className="h-64 w-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
+          {isBestChoice && (
+            <div className="absolute top-2 right-2 bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg">
+              Best Choice
+            </div>
+          )}
         </div>
         <div className="p-4 bg-white">
           <h3 className="mt-2 font-bold text-lg leading-tight text-black uppercase group-hover:text-primary">
