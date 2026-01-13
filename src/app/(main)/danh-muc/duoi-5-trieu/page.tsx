@@ -6,14 +6,8 @@ import { priceCategoryData } from '@/lib/price-category-data';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
+  const bannerData = priceCategoryData.find(cat => cat.slug === 'duoi-5-trieu');
   const pageTitle = "Whisky Dưới 5 Triệu";
-  const bannerData = {
-    ...priceCategoryData.find(cat => cat.slug === 'duoi-5-trieu')!,
-    breadcrumbs: [
-        { label: 'Trang chủ', href: '/' },
-        { label: pageTitle, href: '/danh-muc/duoi-5-trieu' }
-    ]
-  };
 
   if (isLoading) {
     return (
@@ -39,14 +33,20 @@ export default function ProductsPage() {
     )
   }
 
-  const filteredProducts = products?.filter(wine => wine.price < 5000000) || [];
-
+  const productsInRange = products?.filter(wine => wine.price < 5000000) || [];
+  
   return (
-    <ProductListing 
+    <ProductListing
       key={pageTitle}
-      initialProducts={filteredProducts}
+      initialProducts={productsInRange}
       title={pageTitle}
-      bannerData={bannerData}
+      bannerData={{
+        ...bannerData!,
+        breadcrumbs: [
+            { label: 'Trang chủ', href: '/' },
+            { label: pageTitle, href: '/danh-muc/duoi-5-trieu' }
+        ]
+      }}
     />
   );
 }
