@@ -2,10 +2,19 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { priceCategoryData } from '@/lib/price-category-data';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
   const pageTitle = "Whisky Dưới 50 Triệu";
+  const bannerData = {
+    ...priceCategoryData.find(cat => cat.slug === 'duoi-50-trieu')!,
+    breadcrumbs: [
+        { label: 'Trang chủ', href: '/' },
+        { label: pageTitle, href: '/danh-muc/duoi-50-trieu' }
+    ]
+  };
+
 
   if (isLoading) {
     return (
@@ -38,6 +47,7 @@ export default function ProductsPage() {
       key={pageTitle}
       initialProducts={filteredProducts}
       title={pageTitle}
+      bannerData={bannerData}
     />
   );
 }
