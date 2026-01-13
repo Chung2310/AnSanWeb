@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -57,7 +58,7 @@ const heroSlides = [
     },
     {
         imageId: 'hero-wine',
-        label: 'WINE',
+        label: 'RƯỢU MẠNH',
         href: '/danh-muc/wine',
         tag: 'WINE',      
         titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
