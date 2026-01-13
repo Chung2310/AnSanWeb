@@ -7,24 +7,24 @@ import {
   
 const faqItems = [
     {
-        question: "WHISKY KHÁC NHAU NHƯ THẾ NÀO THEO VÙNG SẢN XUẤT?",
-        answer: "Mỗi quốc gia sản xuất Whisky có những đặc trưng riêng về quy trình, nguyên liệu và khí hậu. Ví dụ, Scotch Whisky thường mang hương vị đậm đà, khói do quá trình ủ trong thùng gỗ sồi, trong khi Whisky Nhật Bản thường tinh tế và cân bằng hơn. Những yếu tố này ảnh hưởng trực tiếp đến hương vị và trải nghiệm của mỗi chai Whisky."
+        question: "RƯỢU VANG ĐỎ VÀ RƯỢU VANG TRẮNG KHÁC NHAU NHƯ THẾ NÀO?",
+        answer: "Sự khác biệt chính nằm ở giống nho và quy trình sản xuất. Rượu vang đỏ được làm từ nho đỏ (cả vỏ), quá trình lên men tiếp xúc với vỏ nho tạo ra màu sắc và tannin. Vang trắng chủ yếu làm từ nho trắng (hoặc nho đỏ bỏ vỏ), lên men chỉ từ nước ép nho nên có màu sáng và ít tannin hơn."
     },
     {
-        question: "LÀM SAO ĐỂ THƯỞNG THỨC WHISKY ĐÚNG CÁCH?",
-        answer: "Thưởng thức whisky đúng cách là một nghệ thuật. Bạn có thể uống neat (nguyên chất), thêm vài giọt nước để mở ra hương vị, hoặc uống trên một viên đá lớn để làm lạnh từ từ mà không làm loãng rượu. Quan trọng nhất là hãy dành thời gian để cảm nhận hương thơm và từng lớp vị."
+        question: "TANNIN TRONG RƯỢU VANG LÀ GÌ?",
+        answer: "Tannin là một hợp chất polyphenol tự nhiên có trong vỏ, hạt và cuống nho. Nó tạo ra cảm giác khô, chát nhẹ trong miệng khi uống rượu vang đỏ. Tannin là một thành phần quan trọng tạo nên cấu trúc, sự phức hợp và khả năng lưu giữ lâu năm của rượu vang."
     },
     {
-        question: "NHỮNG YẾU TỐ NÀO ẢNH HƯỞNG ĐẾN GIÁ CỦA MỘT CHAI WHISKY?",
-        answer: "Giá của một chai whisky bị ảnh hưởng bởi nhiều yếu tố: tuổi rượu (thời gian ủ), sự khan hiếm (phiên bản giới hạn), danh tiếng của nhà chưng cất, loại thùng ủ được sử dụng, và chi phí nguyên liệu cũng như sản xuất."
+        question: "CÁCH KẾT HỢP RƯỢU VANG VỚI MÓN ĂN?",
+        answer: "Quy tắc cổ điển là 'vang trắng với thịt trắng (gà, cá), vang đỏ với thịt đỏ (bò, cừu)'. Tuy nhiên, bạn hoàn toàn có thể sáng tạo. Một nguyên tắc hữu ích là kết hợp rượu vang và món ăn có cùng cường độ hương vị. Vang nhẹ đi với món nhẹ, và vang đậm đà hợp với món ăn đậm vị."
     },
     {
-        question: "ANSAN CÓ TỔ CHỨC SỰ KIỆN NÀO ĐỂ CHIA SẺ KIẾN THỨC KHÔNG?",
-        answer: "Có, chúng tôi thường xuyên tổ chức các buổi tasting, workshop và sự kiện gặp gỡ chuyên gia để chia sẻ kiến thức và đam mê về whisky. Vui lòng theo dõi trang tin tức hoặc mạng xã hội của chúng tôi để cập nhật lịch sự kiện mới nhất."
+        question: "LÀM THẾ NÀO ĐỂ BẢO QUẢN RƯỢU VANG SAU KHI MỞ NÚT?",
+        answer: "Sau khi mở, rượu vang sẽ bắt đầu bị oxy hóa. Để bảo quản, bạn nên đậy kín nút chai và để trong tủ lạnh (kể cả vang đỏ). Vang trắng và vang hồng có thể giữ được 2-3 ngày, trong khi vang đỏ có thể giữ được 3-5 ngày. Sử dụng dụng cụ hút chân không sẽ giúp kéo dài thời gian bảo quản hơn."
     },
     {
-        question: "THAY CÂU NÀY BẰNG NỘI DUNG KHÁC",
-        answer: "Để trở thành thành viên của Spirit Club và nhận những ưu đãi độc quyền, bạn chỉ cần đăng ký tài khoản trên website của chúng tôi và tham gia vào các hoạt động cộng đồng. Thành viên sẽ được ưu tiên tham gia sự kiện và nhận các thông tin đặc biệt."
+        question: "ANSAN CAM KẾT CHẤT LƯỢNG SẢN PHẨM NHƯ THẾ NÀO?",
+        answer: "Chúng tôi cam kết 100% sản phẩm là hàng chính hãng, nhập khẩu trực tiếp hoặc thông qua các nhà phân phối uy tín tại Việt Nam. Mỗi chai rượu đều có nguồn gốc xuất xứ rõ ràng và được bảo quản trong điều kiện tiêu chuẩn quốc tế để đảm bảo chất lượng tốt nhất khi đến tay khách hàng."
     }
 ]
 
