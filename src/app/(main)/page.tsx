@@ -1,6 +1,5 @@
 'use client';
 
-import EngravingSection from '@/components/homepage/engraving-section';
 import FamousBrands from '@/components/homepage/famous-brands';
 import WhiskyRegionShowcase from '@/components/homepage/whisky-region-showcase';
 import GiftSetsSection from '@/components/homepage/gift-sets-section';
@@ -19,7 +18,6 @@ export default function HomePage() {
       <PriceCategoryShowcase />
       <GiftSetsSection />
       <Testimonials />
-      <EngravingSection />
     </>
   );
 }
