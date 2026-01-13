@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
-  const pageTitle = "Bộ quà tặng";
+  const pageTitle = "Quà Tết Rượu Vang";
 
   if (isLoading) {
     return (
@@ -31,7 +31,7 @@ export default function ProductsPage() {
     )
   }
 
-  const giftSetProducts = products?.filter(wine => wine.tags?.some(tag => ['gift-set', 'gift-set-spirits', 'gift-set-wine'].includes(tag))) || [];
+  const giftSetProducts = products?.filter(wine => wine.tags?.includes('gift-set-wine')) || [];
 
   return (
     <ProductListing 
