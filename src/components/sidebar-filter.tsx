@@ -26,26 +26,27 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     onFilterChange: (group: string, value: string) => void;
     activeFilters: string[];
 }) => (
-    <div className="border p-4 mb-6">
+    <div className="mb-8">
         <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">{title}</h3>
-        <div className="flex flex-col items-start gap-2">
+        <div className="grid grid-cols-2 gap-2">
         {options.map((option, index) => {
             const isActive = activeFilters.includes(option.label);
-            if (option.count === 0 && !isActive) return null;
+            // We still want to show the button even if count is 0, to allow clearing filters
+            // if (option.count === 0 && !isActive) return null;
 
             return (
             <Button
                 key={index}
-                variant="ghost"
+                variant="outline"
                 className={cn(
-                "rounded-none text-xs h-auto py-1 px-2 justify-start w-full",
+                "rounded-sm text-xs h-auto py-2 px-1 justify-center w-full font-semibold border-gray-300",
                 isActive 
-                    ? "font-bold text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-white text-gray-600 hover:bg-gray-100 hover:border-gray-400"
                 )}
                 onClick={() => onFilterChange(title, option.label)}
             >
-                {`${option.label} (${option.count})`}
+                {option.label}
             </Button>
             )
         })}
@@ -76,7 +77,16 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
     const handleFilterClick = (group: string, value: string) => {
         setActiveFilters(prev => {
             const currentGroupFilters = prev[group] || [];
-            const newGroupFilters = currentGroupFilters.includes(value)
+            const isCurrentlyActive = currentGroupFilters.includes(value);
+            
+            // For price range, allow only one selection
+            if (group === "KHOẢNG GIÁ") {
+                 const newGroupFilters = isCurrentlyActive ? [] : [value];
+                 return { ...prev, [group]: newGroupFilters };
+            }
+
+            // For other filters, allow multiple selections
+            const newGroupFilters = isCurrentlyActive
                 ? currentGroupFilters.filter(item => item !== value)
                 : [...currentGroupFilters, value];
             
@@ -101,7 +111,6 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
         if (potentialParents.length === 1) {
             parentCategory = potentialParents[0];
         } else if (potentialParents.length > 1) {
-             const productSlugs = new Set(products.map(p => p.slug));
              const parentCounts = potentialParents.map(p => {
                 const childIds = allCategories.filter(c => c.parentId === p.id).map(c => c.id);
                 const count = products.filter(prod => prod.tags?.some(t => childIds.includes(t))).length;
@@ -109,7 +118,6 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
              });
              parentCategory = parentCounts.sort((a,b) => b.count - a.count)[0]?.parent;
         } else {
-             // Try to find common parent if no top-level category matches
              const firstProductTags = products[0]?.tags;
              if(firstProductTags && firstProductTags.length > 0) {
                  const firstCat = allCategories.find(c => c.id === firstProductTags[0]);
@@ -154,8 +162,6 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
 
     return (
         <div className="w-full">
-            <h2 className="text-lg font-bold uppercase tracking-wider mb-6">Lọc sản phẩm</h2>
-            
             {dynamicCategoryFilter}
 
             {Object.entries(staticFiltersData).map(([groupTitle, options]) => (
