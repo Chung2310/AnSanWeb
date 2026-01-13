@@ -58,8 +58,7 @@ const mainCategoriesConfig = [
         ]
     },
     { label: "Bộ Quà Tặng", slug: "bo-qua-tang", href: "/danh-muc/bo-qua-tang", tags: ['gift-set'] },
-    { label: "Khắc Tên Lên Chai", slug: "khac-ten-len-chai", href: "/danh-muc/khac-ten-len-chai", tags: ['engraving'] },
-    { label: "Set Thử Rượu", slug: "set-thu-ruou", href: "/danh-muc/set-thu-ruou", tags: ['tasting-set'] },
+      
 ];
 
 

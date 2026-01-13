@@ -19,26 +19,47 @@ interface PriceCategory {
 
 const priceCategories: PriceCategory[] = [
   {
-    imageId: 'price-category-50',
-    title: 'WHISKY DƯỚI 50 TRIỆU',
-    href: '/danh-muc/duoi-50-trieu',
+    imageId: 'wine-2', // Placeholder for German wine
+    title: 'Vang Đức',
+    href: '/danh-muc/ruou-vang/vang-duc',
   },
   {
-    imageId: 'price-category-20',
-    title: 'WHISKY DƯỚI 20 TRIỆU',
-    href: '/danh-muc/duoi-20-trieu',
+    imageId: 'sampanh-nga-do',
+    title: 'Vang Nga',
+    href: '/danh-muc/ruou-vang/vang-nga',
+  },
+  {
+    imageId: 'chateau-la-grace-dieu-2015',
+    title: 'Vang Pháp',
+    href: '/danh-muc/ruou-vang/vang-phap',
+  },
+  {
+    imageId: 'wine-1', // Placeholder for Spanish wine
+    title: 'Vang Tây Ban Nha',
+    href: '/danh-muc/ruou-vang/vang-tay-ban-nha',
+  },
+  {
+    imageId: 'wine-4', // Placeholder for Italian wine
+    title: 'Vang Ý',
+    href: '/danh-muc/ruou-vang/vang-y',
+  },
+  {
+    imageId: 'hero-macallan', // Placeholder for Chivas
+    title: 'Chivas Series',
+    href: '/danh-muc/ruou-manh/chivas',
   },
   {
     imageId: 'price-category-10',
-    title: 'WHISKY DƯỚI 10 TRIỆU',
-    href: '/danh-muc/duoi-10-trieu',
+    title: 'John Walker Series',
+    href: '/danh-muc/ruou-manh/john-walker',
   },
   {
-    imageId: 'price-category-5',
-    title: 'WHISKY DƯỚI 5 TRIỆU',
-    href: '/danh-muc/duoi-5-trieu',
+    imageId: 'hero-armagnac',
+    title: 'Rượu mạnh khác',
+    href: '/danh-muc/ruou-manh',
   }
 ];
+
 
 const getImage = (id: string): ImagePlaceholder | undefined => {
   return PlaceHolderImages.find(img => img.id === id);
@@ -59,7 +80,9 @@ export default function PriceCategoryShowcase() {
   }, [isInView, mainControls]);
 
   useEffect(() => {
-    if (!api) return;
+    if (!api) {
+      return
+    }
     
     const onSelect = (api: CarouselApi) => {
       if (!api) {
@@ -98,7 +121,7 @@ export default function PriceCategoryShowcase() {
               if (!image) return null;
 
               return (
-                <CarouselItem key={index} className="basis-full md:basis-4/5 pl-4 md:pl-6">
+                <CarouselItem key={index} className="basis-full md:basis-4/5 lg:basis-1/3 pl-4 md:pl-6">
                     <Link href={category.href}>
                         <div className="relative h-[400px] md:h-[450px] w-full text-white rounded-lg overflow-hidden">
                             <Image 
@@ -107,7 +130,7 @@ export default function PriceCategoryShowcase() {
                                 fill
                                 className="object-cover"
                                 data-ai-hint={image.imageHint}
-                                sizes="(max-width: 768px) 100vw, 80vw"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 33vw"
                             />
                             <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-r from-black/40 to-transparent">
                                 <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
