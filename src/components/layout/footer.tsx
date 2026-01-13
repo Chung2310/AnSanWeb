@@ -43,9 +43,21 @@ export default function Footer() {
 
         <div className="mt-8 text-sm text-black/80 space-y-2">
             <p className="font-headline text-lg font-bold">Rượu Vang An San</p>
-            <p>Người đại diện: Phạm Đăng Thành</p>
-            <p>Địa chỉ: Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn</p>
-            <p>Hotline: 093 333 33 13</p>
+            <p>
+                <Link href="https://zalo.me/0933333313" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    Người đại diện: Phạm Đăng Thành
+                </Link>
+            </p>
+            <p>
+                <Link href="https://www.google.com/maps/search/?api=1&query=R%C6%B0%E1%BB%A3u+Vang+An+San" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    Địa chỉ: Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn
+                </Link>
+            </p>
+            <p>
+                <Link href="tel:0933333313" className="hover:underline">
+                    Hotline: 093 333 33 13
+                </Link>
+            </p>
             <p>Email: ruouvangansan@gmail.com</p>
         </div>
 
