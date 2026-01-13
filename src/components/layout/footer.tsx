@@ -22,24 +22,6 @@ export default function Footer() {
           <Logo />
         </div>
         
-        <div className="mt-6 flex justify-center space-x-4">
-          <Link href="#" className="text-black hover:opacity-75">
-            <span className="sr-only">Facebook</span>
-            <Facebook className="h-6 w-6" />
-          </Link>
-          <Link href="#" className="text-black hover:opacity-75">
-            <span className="sr-only">Instagram</span>
-            <Instagram className="h-6 w-6" />
-          </Link>
-          <Link href="#" className="text-black hover:opacity-75">
-            <span className="sr-only">TikTok</span>
-            <TikTokIcon className="h-6 w-6" />
-          </Link>
-          <Link href="#" className="text-black hover:opacity-75">
-            <span className="sr-only">YouTube</span>
-            <Youtube className="h-6 w-6" />
-          </Link>
-        </div>
 
         <div className="mt-8 text-sm text-black/80 space-y-2">
             <p className="font-headline text-lg font-bold">Rượu Vang An San</p>
