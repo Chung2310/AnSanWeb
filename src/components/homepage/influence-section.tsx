@@ -46,7 +46,7 @@ export default function InfluenceSection() {
         animate={mainControls}
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <motion.div variants={itemVariants}>
             <p className="font-semibold tracking-widest uppercase text-sm text-center lg:text-left" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
