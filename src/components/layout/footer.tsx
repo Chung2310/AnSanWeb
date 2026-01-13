@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -59,7 +60,7 @@ export default function Footer() {
         <div className="container mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <p className="text-center text-xs text-black/60">
-              2024 &copy; AnSan. MỌI QUYỀN ĐÃ ĐƯỢC BẢO LƯU.
+              2026 &copy; AnSan. ALL RIGHTS RESERVED.
             </p>
 
             <div className="mt-4 flex justify-center text-xs text-black/60 sm:mt-0 sm:justify-start">
