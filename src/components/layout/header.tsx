@@ -103,7 +103,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
            <div className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                {sublinks.map((link) => (
-                  <div key={link.href} className="relative group">
+                  <div key={`${link.href}-${link.label}`} className="relative group">
                      <Link 
                        href={link.href} 
                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
