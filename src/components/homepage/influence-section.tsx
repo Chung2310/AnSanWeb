@@ -50,7 +50,7 @@ export default function InfluenceSection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.2 });
     const mainControls = useAnimation();
-    const plugin = React.useRef(Autoplay({ delay: 3000, stopOnInteraction: false }));
+    const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
 
     useEffect(() => {
         if (isInView) {
