@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import { motion, useInView, useAnimation, animate } from 'framer-motion';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+
 
 const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -38,20 +40,23 @@ const AnimatedNumber = ({ to }: { to: number }) => {
     return <p ref={ref} className="text-5xl font-black" style={{ color: '#8a7d6a' }} >0</p>;
 };
 
+const carouselImages = [
+  '/images/2.webp',
+  '/images/3.webp',
+  '/images/4.webp',
+];
+
 export default function InfluenceSection() {
-    const influenceImage = PlaceHolderImages.find(img => img.id === 'influence-image');
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.2 });
     const mainControls = useAnimation();
+    const plugin = React.useRef(Autoplay({ delay: 3000, stopOnInteraction: false }));
 
     useEffect(() => {
         if (isInView) {
             mainControls.start("visible");
         }
     }, [isInView, mainControls]);
-
-
-    if (!influenceImage) return null;
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -82,15 +87,30 @@ export default function InfluenceSection() {
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
             </h2>
-            <motion.div variants={itemVariants} className="mt-8 aspect-w-4 aspect-h-3">
-              <Image
-                src={influenceImage.imageUrl}
-                alt={influenceImage.description}
-                width={800}
-                height={600}
-                className="w-full h-full object-cover rounded-lg shadow-lg"
-                data-ai-hint={influenceImage.imageHint}
-              />
+            <motion.div variants={itemVariants} className="mt-8">
+               <Carousel
+                  plugins={[plugin.current]}
+                  className="w-full"
+                  opts={{
+                    loop: true,
+                  }}
+                >
+                  <CarouselContent>
+                    {carouselImages.map((src, index) => (
+                      <CarouselItem key={index}>
+                        <div className="relative h-[400px] w-full aspect-w-4 aspect-h-3">
+                           <Image
+                            src={src}
+                            alt={`Influence image ${index + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="w-full h-full object-cover rounded-lg shadow-lg"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
             </motion.div>
           </motion.div>
           {/* Right Column */}
