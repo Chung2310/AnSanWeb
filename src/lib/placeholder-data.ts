@@ -8,7 +8,11 @@ const getImage = (id: string) => {
   if (!img) {
     throw new Error(`Image with id ${id} not found`);
   }
-  return img;
+  return {
+    url: img.imageUrl,
+    path: '',
+    imageHint: img.imageHint
+  };
 };
 
 const genericTastingNotes = {
@@ -815,4 +819,3 @@ export const sampleTestimonials: Testimonial[] = [
 
     
     
-

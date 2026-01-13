@@ -90,7 +90,7 @@ export type BlogPost = {
   excerpt: string;
   content?: string;
   image: {
-    url: string; // Changed from imageUrl
+    url: string;
     imageHint?: string;
     path?: string;
   } | null;
@@ -105,7 +105,7 @@ export type Testimonial = {
   title: string;
   quote: string;
   avatar: {
-    imageUrl: string,
+    url: string,
     imageHint: string,
   };
 };
