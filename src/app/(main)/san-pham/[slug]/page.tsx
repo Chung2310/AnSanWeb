@@ -169,6 +169,21 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }
 
+  const isBestChoice = React.useMemo(() => {
+    const bestChoiceProductNames = [
+      "Old Vine Cabernet Sauvignon",
+      "Old Vine Shiraz",
+      "Gigino Grande (Phiên bản kỷ niệm 80 năm) – Vang Đỏ",
+      "Sgarzi Luigi Primitivo di Manduria DOC",
+      "Piandimare \"Tassanera\" Montepulciano d'Abruzzo Riserva",
+      "Enzo Vincenzo Appassimento Puglia IGT",
+      "Grande Alberone Moscato",
+    ].map(name => name.replace(/\u200B/g, '').trim());
+
+    const productName = product.nameVN.replace(/\u200B/g, '').trim();
+    return bestChoiceProductNames.includes(productName);
+  }, [product.nameVN]);
+
   return (
     <>
       <div className="bg-white text-black">
@@ -178,6 +193,11 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
                         <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative">
+                            {index === 0 && isBestChoice && (
+                                <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
+                                    Best Choice
+                                </div>
+                            )}
                             <Image
                               src={image.url}
                               alt={`${product.nameVN} - ảnh ${index + 1}`}
@@ -252,9 +272,15 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         <div>
                             <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                <Button variant="outline" className="justify-center text-center h-14"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</Button>
-                                <Button variant="outline" className="justify-center text-center h-14"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</Button>
-                                <Button variant="outline" className="justify-center text-center h-14"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</Button>
+                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                                  <Link href="tel:0933333313"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</Link>
+                                </Button>
+                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                                  <Link href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</Link>
+                                </Button>
+                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                                  <Link href="https://zalo.me/0933333313" target="_blank"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</Link>
+                                </Button>
                                 <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-5 w-5"/> WHATSAPP</Button>
                             </div>
                         </div>
