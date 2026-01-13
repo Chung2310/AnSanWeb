@@ -96,7 +96,7 @@ export default function WhiskyRegionShowcase() {
         className="container relative z-10 flex flex-col items-start justify-center text-left"
       >
         <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 shadow-text">
-          Lựa chọn vùng whisky
+          Lựa Chọn Rượu mạnh
         </motion.p>
         <div className="my-6">
           {regions.map((region) => (
