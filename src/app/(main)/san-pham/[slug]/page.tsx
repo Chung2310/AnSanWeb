@@ -353,7 +353,3 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
-
-    
-
-    
