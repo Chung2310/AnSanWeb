@@ -4,7 +4,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -12,58 +11,57 @@ import Autoplay from "embla-carousel-autoplay";
 import { motion, useInView, useAnimation } from 'framer-motion';
 
 interface PriceCategory {
-  imageId: string;
+  src: string;
   title: string;
   href: string;
 }
 
+// Tạm thời dùng chung 1 ảnh cho tất cả category
+// Bạn sẽ cập nhật src riêng cho từng cái sau
+const TEMP_IMAGE_SRC = '/images/homepage/Chivas.png';
+
 const priceCategories: PriceCategory[] = [
   {
-    imageId: 'wine-2', // Placeholder for German wine
+    src: TEMP_IMAGE_SRC,
     title: 'Vang Đức',
     href: '/danh-muc/ruou-vang/vang-duc',
   },
   {
-    imageId: 'sampanh-nga-do',
+    src: TEMP_IMAGE_SRC,
     title: 'Vang Nga',
     href: '/danh-muc/ruou-vang/vang-nga',
   },
   {
-    imageId: 'chateau-la-grace-dieu-2015',
+    src: TEMP_IMAGE_SRC,
     title: 'Vang Pháp',
     href: '/danh-muc/ruou-vang/vang-phap',
   },
   {
-    imageId: 'wine-1', // Placeholder for Spanish wine
+    src: TEMP_IMAGE_SRC,
     title: 'Vang Tây Ban Nha',
     href: '/danh-muc/ruou-vang/vang-tay-ban-nha',
   },
   {
-    imageId: 'wine-4', // Placeholder for Italian wine
+    src: TEMP_IMAGE_SRC,
     title: 'Vang Ý',
     href: '/danh-muc/ruou-vang/vang-y',
   },
   {
-    imageId: 'hero-macallan', // Placeholder for Chivas
+    src: TEMP_IMAGE_SRC,
     title: 'Chivas Series',
     href: '/danh-muc/ruou-manh/chivas',
   },
   {
-    imageId: 'price-category-10',
+    src: TEMP_IMAGE_SRC,
     title: 'John Walker Series',
     href: '/danh-muc/ruou-manh/john-walker',
   },
   {
-    imageId: 'hero-armagnac',
+    src: TEMP_IMAGE_SRC,
     title: 'Rượu mạnh khác',
     href: '/danh-muc/ruou-manh',
   }
 ];
-
-
-const getImage = (id: string): ImagePlaceholder | undefined => {
-  return PlaceHolderImages.find(img => img.id === id);
-}
 
 export default function PriceCategoryShowcase() {
   const [api, setApi] = useState<CarouselApi>();
@@ -74,25 +72,25 @@ export default function PriceCategoryShowcase() {
   const mainControls = useAnimation();
 
   useEffect(() => {
-      if (isInView) {
-          mainControls.start("visible");
-      }
+    if (isInView) {
+      mainControls.start("visible");
+    }
   }, [isInView, mainControls]);
 
   useEffect(() => {
     if (!api) {
-      return
+      return;
     }
-    
+
     const onSelect = (api: CarouselApi) => {
       if (!api) {
         return;
       }
       setCurrent(api.selectedScrollSnap());
     };
-    
+
     api.on("select", onSelect);
-    
+
     return () => {
       api.off("select", onSelect);
     };
@@ -108,7 +106,9 @@ export default function PriceCategoryShowcase() {
       initial="hidden"
       animate={mainControls}
       transition={{ duration: 1, delay: 0.4 }}
-      className="py-12" style={{ backgroundColor: '#fdfaf5' }}>
+      className="py-12" 
+      style={{ backgroundColor: '#fdfaf5' }}
+    >
       <div className="container mx-auto max-w-screen-xl">
         <Carousel
           setApi={setApi}
@@ -116,47 +116,50 @@ export default function PriceCategoryShowcase() {
           opts={{ loop: true, align: 'start', dragFree: true }}
         >
           <CarouselContent className="items-center">
-            {priceCategories.map((category, index) => {
-              const image = getImage(category.imageId);
-              if (!image) return null;
-
-              return (
-                <CarouselItem key={index} className="basis-full md:basis-4/5 lg:basis-1/3 pl-4 md:pl-6">
-                    <Link href={category.href}>
-                        <div className="relative h-[400px] md:h-[450px] w-full text-white rounded-lg overflow-hidden">
-                            <Image 
-                                src={image.imageUrl}
-                                alt={category.title}
-                                fill
-                                className="object-cover"
-                                data-ai-hint={image.imageHint}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 33vw"
-                            />
-                            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-r from-black/40 to-transparent">
-                                <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
-                                    {category.title}
-                                </h3>
-                                <Button asChild variant="outline" className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest">
-                                    <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
-                                </Button>
-                            </div>
-                        </div>
-                    </Link>
-                </CarouselItem>
-              );
-            })}
+            {priceCategories.map((category, index) => (
+              <CarouselItem 
+                key={category.href} // dùng href làm key để ổn định hơn index
+                className="basis-full md:basis-4/5 lg:basis-1/3 pl-4 md:pl-6"
+              >
+                <Link href={category.href}>
+                  <div className="relative h-[400px] md:h-[450px] w-full text-white rounded-lg overflow-hidden">
+                    <Image 
+                      src={category.src}
+                      alt={category.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 33vw"
+                    />
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-t from-black/70 to-transparent">
+                      <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
+                        {category.title}
+                      </h3>
+                      <Button 
+                        asChild 
+                        variant="outline" 
+                        className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
+                      >
+                        <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
+                      </Button>
+                    </div>
+                  </div>
+                </Link>
+              </CarouselItem>
+            ))}
           </CarouselContent>
+
+          {/* Dot navigation */}
           <div className="flex justify-center mt-8 space-x-2">
             {priceCategories.map((_, index) => (
-                <button
-                    key={index}
-                    onClick={() => api?.scrollTo(index)}
-                    className={cn(
-                        "w-2.5 h-2.5 rounded-full transition-colors",
-                        current === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
-                    )}
-                    aria-label={`Go to slide ${index + 1}`}
-                />
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={cn(
+                  "w-2.5 h-2.5 rounded-full transition-colors",
+                  current === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
+                )}
+                aria-label={`Go to slide ${index + 1}`}
+              />
             ))}
           </div>
         </Carousel>
