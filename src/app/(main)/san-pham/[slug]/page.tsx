@@ -171,6 +171,23 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }
 
+  const isWineCategory = React.useMemo(() => {
+    if (!product.tags || !categories) return false;
+    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
+    if (!wineCategory) return false;
+
+    const getPathIds = (categoryId: string): string[] => {
+        const category = categories.find(c => c.id === categoryId);
+        if (!category) return [];
+        return category.parentId ? [category.id, ...getPathIds(category.parentId)] : [category.id];
+    };
+
+    return product.tags.some(tagId => {
+        const pathIds = getPathIds(tagId);
+        return pathIds.includes(wineCategory.id);
+    });
+  }, [product.tags, categories]);
+
 
   return (
     <>
@@ -180,15 +197,20 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                 <div className="lg:col-span-3">
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
-                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center">
+                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative">
                             <Image
-                            src={image.url}
-                            alt={`${product.nameVN} - ảnh ${index + 1}`}
-                            width={1000}
-                            height={1000}
-                            className="w-full h-auto object-contain"
-                            priority={index === 0}
+                              src={image.url}
+                              alt={`${product.nameVN} - ảnh ${index + 1}`}
+                              width={1000}
+                              height={1000}
+                              className="w-full h-auto object-contain"
+                              priority={index === 0}
                             />
+                            {index === 0 && isWineCategory && (
+                                <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm font-bold uppercase px-4 py-2 rounded-full shadow-lg">
+                                    Best Choice
+                                </div>
+                            )}
                         </div>
                         ))}
                     </div>
@@ -333,3 +355,5 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
+    
