@@ -10,7 +10,6 @@ import { useRef, useEffect } from 'react';
 
 interface GiftSetCardProps {
   imageId: string;
-  category: string;
   title: string;
   href: string;
 }
@@ -18,15 +17,13 @@ interface GiftSetCardProps {
 const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'gift-set-tasting',
-    category: 'Quà tết Rượu Vang',
-    title: 'BỘ QUÀ TẶNG RƯỢU VANG TẾT 2026',
-    href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang',
+    title: 'BỘ QUÀ TẾT 2026',
+    href: '/danh-muc/bo-qua-tang',
   },
   {
     imageId: 'gift-set-lakes-tet',
-    category: 'Quà tết Rượu Mạnh',
-    title: 'BỘ QUÀ TẶNG RƯỢU MẠNH TẾT 2026',
-    href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
+    title: 'CIGAR',
+    href: '/danh-muc/cigar',
   },
 ];
 
@@ -48,8 +45,7 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
         data-ai-hint={image.imageHint}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
-      <div className="absolute bottom-0 left-0 p-8">
-        <p className="font-semibold tracking-wider uppercase text-sm">{card.category}</p>
+      <div className="absolute bottom-0 left-0 p-8">       
         <h3 className="mt-2 font-headline text-3xl font-black uppercase">{card.title}</h3>
         <Button
           variant="outline"
