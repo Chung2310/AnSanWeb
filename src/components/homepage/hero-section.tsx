@@ -15,8 +15,7 @@ const heroSlides = [
         imageId: 'hero-macallan',
         label: 'Master of Wine',
         href: '/danh-muc-san-pham',
-        tag: 'Master of wine',
-        titleLine1: 'Master of wine',
+        tag: 'Master of wine',      
         titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
         bgColor: 'bg-primary',
@@ -25,10 +24,7 @@ const heroSlides = [
     {
         imageId: 'hero-sale',
         label: 'AN SAN',
-        href: '/gioi-thieu',
-        tag: '10% OFF',
-        titleLine1: 'AnSan OUTLET',
-        titleAccent: 'SALE 10% OFF',
+        href: '/gioi-thieu',       
         description: 'ANSAN không chỉ mang đến rượu vang, mà còn là cách thể hiện đẳng cấp, sự trân trọng và phong vị sống của người thưởng thức',
         bgColor: 'bg-primary',
         textColor: 'text-white'
@@ -36,10 +32,7 @@ const heroSlides = [
     {
         imageId: 'hero-armagnac',
         label: 'DONNELLI',
-        href: '/danh-muc/armagnac',
-        tag: 'ARMAGNAC',
-        titleLine1: 'ARMAGNAC RƯỢU MẠNH',
-        titleAccent: 'PHÁP LỊCH SỬ 700 NĂM',
+        href: '/danh-muc/armagnac',  
         description: 'Donnelli không cồn – lựa chọn tinh tế cho những khoảnh khắc nâng ly trọn vẹn, nơi phong vị Ý được thưởng thức theo cách an toàn và lịch lãm',
         bgColor: 'bg-primary',
         textColor: 'text-white'
@@ -48,9 +41,6 @@ const heroSlides = [
         imageId: 'hero-smws',
         label: 'QUÀ TẾT',
         href: '/blog/5-dieu-ban-khong-biet-ve-smws',
-        tag: 'SMWS',
-        
-        titleAccent: '100% CASK STRENGTH',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         bgColor: 'bg-primary',
         textColor: 'text-white',
@@ -59,9 +49,7 @@ const heroSlides = [
     {
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
-        href: '/danh-muc/wine',
-        tag: 'WINE',      
-        titleAccent: 'ANSAN CŨNG TUYỂN CHỌN NHỮNG CHAI VANG HẢO HẠNG NHẤT',
+        href: '/danh-muc/ruou-manh',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
         bgColor: 'bg-primary',
         textColor: 'text-white'
@@ -131,7 +119,7 @@ export default function HeroSection() {
                                                         {slide.tag}
                                                     </motion.p>
                                                     <motion.h1 variants={textItemVariants} className="mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline">
-                                                        {slide.titleLine1} <span className="text-white">{slide.titleAccent}</span>
+                                                        {slide.label} <span className="text-white">{slide.titleAccent}</span>
                                                     </motion.h1>
                                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
