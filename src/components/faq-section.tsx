@@ -23,7 +23,7 @@ const faqItems = [
         answer: "Có, chúng tôi thường xuyên tổ chức các buổi tasting, workshop và sự kiện gặp gỡ chuyên gia để chia sẻ kiến thức và đam mê về whisky. Vui lòng theo dõi trang tin tức hoặc mạng xã hội của chúng tôi để cập nhật lịch sự kiện mới nhất."
     },
     {
-        question: "LÀM SAO ĐỂ TRỞ THÀNH THÀNH VIÊN CỦA SPIRIT CLUB?",
+        question: "THAY CÂU NÀY BẰNG NỘI DUNG KHÁC",
         answer: "Để trở thành thành viên của Spirit Club và nhận những ưu đãi độc quyền, bạn chỉ cần đăng ký tài khoản trên website của chúng tôi và tham gia vào các hoạt động cộng đồng. Thành viên sẽ được ưu tiên tham gia sự kiện và nhận các thông tin đặc biệt."
     }
 ]
