@@ -128,8 +128,8 @@ export default function PriceCategoryShowcase() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 80vw"
                     />
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-t from-black/70 to-transparent">
-                      <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start">
+                      <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
                         {category.title}
                       </h3>
                       <Button 
@@ -161,6 +161,11 @@ export default function PriceCategoryShowcase() {
             ))}
           </div>
         </Carousel>
+        <style jsx>{`
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+        `}</style>
       </div>
     </motion.section>
   );
