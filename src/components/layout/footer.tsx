@@ -2,27 +2,38 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
 import Logo from '@/components/logo';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
-const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M21 8.15c-1.33 0-2.4 1.07-2.4 2.4v5.3c0 1.33-1.07 2.4-2.4 2.4H8.15c-1.33 0-2.4-1.07-2.4-2.4V8.15c0-1.33-1.07 2.4-2.4 2.4H3" />
-        <path d="M12 18.25V3" />
-        <path d="M12 3a4 4 0 1 1 4 4" />
-    </svg>
-);
+const containerVariants = {
+    hidden: { opacity: 0, y: 75 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.2 } },
+};
 
 export default function Footer() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const mainControls = useAnimation();
+
+  useEffect(() => {
+      if (isInView) {
+          mainControls.start("visible");
+      }
+  }, [isInView, mainControls]);
+
   return (
-    <footer 
+    <motion.footer 
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={mainControls}
       className="bg-[#f7f7f7] text-black">
       <div className="container mx-auto max-w-screen-xl px-4 py-12 text-center">
         <div className="flex justify-center">
           <Logo />
         </div>
         
-
         <div className="mt-8 text-sm text-black/80 space-y-2">
             <p className="font-headline text-lg font-bold">Rượu Vang An San</p>
             <p>
@@ -63,6 +74,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
