@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -22,8 +23,8 @@ const heroSlides = [
     },
     {
         imageId: 'hero-sale',
-        label: '10% OFF',
-        href: '/collection/sales-10',
+        label: 'AN SAN',
+        href: '/gioi-thieu',
         tag: '10% OFF',
         titleLine1: 'AnSan OUTLET',
         titleAccent: 'SALE 10% OFF',
