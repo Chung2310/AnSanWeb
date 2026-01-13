@@ -1,3 +1,6 @@
+
+'use client';
+
 import { sampleTestimonials } from '@/lib/placeholder-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,10 +11,32 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+
+const containerVariants = {
+    hidden: { opacity: 0, y: 75 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.2 } },
+};
 
 export default function Testimonials() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
+    const mainControls = useAnimation();
+
+    useEffect(() => {
+        if (isInView) {
+            mainControls.start("visible");
+        }
+    }, [isInView, mainControls]);
+
   return (
-    <section className="py-12 md:py-20 bg-secondary">
+    <motion.section 
+        ref={ref}
+        variants={containerVariants}
+        initial="hidden"
+        animate={mainControls}
+        className="py-12 md:py-20 bg-secondary">
       <div className="container">
         <div className="text-center mb-10">
           <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
@@ -58,6 +83,6 @@ export default function Testimonials() {
           <CarouselNext />
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -12,11 +12,11 @@ export type ActiveFilters = {
 
 const staticFiltersData = {
     "KHOẢNG GIÁ": [
-        { label: "DƯỚI 5 TRIỆU", value: [0, 5000000] },
-        { label: "5 - 10 TRIỆU", value: [5000000, 10000000] },
-        { label: "10 - 20 TRIỆU", value: [10000000, 20000000] },
-        { label: "20 - 50 TRIỆU", value: [20000000, 50000000] },
-        { label: "TRÊN 50 TRIỆU", value: [50000000, Infinity] },
+        { label: "DƯỚI 5 TRĂM", value: [0, 500000] },
+        { label: "5 TRĂM - 1 TRIỆU", value: [500000, 1000000] },
+        { label: "1 - 2 TRIỆU", value: [1000000, 2000000] },
+        { label: "2 - 3 TRIỆU", value: [2000000, 3000000] },
+        { label: "TRÊN 3 TRIỆU", value: [3000000, Infinity] },
     ],
 };
 
