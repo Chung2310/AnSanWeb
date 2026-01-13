@@ -38,8 +38,9 @@ const ActionsCell = ({ row }: { row: { original: BlogPost } }) => {
     const searchParams = useSearchParams();
     const page = searchParams.get('page') ?? '1';
 
-    const handleDelete = () => {
-        deleteBlogPost(post, () => setIsAlertOpen(false));
+    const handleDelete = async () => {
+        await deleteBlogPost(post);
+        setIsAlertOpen(false);
     };
 
     return (
