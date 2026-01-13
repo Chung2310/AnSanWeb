@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -37,6 +38,7 @@ export default function WineQuizPage() {
   const [answers, setAnswers] = useState<AnswersState>({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const { toast } = useToast();
 
   const handleAnswerSelect = (questionId: number, answer: string) => {
@@ -65,7 +67,7 @@ export default function WineQuizPage() {
       });
       return;
     }
-    console.log('Quiz submitted:', { answers, name, email });
+    console.log('Quiz submitted:', { answers, name, email, phone });
     toast({
       title: 'Thành công!',
       description: 'Cảm ơn bạn đã tham gia. Chuyên gia của chúng tôi sẽ sớm liên hệ để tư vấn loại vang phù hợp nhất với bạn.',
@@ -74,6 +76,7 @@ export default function WineQuizPage() {
     setAnswers({});
     setName('');
     setEmail('');
+    setPhone('');
   };
 
   return (
@@ -143,6 +146,17 @@ export default function WineQuizPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                   className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
+                  placeholder=""
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">SỐ ĐIỆN THOẠI</label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                    className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
                   placeholder=""
                 />
