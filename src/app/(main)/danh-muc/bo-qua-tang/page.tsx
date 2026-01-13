@@ -2,10 +2,34 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Bộ quà tặng";
+
+  const giftSetProducts = useMemo(() => {
+    if (!products || !categories) return [];
+    
+    // Find the parent "Bộ quà tặng" category by its slug
+    const giftSetParentCategory = categories.find(c => c.slug === 'bo-qua-tang');
+    if (!giftSetParentCategory) return [];
+    
+    // Find all direct children of the parent category
+    const childCategoryIds = categories
+      .filter(c => c.parentId === giftSetParentCategory.id)
+      .map(c => c.id);
+      
+    // Combine the parent ID and all child IDs to create a comprehensive list
+    const allGiftCategoryIds = [giftSetParentCategory.id, ...childCategoryIds];
+
+    // Filter products that have a tag matching any of the identified category IDs
+    return products.filter(wine => wine.tags?.some(tag => allGiftCategoryIds.includes(tag)));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -30,8 +54,6 @@ export default function ProductsPage() {
       </div>
     )
   }
-
-  const giftSetProducts = products?.filter(wine => wine.tags?.some(tag => ['gift-set', 'gift-set-spirits', 'gift-set-wine'].includes(tag))) || [];
 
   return (
     <ProductListing 
