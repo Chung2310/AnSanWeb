@@ -2,10 +2,26 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Rượu Mạnh";
+
+  const spiritsProducts = useMemo(() => {
+    if (!products || !categories) return [];
+    const spiritCategory = categories.find(c => c.slug === 'ruou-manh');
+    if (!spiritCategory) return [];
+
+    const childCategoryIds = categories.filter(c => c.parentId === spiritCategory.id).map(c => c.id);
+    const allSpiritIds = [spiritCategory.id, ...childCategoryIds];
+
+    return products.filter(wine => wine.tags?.some(tag => allSpiritIds.includes(tag)));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -31,9 +47,6 @@ export default function ProductsPage() {
     )
   }
   
-  const spiritTags = ['spirits', 'john-walker', 'chivas', 'mortlach', 'ballantines', 'royal-salute', 'singleton'];
-  const spiritsProducts = products?.filter(wine => wine.tags?.some(tag => spiritTags.includes(tag))) || [];
-
   return (
     <ProductListing 
       key={pageTitle}

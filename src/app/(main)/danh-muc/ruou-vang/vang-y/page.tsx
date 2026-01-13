@@ -2,10 +2,26 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
+import { useMemo } from 'react';
 
 export default function ProductsPage() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Vang Ý";
+
+  const italianWines = useMemo(() => {
+    if (!products || !categories) return [];
+    const italianWineCategory = categories.find(c => c.slug === 'vang-y');
+    if (!italianWineCategory) return [];
+
+    const childCategoryIds = categories.filter(c => c.parentId === italianWineCategory.id).map(c => c.id);
+    const allItalianWineIds = [italianWineCategory.id, ...childCategoryIds];
+
+    return products.filter(wine => wine.tags?.some(tag => allItalianWineIds.includes(tag)));
+  }, [products, categories]);
+
+  const isLoading = isLoadingProducts || isLoadingCategories;
 
   if (isLoading) {
     return (
@@ -30,9 +46,6 @@ export default function ProductsPage() {
       </div>
     )
   }
-
-  const italianWineTags = ['y', 'piemonte', 'toscana', 'veneto', 'puglia', 'sicilia'];
-  const italianWines = products?.filter(wine => wine.tags?.some(tag => italianWineTags.includes(tag))) || [];
 
   return (
     <ProductListing 
