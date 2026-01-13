@@ -70,8 +70,8 @@ const categoryNavLinks = [
         href: '/danh-muc/bo-qua-tang', 
         label: 'BỘ QUÀ TẶNG',
         sublinks: [
-            { href: '/danh-muc/bo-qua-tang', label: 'Quà Tết Rượu Mạnh' },
-            { href: '/danh-muc/bo-qua-tang', label: 'Quà Tết Rượu Vang' },
+            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
+            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
         ]
     },
     { href: '/danh-muc/khac-ten-len-chai', label: 'KHẮC TÊN LÊN CHAI' },
