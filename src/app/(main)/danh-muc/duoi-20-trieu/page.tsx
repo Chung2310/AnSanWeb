@@ -6,7 +6,7 @@ import { priceCategoryData } from '@/lib/price-category-data';
 
 export default function ProductsPage() {
   const { products, isLoading } = useProducts();
-  const pageTitle = "Whisky Dưới 20 Triệu";
+  const pageTitle = "Whisky từ 10 - 20 Triệu";
   const bannerData = {
     ...priceCategoryData.find(cat => cat.slug === 'duoi-20-trieu')!,
     breadcrumbs: [
@@ -39,14 +39,14 @@ export default function ProductsPage() {
     )
   }
 
-  const filteredProducts = products?.filter(wine => wine.price < 20000000) || [];
+  const filteredProducts = products?.filter(wine => wine.price >= 10000000 && wine.price < 20000000) || [];
 
   return (
     <ProductListing 
       key={pageTitle}
       initialProducts={filteredProducts}
       title={pageTitle}
-      bannerData={bannerData}
+      bannerData={{...bannerData, title: pageTitle}}
     />
   );
 }
