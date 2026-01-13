@@ -34,7 +34,7 @@ const heroSlides = [
     },
     {
         imageId: 'hero-armagnac',
-        label: 'ARMAGNAC',
+        label: 'DONNELLI',
         href: '/danh-muc/armagnac',
         tag: 'ARMAGNAC',
         titleLine1: 'ARMAGNAC RƯỢU MẠNH',
