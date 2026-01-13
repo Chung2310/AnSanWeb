@@ -83,6 +83,7 @@ export default function PriceCategoryShowcase() {
     }
 
     const onSelect = (api: CarouselApi) => {
+      if (!api) return;
       setCurrent(api.selectedScrollSnap());
     };
 
@@ -124,7 +125,7 @@ export default function PriceCategoryShowcase() {
                       src={category.src}
                       alt={category.title}
                       fill
-                      className="object-contain"
+                      className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 33vw"
                     />
                     <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-t from-black/70 to-transparent">
