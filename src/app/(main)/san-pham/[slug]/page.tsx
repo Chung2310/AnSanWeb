@@ -180,8 +180,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
       "Piandimare Tassanera",
       "Enzo Vincenzo Appassimento Puglia IGT",
       "Grande Alberone Moscato"
-    ];
-    // Normalize the product name by removing potential invisible characters like zero-width space
+    ].map(name => name.replace(/\u200B/g, '')); // Normalize names to remove zero-width spaces
+
     const productName = product.nameVN.replace(/\u200B/g, '');
     return bestChoiceProductNames.includes(productName);
   }, [product.nameVN]);
@@ -353,5 +353,7 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
+
+    
 
     
