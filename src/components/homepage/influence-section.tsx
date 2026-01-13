@@ -46,11 +46,11 @@ export default function InfluenceSection() {
         animate={mainControls}
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
           {/* Left Column */}
-          <motion.div variants={itemVariants} className="text-center lg:text-left">
-            <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
-            <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
+          <motion.div variants={itemVariants}>
+            <p className="font-semibold tracking-widest uppercase text-sm text-center lg:text-left" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
+            <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight text-center lg:text-left" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
             </h2>
             <motion.div variants={itemVariants} className="mt-8">
