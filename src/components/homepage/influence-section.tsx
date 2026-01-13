@@ -2,20 +2,9 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
-import Link from 'next/link';
-import { motion, useInView, useAnimation, animate } from 'framer-motion';
+import { motion, useInView, useAnimation } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-
-
-const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M21 8.15c-1.33 0-2.4 1.07-2.4 2.4v5.3c0 1.33-1.07 2.4-2.4 2.4H8.15c-1.33 0-2.4-1.07-2.4-2.4V8.15c0-1.33-1.07 2.4-2.4 2.4H3" />
-        <path d="M12 18.25V3" />
-        <path d="M12 3a4 4 0 1 1 4 4" />
-    </svg>
-);
 
 const carouselImages = [
   '/images/2.webp',
@@ -57,30 +46,30 @@ export default function InfluenceSection() {
         animate={mainControls}
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <motion.div variants={itemVariants} className="text-center lg:text-left">
             <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
             </h2>
-            <motion.div variants={itemVariants} className="mt-8 h-[400px]">
+            <motion.div variants={itemVariants} className="mt-8">
                <Carousel
                   plugins={[plugin.current]}
-                  className="w-full h-full"
+                  className="w-full"
                   opts={{
                     loop: true,
                   }}
                 >
-                  <CarouselContent className="h-full">
+                  <CarouselContent>
                     {carouselImages.map((src, index) => (
-                      <CarouselItem key={index} className="h-full">
-                        <div className="relative h-full w-full">
+                      <CarouselItem key={index}>
+                        <div className="relative aspect-[4/3] w-full">
                            <Image
                             src={src}
                             alt={`Influence image ${index + 1}`}
                             fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
+                            sizes="(max-width: 1024px) 100vw, 50vw"
                             className="w-full h-full object-cover rounded-lg shadow-lg"
                           />
                         </div>
@@ -93,7 +82,7 @@ export default function InfluenceSection() {
           {/* Right Column */}
           <motion.div 
             variants={containerVariants}
-            className="flex flex-col justify-center text-gray-700 relative"
+            className="flex flex-col justify-center text-gray-700"
           >
             <motion.div variants={itemVariants} className="text-base leading-relaxed space-y-4">
               <p className="font-bold">VÌ SAO NÊN CHỌN AN SAN</p>
