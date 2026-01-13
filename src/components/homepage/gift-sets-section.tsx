@@ -20,13 +20,13 @@ const giftCards: GiftSetCardProps[] = [
     imageId: 'gift-set-tasting',
     category: 'Quà tết Rượu Vang',
     title: 'BỘ QUÀ TẶNG RƯỢU VANG TẾT 2026',
-    href: '/danh-muc/bo-qua-tang',
+    href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang',
   },
   {
     imageId: 'gift-set-lakes-tet',
     category: 'Quà tết Rượu Mạnh',
     title: 'BỘ QUÀ TẶNG RƯỢU MẠNH TẾT 2026',
-    href: '/danh-muc/bo-qua-tang',
+    href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
   },
 ];
 
@@ -48,7 +48,6 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
         data-ai-hint={image.imageHint}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
       <div className="absolute bottom-0 left-0 p-8">
         <p className="font-semibold tracking-wider uppercase text-sm">{card.category}</p>
         <h3 className="mt-2 font-headline text-3xl font-black uppercase">{card.title}</h3>
