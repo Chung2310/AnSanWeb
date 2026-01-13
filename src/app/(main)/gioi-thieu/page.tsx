@@ -31,7 +31,7 @@ export default function AboutPage() {
                                 <p>Có lẽ rượu vang là 1 trong các số ít thức uống có cồn mà tốt cho sức khoẻ. Tôi đã say mê nó lúc nào không biết! Với niềm đam mê mãnh liệt và mong muốn cung cấp các sản phẩm rượu vang đúng giá trị đúng chất lượng mà Công ty TNHH Thương Mại và Xuất Nhập Khẩu An San ra đời.</p>
                                 <p>Chúng tôi – Rượu vang An San không chỉ bán sản phẩm cho khách hàng mà chính gia đình, bạn bè và người thân biết tới An San đều sử dụng rượu vang. Vậy nên tất cả các sản phẩm bán ra từ An San đều được chọn lọc rất kĩ từ các nhà sản xuất rượu vang trên thế giới và phân phối lại các sản phẩm uy tín từ các nhà nhập khẩu tại Việt Nam.</p>
                                 <blockquote>
-                                    “Rượu vang An San nơi mang đến cho khách hàng không chỉ là thức rượu chính hãng mà hơn cả là nghệ thuật thưởng thức”
+                                    Rượu vang An San nơi mang đến cho khách hàng không chỉ là thức rượu chính hãng mà hơn cả là nghệ thuật thưởng thức
                                 </blockquote>
                             </div>
                         </div>
