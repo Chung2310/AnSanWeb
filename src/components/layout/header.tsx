@@ -6,7 +6,7 @@ import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
@@ -125,7 +125,17 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
   const isHydrated = useHydration();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -150,10 +160,18 @@ export default function Header() {
       <div className="bg-secondary text-secondary-foreground">
         <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
             <div className="flex-1 flex justify-start">
-                <div className="relative w-full max-w-xs">
-                    <Input type="text" placeholder="Tìm kiếm" className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" />
-                    <Search className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-foreground/80" />
-                </div>
+                <form onSubmit={handleSearch} className="relative w-full max-w-xs">
+                    <Input 
+                      type="text" 
+                      placeholder="Tìm kiếm" 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" 
+                    />
+                    <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2">
+                      <Search className="h-5 w-5 text-secondary-foreground/80" />
+                    </button>
+                </form>
             </div>
 
             <div className="flex-1 flex justify-center">
