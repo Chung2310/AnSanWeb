@@ -1,3 +1,4 @@
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
@@ -13,16 +14,15 @@ export default function ProductsPage() {
   const wineProducts = useMemo(() => {
     if (!products || !categories) return [];
     
-    // Define the list of "Best Choice" product names
     const bestChoiceProductNames = [
       "Old Vine Cabernet Sauvignon",
       "Old Vine Shiraz",
-      "Gigino Grande (80 anniv.)",
+      "Gigino Grande (Phiên bản kỷ niệm 80 năm) – Vang Đỏ",
       "Sgarzi Luigi Primitivo di Manduria DOC",
-      "Piandimare Tassanera",
+      "Piandimare \"Tassanera\" Montepulciano d'Abruzzo Riserva",
       "Enzo Vincenzo Appassimento Puglia IGT",
-      "Grande Alberone Moscato"
-    ].map(name => name.replace(/\u200B/g, '')); // Normalize names
+      "Grande Alberone Moscato",
+    ].map(name => name.replace(/\u200B/g, '').trim());
 
     // Find the 'ruou-vang' category and its descendants
     const wineCategory = categories.find(c => c.slug === 'ruou-vang');
@@ -39,7 +39,7 @@ export default function ProductsPage() {
     const otherProducts: typeof products = [];
 
     allWineProducts.forEach(product => {
-      const normalizedName = product.nameVN.replace(/\u200B/g, '');
+      const normalizedName = product.nameVN.replace(/\u200B/g, '').trim();
       if (bestChoiceProductNames.includes(normalizedName)) {
         bestChoiceProducts.push(product);
       } else {

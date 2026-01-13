@@ -175,14 +175,14 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     const bestChoiceProductNames = [
       "Old Vine Cabernet Sauvignon",
       "Old Vine Shiraz",
-      "Gigino Grande (80 anniv.)",
+      "Gigino Grande (Phiên bản kỷ niệm 80 năm) – Vang Đỏ",
       "Sgarzi Luigi Primitivo di Manduria DOC",
-      "Piandimare Tassanera",
+      "Piandimare \"Tassanera\" Montepulciano d'Abruzzo Riserva",
       "Enzo Vincenzo Appassimento Puglia IGT",
-      "Grande Alberone Moscato"
-    ].map(name => name.replace(/\u200B/g, '')); // Normalize names to remove zero-width spaces
+      "Grande Alberone Moscato",
+    ].map(name => name.replace(/\u200B/g, '').trim());
 
-    const productName = product.nameVN.replace(/\u200B/g, '');
+    const productName = product.nameVN.replace(/\u200B/g, '').trim();
     return bestChoiceProductNames.includes(productName);
   }, [product.nameVN]);
 
