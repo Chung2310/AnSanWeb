@@ -31,9 +31,9 @@ const itemVariants = {
 };
 
 const regions = [
-  { name: 'SCOTCH WHISKY', href: '/danh-muc/scotch-whisky', prominent: true, imageId: 'featured-macallan-25' },
-  { name: 'JAPANESE WHISKY', href: '/danh-muc/world-whisky/whisky-nhat', prominent: false, imageId: 'banner-japanese-whisky' },
-  { name: 'WORLD WHISKY', href: '/danh-muc/world-whisky', prominent: false, imageId: 'banner-world-whisky' },
+  { name: 'Old Vine Cabernet Sauvignon', href: '/san-pham/the-macallan-25-sherry-oak', prominent: true, imageId: 'featured-macallan-25' },
+  { name: 'Old Vine Shiraz', href: '/san-pham/yamazaki-12', prominent: false, imageId: 'banner-japanese-whisky' },
+  { name: 'Gigino Grande (80 anniv.)', href: '/danh-muc/ruou-manh', prominent: false, imageId: 'banner-world-whisky' },
 ];
 
 const getImage = (id: string): ImagePlaceholder | undefined => {
