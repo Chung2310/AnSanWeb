@@ -9,28 +9,23 @@ import { useToast } from '@/hooks/use-toast';
 const quizQuestions = [
   {
     id: 1,
-    question: 'Bạn thích hương vị nào nhất trong ly whisky của mình?',
-    answers: ['Trái cây & Hoa cỏ', 'Khói & Than bùn', 'Ngọt ngào & Êm dịu', 'Đậm đà & Cay nồng'],
+    question: 'Bạn thích loại rượu vang nào?',
+    answers: ['Vang đỏ', 'Vang trắng', 'Vang hồng (Rosé)', 'Vang sủi/Champagne'],
   },
   {
     id: 2,
-    question: 'Bạn thường thưởng thức whisky vào dịp nào?',
-    answers: ['Thư giãn một mình sau ngày dài', 'Cùng bạn bè thân thiết', 'Trong các bữa tiệc sang trọng', 'Trong các buổi khám phá, nếm thử'],
+    question: 'Bạn thường uống rượu vang vào dịp nào?',
+    answers: ['Trong bữa ăn hàng ngày', 'Tiệc tùng cùng bạn bè', 'Những dịp đặc biệt, sang trọng', 'Thư giãn một mình'],
   },
   {
     id: 3,
-    question: 'Bạn ưa thích loại rượu nào khác ngoài whisky?',
-    answers: ['Vang trắng nhẹ nhàng', 'Rượu rum đậm đà', 'Cognac êm ái', 'Bia thủ công (Craft beer)'],
+    question: 'Bạn ưu tiên yếu tố nào nhất khi chọn rượu vang?',
+    answers: ['Hương vị trái cây', 'Độ đậm đà (body)', 'Đến từ vùng nổi tiếng', 'Giá cả hợp lý'],
   },
   {
     id: 4,
-    question: 'Khi chọn một món ăn, bạn ưu tiên điều gì?',
-    answers: ['Sự tươi mới của hải sản', 'Vị đậm đà của thịt nướng BBQ', 'Sự ngọt ngào của món tráng miệng', 'Sự phong phú của phô mai ủ lâu năm'],
-  },
-  {
-    id: 5,
-    question: 'Phong cách sống của bạn gần với hình ảnh nào nhất?',
-    answers: ['Tinh tế và tối giản', 'Mạnh mẽ và phiêu lưu', 'Cổ điển và lịch lãm', 'Sáng tạo và độc đáo'],
+    question: 'Bạn muốn khám phá rượu vang từ quốc gia nào?',
+    answers: ['Pháp', 'Ý', 'Tây Ban Nha / Bồ Đào Nha', 'Chile / Argentina / Úc (New World)'],
   },
 ];
 
@@ -38,7 +33,7 @@ type AnswersState = {
   [key: number]: string | null;
 };
 
-export default function WhiskyQuizPage() {
+export default function WineQuizPage() {
   const [answers, setAnswers] = useState<AnswersState>({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -73,7 +68,7 @@ export default function WhiskyQuizPage() {
     console.log('Quiz submitted:', { answers, name, email });
     toast({
       title: 'Thành công!',
-      description: 'Kết quả trắc nghiệm sẽ sớm được gửi đến email của bạn.',
+      description: 'Cảm ơn bạn đã tham gia. Chuyên gia của chúng tôi sẽ sớm liên hệ để tư vấn loại vang phù hợp nhất với bạn.',
     });
     // Reset state if needed
     setAnswers({});
@@ -86,9 +81,9 @@ export default function WhiskyQuizPage() {
       <div className="w-full max-w-3xl mx-auto">
         <div className="text-center mb-12">
             <h1 className="font-headline text-4xl md:text-5xl font-bold mt-2 uppercase text-gray-800">
-                Khám phá vị Whisky của bạn
+                Khám Phá Gu Rượu Vang Của Bạn
             </h1>
-            <p className="mt-4 text-lg text-gray-600">Trả lời 5 câu hỏi nhanh để tìm ra loại whisky hoàn hảo dành cho bạn.</p>
+            <p className="mt-4 text-lg text-gray-600">Trả lời nhanh các câu hỏi sau để nhận được tư vấn chuyên sâu từ chuyên gia rượu vang của chúng tôi.</p>
         </div>
 
         <div className="space-y-12">
@@ -126,8 +121,8 @@ export default function WhiskyQuizPage() {
 
         <div className="w-full max-w-xl mx-auto p-8 md:p-12 mt-20 bg-secondary">
             <div className="text-center">
-              <h2 className="font-headline text-4xl font-black uppercase text-black">NHẬN KẾT QUẢ NGAY!</h2>
-              <p className="mt-2 text-black/80">Vui lòng điền đầy đủ thông tin để nhận kết quả</p>
+              <h2 className="font-headline text-4xl font-black uppercase text-black">NHẬN TƯ VẤN NGAY!</h2>
+              <p className="mt-2 text-black/80">Vui lòng điền đầy đủ thông tin để nhận được tư vấn từ chuyên gia.</p>
             </div>
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <div>
@@ -157,7 +152,7 @@ export default function WhiskyQuizPage() {
                     BẰNG VIỆC NHẤN 'NHẬN KẾT QUẢ', BẠN ĐỒNG Ý VỚI <a href="#" className="underline">ĐIỀU KHOẢN VÀ ĐIỀU KIỆN</a> CỦA CHÚNG TÔI.
                 </p>
                 <Button type="submit" className="bg-black text-white font-bold uppercase tracking-widest px-8 py-6 rounded-sm hover:bg-gray-800">
-                  Nhận Kết Quả
+                  Gửi Thông Tin
                 </Button>
               </div>
             </form>

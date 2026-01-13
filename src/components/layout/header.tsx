@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
 import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,8 +15,8 @@ import { useHydration } from '@/hooks/use-hydration';
 
 const mainNavLinks = [
   { 
-    href: '/trac-nghiem-whisky', 
-    label: 'Trắc nghiệm Whisky',
+    href: '/trac-nghiem-ruou-vang', 
+    label: 'Trắc nghiệm Rượu Vang',
   },
   { 
     href: '/gioi-thieu', 
