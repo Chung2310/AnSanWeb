@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
-import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Paginator } from "./paginator";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -20,7 +19,7 @@ interface ProductListingProps {
     itemsPerPage?: number;
 }
 
-export default function ProductListing({ initialProducts, title, bannerData, itemsPerPage = 18 }: ProductListingProps) {
+function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 18 }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
@@ -101,42 +100,6 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-    return (
-      <nav aria-label="Product pagination" className="flex items-center justify-center gap-2 mt-12 text-lg">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-          <Button
-            key={page}
-            variant={currentPage === page ? 'outline' : 'ghost'}
-            onClick={() => handlePageChange(page)}
-            className={cn('h-auto px-4 py-2 font-headline font-bold transition-colors hover:text-foreground', currentPage === page ? 'text-foreground underline underline-offset-4' : 'text-muted-foreground')}
-          >
-            {page}
-          </Button>
-        ))}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button>
-      </nav>
-    );
-  };
-
   return (
     <div className="bg-white text-black">
       {bannerData ? <CategoryBanner {...bannerData} /> : (
@@ -183,11 +146,21 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
                     <p className="text-lg text-muted-foreground">Không tìm thấy sản phẩm nào phù hợp.</p>
                 </div>
             )}
-
-            {renderPagination()}
+            
+            <Suspense fallback={<div className="flex justify-center mt-12">Loading pagination...</div>}>
+                <Paginator 
+                    totalPages={totalPages} 
+                    onPageChange={handlePageChange} 
+                />
+            </Suspense>
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+
+export default function ProductListing(props: ProductListingProps) {
+    return <ProductListingContent {...props} />;
 }
