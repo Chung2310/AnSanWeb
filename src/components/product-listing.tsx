@@ -147,7 +147,7 @@ export default function ProductListing({ initialProducts, title, bannerData, ite
          </div>
       )}
       
-      {!bannerData && <CategoryNav onCategorySelect={() => {}} selectedCategory={null} />}
+      <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
       
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
