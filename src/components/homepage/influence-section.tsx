@@ -57,25 +57,25 @@ export default function InfluenceSection() {
         animate={mainControls}
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
           {/* Left Column */}
           <motion.div variants={itemVariants} className="text-center lg:text-left">
             <p className="font-semibold tracking-widest uppercase text-sm" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
             <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight" style={{ color: '#3a3a3a' }}>
               SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
             </h2>
-            <motion.div variants={itemVariants} className="mt-8">
+            <motion.div variants={itemVariants} className="mt-8 h-[400px]">
                <Carousel
                   plugins={[plugin.current]}
-                  className="w-full"
+                  className="w-full h-full"
                   opts={{
                     loop: true,
                   }}
                 >
-                  <CarouselContent>
+                  <CarouselContent className="h-full">
                     {carouselImages.map((src, index) => (
-                      <CarouselItem key={index}>
-                        <div className="relative h-[400px] w-full aspect-w-4 aspect-h-3">
+                      <CarouselItem key={index} className="h-full">
+                        <div className="relative h-full w-full">
                            <Image
                             src={src}
                             alt={`Influence image ${index + 1}`}
