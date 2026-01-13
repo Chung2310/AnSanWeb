@@ -12,13 +12,43 @@ export default function ProductsPage() {
   
   const wineProducts = useMemo(() => {
     if (!products || !categories) return [];
+    
+    // Define the list of "Best Choice" product names
+    const bestChoiceProductNames = [
+      "Old Vine Cabernet Sauvignon",
+      "Old Vine Shiraz",
+      "Gigino Grande (80 anniv.)",
+      "Sgarzi Luigi Primitivo di Manduria DOC",
+      "Piandimare Tassanera",
+      "Enzo Vincenzo Appassimento Puglia IGT",
+      "Grande Alberone Moscato"
+    ].map(name => name.replace(/\u200B/g, '')); // Normalize names
+
+    // Find the 'ruou-vang' category and its descendants
     const wineCategory = categories.find(c => c.slug === 'ruou-vang');
     if (!wineCategory) return [];
 
     const childCategoryIds = categories.filter(c => c.parentId === wineCategory.id).map(c => c.id);
     const allWineIds = [wineCategory.id, ...childCategoryIds];
     
-    return products.filter(wine => wine.tags?.some(tag => allWineIds.includes(tag)));
+    // Get all products belonging to the wine category
+    const allWineProducts = products.filter(wine => wine.tags?.some(tag => allWineIds.includes(tag)));
+
+    // Separate into best choice and others
+    const bestChoiceProducts: typeof products = [];
+    const otherProducts: typeof products = [];
+
+    allWineProducts.forEach(product => {
+      const normalizedName = product.nameVN.replace(/\u200B/g, '');
+      if (bestChoiceProductNames.includes(normalizedName)) {
+        bestChoiceProducts.push(product);
+      } else {
+        otherProducts.push(product);
+      }
+    });
+
+    // Combine them with best choice products at the top
+    return [...bestChoiceProducts, ...otherProducts];
   }, [products, categories]);
 
   const isLoading = isLoadingProducts || isLoadingCategories;
