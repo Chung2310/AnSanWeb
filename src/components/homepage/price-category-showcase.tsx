@@ -111,13 +111,13 @@ export default function PriceCategoryShowcase() {
         <Carousel
           setApi={setApi}
           plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
-          opts={{ loop: true, align: 'start', dragFree: true }}
+          opts={{ loop: true, align: 'start' }}
         >
           <CarouselContent className="items-center">
             {priceCategories.map((category, index) => (
               <CarouselItem 
-                key={category.href} // dùng href làm key để ổn định hơn index
-                className="basis-full md:basis-4/5 lg:basis-1/3 pl-4 md:pl-6"
+                key={category.href}
+                className="basis-full md:basis-4/5 lg:basis-1/2 pl-4 md:pl-6"
               >
                 <Link href={category.href}>
                   <div className="relative aspect-[2/1] w-full text-white rounded-lg overflow-hidden">
@@ -126,7 +126,7 @@ export default function PriceCategoryShowcase() {
                       alt={category.title}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
                     />
                     <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start bg-gradient-to-t from-black/70 to-transparent">
                       <h3 className="font-headline text-3xl md:text-4xl font-black uppercase">
