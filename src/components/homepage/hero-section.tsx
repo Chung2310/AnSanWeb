@@ -115,7 +115,7 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-xl text-white/80 font-headline">
+                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
                                                     <motion.h1 variants={textItemVariants} className="mt-4 text-6xl lg:text-7xl font-black leading-tight uppercase font-headline">
