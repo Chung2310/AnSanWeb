@@ -40,11 +40,11 @@ const heroSlides = [
     {
         imageId: 'hero-smws',
         label: 'QUÀ TẾT',
-        href: '/blog/5-dieu-ban-khong-biet-ve-smws',
+        href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         bgColor: 'bg-primary',
         textColor: 'text-white',
-        external: true
+        external: false
     },
     {
         imageId: 'hero-wine',
