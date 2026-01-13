@@ -5,6 +5,7 @@ import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
 import { useMemo } from 'react';
+import type { Category } from '@/lib/types';
 
 export default function ProductsPage() {
   const { products, isLoading: isLoadingProducts } = useProducts();
@@ -24,12 +25,21 @@ export default function ProductsPage() {
       "Grande Alberone Moscato",
     ].map(name => name.replace(/\u200B/g, '').trim());
 
+    const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
+        const children = allCategories.filter(cat => cat.parentId === parentId);
+        let ids = children.map(cat => cat.id);
+        children.forEach(child => {
+            ids = [...ids, ...getDescendantIds(child.id, allCategories)];
+        });
+        return ids;
+    };
+
     // Find the 'ruou-vang' category and its descendants
     const wineCategory = categories.find(c => c.slug === 'ruou-vang');
     if (!wineCategory) return [];
 
-    const childCategoryIds = categories.filter(c => c.parentId === wineCategory.id).map(c => c.id);
-    const allWineIds = [wineCategory.id, ...childCategoryIds];
+    const descendantCategoryIds = getDescendantIds(wineCategory.id, categories);
+    const allWineIds = [wineCategory.id, ...descendantCategoryIds];
     
     // Get all products belonging to the wine category
     const allWineProducts = products.filter(wine => wine.tags?.some(tag => allWineIds.includes(tag)));
