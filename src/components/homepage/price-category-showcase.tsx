@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -60,7 +61,10 @@ export default function PriceCategoryShowcase() {
   useEffect(() => {
     if (!api) return;
     
-    const onSelect = () => {
+    const onSelect = (api: CarouselApi) => {
+      if (!api) {
+        return;
+      }
       setCurrent(api.selectedScrollSnap());
     };
     
