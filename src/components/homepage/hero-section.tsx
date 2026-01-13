@@ -32,7 +32,7 @@ const heroSlides = [
     {
         imageId: 'hero-armagnac',
         label: 'DONNELLI',
-        href: '/danh-muc/armagnac',  
+        href: '/san-pham/vang-no-00-donelli-white-grape-khong-con',  
         description: 'Donnelli không cồn – lựa chọn tinh tế cho những khoảnh khắc nâng ly trọn vẹn, nơi phong vị Ý được thưởng thức theo cách an toàn và lịch lãm',
         bgColor: 'bg-primary',
         textColor: 'text-white'
