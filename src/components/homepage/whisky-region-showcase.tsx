@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -120,7 +121,7 @@ export default function WhiskyRegionShowcase() {
             variant="outline"
             className="mt-4 rounded-none border-2 border-white bg-transparent px-8 py-6 text-xs font-bold tracking-widest text-white transition-colors hover:bg-white hover:text-black"
           >
-            <Link href="/danh-muc-san-pham">KHÁM PHÁ SẢN PHẨM</Link>
+            <Link href="/danh-muc/ruou-vang">KHÁM PHÁ SẢN PHẨM</Link>
           </Button>
         </motion.div>
       </motion.div>
