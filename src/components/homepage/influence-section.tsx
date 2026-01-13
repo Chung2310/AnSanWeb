@@ -49,11 +49,6 @@ export default function InfluenceSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <motion.div variants={itemVariants}>
-            <p className="font-semibold tracking-widest uppercase text-sm text-center lg:text-left" style={{ color: '#8a7d6a' }}>AnSan's INFLUENCE</p>
-            <h2 className="mt-2 text-4xl lg:text-5xl font-black leading-tight text-center lg:text-left" style={{ color: '#3a3a3a' }}>
-              SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA  AN SAN
-            </h2>
-            <motion.div variants={itemVariants} className="mt-8">
                <Carousel
                   plugins={[plugin.current]}
                   className="w-full"
@@ -77,7 +72,6 @@ export default function InfluenceSection() {
                     ))}
                   </CarouselContent>
                 </Carousel>
-            </motion.div>
           </motion.div>
           {/* Right Column */}
           <motion.div 
@@ -91,7 +85,6 @@ export default function InfluenceSection() {
               <p>Dịch vụ tại An San được xây dựng trên sự chuyên nghiệp – tận tâm – am hiểu, với đội ngũ tư vấn giàu kiến thức, hỗ trợ 24/7, giao hàng nhanh chóng</p>
               <p>Đến An San không chỉ để mua rượu vang, mà để trải nghiệm trọn vẹn nghệ thuật thưởng vang.</p>
             </motion.div>
-            
           </motion.div>
         </div>
       </div>
