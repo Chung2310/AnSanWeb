@@ -45,7 +45,7 @@ const heroSlides = [
     },
     {
         imageId: 'hero-smws',
-        label: 'SMWS',
+        label: 'QUÀ TẾT',
         href: '/blog/5-dieu-ban-khong-biet-ve-smws',
         tag: 'SMWS',
         
