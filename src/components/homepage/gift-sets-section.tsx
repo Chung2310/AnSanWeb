@@ -96,7 +96,7 @@ export default function GiftSetsSection() {
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-left mb-12">
           <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>
-            BỘ QUÀ TẶNG TẾT 2026
+            Quà Tết Ansan & Cigar
           </h2>
         </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6 md:grid-cols-2">
