@@ -11,78 +11,84 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { ChevronDown } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import { useCategories } from '@/hooks/use-categories';
+import type { Category } from '@/lib/types';
 
-interface CategoryNavProps {
-    onCategorySelect: (slug: string | null) => void;
-    selectedCategory: string | null;
-}
 
 const mainCategoriesConfig = [
     {
         label: "Rượu Vang",
         slug: "ruou-vang",
         href: '/danh-muc/ruou-vang',
-        tags: ['wine', 'y', 'phap', 'tay-ban-nha', 'uc', 'nga', 'duc'],
-        subCategories: [
-            { label: 'VANG Ý', href: '/danh-muc/ruou-vang/vang-y' },
-            { label: 'VANG PHÁP', href: '/danh-muc/ruou-vang/vang-phap' },
-            { label: 'VANG TÂY BAN NHA', href: '/danh-muc/ruou-vang/vang-tay-ban-nha' },
-            { label: 'VANG ÚC', href: '/danh-muc/ruou-vang/vang-uc' },
-            { label: 'VANG NGA', href: '/danh-muc/ruou-vang/vang-nga' },
-            { label: 'VANG ĐỨC', href: '/danh-muc/ruou-vang/vang-duc' },
-        ]
     },
     {
         label: "Rượu Mạnh",
         slug: "ruou-manh",
         href: '/danh-muc/ruou-manh',
-        tags: ['spirits', 'john-walker', 'chivas', 'mortlach', 'ballantines', 'royal-salute', 'singleton', 'armagnac', 'scotch', 'world'],
-        subCategories: [
-            { label: "BALLANTINE'S FINEST", href: '/danh-muc/ruou-manh/ballantines-finest' },
-            { label: 'JOHN WALKER', href: '/danh-muc/ruou-manh/john-walker' },
-            { label: 'MORTLACH', href: '/danh-muc/ruou-manh/mortlach' },
-            { label: 'CHIVAS', href: '/danh-muc/ruou-manh/chivas' },
-            { label: 'ROYAL SALUTE', href: '/danh-muc/ruou-manh/royal-salute' },
-            { label: 'THE SINGLETON', href: '/danh-muc/ruou-manh/the-singleton' },
-        ]
     },
     {
         label: "Cigar",
         slug: "cigar",
         href: "/danh-muc/cigar",
-        tags: ['cigar', 'cigar-hanos', 'cigar-lotus', 'cigar-vinaboss'],
+    },
+    { 
+        label: "Bộ Quà Tặng", 
+        slug: "bo-qua-tang", 
+        href: "/danh-muc/bo-qua-tang",
         subCategories: [
-            { label: 'Cigar Hanos', href: '/danh-muc/cigar/hanos' },
-            { label: 'Cigar Lotus', href: '/danh-muc/cigar/lotus' },
-            { label: "Cigar Vinaboss's", href: '/danh-muc/cigar/vinaboss' },
+            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
+            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
         ]
     },
-    { label: "Bộ Quà Tặng", slug: "bo-qua-tang", href: "/danh-muc/bo-qua-tang", tags: ['gift-set'] },
-      
 ];
-
 
 export default function CategoryNav({ onCategorySelect, selectedCategory }: CategoryNavProps) {
     const { products, isLoading: isLoadingProducts } = useProducts();
+    const { categories, isLoading: isLoadingCategories } = useCategories();
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const categoryCounts = useMemo(() => {
-        if (isLoadingProducts || !products) return {};
-    
+        if (isLoadingProducts || isLoadingCategories || !products || !categories) {
+            return {};
+        }
+
         const counts: { [key: string]: number } = {};
-    
-        mainCategoriesConfig.forEach(cat => {
-            if (cat.tags) {
-                 counts[cat.slug] = products.filter(p => p.tags?.some(t => cat.tags.includes(t))).length;
+
+        const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
+            const children = allCategories.filter(cat => cat.parentId === parentId);
+            let ids = children.map(cat => cat.id);
+            children.forEach(child => {
+                ids = [...ids, ...getDescendantIds(child.id, allCategories)];
+            });
+            return ids;
+        };
+
+        mainCategoriesConfig.forEach(mainCat => {
+            const parentCategory = categories.find(c => c.slug === mainCat.slug);
+            if (parentCategory) {
+                const descendantIds = getDescendantIds(parentCategory.id, categories);
+                const allCategoryIds = [parentCategory.id, ...descendantIds];
+                
+                const uniqueProductIds = new Set<string>();
+                products.forEach(p => {
+                    if (p.tags?.some(tag => allCategoryIds.includes(tag))) {
+                        uniqueProductIds.add(p.id);
+                    }
+                });
+                counts[mainCat.slug] = uniqueProductIds.size;
             } else {
-                counts[cat.slug] = products.filter(p => p.tags?.includes(cat.slug)).length;
+                 counts[mainCat.slug] = 0;
             }
         });
+
         return counts;
-    }, [products, isLoadingProducts]);
+    }, [products, categories, isLoadingProducts, isLoadingCategories]);
 
     
-    const allProductsCount = products?.length || 0;
+    const allProductsCount = useMemo(() => {
+        if(isLoadingProducts || !products) return 0;
+        return products.length;
+    }, [products, isLoadingProducts]);
 
     return (
         <div className="border-b border-t">
@@ -99,7 +105,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                     </Link>
                     {mainCategoriesConfig.map(cat => {
                         const count = categoryCounts[cat.slug] || 0;
-                        if (count === 0 && !isLoadingProducts) return null;
+                        if (count === 0 && !isLoadingProducts && !isLoadingCategories) return null;
 
                         const isActive = selectedCategory === cat.slug;
 
@@ -169,4 +175,9 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
             </div>
         </div>
     );
+}
+
+interface CategoryNavProps {
+    onCategorySelect: (slug: string | null) => void;
+    selectedCategory: string | null;
 }
