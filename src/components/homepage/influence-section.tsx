@@ -79,12 +79,17 @@ export default function InfluenceSection() {
             className="flex flex-col justify-center text-gray-700 h-full"
           >
             <div className="flex flex-col justify-center h-full">
-              <motion.div variants={itemVariants} className="text-base leading-relaxed space-y-4">
-                <p className="font-bold">VÌ SAO NÊN CHỌN AN SAN</p>
-                <p>An San cam kết “Vang thật – Giá trị thật”. Chúng tôi tuyển chọn rượu vang nhập khẩu chính hãng, nguồn gốc rõ ràng, đến từ các quốc gia danh tiếng như Pháp, Ý, Tây Ban Nha, Úc, Đức…, đầy đủ hoá đơn VAT, được bảo quản và trưng bày theo tiêu chuẩn quốc tế với giá bán cạnh tranh.</p>
-                <p>Khách hàng được thưởng thức rượu miễn phí trước khi mua, đảm bảo lựa chọn đúng gu và đúng giá trị.</p>
-                <p>Dịch vụ tại An San được xây dựng trên sự chuyên nghiệp – tận tâm – am hiểu, với đội ngũ tư vấn giàu kiến thức, hỗ trợ 24/7, giao hàng nhanh chóng</p>
-                <p>Đến An San không chỉ để mua rượu vang, mà để trải nghiệm trọn vẹn nghệ thuật thưởng vang.</p>
+              <motion.div variants={itemVariants}>
+                <h2 className="font-headline text-3xl font-black uppercase mb-6" style={{color: '#5a5a5a'}}>
+                    SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA AN SAN
+                </h2>
+                <div className="text-base leading-relaxed space-y-4">
+                  <p className="font-bold">VÌ SAO NÊN CHỌN AN SAN</p>
+                  <p>An San cam kết “Vang thật – Giá trị thật”. Chúng tôi tuyển chọn rượu vang nhập khẩu chính hãng, nguồn gốc rõ ràng, đến từ các quốc gia danh tiếng như Pháp, Ý, Tây Ban Nha, Úc, Đức…, đầy đủ hoá đơn VAT, được bảo quản và trưng bày theo tiêu chuẩn quốc tế với giá bán cạnh tranh.</p>
+                  <p>Khách hàng được thưởng thức rượu miễn phí trước khi mua, đảm bảo lựa chọn đúng gu và đúng giá trị.</p>
+                  <p>Dịch vụ tại An San được xây dựng trên sự chuyên nghiệp – tận tâm – am hiểu, với đội ngũ tư vấn giàu kiến thức, hỗ trợ 24/7, giao hàng nhanh chóng</p>
+                  <p>Đến An San không chỉ để mua rượu vang, mà để trải nghiệm trọn vẹn nghệ thuật thưởng vang.</p>
+                </div>
               </motion.div>
             </div>
           </motion.div>
