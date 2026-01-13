@@ -171,22 +171,20 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }
 
-  const isWineCategory = React.useMemo(() => {
-    if (!product.tags || !categories) return false;
-    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
-    if (!wineCategory) return false;
-
-    const getPathIds = (categoryId: string): string[] => {
-        const category = categories.find(c => c.id === categoryId);
-        if (!category) return [];
-        return category.parentId ? [category.id, ...getPathIds(category.parentId)] : [category.id];
-    };
-
-    return product.tags.some(tagId => {
-        const pathIds = getPathIds(tagId);
-        return pathIds.includes(wineCategory.id);
-    });
-  }, [product.tags, categories]);
+  const isBestChoice = React.useMemo(() => {
+    const bestChoiceProductNames = [
+      "Old Vine Cabernet Sauvignon",
+      "Old Vine Shiraz",
+      "Gigino Grande (80 anniv.)",
+      "Sgarzi Luigi Primitivo di Manduria DOC",
+      "Piandimare Tassanera",
+      "Enzo Vincenzo Appassimento Puglia IGT",
+      "Grande Alberone Moscato"
+    ];
+    // Normalize the product name by removing potential invisible characters like zero-width space
+    const productName = product.nameVN.replace(/\u200B/g, '');
+    return bestChoiceProductNames.includes(productName);
+  }, [product.nameVN]);
 
 
   return (
@@ -206,7 +204,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                               className="w-full h-auto object-contain"
                               priority={index === 0}
                             />
-                            {index === 0 && isWineCategory && (
+                            {index === 0 && isBestChoice && (
                                 <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm font-bold uppercase px-4 py-2 rounded-full shadow-lg">
                                     Best Choice
                                 </div>
