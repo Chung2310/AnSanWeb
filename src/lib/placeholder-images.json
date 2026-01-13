@@ -123,13 +123,13 @@
     {
       "id": "gift-set-tasting",
       "description": "Hands holding The Lakes Whiskymaker's Editions tasting set box.",
-      "imageUrl": "/images/gift/tasting_set_banner.webp",
+      "imageUrl": "/images/Banner 4.webp",
       "imageHint": "whisky tasting set"
     },
     {
       "id": "gift-set-lakes-tet",
       "description": "The Lakes Single Malt whisky gift set with a red box.",
-      "imageUrl": "/images/gift/imagesgiftgift-set.webp",
+      "imageUrl": "/images/Banner 4.webp",
       "imageHint": "whisky gift set"
     },
     {
@@ -147,31 +147,31 @@
     {
       "id": "wine-2",
       "description": "Bottle of crisp white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "white wine"
     },
     {
       "id": "wine-3",
       "description": "Bottle of elegant rosé wine",
-      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "rose wine"
     },
     {
       "id": "wine-4",
       "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sparkling wine"
     },
     {
       "id": "wine-5",
       "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dessert wine"
     },
     {
       "id": "wine-6",
       "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "vintage wine"
     },
     {
@@ -183,7 +183,7 @@
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
@@ -195,7 +195,7 @@
     {
       "id": "category-sparkling",
       "description": "Champagne flutes being filled",
-      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "champagne flutes"
     },
     {
@@ -231,13 +231,13 @@
     {
       "id": "blog-1",
       "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine tasting"
     },
     {
       "id": "blog-2",
       "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "food pairing"
     },
     {
@@ -261,7 +261,7 @@
     {
       "id": "avatar-3",
       "description": "Smiling person",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "person smiling"
     },
     {
@@ -291,31 +291,31 @@
     {
       "id": "quiz-flavor-smoke",
       "description": "Wisps of aromatic smoke.",
-      "imageUrl": "https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbW9rZXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbW9rZXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "smoke"
     },
     {
       "id": "quiz-flavor-grain",
       "description": "Handful of mixed grains.",
-      "imageUrl": "https://images.unsplash.com/photo-1615485500710-aa71300612aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3JhaW5zfGVufDB8fHx8MTc2NzU1Njg4MHww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1615485500710-aa71300612aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3JhaW5zfGVufDB8fHx8MTc2NzU1Njg4MHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "grains"
     },
     {
       "id": "quiz-flavor-wood",
       "description": "Stack of oak wood logs.",
-      "imageUrl": "https://images.unsplash.com/photo-1544840280-80e54213dfdc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d29vZHxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1544840280-80e54213dfdc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d29vZHxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wood"
     },
     {
       "id": "quiz-flavor-leather",
       "description": "Close-up of a leather texture.",
-      "imageUrl": "https://images.unsplash.com/photo-1573227896778-8f378c4029d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyfGVufDB8fHx8MTc2NzYwMDE0Nnww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1573227896778-8f378c4029d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyfGVufDB8fHx8MTc2NzYwMDE0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "leather"
     },
     {
       "id": "quiz-flavor-candy",
       "description": "Assortment of colorful candies.",
-      "imageUrl": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5keXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5keXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "candy"
     },
     {
@@ -417,19 +417,19 @@
     {
       "id": "prod-detail-1",
       "description": "Bottle of product 1 for detail page",
-      "imageUrl": "https://images.unsplash.com/photo-1610631787813-9eeb1a2386cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aW5lJTIwYm90dGxlfGVufDB8fHx8MTc2NzY2NzkwN3ww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1610631787813-9eeb1a2386cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aW5lJTIwYm90dGxlfGVufDB8fHx8MTc2NzY2NzkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine bottle"
     },
     {
       "id": "prod-detail-2",
       "description": "Bottle of product 2 for detail page",
-      "imageUrl": "https://images.unsplash.com/photo-1580537922571-ca7180cd700e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGlza3klMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580537922571-ca7180cd700e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGlza3klMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "whisky bottle"
     },
     {
       "id": "prod-detail-3",
       "description": "Bottle of product 3 for detail page",
-      "imageUrl": "https://images.unsplash.com/photo-1633219662092-32ec511159fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcGlyaXQlMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1633219662092-32ec511159fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcGlyaXQlMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spirit bottle"
     },
     {
