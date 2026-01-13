@@ -21,46 +21,46 @@ interface PriceCategory {
 const TEMP_IMAGE_SRC = '/images/homepage/Chivas.png';
 
 const priceCategories: PriceCategory[] = [
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Vang Đức',
-    href: '/danh-muc/ruou-vang/vang-duc',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Vang Nga',
-    href: '/danh-muc/ruou-vang/vang-nga',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Vang Pháp',
-    href: '/danh-muc/ruou-vang/vang-phap',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Vang Tây Ban Nha',
-    href: '/danh-muc/ruou-vang/vang-tay-ban-nha',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Vang Ý',
-    href: '/danh-muc/ruou-vang/vang-y',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Chivas Series',
-    href: '/danh-muc/ruou-manh/chivas',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'John Walker Series',
-    href: '/danh-muc/ruou-manh/john-walker',
-  },
-  {
-    src: TEMP_IMAGE_SRC,
-    title: 'Rượu mạnh khác',
-    href: '/danh-muc/ruou-manh',
-  }
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Vang Đức',
+        href: '/danh-muc/ruou-vang/vang-duc',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Vang Nga',
+        href: '/danh-muc/ruou-vang/vang-nga',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Vang Pháp',
+        href: '/danh-muc/ruou-vang/vang-phap',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Vang Tây Ban Nha',
+        href: '/danh-muc/ruou-vang/vang-tay-ban-nha',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Vang Ý',
+        href: '/danh-muc/ruou-vang/vang-y',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Chivas Series',
+        href: '/danh-muc/ruou-manh/chivas',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'John Walker Series',
+        href: '/danh-muc/ruou-manh/john-walker',
+    },
+    {
+        src: TEMP_IMAGE_SRC,
+        title: 'Rượu mạnh khác',
+        href: '/danh-muc/ruou-manh',
+    }
 ];
 
 export default function PriceCategoryShowcase() {
@@ -120,7 +120,7 @@ export default function PriceCategoryShowcase() {
                 className="basis-full md:basis-4/5 lg:basis-1/3 pl-4 md:pl-6"
               >
                 <Link href={category.href}>
-                  <div className="relative h-[400px] md:h-[450px] w-full text-white rounded-lg overflow-hidden">
+                  <div className="relative aspect-[2/1] w-full text-white rounded-lg overflow-hidden">
                     <Image 
                       src={category.src}
                       alt={category.title}
