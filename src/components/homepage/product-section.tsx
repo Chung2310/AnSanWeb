@@ -1,13 +1,13 @@
 import WineCard from '@/components/wine-card';
-import type { Wine } from '@/lib/types';
+import type { Product } from '@/lib/types';
 
 type ProductSectionProps = {
   title: string;
   description: string;
-  wines: Wine[];
+  products: Product[];
 };
 
-export default function ProductSection({ title, description, wines }: ProductSectionProps) {
+export default function ProductSection({ title, description, products }: ProductSectionProps) {
   return (
     <section className="py-12 md:py-20">
       <div className="container">
@@ -20,8 +20,8 @@ export default function ProductSection({ title, description, wines }: ProductSec
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {wines.map((wine) => (
-            <WineCard key={wine.id} wine={wine} />
+          {products.map((product) => (
+            <WineCard key={product.id} product={product} />
           ))}
         </div>
       </div>

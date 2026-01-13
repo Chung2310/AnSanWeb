@@ -15,13 +15,13 @@ export default function HomePage() {
       <ProductSection
         title="Sản Phẩm Nổi Bật"
         description="Khám phá những chai vang được yêu thích và đánh giá cao nhất bởi các chuyên gia và khách hàng của chúng tôi."
-        wines={featuredWines}
+        products={featuredWines}
       />
       <CategoryShowcase />
       <ProductSection
         title="Hàng Mới Về"
         description="Những sự bổ sung mới nhất cho bộ sưu tập của chúng tôi, hứa hẹn mang đến những trải nghiệm hương vị độc đáo."
-        wines={newArrivals}
+        products={newArrivals}
       />
       <BrandStory />
       <Testimonials />
