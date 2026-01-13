@@ -17,29 +17,6 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-const AnimatedNumber = ({ to }: { to: number }) => {
-    const ref = useRef<HTMLParagraphElement>(null);
-    const isInView = useInView(ref, { once: true });
-
-    useEffect(() => {
-        if (!isInView) return;
-        const node = ref.current;
-        if (!node) return;
-
-        const controls = animate(0, to, {
-            duration: 2.5,
-            ease: "easeOut",
-            onUpdate(value) {
-                node.textContent = new Intl.NumberFormat('vi-VN').format(Math.round(value));
-            }
-        });
-
-        return () => controls.stop();
-    }, [to, isInView]);
-
-    return <p ref={ref} className="text-5xl font-black" style={{ color: '#8a7d6a' }} >0</p>;
-};
-
 const carouselImages = [
   '/images/2.webp',
   '/images/3.webp',
@@ -126,16 +103,6 @@ export default function InfluenceSection() {
               <p>Đến An San không chỉ để mua rượu vang, mà để trải nghiệm trọn vẹn nghệ thuật thưởng vang.</p>
             </motion.div>
             
-            <motion.div variants={containerVariants} className="mt-10 grid grid-cols-2 gap-8">
-              <motion.div variants={itemVariants}>
-                <AnimatedNumber to={110000} />
-                <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT THEO DÕI</p>
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <AnimatedNumber to={18000000} />
-                <p className="mt-2 text-sm font-semibold tracking-wider text-gray-600">LƯỢT XEM</p>
-              </motion.div>
-            </motion.div>
           </motion.div>
         </div>
       </div>
