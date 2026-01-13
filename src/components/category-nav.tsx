@@ -1,3 +1,4 @@
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import { cn } from '@/lib/utils';
@@ -69,13 +70,10 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                 const descendantIds = getDescendantIds(parentCategory.id, categories);
                 const allCategoryIds = [parentCategory.id, ...descendantIds];
                 
-                const uniqueProductIds = new Set<string>();
-                products.forEach(p => {
-                    if (p.tags?.some(tag => allCategoryIds.includes(tag))) {
-                        uniqueProductIds.add(p.id);
-                    }
-                });
-                counts[mainCat.slug] = uniqueProductIds.size;
+                const count = products.filter(p => 
+                    p.tags?.some(tag => allCategoryIds.includes(tag))
+                ).length;
+                counts[mainCat.slug] = count;
             } else {
                  counts[mainCat.slug] = 0;
             }
