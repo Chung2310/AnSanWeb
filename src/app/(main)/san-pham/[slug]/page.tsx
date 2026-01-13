@@ -169,22 +169,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }
 
-  const isBestChoice = React.useMemo(() => {
-    const bestChoiceProductNames = [
-      "Old Vine Cabernet Sauvignon",
-      "Old Vine Shiraz",
-      "Gigino Grande (Phiên bản kỷ niệm 80 năm) – Vang Đỏ",
-      "Sgarzi Luigi Primitivo di Manduria DOC",
-      "Piandimare \"Tassanera\" Montepulciano d'Abruzzo Riserva",
-      "Enzo Vincenzo Appassimento Puglia IGT",
-      "Grande Alberone Moscato",
-    ].map(name => name.replace(/\u200B/g, '').trim());
-
-    const productName = product.nameVN.replace(/\u200B/g, '').trim();
-    return bestChoiceProductNames.includes(productName);
-  }, [product.nameVN]);
-
-
   return (
     <>
       <div className="bg-white text-black">
@@ -202,11 +186,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                               className="w-full h-auto object-contain"
                               priority={index === 0}
                             />
-                            {index === 0 && isBestChoice && (
-                                <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm font-bold uppercase px-4 py-2 rounded-full shadow-lg">
-                                    Best Choice
-                                </div>
-                            )}
                         </div>
                         ))}
                     </div>
@@ -351,5 +330,3 @@ export default function ProductDetailPage() {
   // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }
-
-    
