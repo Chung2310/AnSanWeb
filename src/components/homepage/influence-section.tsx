@@ -46,6 +46,11 @@ export default function InfluenceSection() {
         animate={mainControls}
         className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
       <div className="container mx-auto max-w-screen-xl">
+        <motion.div variants={itemVariants} className="text-center mb-12">
+            <h2 className="font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
+                SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA AN SAN
+            </h2>
+        </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column */}
           <motion.div variants={itemVariants}>
@@ -80,9 +85,6 @@ export default function InfluenceSection() {
           >
             <div className="flex flex-col justify-center h-full">
               <motion.div variants={itemVariants}>
-                <h2 className="font-headline text-3xl font-black uppercase mb-6" style={{color: '#5a5a5a'}}>
-                    SỨC ẢNH HƯỞNG VÀ LAN TỎA CỦA AN SAN
-                </h2>
                 <div className="text-base leading-relaxed space-y-4">
                   <p className="font-bold">VÌ SAO NÊN CHỌN AN SAN</p>
                   <p>An San cam kết “Vang thật – Giá trị thật”. Chúng tôi tuyển chọn rượu vang nhập khẩu chính hãng, nguồn gốc rõ ràng, đến từ các quốc gia danh tiếng như Pháp, Ý, Tây Ban Nha, Úc, Đức…, đầy đủ hoá đơn VAT, được bảo quản và trưng bày theo tiêu chuẩn quốc tế với giá bán cạnh tranh.</p>
