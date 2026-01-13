@@ -17,29 +17,7 @@ export default function EngravingSection() {
   return (
     <section className="py-12 bg-white">
       <div className="container mx-auto max-w-screen-xl">
-        <Carousel
-          plugins={[plugin.current]}
-          className="w-full"
-          opts={{
-            loop: true,
-          }}
-        >
-          <CarouselContent>
-            {carouselImages.map((src, index) => (
-              <CarouselItem key={index}>
-                <div className="relative h-[400px] w-full">
-                  <Image
-                    src={src}
-                    alt={`Engraving example ${index + 1}`}
-                    fill
-                    sizes="100vw"
-                    className="object-contain"
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        {/* The carousel has been removed as per your request. */}
       </div>
     </section>
   );
