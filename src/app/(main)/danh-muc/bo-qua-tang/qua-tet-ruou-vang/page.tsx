@@ -12,7 +12,7 @@ export default function ProductsPage() {
 
   const giftSetProducts = useMemo(() => {
     if (!products || !categories) return [];
-    const giftSetCategory = categories.find(c => c.slug === 'gift-set-wine');
+    const giftSetCategory = categories.find(c => c.slug === 'qua-tet-ruou-vang');
     if (!giftSetCategory) return [];
     return products.filter(wine => wine.tags?.includes(giftSetCategory.id));
   }, [products, categories]);
