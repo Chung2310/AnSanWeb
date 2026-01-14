@@ -194,7 +194,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         {allImages.map((image, index) => (
                         <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative">
                             {index === 0 && isBestChoice && (
-                                <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
+                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
                                     Best Choice
                                 </div>
                             )}
