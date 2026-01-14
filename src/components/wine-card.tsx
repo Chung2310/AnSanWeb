@@ -41,7 +41,7 @@ export default function WineCard({ product }: WineCardProps) {
             className="h-64 w-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
           {isBestChoice && (
-            <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg">
+            <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg">
               Best Choice
             </div>
           )}
