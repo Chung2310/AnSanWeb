@@ -26,20 +26,17 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     onFilterChange: (group: string, value: string) => void;
     activeFilters: string[];
 }) => (
-    <div className="mb-8">
+    <div className="mb-8 border p-4 rounded-md">
         <h3 className="text-sm font-bold tracking-widest uppercase text-foreground mb-4">{title}</h3>
         <div className="grid grid-cols-2 gap-2">
         {options.map((option, index) => {
             const isActive = activeFilters.includes(option.label);
-            // We still want to show the button even if count is 0, to allow clearing filters
-            // if (option.count === 0 && !isActive) return null;
-
             return (
             <Button
                 key={index}
                 variant="outline"
                 className={cn(
-                "rounded-sm text-xs h-auto py-2 px-1 justify-center w-full font-semibold border-gray-300",
+                "rounded-sm text-xs h-auto py-2 px-1 justify-center w-full font-semibold border-gray-300 whitespace-normal text-center",
                 isActive 
                     ? "bg-primary text-primary-foreground border-primary"
                     : "bg-white text-gray-600 hover:bg-gray-100 hover:border-gray-400"
