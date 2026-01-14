@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -41,8 +42,8 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'admin@ansan.com',
-      password: '123456',
+      email: '',
+      password: '',
     },
   });
 
@@ -113,7 +114,7 @@ export default function LoginPage() {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="admin@ansan.com"
+                        placeholder="admin@example.com"
                         {...field}
                         type="email"
                       />
