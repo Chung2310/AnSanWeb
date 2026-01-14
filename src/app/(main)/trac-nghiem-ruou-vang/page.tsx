@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 const quizQuestions = [
   {
@@ -41,8 +42,8 @@ type AnswersState = {
 export default function WineQuizPage() {
   const [answers, setAnswers] = useState<AnswersState>({});
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [notes, setNotes] = useState('');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -57,11 +58,11 @@ export default function WineQuizPage() {
     e.preventDefault();
     setIsSubmitting(true);
     const allAnswered = quizQuestions.every(q => answers[q.id]);
-    if (!name || !email) {
+    if (!name || !phone) {
       toast({
         variant: 'destructive',
         title: 'Lỗi',
-        description: 'Vui lòng điền đầy đủ họ tên và email.',
+        description: 'Vui lòng điền đầy đủ họ tên và số điện thoại.',
       });
       setIsSubmitting(false);
       return;
@@ -91,8 +92,8 @@ export default function WineQuizPage() {
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('email', email);
     formData.append('phone', phone);
+    formData.append('notes', notes);
     
     quizQuestions.forEach(q => {
         formData.append(q.key, answers[q.id] || '');
@@ -113,8 +114,8 @@ export default function WineQuizPage() {
         });
         setAnswers({});
         setName('');
-        setEmail('');
         setPhone('');
+        setNotes('');
       } else {
         throw new Error(result.error || "Unknown error occurred");
       }
@@ -188,21 +189,11 @@ export default function WineQuizPage() {
                   onChange={(e) => setName(e.target.value)}
                   className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
                   placeholder=""
+                  required
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">ĐỊA CHỈ EMAIL *</label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                   className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
-                  placeholder=""
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">SỐ ĐIỆN THOẠI</label>
+                <label htmlFor="phone" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">SỐ ĐIỆN THOẠI *</label>
                 <Input
                   id="phone"
                   type="tel"
@@ -210,6 +201,17 @@ export default function WineQuizPage() {
                   onChange={(e) => setPhone(e.target.value)}
                    className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
                   placeholder=""
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="notes" className="block text-sm font-bold uppercase tracking-wider text-black mb-2">GHI CHÚ</label>
+                <Textarea
+                  id="notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                   className="bg-white/80 border-0 border-b-2 border-black/40 rounded-none focus:ring-0 focus:border-black text-black placeholder-black/50"
+                  placeholder="Bạn có yêu cầu gì đặc biệt không?"
                 />
               </div>
               <div className="text-center">
