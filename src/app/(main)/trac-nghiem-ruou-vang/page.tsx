@@ -10,21 +10,25 @@ import { useToast } from '@/hooks/use-toast';
 const quizQuestions = [
   {
     id: 1,
+    key: 'question1',
     question: 'Bạn thích loại rượu vang nào?',
     answers: ['Vang đỏ', 'Vang trắng', 'Vang hồng (Rosé)', 'Vang sủi/Champagne'],
   },
   {
     id: 2,
+    key: 'question2',
     question: 'Bạn thường uống rượu vang vào dịp nào?',
     answers: ['Trong bữa ăn hàng ngày', 'Tiệc tùng cùng bạn bè', 'Những dịp đặc biệt, sang trọng', 'Thư giãn một mình'],
   },
   {
     id: 3,
+    key: 'question3',
     question: 'Bạn ưu tiên yếu tố nào nhất khi chọn rượu vang?',
     answers: ['Hương vị trái cây', 'Độ đậm đà (body)', 'Đến từ vùng nổi tiếng', 'Giá cả hợp lý'],
   },
   {
     id: 4,
+    key: 'question4',
     question: 'Bạn muốn khám phá rượu vang từ quốc gia nào?',
     answers: ['Pháp', 'Ý', 'Tây Ban Nha / Bồ Đào Nha', 'Chile / Argentina / Úc (New World)'],
   },
@@ -40,6 +44,7 @@ export default function WineQuizPage() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAnswerSelect = (questionId: number, answer: string) => {
     setAnswers((prev) => ({
@@ -48,8 +53,9 @@ export default function WineQuizPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const allAnswered = quizQuestions.every(q => answers[q.id]);
     if (!name || !email) {
       toast({
@@ -57,6 +63,7 @@ export default function WineQuizPage() {
         title: 'Lỗi',
         description: 'Vui lòng điền đầy đủ họ tên và email.',
       });
+      setIsSubmitting(false);
       return;
     }
      if (!allAnswered) {
@@ -65,18 +72,62 @@ export default function WineQuizPage() {
         title: 'Lỗi',
         description: 'Vui lòng trả lời tất cả các câu hỏi.',
       });
+      setIsSubmitting(false);
       return;
     }
-    console.log('Quiz submitted:', { answers, name, email, phone });
-    toast({
-      title: 'Thành công!',
-      description: 'Cảm ơn bạn đã tham gia. Chuyên gia của chúng tôi sẽ sớm liên hệ để tư vấn loại vang phù hợp nhất với bạn.',
+
+    const scriptURL = process.env.APPS_SCRIPT_URL;
+
+    if (!scriptURL || scriptURL === "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
+        console.error("Apps Script URL is not configured.");
+        toast({
+            variant: "destructive",
+            title: "Lỗi cấu hình",
+            description: "Chức năng gửi biểu mẫu chưa được cấu hình. Vui lòng liên hệ quản trị viên.",
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    
+    quizQuestions.forEach(q => {
+        formData.append(q.key, answers[q.id] || '');
     });
-    // Reset state if needed
-    setAnswers({});
-    setName('');
-    setEmail('');
-    setPhone('');
+    
+    try {
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.result === "success") {
+        toast({
+          title: 'Thành công!',
+          description: 'Cảm ơn bạn đã tham gia. Chuyên gia của chúng tôi sẽ sớm liên hệ để tư vấn loại vang phù hợp nhất với bạn.',
+        });
+        setAnswers({});
+        setName('');
+        setEmail('');
+        setPhone('');
+      } else {
+        throw new Error(result.error || "Unknown error occurred");
+      }
+    } catch (error) {
+      console.error('Error submitting to Google Sheet:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Đã có lỗi xảy ra',
+        description: 'Không thể gửi thông tin của bạn. Vui lòng thử lại sau.',
+      });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (
@@ -165,8 +216,12 @@ export default function WineQuizPage() {
                  <p className="text-xs text-black/60 mb-6">
                     BẰNG VIỆC NHẤN 'NHẬN KẾT QUẢ', BẠN ĐỒNG Ý VỚI <a href="#" className="underline">ĐIỀU KHOẢN VÀ ĐIỀU KIỆN</a> CỦA CHÚNG TÔI.
                 </p>
-                <Button type="submit" className="bg-black text-white font-bold uppercase tracking-widest px-8 py-6 rounded-sm hover:bg-gray-800">
-                  Gửi Thông Tin
+                <Button 
+                    type="submit" 
+                    className="bg-black text-white font-bold uppercase tracking-widest px-8 py-6 rounded-sm hover:bg-gray-800"
+                    disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'ĐANG GỬI...' : 'Gửi Thông Tin'}
                 </Button>
               </div>
             </form>
