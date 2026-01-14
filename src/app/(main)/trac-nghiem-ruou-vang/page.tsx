@@ -77,18 +77,7 @@ export default function WineQuizPage() {
       return;
     }
 
-    const scriptURL = process.env.APPS_SCRIPT_URL;
-
-    if (!scriptURL || scriptURL === "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
-        console.error("Apps Script URL is not configured.");
-        toast({
-            variant: "destructive",
-            title: "Lỗi cấu hình",
-            description: "Chức năng gửi biểu mẫu chưa được cấu hình. Vui lòng liên hệ quản trị viên.",
-        });
-        setIsSubmitting(false);
-        return;
-    }
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx5IGoQqAR1isYrxbF_41dxRlsVsqi7YZ4rRxlBQTXwXilA5Oz7hLNgQRFhEUjKYUbrvw/exec";
 
     const formData = new FormData();
     formData.append('name', name);
