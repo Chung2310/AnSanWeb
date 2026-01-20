@@ -25,7 +25,7 @@ export default function TetGiftPopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="p-0 max-w-xl bg-transparent shadow-none border-4 border-yellow-500">
+      <DialogContent className="p-0 max-w-xl bg-transparent shadow-none border-4 border-amber-500">
         <DialogHeader className="sr-only">
           <DialogTitle>Quà Tết AnSan Promotion</DialogTitle>
           <DialogDescription>
