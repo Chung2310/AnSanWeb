@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -128,7 +129,7 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
     const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
     return (
-        <div className="absolute top-full left-0 w-full bg-white shadow-lg z-20">
+        <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50">
             <div className="container mx-auto max-w-screen-2xl p-8">
                 <div className="grid grid-cols-5 gap-8">
                     {/* Column 1: Loại Vang */}
@@ -225,7 +226,7 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
        <div 
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
-        className="relative h-14 flex items-center"
+        className="static h-14 flex items-center"
       >
         <Link href={href} className={linkClasses}>
           {label}
@@ -453,7 +454,7 @@ export default function Header() {
 
       {/* Category Nav */}
       {isHydrated && (
-        <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
+        <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block relative">
             <div className="container flex h-auto min-h-14 items-center justify-center py-2">
                 <nav className="flex items-center gap-8 flex-wrap justify-center">
                     {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
