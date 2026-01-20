@@ -120,7 +120,7 @@ export default function HeroSection() {
                                     <div className="absolute inset-0 bg-black/40" />
 
                                     {/* Text Content */}
-                                    <div className="container relative z-10 flex h-full flex-col items-center justify-center text-center text-white">
+                                    <div className="container relative z-10 flex h-full flex-col items-start justify-end pb-40 text-left text-white">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
@@ -140,7 +140,7 @@ export default function HeroSection() {
                                                         }
                                                         <span className="text-white">{slide.titleAccent || ''}</span>
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line text-white/90")}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line text-white/90")}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
@@ -164,7 +164,7 @@ export default function HeroSection() {
             </div>
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
-                    <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
+                    <div className="flex items-center justify-start space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
                             <div key={slide.label} className="flex items-center">
                                 <button
