@@ -17,13 +17,14 @@ export const wineMegaMenuData = {
         { label: "Saint-Émilion", slug: "saint-emilion", category_id: "saint-emilion" },
         { label: "Pomerol", slug: "pomerol", category_id: "pomerol" },
         { label: "Languedoc", slug: "languedoc", category_id: "languedoc" },
-        { label: "Puglia", slug: "puglia", category_id: "puglia" },
-        { label: "Veneto", slug: "veneto", category_id: "veneto" },
+        { label: "Puglia", slug: "vang-y/puglia", category_id: "puglia" },
+        { label: "Veneto", slug: "vang-y/veneto", category_id: "veneto" },
         { label: "Abruzzo", slug: "abruzzo", category_id: "abruzzo" },
         { label: "Crecchio", slug: "crecchio", category_id: "crecchio" },
-        { label: "Tuscany", slug: "toscana", category_id: "toscana" },
+        { label: "Tuscany", slug: "vang-y/toscana", category_id: "toscana" },
         { label: "Salento", slug: "salento", category_id: "salento" },
-        { label: "Sicily", slug: "sicilia", category_id: "sicilia" },
+        { label: "Sicily", slug: "vang-y/sicilia", category_id: "sicilia" },
+        { label: "Piemonte", slug: "vang-y/piemonte", category_id: "piemonte"}
     ],
     theoGiongNho: [
         { label: "Cabernet Sauvignon", slug: "cabernet-sauvignon", category_id: "cabernet-sauvignon" },
