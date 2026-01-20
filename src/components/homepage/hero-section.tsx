@@ -77,7 +77,7 @@ export default function HeroSection() {
     }, [current]);
 
     return (
-        <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
+        <section className="relative w-full font-body h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
