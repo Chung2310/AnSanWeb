@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -94,6 +95,15 @@ const categoryNavLinks: NavLinkData[] = [
         href: '/danh-muc/ly-coc-pha-le',
         label: 'LY - CỐC PHA LÊ',
         megaMenuColumns: [
+            {
+                title: 'LY PHA LÊ RIEDEL',
+                items: [
+                    { href: '/danh-muc/ly-coc-pha-le/ly-vang-do', label: 'Ly Vang Đỏ' },
+                    { href: '/danh-muc/ly-coc-pha-le/ly-vang-trang', label: 'Ly Vang Trắng' },
+                    { href: '/danh-muc/ly-coc-pha-le/ly-champagne', label: 'Ly Champagne' },
+                    { href: '/danh-muc/ly-coc-pha-le/ly-thuy-tinh-re', label: 'Ly thủy tinh rẻ' },
+                ]
+            },
             {
                 title: 'LY WHISKY',
                 items: [
@@ -214,11 +224,12 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
             href={href}
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
-                 isMenuOpen
-                    ? 'bg-popover text-popover-foreground'
-                    : isCurrentPage 
-                    ? 'text-primary-foreground font-bold hover:text-white'
-                    : 'text-primary-foreground/80 hover:text-white'
+                isMenuOpen
+                  ? 'bg-popover text-popover-foreground'
+                  : isCurrentPage
+                  ? 'text-primary-foreground font-bold'
+                  : 'text-primary-foreground/80',
+                'hover:text-black'
             )}
         >
           {label}
