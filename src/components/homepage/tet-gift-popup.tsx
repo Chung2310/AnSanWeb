@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,6 +34,12 @@ export default function TetGiftPopup() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="p-0 border-0 max-w-xl bg-transparent shadow-none">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Quà Tết AnSan Promotion</DialogTitle>
+          <DialogDescription>
+            A promotional popup for AnSan's Tet gift sets. Click to explore the gift sets.
+          </DialogDescription>
+        </DialogHeader>
         <Link href="/danh-muc/bo-qua-tang" onClick={() => setIsOpen(false)}>
             <Image
                 src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1768899296/Banner_4_ds55j7.png"
