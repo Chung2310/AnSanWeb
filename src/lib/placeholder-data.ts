@@ -57,7 +57,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'chateau-margaux-2015',
     price: 35000000,
     description: 'Một biểu tượng của Bordeaux, loại rượu này mang đến sự phức hợp đáng kinh ngạc với hương hoa violet, dâu đen và gỗ tuyết tùng.',
-    image: getImage('wine-1'),
+    image: getImage('prod-detail-1'),
     isFeatured: true,
     status: 'published',
     tags: ['wine'],
@@ -74,7 +74,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'drc-montrachet-2018',
     price: 95000000,
     description: 'Loại rượu vang trắng được săn lùng nhất thế giới, thể hiện sự cân bằng hoàn hảo giữa sự đậm đà, khoáng chất và độ chua.',
-    image: getImage('wine-2'),
+    image: getImage('prod-detail-2'),
     isFeatured: true,
     status: 'published',
     tags: ['wine', 'old-rare'],
@@ -91,7 +91,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'whispering-angel-rose',
     price: 1200000,
     description: 'Loại vang hồng tinh tế từ Provence với hương thơm của dâu tây, đào và một chút hương hoa.',
-    image: getImage('wine-3'),
+    image: getImage('prod-detail-3'),
     isNew: true,
     status: 'published',
     tags: ['wine'],
@@ -108,7 +108,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'krug-grande-cuvee',
     price: 8500000,
     description: 'Một loại Champagne sang trọng với sự phức hợp của hương bánh mì nướng, các loại hạt và trái cây họ cam quýt.',
-    image: getImage('wine-4'),
+    image: getImage('prod-detail-1'),
     isFeatured: true,
     status: 'published',
     tags: ['wine'],
@@ -125,7 +125,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'chateau-dyquem-2011',
     price: 15000000,
     description: 'Vua của các loại rượu vang ngọt, với các lớp hương mật ong, mơ, và hạnh nhân.',
-    image: getImage('wine-5'),
+    image: getImage('prod-detail-2'),
     isNew: true,
     status: 'published',
     tags: ['wine', 'old-rare'],
@@ -142,7 +142,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'penfolds-grange-2017',
     price: 22000000,
     description: 'Biểu tượng của Úc, một loại Shiraz đậm đà và mạnh mẽ với hương vị của mận, sô cô la và gia vị.',
-    image: getImage('wine-6'),
+    image: getImage('prod-detail-3'),
     isFeatured: true,
     status: 'published',
     tags: ['wine', 'world'],
@@ -209,7 +209,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'springbank-15',
     price: 6800000,
     description: 'Một chai Campbeltown single malt cổ điển, phức hợp với hương sherry, trái cây sẫm màu và một chút khói than bùn.',
-    image: getImage('wine-1'),
+    image: getImage('prod-detail-1'),
     status: 'published',
     tags: ['scotch', 'campbeltown'],
     attributes: [
@@ -228,7 +228,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'glen-scotia-victoriana',
     price: 3500000,
     description: 'Lấy cảm hứng từ thời Victoria, loại whisky này mạnh mẽ và đậm đà, được ủ trong thùng gỗ sồi cháy kỹ.',
-    image: getImage('wine-2'),
+    image: getImage('prod-detail-2'),
     status: 'published',
     tags: ['scotch', 'campbeltown'],
     attributes: [
@@ -247,7 +247,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'yamazaki-12',
     price: 7900000,
     description: 'Loại single malt tiên phong của Nhật Bản, tinh tế và phức hợp với hương trái cây nhiệt đới, gỗ đàn hương và trầm hương.',
-    image: getImage('wine-3'),
+    image: getImage('prod-detail-3'),
     status: 'published',
     tags: ['world', 'japan'],
     attributes: [
@@ -266,7 +266,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'lakes-reserve-no7',
     price: 4500000,
     description: 'Phiên bản thứ bảy trong sê-ri được đánh giá cao, một loại single malt đậm đà hương sherry, phức hợp và cân bằng.',
-    image: getImage('wine-4'),
+    image: getImage('hero-lakes'),
     status: 'published',
     tags: ['world', 'england'],
     attributes: [
@@ -303,7 +303,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'glenfiddich-12',
     price: 1800000,
     description: 'Một trong những loại single malt bán chạy nhất thế giới, đặc trưng bởi hương lê tươi và gỗ sồi tinh tế.',
-    image: getImage('wine-5'),
+    image: getImage('prod-detail-2'),
     status: 'published',
     tags: ['scotch', 'speyside'],
     attributes: [
@@ -322,7 +322,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'ardbeg-10',
     price: 2800000,
     description: 'Một loại Islay single malt cổ điển, cực kỳ đậm vị khói than bùn, i-ốt và một chút vị ngọt của mạch nha.',
-    image: getImage('wine-6'),
+    image: getImage('prod-detail-3'),
     status: 'published',
     tags: ['scotch', 'islay'],
     attributes: [
@@ -673,11 +673,11 @@ export const sampleWines: FullProduct[] = [
 ];
 
 export const sampleCategories: Category[] = [
-  { id: '1', name: 'Vang Đỏ', slug: 'vang-do', image: getImage('category-red'), status: 'active' },
-  { id: '2', name: 'Vang Trắng', slug: 'vang-trang', image: getImage('category-white'), status: 'active' },
-  { id: '3', name: 'Vang Hồng', slug: 'vang-hong', image: getImage('category-rose'), status: 'active' },
-  { id: '4', name: 'Vang Sủi', slug: 'vang-sui', image: getImage('category-sparkling'), status: 'active' },
-  { id: '5', name: 'Vang Tráng Miệng', slug: 'vang-trang-mieng', image: getImage('category-dessert'), status: 'active' },
+  { id: '1', name: 'Vang Đỏ', slug: 'vang-do', image: getImage('cotes-rocheuses'), status: 'active' },
+  { id: '2', name: 'Vang Trắng', slug: 'vang-trang', image: getImage('cuvee-les-naiades'), status: 'active' },
+  { id: '3', name: 'Vang Hồng', slug: 'vang-hong', image: getImage('la-petite-gargotte'), status: 'active' },
+  { id: '4', name: 'Vang Sủi', slug: 'vang-sui', image: getImage('minskoye-shampanskoye'), status: 'active' },
+  { id: '5', name: 'Vang Tráng Miệng', slug: 'vang-trang-mieng', image: getImage('zolotoe-wine'), status: 'active' },
 ];
 
 export const sampleBlogPosts: BlogPost[] = [
@@ -688,7 +688,7 @@ export const sampleBlogPosts: BlogPost[] = [
     slug: 'nha-chung-cat-whisky-lon-nhat-the-gioi',
     excerpt: 'Khám phá những gã khổng lồ đứng sau những chai whisky trứ danh, tìm hiểu về quy mô và sản lượng đáng kinh ngạc của họ.',
     createdAt: new Date('2024-02-14'),
-    image: getImage('blog-distillery'),
+    image: getImage('hero-lakes'),
     categories: ['DISTILLERIES', 'NEWS'],
   },
   {
@@ -698,7 +698,7 @@ export const sampleBlogPosts: BlogPost[] = [
     slug: '5-dieu-ban-khong-biet-ve-smws',
     excerpt: 'The Scotch Malt Whisky Society không chỉ là một hiệp hội, đó là một thế giới riêng. Cùng khám phá 5 bí mật thú vị về tổ chức này.',
     createdAt: new Date('2024-02-04'),
-    image: getImage('blog-smws'),
+    image: getImage('hero-smws'),
     categories: ['WHISKY BASICS', 'DISTILLERIES'],
   },
   {
@@ -708,7 +708,7 @@ export const sampleBlogPosts: BlogPost[] = [
     slug: '8-dieu-ban-chua-biet-ve-glenturret',
     excerpt: 'Đi sâu vào lịch sử và những câu chuyện ít người biết về Glenturret, một trong những nhà chưng cất lâu đời nhất Scotland.',
     createdAt: new Date('2024-03-13'),
-    image: getImage('blog-glenturret'),
+    image: getImage('hero-armagnac'),
     categories: ['DISTILLERIES'],
   },
   {
@@ -748,7 +748,7 @@ export const sampleBlogPosts: BlogPost[] = [
     slug: 'review-ardbeg-10-vs-lagavulin-16',
     excerpt: 'Hai gã khổng lồ của vùng Islay, Scotland. Cuộc đối đầu kinh điển giữa hai phong cách khói than bùn khác biệt. Ai sẽ là người chiến thắng?',
     createdAt: new Date('2024-06-01'),
-    image: getImage('wine-6'),
+    image: getImage('prod-detail-3'),
     categories: ['WHISKY REVIEW'],
   },
    {
@@ -793,21 +793,21 @@ export const sampleTestimonials: Testimonial[] = [
     name: 'Anh Trần Tuấn',
     title: 'Doanh nhân',
     quote: 'Bộ sưu tập rượu vang ở đây thật sự ấn tượng. Tôi đã tìm thấy những chai vang hiếm mà tôi đã tìm kiếm từ lâu. Dịch vụ tư vấn rất chuyên nghiệp.',
-    avatar: getImage('avatar-1'),
+    avatar: getImage('prod-detail-1'),
   },
   {
     id: '2',
     name: 'Chị Minh Anh',
     title: 'Chuyên gia ẩm thực',
     quote: 'Chất lượng rượu vang vượt xa mong đợi của tôi. Mỗi chai vang đều kể một câu chuyện riêng. Chắc chắn tôi sẽ quay lại.',
-    avatar: getImage('avatar-2'),
+    avatar: getImage('prod-detail-2'),
   },
   {
     id: '3',
     name: 'Chị Gia Linh',
     title: 'Nhà sưu tập rượu',
     quote: 'Là một nhà sưu tập, tôi đánh giá cao sự đa dạng và chất lượng của các loại rượu vang ở đây. Trang web rất trang nhã và dễ sử dụng.',
-    avatar: getImage('avatar-3'),
+    avatar: getImage('prod-detail-3'),
   },
 ];
 

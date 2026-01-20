@@ -20,15 +20,15 @@
     },
     {
       "id": "hero-sale",
-      "description": "Special offer on whisky",
-      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768896911/Baner_r%C6%B0%E1%BB%A3u_web-01_1_nvownd.jpg",
-      "imageHint": "whisky offer"
+      "description": "Grande Alberone Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768900953/alberone-white_stqc5t.png",
+      "imageHint": "grande alberone"
     },
     {
       "id": "hero-armagnac",
-      "description": "Collection of authentic wines",
+      "description": "A collection of best choice wines",
       "imageUrl": "https://res.cloudinary.com/dqhgnzmtk/image/upload/v1768883382/R%C6%B0%E1%BB%A3u_bestchoise-01_d9hgxw.jpg",
-      "imageHint": "authentic wine"
+      "imageHint": "best choice wine"
     },
     {
       "id": "hero-smws",
@@ -119,150 +119,6 @@
       "description": "A whisky bottle for a lower price category",
       "imageUrl": "/images/whisky/whisky_duoi_4_banner-1.webp",
       "imageHint": "affordable whisky"
-    },
-    {
-      "id": "gift-set-tasting",
-      "description": "Hands holding The Lakes Whiskymaker's Editions tasting set box.",
-      "imageUrl": "/images/Banner 4.webp",
-      "imageHint": "whisky tasting set"
-    },
-    {
-      "id": "gift-set-lakes-tet",
-      "description": "The Lakes Single Malt whisky gift set with a red box.",
-      "imageUrl": "/images/Banner 4.webp",
-      "imageHint": "whisky gift set"
-    },
-    {
-      "id": "engraving-banner",
-      "description": "Personalised engraving on a wine bottle, saying Congratulations.",
-      "imageUrl": "/images/engraving.webp",
-      "imageHint": "bottle engraving"
-    },
-    {
-      "id": "wine-1",
-      "description": "Bottle of premium red wine",
-      "imageUrl": "https://images.unsplash.com/photo-1621644894301-cd6b2eaca610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZWQlMjB3aW5lfGVufDB8fHx8MTc2NzQ2MTQyNnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "red wine"
-    },
-    {
-      "id": "wine-2",
-      "description": "Bottle of crisp white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "white wine"
-    },
-    {
-      "id": "wine-3",
-      "description": "Bottle of elegant rosé wine",
-      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "rose wine"
-    },
-    {
-      "id": "wine-4",
-      "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "sparkling wine"
-    },
-    {
-      "id": "wine-5",
-      "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
-      "imageHint": "dessert wine"
-    },
-    {
-      "id": "wine-6",
-      "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "vintage wine"
-    },
-    {
-      "id": "category-red",
-      "description": "Grapes for red wine",
-      "imageUrl": "https://images.unsplash.com/photo-1663687552745-f76a59fd7bcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxyZWQlMjBncmFwZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "red grapes"
-    },
-    {
-      "id": "category-white",
-      "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "white grapes"
-    },
-    {
-      "id": "category-rose",
-      "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
-      "imageHint": "rose glass"
-    },
-    {
-      "id": "category-sparkling",
-      "description": "Champagne flutes being filled",
-      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "champagne flutes"
-    },
-    {
-      "id": "category-dessert",
-      "description": "Pouring a sweet dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1699968359715-a22a1df56a68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3dlZXQlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "sweet wine"
-    },
-    {
-      "id": "brand-story",
-      "description": "Interior of an old wine cellar",
-      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "wine cellar"
-    },
-    {
-      "id": "blog-distillery",
-      "description": "Whisky barrels in a distillery",
-      "imageUrl": "/images/blog/1.webp",
-      "imageHint": "whisky distillery"
-    },
-    {
-      "id": "blog-smws",
-      "description": "Man holding a bottle of SMWS whisky",
-      "imageUrl": "/images/blog/2.webp",
-      "imageHint": "whisky bottle"
-    },
-    {
-      "id": "blog-glenturret",
-      "description": "Glenturret whisky bottle with glasses",
-      "imageUrl": "/images/blog/3.webp",
-      "imageHint": "whisky glass"
-    },
-    {
-      "id": "blog-1",
-      "description": "People at a wine tasting event",
-      "imageUrl": "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aW5lJTIwdGFzdGluZ3xlbnwwfHx8fDE3Njc0NjU0MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "wine tasting"
-    },
-    {
-      "id": "blog-2",
-      "description": "Cheese board and wine pairing",
-      "imageUrl": "https://images.unsplash.com/photo-1734313237431-50e32865a008?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwcGFpcmluZ3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "food pairing"
-    },
-    {
-      "id": "blog-3",
-      "description": "A winemaker checking barrels",
-      "imageUrl": "https://images.unsplash.com/photo-1727063137470-0cc4389eeb59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aW5lJTIwbWFraW5nfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlibrb-4.1.0&q=80&w=1080",
-      "imageHint": "wine making"
-    },
-    {
-      "id": "avatar-1",
-      "description": "Smiling man",
-      "imageUrl": "https://images.unsplash.com/photo-1629185752040-57f6fa9b4f53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3Njc1NjcyODJ8MA&ixlibrb-4.1.0&q=80&w=1080",
-      "imageHint": "man smiling"
-    },
-    {
-      "id": "avatar-2",
-      "description": "Smiling woman",
-      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "woman smiling"
-    },
-    {
-      "id": "avatar-3",
-      "description": "Smiling person",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
-      "imageHint": "person smiling"
     },
     {
       "id": "gift-set-tasting",
