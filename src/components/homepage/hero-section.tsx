@@ -14,31 +14,40 @@ const heroSlides = [
         label: 'Master of Wine',
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
+        tag: 'Master of wine',
+        titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
+        bgColor: 'bg-primary',
         textColor: 'text-white',
     },
     {
         imageId: 'hero-sale',
         label: 'Grande Alberone',
         title: 'Grande Alberone',
+        tag: 'Grande Alberone',
         href: '/gioi-thieu',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
+        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
     {
         imageId: 'hero-armagnac',
         label: 'Rượu Vang Chính Hãng',
         title: ['Rượu Vang', 'Chính Hãng'],
+        tag: 'Rượu Vang Chính Hãng',
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
+        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
     {
         imageId: 'hero-smws',
         label: 'QUÀ TẾT',
         title: 'QUÀ TẾT',
+        tag: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
+        bgColor: 'bg-primary',
         textColor: 'text-white',
         external: false,
         objectFit: 'contain',
@@ -47,8 +56,10 @@ const heroSlides = [
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
         title: 'RƯỢU MẠNH',
+        tag: 'RƯỢU MẠNH',
         href: '/danh-muc/ruou-manh',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
+        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
 ];
@@ -81,16 +92,15 @@ export default function HeroSection() {
         }, 8000);
         return () => clearTimeout(timer);
     }, [current]);
-    
+
     return (
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide: any, index) => {
-                         const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                         const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
-                         const isActive = index === current;
-
+                        const image = PlaceHolderImages.find(img => img.id === slide.imageId);
+                        const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+                        const isActive = index === current;
                         return (
                             <motion.div
                                 key={index}
@@ -100,52 +110,40 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                <div className={cn("relative h-full w-full", slide.objectFit === 'contain' && 'bg-black')}>
-                                    {/* Background Image */}
-                                    {image && (
-                                        <Image
-                                            src={image.imageUrl}
-                                            alt={image.description}
-                                            fill
-                                            className={slide.objectFit === 'contain' ? 'object-contain' : 'object-cover'}
-                                            sizes="100vw"
-                                            priority={isActive}
-                                            data-ai-hint={image.imageHint}
-                                        />
-                                    )}
-                                    <div className="absolute inset-0 bg-black/40" />
-                                    
-                                    {/* Text Content */}
-                                    <div className={cn("mx-auto max-w-screen-2xl px-4 md:px-24 lg:px-32 relative z-10 flex h-full w-full flex-col items-start justify-center text-left", slide.textColor)}>
+                                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                                    {/* Left Column: Text */}
+                                    <div className={cn("flex flex-col justify-center items-center text-center p-8", slide.bgColor, slide.textColor)}>
                                         <AnimatePresence>
                                             {isActive && (
-                                                <motion.div 
-                                                    className="max-w-xl"
+                                                <motion.div
+                                                    className="max-w-md"
                                                     variants={containerVariants}
                                                     initial="initial"
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    {slide.tag && <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
-                                                        {slide.tag}
-                                                    </motion.p>}
-                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-loose", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
+                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
+                                                        {slide.tag || slide.label}
+                                                    </motion.p>
+                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-tight", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {Array.isArray(slide.title)
-                                                            ? slide.title.map((line:string, i:number) => <span key={i} className="block">{line}</span>)
+                                                            ? slide.title.map((line: string, i: number) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
                                                         }
-                                                        {slide.titleAccent && <span className="text-white">{slide.titleAccent}</span>}
+                                                        <span className="text-white">{slide.titleAccent || ''}</span>
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
-                                                        <Button 
-                                                            asChild 
-                                                            variant="outline" 
+                                                        <Button
+                                                            asChild
+                                                            variant="outline"
                                                             className={cn(
                                                                 "mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105",
-                                                                "border-white text-white hover:bg-white hover:text-black"
+                                                                slide.textColor === 'text-white'
+                                                                    ? "border-white text-white hover:bg-white hover:text-black"
+                                                                    : "border-black text-black hover:bg-black hover:text-white"
                                                             )}
                                                         >
                                                             <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
@@ -155,18 +153,46 @@ export default function HeroSection() {
                                             )}
                                         </AnimatePresence>
                                     </div>
+                                    {/* Right Column: Image */}
+                                    <div className={cn("relative h-full hidden md:block", slide.objectFit === 'contain' && 'bg-black')}>
+                                        {image && (
+                                            <Image
+                                                src={image.imageUrl}
+                                                alt={image.description}
+                                                fill
+                                                className={cn("object-cover", slide.objectFit === 'contain' && "object-contain")}
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                                priority={isActive}
+                                                data-ai-hint={image.imageHint}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Mobile background image */}
+                                <div className={cn("absolute inset-0 md:hidden -z-10", slide.objectFit === 'contain' && 'bg-black')}>
+                                    {image && (
+                                        <Image
+                                            src={image.imageUrl}
+                                            alt={image.description}
+                                            fill
+                                            className={cn("object-cover", slide.objectFit === 'contain' && "object-contain")}
+                                            sizes="100vw"
+                                            priority={isActive}
+                                            data-ai-hint={image.imageHint}
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/50" />
                                 </div>
                             </motion.div>
                         )
                     })}
                 </AnimatePresence>
             </div>
-            
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
-                     <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
+                    <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
-                             <div key={slide.label} className="flex items-center">
+                            <div key={slide.label} className="flex items-center">
                                 <button
                                     onClick={() => setCurrent(index)}
                                     className={cn(
@@ -178,7 +204,7 @@ export default function HeroSection() {
                                     {slide.label}
                                 </button>
                                 {index < heroSlides.length - 1 && (
-                                     <div className="w-8 h-px bg-white/50 mx-2 hidden md:block"></div>
+                                    <div className="w-8 h-px bg-white/50 mx-2 hidden md:block"></div>
                                 )}
                             </div>
                         ))}
