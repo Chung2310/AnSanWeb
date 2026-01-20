@@ -20,9 +20,9 @@
     },
     {
       "id": "hero-sale",
-      "description": "Ansan Wine Banner",
+      "description": "Grande Alberone Logo",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768896911/Baner_r%C6%B0%E1%BB%A3u_web-01_1_nvownd.jpg",
-      "imageHint": "wine banner"
+      "imageHint": "grande alberone logo"
     },
     {
       "id": "hero-armagnac",
@@ -83,6 +83,12 @@
       "description": "Hechtsheimer Winzer Logo",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904665/Hechtsheimer_Winzer_Logo_600_qae4re.png",
       "imageHint": "hechtsheimer winzer logo"
+    },
+    {
+      "id": "brand-sgarzi-luigi",
+      "description": "Sgarzi Luigi Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768905491/widget_list_169_yientt.png",
+      "imageHint": "sgarzi luigi logo"
     },
     {
       "id": "influence-image",
