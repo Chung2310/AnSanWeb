@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -68,6 +69,12 @@ const categoryNavLinks: NavLinkData[] = [
         label: 'RƯỢU MẠNH',
         megaMenuColumns: [
             {
+                title: 'Theo loại rượu',
+                items: [
+                    { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
+                ]
+            },
+            {
                 title: 'Thương hiệu',
                 items: [
                     { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
@@ -76,6 +83,12 @@ const categoryNavLinks: NavLinkData[] = [
                     { href: '/danh-muc/ruou-manh/chivas', label: 'Chivas' },
                     { href: '/danh-muc/ruou-manh/royal-salute', label: 'Royal Salute' },
                     { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
+                ]
+            },
+            {
+                title: 'Quà tặng',
+                items: [
+                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà tặng rượu mạnh' }
                 ]
             }
         ]
@@ -125,7 +138,8 @@ const MegaMenu = ({ columns, isOpen }: {
         <div 
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50",
-                isOpen ? "block" : "hidden"
+                "transition-opacity duration-300 ease-in-out",
+                isOpen ? "opacity-100 visible" : "opacity-0 invisible"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
@@ -153,7 +167,7 @@ const MegaMenu = ({ columns, isOpen }: {
     );
 };
 
-const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { className?: string; }) => {
+const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -177,7 +191,7 @@ const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { cl
 
   return (
       <div 
-        className='h-full'
+        className={cn('h-full flex items-center', hasDropdown && 'static')}
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
       >
@@ -186,8 +200,7 @@ const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { cl
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 'text-primary-foreground/80 hover:text-primary-foreground',
-                isActive && 'text-popover-foreground bg-popover',
-                className
+                 isActive ? 'text-popover-foreground bg-popover' : ''
             )}
         >
           {label}
@@ -196,7 +209,7 @@ const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { cl
         
         {hasDropdown && (
             <MegaMenu 
-                columns={megaMenuColumns!}
+                columns={megaMenuColumns}
                 isOpen={isOpen}
             />
         )}
@@ -347,13 +360,11 @@ export default function Header() {
         </div>
       </div>
 
-      {isHydrated && (
-        <nav className="bg-primary relative">
-            <div className="container flex h-14 items-center justify-center gap-x-2">
+      <nav className="bg-primary relative">
+            <div className="container relative flex h-14 items-center justify-center gap-x-2">
                 {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </div>
         </nav>
-      )}
     </header>
   );
 }
