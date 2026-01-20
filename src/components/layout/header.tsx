@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -87,9 +88,7 @@ const categoryNavLinks: NavLinkData[] = [
             },
              {
                 title: 'Quà tặng',
-                items: [
-                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà tặng rượu mạnh' }
-                ]
+                items: []
             }
         ]
     },
@@ -205,7 +204,6 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
   const isActive = (isOpen && hasDropdown) || pathname === href || (href !== '/' && pathname.startsWith(href));
   
-  // Use a div wrapper that will contain the link and the mega menu logic
   const LinkComponent = 'div';
 
   return (
