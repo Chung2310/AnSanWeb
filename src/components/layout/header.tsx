@@ -12,6 +12,56 @@ import { Input } from '../ui/input';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import { useHydration } from '@/hooks/use-hydration';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
+
+const wineMegaMenuData = [
+  {
+    title: 'Loại Vang',
+    links: [
+      { label: 'Vang Đỏ', href: '/danh-muc/ruou-vang' },
+      { label: 'Vang Trắng', href: '/danh-muc/ruou-vang' },
+      { label: 'Vang Hồng', href: '/danh-muc/ruou-vang' },
+      { label: 'Vang Sủi', href: '/danh-muc/ruou-vang' },
+    ],
+  },
+  {
+    title: 'Xuất Xứ',
+    links: [
+      { label: 'Vang Pháp', href: '/danh-muc/ruou-vang/vang-phap' },
+      { label: 'Vang Ý', href: '/danh-muc/ruou-vang/vang-y' },
+      { label: 'Vang Tây Ban Nha', href: '/danh-muc/ruou-vang/vang-tay-ban-nha' },
+      { label: 'Vang Úc', href: '/danh-muc/ruou-vang/vang-uc' },
+      { label: 'Vang Nga', href: '/danh-muc/ruou-vang/vang-nga' },
+      { label: 'Vang Đức', href: '/danh-muc/ruou-vang/vang-duc' },
+    ],
+  },
+  {
+    title: 'Vùng Làm Vang (Ý)',
+    links: [
+      { label: 'Puglia', href: '/danh-muc/ruou-vang/vang-y/puglia' },
+      { label: 'Toscana', href: '/danh-muc/ruou-vang/vang-y/toscana' },
+      { label: 'Veneto', href: '/danh-muc/ruou-vang/vang-y/veneto' },
+      { label: 'Sicilia', href: '/danh-muc/ruou-vang/vang-y/sicilia' },
+      { label: 'Piemonte', href: '/danh-muc/ruou-vang/vang-y/piemonte' },
+    ],
+  },
+  {
+    title: 'Giống Nho (Phổ biến)',
+    links: [
+      { label: 'Cabernet Sauvignon', href: '/danh-muc/ruou-vang' },
+      { label: 'Merlot', href: '/danh-muc/ruou-vang' },
+      { label: 'Chardonnay', href: '/danh-muc/ruou-vang' },
+      { label: 'Primitivo', href: '/danh-muc/ruou-vang' },
+      { label: 'Syrah', href: '/danh-muc/ruou-vang' },
+    ],
+  },
+];
 
 
 const mainNavLinks = [
@@ -29,14 +79,7 @@ const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
-        sublinks: [
-            { href: '/danh-muc/ruou-vang/vang-y', label: 'Vang Ý' },
-            { href: '/danh-muc/ruou-vang/vang-phap', label: 'Vang Pháp' },
-            { href: '/danh-muc/ruou-vang/vang-tay-ban-nha', label: 'Vang Tây Ban Nha' },
-            { href: '/danh-muc/ruou-vang/vang-uc', label: 'Vang Úc' },
-            { href: '/danh-muc/ruou-vang/vang-nga', label: 'Vang Nga' },
-            { href: '/danh-muc/ruou-vang/vang-duc', label: 'Vang Đức' },
-        ],
+        megaMenuData: wineMegaMenuData,
     },
     {
         href: '/danh-muc/ruou-manh',
@@ -77,7 +120,13 @@ const categoryNavLinks = [
     }
 ];
 
-const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[] | undefined, className?: string }) => {
+const NavLink = ({ href, label, sublinks, megaMenuData, className }: { 
+  href: string; 
+  label: string; 
+  sublinks?: {href: string, label: string}[];
+  megaMenuData?: typeof wineMegaMenuData;
+  className?: string;
+}) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const isActive = pathname.startsWith(href);
@@ -87,6 +136,43 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
     isActive ? 'text-foreground' : 'text-header-nav hover:text-header-nav-hover',
     className
   );
+
+  if (megaMenuData) {
+    return (
+      <div
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="relative flex items-center"
+      >
+        <Link href={href} className={linkClasses}>
+          {label}
+          <ChevronDown className="h-4 w-4 ml-1" />
+        </Link>
+        {isOpen && (
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-screen mt-2 bg-white shadow-lg border-t z-20">
+            <div className="container mx-auto max-w-screen-2xl p-8">
+              <div className="grid grid-cols-4 gap-8">
+                {megaMenuData.map((column) => (
+                  <div key={column.title}>
+                    <h3 className="font-bold uppercase text-sm mb-4 text-foreground">{column.title}</h3>
+                    <ul className="space-y-3">
+                      {column.links.map((item) => (
+                        <li key={item.label}>
+                          <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary">
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (sublinks) {
     return (
@@ -106,7 +192,7 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
                   <div key={`${link.href}-${link.label}`} className="relative group p-1">
                      <Link 
                        href={link.href} 
-                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left border border-gray-200 rounded-md hover:border-gray-300"
+                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left border border-transparent rounded-md"
                        role="menuitem"
                      >
                        {link.label}
@@ -198,7 +284,7 @@ export default function Header() {
                         <Menu className="h-6 w-6" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-full bg-white p-6">
+                    <SheetContent side="right" className="w-full bg-white p-6 overflow-y-auto">
                       <SheetHeader className="sr-only">
                         <SheetTitle>Main Menu</SheetTitle>
                         <SheetDescription>Main navigation links for the website.</SheetDescription>
@@ -212,10 +298,53 @@ export default function Header() {
                         </nav>
                         <div className="border-t pt-4">
                           <h3 className="font-bold uppercase mb-4">Danh mục</h3>
-                           <nav className="flex flex-col space-y-3">
-                            {categoryNavLinks.map(link => (
-                               <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-sm font-medium uppercase text-header-nav">{link.label}</Link>
-                            ))}
+                           <nav className="flex flex-col space-y-1">
+                            {categoryNavLinks.map(link => {
+                                if (link.megaMenuData) {
+                                  return (
+                                    <Accordion type="single" collapsible className="w-full" key={link.href}>
+                                        <AccordionItem value={link.label} className="border-b-0">
+                                            <AccordionTrigger className="text-sm font-medium uppercase text-header-nav hover:no-underline py-2">
+                                                {link.label}
+                                            </AccordionTrigger>
+                                            <AccordionContent className="pl-4">
+                                                <Accordion type="multiple" className="w-full">
+                                                    {link.megaMenuData.map(column => (
+                                                        <AccordionItem value={column.title} key={column.title}>
+                                                            <AccordionTrigger className="py-2 text-muted-foreground">{column.title}</AccordionTrigger>
+                                                            <AccordionContent className="pl-4 pb-0">
+                                                                {column.links.map(item => (
+                                                                    <Link key={item.label} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground/80 hover:text-primary">
+                                                                        {item.label}
+                                                                    </Link>
+                                                                ))}
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    ))}
+                                                </Accordion>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+                                  )
+                                }
+                                if (link.sublinks) {
+                                   return (
+                                        <Accordion type="single" collapsible className="w-full" key={link.href}>
+                                             <AccordionItem value={link.label} className="border-b-0">
+                                                <AccordionTrigger className="text-sm font-medium uppercase text-header-nav hover:no-underline py-2">{link.label}</AccordionTrigger>
+                                                <AccordionContent className="pl-4 pb-0">
+                                                    {link.sublinks.map(sublink => (
+                                                        <Link key={sublink.href} href={sublink.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground/80 hover:text-primary">
+                                                            {sublink.label}
+                                                        </Link>
+                                                    ))}
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                   )
+                                }
+                                return <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-sm font-medium uppercase text-header-nav py-2">{link.label}</Link>
+                            })}
                           </nav>
                         </div>
                       </div>
@@ -240,3 +369,4 @@ export default function Header() {
     </header>
   );
 }
+
