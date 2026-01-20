@@ -17,7 +17,6 @@ const heroSlides = [
         tag: '',
         titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
-        bgColor: 'bg-primary',
         textColor: 'text-white',
     },
     {
@@ -26,7 +25,6 @@ const heroSlides = [
         title: 'Grande Alberone',
         href: '/gioi-thieu',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
-        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
     {
@@ -35,7 +33,6 @@ const heroSlides = [
         title: ['Rượu Vang', 'Chính Hãng'],
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
-        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
     {
@@ -44,7 +41,6 @@ const heroSlides = [
         title: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
-        bgColor: 'bg-primary',
         textColor: 'text-white',
         external: false
     },
@@ -54,7 +50,6 @@ const heroSlides = [
         title: 'RƯỢU MẠNH',
         href: '/danh-muc/ruou-manh',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
-        bgColor: 'bg-primary',
         textColor: 'text-white'
     },
 ];
@@ -106,9 +101,23 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                                    {/* Left Column: Text */}
-                                    <div className={cn("flex flex-col justify-center items-center text-center p-8", slide.bgColor, slide.textColor)}>
+                                <div className="relative h-full w-full">
+                                    {/* Background Image */}
+                                    {image && (
+                                        <Image
+                                            src={image.imageUrl}
+                                            alt={image.description}
+                                            fill
+                                            className="object-cover"
+                                            sizes="100vw"
+                                            priority={isActive}
+                                            data-ai-hint={image.imageHint}
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/40" />
+                                    
+                                    {/* Text Content */}
+                                    <div className={cn("relative z-10 flex h-full w-full flex-col items-center justify-center p-8 text-center", slide.textColor)}>
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div 
@@ -137,9 +146,7 @@ export default function HeroSection() {
                                                             variant="outline" 
                                                             className={cn(
                                                                 "mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105",
-                                                                slide.textColor === 'text-white' 
-                                                                    ? "border-white text-white hover:bg-white hover:text-black" 
-                                                                    : "border-black text-black hover:bg-black hover:text-white"
+                                                                "border-white text-white hover:bg-white hover:text-black"
                                                             )}
                                                         >
                                                             <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
@@ -149,35 +156,6 @@ export default function HeroSection() {
                                             )}
                                         </AnimatePresence>
                                     </div>
-                                    {/* Right Column: Image */}
-                                    <div className="relative h-full hidden md:block">
-                                        {image && (
-                                            <Image
-                                                src={image.imageUrl}
-                                                alt={image.description}
-                                                fill
-                                                className="object-cover"
-                                                sizes="(max-width: 768px) 100vw, 50vw"
-                                                priority={isActive}
-                                                data-ai-hint={image.imageHint}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                                 {/* Mobile background image */}
-                                <div className="absolute inset-0 md:hidden -z-10">
-                                    {image && (
-                                        <Image
-                                            src={image.imageUrl}
-                                            alt={image.description}
-                                            fill
-                                            className="object-cover"
-                                            sizes="100vw"
-                                            priority={isActive}
-                                            data-ai-hint={image.imageHint}
-                                        />
-                                    )}
-                                    <div className="absolute inset-0 bg-black/50" />
                                 </div>
                             </motion.div>
                         )
