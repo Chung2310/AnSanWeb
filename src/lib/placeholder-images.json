@@ -21,8 +21,8 @@
     {
       "id": "hero-sale",
       "description": "Grande Alberone wine banner",
-      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768896911/Baner_r%C6%B0%E1%BB%A3u_web-01_1_nvownd.jpg",
-      "imageHint": "wine banner"
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768900953/alberone-white_stqc5t.png",
+      "imageHint": "alberone logo"
     },
     {
       "id": "hero-armagnac",
@@ -56,9 +56,9 @@
     },
     {
       "id": "brand-lakes",
-      "description": "The Lakes Distillery Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_9.webp",
-      "imageHint": "lakes distillery"
+      "description": "Domaine de la Baume Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904320/Domaine_de_la_Baume_dznlry.png",
+      "imageHint": "domaine de la baume logo"
     },
     {
       "id": "brand-ichiros",
