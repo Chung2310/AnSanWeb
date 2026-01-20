@@ -106,7 +106,7 @@ export default function HeroSection() {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/40" />
-                                    <div className="container relative z-10 flex h-full flex-col items-start justify-end pb-24 text-left text-white md:pb-32 lg:px-24">
+                                    <div className="container relative z-10 flex h-full flex-col items-center justify-center text-center text-white lg:px-24">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
@@ -122,7 +122,7 @@ export default function HeroSection() {
                                                             : slide.title
                                                         }
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line text-white/90")}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line text-white/90")}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
