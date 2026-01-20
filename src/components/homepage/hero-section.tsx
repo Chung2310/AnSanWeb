@@ -121,7 +121,7 @@ export default function HeroSection() {
                                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-normal", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-loose", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line, i) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
@@ -211,4 +211,3 @@ export default function HeroSection() {
         </section>
     );
 }
-    
