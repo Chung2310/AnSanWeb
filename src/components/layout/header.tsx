@@ -91,7 +91,7 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo loại</h3>
                         <ul className="space-y-2">
                             {data.theoLoai.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
@@ -109,25 +109,21 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                     {/* Column 3: Theo Vùng */}
                     <div className="px-8 border-l">
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo vùng</h3>
-                        <ScrollArea className="h-48">
-                            <ul className="space-y-2">
-                                {data.theoVung.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
-                                ))}
-                            </ul>
-                        </ScrollArea>
+                        <ul className="space-y-2">
+                            {data.theoVung.map(item => (
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                            ))}
+                        </ul>
                     </div>
 
                     {/* Column 4: Theo Giống Nho */}
                     <div className="pl-8 border-l">
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo giống nho</h3>
-                        <ScrollArea className="h-48">
-                            <ul className="space-y-2">
-                                {data.theoGiongNho.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
-                                ))}
-                            </ul>
-                        </ScrollArea>
+                        <ul className="space-y-2">
+                            {data.theoGiongNho.map(item => (
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -334,7 +330,7 @@ export default function Header() {
                                                             <AccordionItem value="loai">
                                                                 <AccordionTrigger>Theo loại</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/loai/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                              <AccordionItem value="quoc-gia">
@@ -383,7 +379,7 @@ export default function Header() {
                                  </Accordion>
                               </div>
                           </div>
-                      </ScrollArea>
+                        </ScrollArea>
                     </SheetContent>
                   </Sheet>
                 </div>
