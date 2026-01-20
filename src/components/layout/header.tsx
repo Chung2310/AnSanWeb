@@ -42,6 +42,10 @@ const categoryNavLinks = [
         ],
     },
     {
+        href: '/collection/gia-tot',
+        label: 'GIÁ TỐT',
+    },
+    {
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
         sublinks: [
