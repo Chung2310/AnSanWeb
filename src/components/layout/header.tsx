@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -30,6 +31,10 @@ const mainNavLinks = [
 
 const categoryNavLinks = [
     {
+        href: '/collection/gia-tot',
+        label: 'GIÁ TỐT',
+    },
+    {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
         sublinks: [
@@ -40,10 +45,6 @@ const categoryNavLinks = [
             { href: '/danh-muc/ruou-vang/vang-nga', label: 'Vang Nga' },
             { href: '/danh-muc/ruou-vang/vang-duc', label: 'Vang Đức' },
         ],
-    },
-    {
-        href: '/collection/gia-tot',
-        label: 'GIÁ TỐT',
     },
     {
         href: '/danh-muc/ruou-manh',
@@ -99,10 +100,10 @@ const NavLink = ({ href, label, sublinks, className }: { href: string; label: st
           <ChevronDown className="h-4 w-4 ml-1" />
         </Link>
         {isOpen && (
-           <div className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2">
+           <div className="absolute top-full left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2">
              <div className="space-y-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                {sublinks.map((link) => (
-                  <div key={`${link.href}-${link.label}`} className="relative group">
+                  <div key={`${link.href}-${link.label}`} className="relative group p-1">
                      <Link 
                        href={link.href} 
                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left border border-gray-200 rounded-md hover:border-gray-300"
