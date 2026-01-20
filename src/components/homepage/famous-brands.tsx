@@ -71,7 +71,7 @@ export default function FamousBrands() {
         initial="hidden"
         animate={mainControls}
         transition={{ duration: 1, delay: 0.3 }}
-        className="py-16 bg-white">
+        className="py-16 bg-secondary">
       <div className="container">
         <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#3a3a3a'}}>
           Những Thương Hiệu Nổi Tiếng
