@@ -19,9 +19,25 @@ import {
 } from "@/components/ui/accordion";
 import { ScrollArea } from '../ui/scroll-area';
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
-import Image from 'next/image';
 
-const categoryNavLinks = [
+// Define unified data structures for navigation
+type MenuItem = {
+    href: string;
+    label: string;
+};
+
+type MenuColumn = {
+    title: string;
+    items: MenuItem[];
+};
+
+type NavLinkData = {
+    href: string;
+    label: string;
+    megaMenuColumns?: MenuColumn[];
+};
+
+const categoryNavLinks: NavLinkData[] = [
     {
         href: '/collection/gia-tot',
         label: 'GIÁ TỐT',
@@ -29,35 +45,67 @@ const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
-        megaMenu: true,
+        megaMenuColumns: [
+            {
+                title: 'Theo loại',
+                items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+            },
+            {
+                title: 'Theo quốc gia',
+                items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+            },
+            {
+                title: 'Theo vùng',
+                items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+            },
+            {
+                title: 'Theo giống nho',
+                items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+            },
+        ]
     },
     {
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
-        sublinks: [
-            { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
-            { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
-            { href: '/danh-muc/ruou-manh/mortlach', label: 'Mortlach' },
-            { href: '/danh-muc/ruou-manh/chivas', label: 'Chivas' },
-            { href: '/danh-muc/ruou-manh/royal-salute', label: 'Royal Salute' },
-            { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
+        megaMenuColumns: [
+            {
+                title: 'Thương hiệu',
+                items: [
+                    { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
+                    { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
+                    { href: '/danh-muc/ruou-manh/mortlach', label: 'Mortlach' },
+                    { href: '/danh-muc/ruou-manh/chivas', label: 'Chivas' },
+                    { href: '/danh-muc/ruou-manh/royal-salute', label: 'Royal Salute' },
+                    { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
+                ]
+            }
         ]
     },
      {
         href: '/danh-muc/cigar',
         label: 'CIGAR',
-        sublinks: [
-            { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
-            { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
-            { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
+        megaMenuColumns: [
+            {
+                title: 'Thương hiệu',
+                items: [
+                    { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
+                    { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
+                    { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
+                ]
+            }
         ]
     },
     { 
         href: '/danh-muc/bo-qua-tang', 
         label: 'BỘ QUÀ TẶNG',
-        sublinks: [
-            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
-            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
+        megaMenuColumns: [
+            {
+                title: 'Phân loại',
+                items: [
+                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
+                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
+                ]
+            }
         ]
     },
     {
@@ -70,101 +118,49 @@ const categoryNavLinks = [
     }
 ];
 
-const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: { 
+const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: { 
+    columns: MenuColumn[];
     isOpen: boolean;
-    data: typeof wineMegaMenuData;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
 }) => {
+    const gridColsClass = `grid-cols-${Math.min(columns.length, 4)}`;
+
     return (
         <div 
-            className={cn("absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50", { 'hidden': !isOpen })}
+            className={cn(
+                "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50",
+                isOpen ? "block" : "hidden"
+            )}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
-                <div className="grid grid-cols-4 gap-x-8">
-                    {/* Column 1: Theo Loại */}
-                    <div className="pr-8">
-                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo loại</h3>
-                        <ul className="space-y-2">
-                            {data.theoLoai.map(item => (
-                                <li key={item.label}>
-                                    <Link 
-                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
-                                        className="font-medium text-foreground hover:text-primary transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Column 2: Theo Quốc Gia */}
-                    <div className="px-8 border-l">
-                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo quốc gia</h3>
-                         <ul className="space-y-2">
-                            {data.theoQuocGia.map(item => (
-                                <li key={item.label}>
-                                    <Link 
-                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
-                                        className="font-medium text-foreground hover:text-primary transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Column 3: Theo Vùng */}
-                    <div className="px-8 border-l">
-                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo vùng</h3>
-                        <ul className="space-y-2">
-                            {data.theoVung.map(item => (
-                                <li key={item.label}>
-                                    <Link 
-                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
-                                        className="font-medium text-foreground hover:text-primary transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Column 4: Theo Giống Nho */}
-                    <div className="pl-8 border-l">
-                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo giống nho</h3>
-                        <ul className="space-y-2">
-                            {data.theoGiongNho.map(item => (
-                                <li key={item.label}>
-                                    <Link 
-                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
-                                        className="font-medium text-foreground hover:text-primary transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                <div className={cn("grid gap-x-8", gridColsClass)} style={{ gridTemplateColumns: `repeat(${Math.min(columns.length, 4)}, minmax(0, 1fr))` }}>
+                    {columns.map((column, index) => (
+                        <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
+                            <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
+                            <ul className="space-y-2">
+                                {column.items.map(item => (
+                                    <li key={item.label}>
+                                        <Link 
+                                            href={item.href} 
+                                            className="font-medium text-foreground hover:text-primary transition-colors"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
     );
 };
 
-
-const NavLink = ({ href, label, sublinks, megaMenu, className }: { 
-  href: string; 
-  label: string; 
-  sublinks?: {href: string, label: string}[];
-  megaMenu?: boolean;
-  className?: string;
-}) => {
+const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { className?: string; }) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -183,9 +179,8 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
     }, 300);
   };
   
-  const hasDropdown = !!(sublinks || megaMenu);
+  const hasDropdown = !!megaMenuColumns;
   const isActive = (isOpen && hasDropdown) || pathname.startsWith(href);
-  const megaMenuData = megaMenu ? wineMegaMenuData : null;
 
   return (
       <div 
@@ -198,7 +193,7 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 'text-primary-foreground/80 hover:text-primary-foreground',
-                isActive ? 'text-primary-foreground bg-popover' : 'text-primary-foreground/80',
+                isActive && 'text-primary-foreground bg-popover',
                 className
             )}
         >
@@ -206,40 +201,17 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
         
-        {megaMenuData ? (
-          <MegaMenu 
-            isOpen={isOpen} 
-            data={megaMenuData}
-            onMouseEnter={handleOpenMenu}
-            onMouseLeave={handleCloseMenu}
-          />
-        ) : sublinks ? (
-           <div 
-             className={cn(
-                "absolute top-full bg-popover text-popover-foreground border-t shadow-lg z-50 rounded-b-md p-2",
-                isOpen ? "block" : "hidden"
-             )}
-            onMouseEnter={handleOpenMenu}
-            onMouseLeave={handleCloseMenu}
-           >
-             <div className="space-y-1 min-w-[224px]" role="menu">
-               {sublinks.map((link) => (
-                  <Link 
-                    key={`${link.href}-${link.label}`} 
-                    href={link.href} 
-                    className="block px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors w-full text-left rounded-md"
-                    role="menuitem"
-                  >
-                    {link.label}
-                  </Link>
-               ))}
-             </div>
-           </div>
-        ) : null}
+        {hasDropdown && (
+            <MegaMenu 
+                columns={megaMenuColumns!}
+                isOpen={isOpen}
+                onMouseEnter={handleOpenMenu}
+                onMouseLeave={handleCloseMenu}
+            />
+        )}
       </div>
   );
 };
-
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -338,14 +310,14 @@ export default function Header() {
                                         const mainContent = (
                                             <Link 
                                                 href={link.href} 
-                                                onClick={() => {if (!link.megaMenu && !link.sublinks) setIsSheetOpen(false)}}
+                                                onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
                                                 className="flex-1 py-3 font-semibold uppercase text-gray-800"
                                             >
                                                 {link.label}
                                             </Link>
                                         );
                                         
-                                        if(link.megaMenu) {
+                                        if(link.megaMenuColumns) {
                                             return (
                                                 <AccordionItem value={link.label} key={link.href}>
                                                     <AccordionTrigger className="hover:no-underline py-0">
@@ -353,48 +325,19 @@ export default function Header() {
                                                     </AccordionTrigger>
                                                     <AccordionContent className="pl-4 pb-0">
                                                         <Accordion type="multiple" className="w-full">
-                                                            <AccordionItem value="loai">
-                                                                <AccordionTrigger>Theo loại</AccordionTrigger>
-                                                                <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                             <AccordionItem value="quoc-gia">
-                                                                <AccordionTrigger>Theo quốc gia</AccordionTrigger>
-                                                                <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoQuocGia.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                             <AccordionItem value="vung">
-                                                                <AccordionTrigger>Theo vùng</AccordionTrigger>
-                                                                <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                            <AccordionItem value="giong-nho">
-                                                                <AccordionTrigger>Theo giống nho</AccordionTrigger>
-                                                                <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
-                                                                </AccordionContent>
-                                                            </AccordionItem>
+                                                            {link.megaMenuColumns.map(column => (
+                                                                <AccordionItem value={column.title} key={column.title}>
+                                                                    <AccordionTrigger>{column.title}</AccordionTrigger>
+                                                                    <AccordionContent className="pl-4">
+                                                                        {column.items.map(item => (
+                                                                            <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
+                                                                                {item.label}
+                                                                            </Link>
+                                                                        ))}
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            ))}
                                                         </Accordion>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            )
-                                        }
-
-                                        if (link.sublinks) {
-                                            return (
-                                                <AccordionItem value={link.label} key={link.href}>
-                                                    <AccordionTrigger className="hover:no-underline py-0">
-                                                        {mainContent}
-                                                    </AccordionTrigger>
-                                                    <AccordionContent className="pl-4">
-                                                        {link.sublinks.map(sublink => (
-                                                            <Link key={sublink.href} href={sublink.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
-                                                                {sublink.label}
-                                                            </Link>
-                                                        ))}
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             )
@@ -414,9 +357,8 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Category Nav */}
       {isHydrated && (
-        <nav className="relative hidden lg:block bg-primary">
+        <nav className="bg-primary">
             <div className="container relative flex h-14 items-center justify-center gap-x-2">
                 {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </div>
