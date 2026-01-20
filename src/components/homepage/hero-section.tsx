@@ -23,7 +23,7 @@ const heroSlides = [
     },
     {
         imageId: 'hero-sale',
-        label: 'AN SAN',
+        label: 'Grande Alberone',
         href: '/gioi-thieu',       
         description: 'ANSAN không chỉ mang đến rượu vang, mà còn là cách thể hiện đẳng cấp, sự trân trọng và phong vị sống của người thưởng thức',
         bgColor: 'bg-primary',
@@ -204,6 +204,3 @@ export default function HeroSection() {
         </section>
     );
 }
-    
-
-    
