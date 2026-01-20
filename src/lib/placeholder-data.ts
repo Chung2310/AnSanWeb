@@ -159,7 +159,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'the-lakes-tasting-set',
     price: 2500000,
     description: 'Bộ sản phẩm khám phá hương vị đa dạng từ nhà The Lakes, bao gồm các phiên bản giới hạn.',
-    image: getImage('gift-set-tasting-product'),
+    image: getImage('gift-set-tasting'),
     status: 'published',
     tags: ['tasting-set'],
     attributes: [
@@ -175,7 +175,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'the-lakes-gift-set',
     price: 4800000,
     description: 'Bộ quà tặng sang trọng từ The Lakes, lựa chọn hoàn hảo cho những dịp đặc biệt.',
-    image: getImage('gift-set-lakes-tet-product'),
+    image: getImage('gift-set-lakes-tet'),
     status: 'published',
     tags: ['gift-set'],
     attributes: [
@@ -191,7 +191,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'engraved-hennessy-vsop',
     price: 3200000,
     description: 'Cá nhân hóa món quà của bạn với dịch vụ khắc tên tinh xảo trên chai Hennessy V.S.O.P nổi tiếng.',
-    image: getImage('engraving-product'),
+    image: getImage('engraving-banner'),
     status: 'published',
     tags: ['engraving', 'spirits'],
     attributes: [
