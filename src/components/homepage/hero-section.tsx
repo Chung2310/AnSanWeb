@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -15,7 +16,6 @@ const heroSlides = [
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
-        objectFit: 'contain',
     },
     {
         imageId: 'hero-sale',
@@ -23,7 +23,6 @@ const heroSlides = [
         title: 'Grande Alberone',
         href: '/gioi-thieu',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
-        objectFit: 'contain',
     },
     {
         imageId: 'hero-armagnac',
@@ -31,7 +30,6 @@ const heroSlides = [
         title: ['Rượu Vang', 'Chính Hãng'],
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
-        objectFit: 'contain',
     },
     {
         imageId: 'hero-smws',
@@ -39,7 +37,6 @@ const heroSlides = [
         title: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
-        objectFit: 'contain',
     },
     {
         imageId: 'hero-wine',
@@ -47,7 +44,6 @@ const heroSlides = [
         title: 'RƯỢU MẠNH',
         href: '/danh-muc/ruou-manh',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
-        objectFit: 'contain',
     },
 ];
 
@@ -98,24 +94,19 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                {/* Full-width container */}
                                 <div className="relative h-full w-full">
-                                    {/* Background Image */}
                                     {image && (
                                         <Image
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className={cn(slide.objectFit === 'contain' ? "object-contain bg-black" : "object-cover")}
+                                            className="object-cover"
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
                                         />
                                     )}
-                                    {/* Overlay */}
                                     <div className="absolute inset-0 bg-black/40" />
-
-                                    {/* Text Content */}
                                     <div className="container relative z-10 flex h-full flex-col items-start justify-center text-left text-white px-4 sm:px-6 lg:px-24">
                                         <AnimatePresence>
                                             {isActive && (
