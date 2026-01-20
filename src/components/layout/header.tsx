@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -203,7 +202,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
   const isMenuOpen = isOpen && hasDropdown;
-  const isCurrentPage = !isMenuOpen && (pathname === href || (href !== '/' && pathname.startsWith(href)));
+  const isCurrentPage = pathname === href || (href !== '/' && pathname.startsWith(href));
   
   return (
       <div 
@@ -214,9 +213,9 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         <div
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
-                'hover:text-primary-foreground',
-                 isMenuOpen 
-                    ? 'text-popover-foreground bg-popover' 
+                'hover:text-black',
+                 isMenuOpen
+                    ? 'text-black font-bold'
                     : isCurrentPage 
                     ? 'text-primary-foreground font-bold'
                     : 'text-primary-foreground/80'
