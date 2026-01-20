@@ -106,9 +106,7 @@ const categoryNavLinks: NavLinkData[] = [
             },
             {
                 title: 'DECANTER/BÌNH THỞ',
-                items: [
-                     { href: '/danh-muc/ly-coc-pha-le/decanter', label: 'Decanter/Bình thở rượu vang' },
-                ]
+                items: []
             }
         ]
     },
@@ -141,6 +139,8 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: {
     onMouseEnter: () => void;
     onMouseLeave: () => void;
 }) => {
+    if (!columns || columns.length === 0) return null;
+    
     return (
         <div 
             onMouseEnter={onMouseEnter}
@@ -202,9 +202,10 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
     };
   }, []);
   
-  const hasDropdown = !!megaMenuColumns;
+  const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
   const isActive = (isOpen && hasDropdown) || pathname === href || (href !== '/' && pathname.startsWith(href));
   
+  // Use a div wrapper that will contain the link and the mega menu logic
   const LinkComponent = 'div';
 
   return (
