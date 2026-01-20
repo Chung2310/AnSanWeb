@@ -1,9 +1,8 @@
-
 'use client';
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu, ArrowRight } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -18,9 +17,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
-
+import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 const categoryNavLinks = [
     {
@@ -71,53 +69,6 @@ const categoryNavLinks = [
     }
 ];
 
-const wineMegaMenuData = {
-    theoLoai: [
-        { label: "Rượu vang đỏ", href: "/danh-muc/ruou-vang/vang-do" },
-        { label: "Rượu vang trắng", href: "/danh-muc/ruou-vang/vang-trang" },
-        { label: "Rượu vang sủi", href: "/danh-muc/ruou-vang/vang-sui" },
-        { label: "Champagne", href: "/danh-muc/ruou-vang/champagne" },
-    ],
-    theoQuocGia: [
-        { label: "Vang Pháp", href: "/danh-muc/ruou-vang/vang-phap" },
-        { label: "Vang Úc", href: "/danh-muc/ruou-vang/vang-uc" },
-        { label: "Vang Ý", href: "/danh-muc/ruou-vang/vang-y" },
-        { label: "Vang Tây Ban Nha", href: "/danh-muc/ruou-vang/vang-tay-ban-nha" },
-        { label: "Vang Đức", href: "/danh-muc/ruou-vang/vang-duc" },
-        { label: "Vang Nga", href: "/danh-muc/ruou-vang/vang-nga" },
-    ],
-    theoVung: [
-        { label: "Saint-Émilion", href: "/danh-muc/ruou-vang/vung/saint-emilion" },
-        { label: "Pomerol", href: "/danh-muc/ruou-vang/vung/pomerol" },
-        { label: "Languedoc", href: "/danh-muc/ruou-vang/vung/languedoc" },
-        { label: "Puglia", href: "/danh-muc/ruou-vang/vang-y/puglia" },
-        { label: "Veneto", href: "/danh-muc/ruou-vang/vang-y/veneto" },
-        { label: "Abruzzo", href: "/danh-muc/ruou-vang/vang-y/abruzzo" },
-        { label: "Crecchio", href: "/danh-muc/ruou-vang/vung/crecchio" },
-        { label: "Tuscany", href: "/danh-muc/ruou-vang/vang-y/toscana" },
-        { label: "Salento", href: "/danh-muc/ruou-vang/vung/salento" },
-        { label: "Sicily", href: "/danh-muc/ruou-vang/vang-y/sicilia" },
-    ],
-    theoGiongNho: [
-        { label: "Cabernet Sauvignon", href: "/danh-muc/ruou-vang/giong-nho/cabernet-sauvignon" },
-        { label: "Merlot", href: "/danh-muc/ruou-vang/giong-nho/merlot" },
-        { label: "Shiraz", href: "/danh-muc/ruou-vang/giong-nho/shiraz" },
-        { label: "Chardonnay", href: "/danh-muc/ruou-vang/giong-nho/chardonnay" },
-        { label: "Garnacha", href: "/danh-muc/ruou-vang/giong-nho/garnacha" },
-        { label: "Malvasia", href: "/danh-muc/ruou-vang/giong-nho/malvasia" },
-        { label: "Montepulciano", href: "/danh-muc/ruou-vang/giong-nho/montepulciano" },
-        { label: "Moscato", href: "/danh-muc/ruou-vang/giong-nho/moscato" },
-        { label: "Negroamaro", href: "/danh-muc/ruou-vang/giong-nho/negroamaro" },
-        { label: "Petit Verdot", href: "/danh-muc/ruou-vang/giong-nho/petit-verdot" },
-        { label: "Pinot Grigio", href: "/danh-muc/ruou-vang/giong-nho/pinot-grigio" },
-        { label: "Primitivo", href: "/danh-muc/ruou-vang/giong-nho/primitivo" },
-        { label: "Riesling", href: "/danh-muc/ruou-vang/giong-nho/riesling" },
-        { label: "Sangiovese", href: "/danh-muc/ruou-vang/giong-nho/sangiovese" },
-        { label: "Tempranillo", href: "/danh-muc/ruou-vang/giong-nho/tempranillo" },
-        { label: "Zinfandel", href: "/danh-muc/ruou-vang/giong-nho/zinfandel" },
-    ],
-};
-
 const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenuData }) => {
     if (!isOpen) return null;
 
@@ -130,7 +81,7 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
                         <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo loại</h3>
                         <ul className="space-y-2">
                             {data.theoLoai.map(item => (
-                                <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
@@ -140,7 +91,7 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
                         <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo quốc gia</h3>
                          <ul className="space-y-2">
                             {data.theoQuocGia.map(item => (
-                                <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
@@ -151,7 +102,7 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoVung.map(item => (
-                                    <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
@@ -163,7 +114,7 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoGiongNho.map(item => (
-                                    <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
@@ -367,25 +318,25 @@ export default function Header() {
                                                             <AccordionItem value="loai">
                                                                 <AccordionTrigger>Theo loại</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/loai/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                              <AccordionItem value="quoc-gia">
                                                                 <AccordionTrigger>Theo quốc gia</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoQuocGia.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoQuocGia.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                              <AccordionItem value="vung">
                                                                 <AccordionTrigger>Theo vùng</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/vung/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                             <AccordionItem value="giong-nho">
                                                                 <AccordionTrigger>Theo giống nho</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/giong-nho/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                         </Accordion>
@@ -438,4 +389,3 @@ export default function Header() {
     </header>
   );
 }
-
