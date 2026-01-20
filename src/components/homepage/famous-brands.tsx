@@ -72,9 +72,9 @@ export default function FamousBrands() {
         animate={mainControls}
         transition={{ duration: 1, delay: 0.3 }}
         className="py-16"
-        style={{ backgroundColor: '#fdfaf5' }}>
+        style={{ backgroundColor: '#5A2F35' }}>
       <div className="container">
-        <h2 className="text-center text-3xl font-bold tracking-wider uppercase" style={{color: '#5a5a5a'}}>
+        <h2 className="text-center text-3xl font-bold tracking-wider uppercase text-white">
           Những Thương Hiệu Nổi Tiếng
         </h2>
         <Carousel
@@ -115,7 +115,7 @@ export default function FamousBrands() {
                     onClick={() => api?.scrollTo(index)}
                     className={cn(
                         "w-2 h-2 rounded-full",
-                        current === index ? "bg-stone-800" : "bg-stone-400"
+                        current === index ? "bg-white" : "bg-white/50"
                     )}
                     aria-label={`Go to slide ${index + 1}`}
                 />
