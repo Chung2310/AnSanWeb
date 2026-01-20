@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -19,7 +18,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
-import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -202,26 +200,29 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   }, []);
   
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
-  const isActive = (isOpen && hasDropdown) || pathname === href || (href !== '/' && pathname.startsWith(href));
+  const isMenuOpen = isOpen && hasDropdown;
+  const isCurrentPage = !isMenuOpen && (pathname === href || (href !== '/' && pathname.startsWith(href)));
   
-  const LinkComponent = 'div';
-
   return (
       <div 
         className={cn('h-full flex items-center', hasDropdown && 'static')}
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
       >
-        <LinkComponent
+        <div
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 'hover:text-primary-foreground',
-                 isActive ? 'text-popover-foreground bg-popover' : 'text-primary-foreground/80'
+                 isMenuOpen 
+                    ? 'text-popover-foreground bg-popover' 
+                    : isCurrentPage 
+                    ? 'text-primary-foreground'
+                    : 'text-primary-foreground/80'
             )}
         >
           <Link href={href}>{label}</Link>
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
-        </LinkComponent>
+        </div>
         
         {hasDropdown && (
             <MegaMenu 
