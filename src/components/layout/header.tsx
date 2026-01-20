@@ -19,7 +19,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
-import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -99,11 +98,16 @@ const categoryNavLinks: NavLinkData[] = [
         label: 'LY - CỐC PHA LÊ',
         megaMenuColumns: [
             {
-                title: 'LY & PHỤ KIỆN',
+                title: 'LY WHISKY',
                 items: [
                     { href: '/danh-muc/ly-coc-pha-le/ly-whisky', label: 'Ly Whisky' },
                     { href: '/danh-muc/ly-coc-pha-le/coc-whisky', label: 'Cốc Whisky' },
-                    { href: '/danh-muc/ly-coc-pha-le/decanter', label: 'Decanter/Bình thở rượu vang' },
+                ]
+            },
+            {
+                title: 'DECANTER/BÌNH THỞ',
+                items: [
+                     { href: '/danh-muc/ly-coc-pha-le/decanter', label: 'Decanter/Bình thở rượu vang' },
                 ]
             }
         ]
