@@ -77,7 +77,7 @@ export default function HeroSection() {
     }, [current]);
 
     return (
-        <section className="relative w-full font-body h-[calc(100vh-136px)] min-h-[700px] md:h-[calc(100vh-136px)] md:min-h-[700px] overflow-hidden">
+        <section className="relative w-full font-body h-[calc(100vh-136px)] min-h-[700px] md:h-screen md:min-h-[700px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
@@ -106,7 +106,7 @@ export default function HeroSection() {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/40" />
-                                    <div className="container relative z-10 flex h-full flex-col items-center justify-center text-center text-white lg:px-24">
+                                    <div className="container relative z-10 flex h-full flex-col items-start justify-center text-left text-white lg:px-24">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
@@ -122,7 +122,7 @@ export default function HeroSection() {
                                                             : slide.title
                                                         }
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl mx-auto whitespace-pre-line text-white/90")}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line text-white/90")}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
