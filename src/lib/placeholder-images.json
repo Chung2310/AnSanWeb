@@ -20,9 +20,9 @@
     },
     {
       "id": "hero-sale",
-      "description": "Grande Alberone Logo",
-      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768900953/alberone-white_stqc5t.png",
-      "imageHint": "grande alberone"
+      "description": "Wine bottles lined up for a sale event",
+      "imageUrl": "/images/banner/3.jpg",
+      "imageHint": "wine sale"
     },
     {
       "id": "hero-armagnac",
