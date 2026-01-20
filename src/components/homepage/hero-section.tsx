@@ -106,7 +106,7 @@ export default function HeroSection() {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/40" />
-                                    <div className="container relative z-10 flex h-full flex-col items-start justify-center text-left text-white px-4 sm:px-6 lg:px-24">
+                                    <div className="container relative z-10 flex h-full flex-col items-start justify-end pb-24 text-left text-white md:pb-32 lg:px-24">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
