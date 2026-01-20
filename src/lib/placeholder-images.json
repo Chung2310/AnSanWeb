@@ -183,13 +183,13 @@
     {
       "id": "category-white",
       "description": "Grapes for white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1515779122185-2390ccdf060b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGdyYXBlc3xlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "white grapes"
     },
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
@@ -261,14 +261,8 @@
     {
       "id": "avatar-3",
       "description": "Smiling person",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2NzU4MDI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "person smiling"
-    },
-    {
-      "id": "gift-set-tasting",
-      "description": "Hands holding The Lakes Whiskymaker's Editions tasting set box.",
-      "imageUrl": "/images/Banner 4.webp",
-      "imageHint": "whisky tasting set"
     },
     {
       "id": "gift-set-lakes-tet",
@@ -281,42 +275,6 @@
       "description": "Personalised engraving on a wine bottle, saying Congratulations.",
       "imageUrl": "/images/engraving.webp",
       "imageHint": "bottle engraving"
-    },
-    {
-      "id": "wine-1",
-      "description": "Bottle of premium red wine",
-      "imageUrl": "https://images.unsplash.com/photo-1621644894301-cd6b2eaca610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZWQlMjB3aW5lfGVufDB8fHx8MTc2NzQ2MTQyNnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "red wine"
-    },
-    {
-      "id": "wine-2",
-      "description": "Bottle of crisp white wine",
-      "imageUrl": "https://images.unsplash.com/photo-1600893117678-cc1e00217fca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2hpdGUlMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "white wine"
-    },
-    {
-      "id": "wine-3",
-      "description": "Bottle of elegant rosé wine",
-      "imageUrl": "https://images.unsplash.com/photo-1573067705784-c377ccd932eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "rose wine"
-    },
-    {
-      "id": "wine-4",
-      "description": "Bottle of celebratory sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1580657274234-7339717f4541?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2NzU3NzIyMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "sparkling wine"
-    },
-    {
-      "id": "wine-5",
-      "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "dessert wine"
-    },
-    {
-      "id": "wine-6",
-      "description": "Bottle of a vintage collection wine",
-      "imageUrl": "https://images.unsplash.com/photo-1730325559326-02acf27e509e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW50YWdlJTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "vintage wine"
     },
     {
       "id": "quiz-flavor-fruit",
@@ -345,13 +303,13 @@
     {
       "id": "quiz-flavor-leather",
       "description": "Close-up of a leather texture.",
-      "imageUrl": "https://images.unsplash.com/photo-1573227896778-8f378c4029d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyfGVufDB8fHx8MTc2NzYwMDE0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1573227896778-8f378c4029d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyfGVufDB8fHx8MTc2NzYwMDE0Nnww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "leather"
     },
     {
       "id": "quiz-flavor-candy",
       "description": "Assortment of colorful candies.",
-      "imageUrl": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5keXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5keXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "candy"
     },
     {
@@ -465,7 +423,7 @@
     {
       "id": "prod-detail-3",
       "description": "Bottle of product 3 for detail page",
-      "imageUrl": "https://images.unsplash.com/photo-1633219662092-32ec511159fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcGlyaXQlMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1633219662092-32ec511159fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcGlyaXQlMjBib3R0bGV8ZW58MHx8fHwxNzY3NjY3OTA3fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "spirit bottle"
     },
     {
