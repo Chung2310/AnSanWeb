@@ -44,3 +44,24 @@ export const wineMegaMenuData = {
         { label: "Zinfandel", slug: "zinfandel", category_id: "zinfandel" },
     ],
 };
+
+export const sanPhamBanChay = [
+    {
+        name: 'The Macallan 25 Sherry Oak',
+        price: '75.000.000₫',
+        imageUrl: '/images/dt_world_whisky_banner.webp',
+        href: '/san-pham/the-macallan-25-sherry-oak',
+    },
+    {
+        name: 'Yamazaki 12 Năm',
+        price: '7.900.000₫',
+        imageUrl: '/images/banner/3.jpg',
+        href: '/san-pham/yamazaki-12',
+    },
+    {
+        name: 'Château Margaux 2015',
+        price: '35.000.000₫',
+        imageUrl: 'https://images.unsplash.com/photo-1621644894301-cd6b2eaca610?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZWQlMjB3aW5lfGVufDB8fHx8MTc2NzQ2MTQyNnww&ixlib=rb-4.1.0&q=80&w=1080',
+        href: '/san-pham/chateau-margaux-2015',
+    },
+];
