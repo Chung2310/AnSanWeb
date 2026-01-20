@@ -8,7 +8,7 @@ import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import { useHydration } from '@/hooks/use-hydration';
 import {
@@ -70,11 +70,20 @@ const categoryNavLinks = [
     }
 ];
 
-const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenuData }) => {
+const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: { 
+    isOpen: boolean;
+    data: typeof wineMegaMenuData;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+}) => {
     if (!isOpen) return null;
 
     return (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50">
+        <div 
+            className="absolute top-full left-0 right-0 bg-white shadow-lg z-50"
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             <div className="container mx-auto max-w-screen-2xl p-8">
                 <div className="grid grid-cols-4 gap-x-8">
                     {/* Column 1: Loại Vang */}
@@ -136,6 +145,22 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
 }) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleOpenMenu = () => {
+    if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+    }
+    setIsOpen(true);
+  };
+
+  const handleCloseMenu = () => {
+    timerRef.current = setTimeout(() => {
+        setIsOpen(false);
+    }, 300);
+  };
+
   const isActive = pathname.startsWith(href);
 
   const linkClasses = cn(
@@ -149,15 +174,20 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
   if (megaMenuData) {
     return (
        <div 
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={handleOpenMenu}
+        onMouseLeave={handleCloseMenu}
         className="static h-14 flex items-center"
       >
         <Link href={href} className={linkClasses}>
           {label}
           <ChevronDown className="h-4 w-4 ml-1" />
         </Link>
-        <MegaMenu isOpen={isOpen} data={megaMenuData} />
+        <MegaMenu 
+          isOpen={isOpen} 
+          data={megaMenuData}
+          onMouseEnter={handleOpenMenu}
+          onMouseLeave={handleCloseMenu}
+        />
       </div>
     )
   }
@@ -166,8 +196,8 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
   if (sublinks) {
     return (
       <div 
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={handleOpenMenu}
+        onMouseLeave={handleCloseMenu}
         className="relative h-14 flex items-center"
       >
         <Link href={href} className={linkClasses}>
@@ -175,7 +205,11 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
           <ChevronDown className="h-4 w-4 ml-1" />
         </Link>
         {isOpen && (
-           <div className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2">
+           <div 
+            className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2"
+            onMouseEnter={handleOpenMenu}
+            onMouseLeave={handleCloseMenu}
+           >
              <div className="space-y-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                {sublinks.map((link) => (
                   <div key={`${link.href}-${link.label}`} className="relative group p-1">
