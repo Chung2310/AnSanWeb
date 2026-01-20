@@ -93,13 +93,13 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                <div className="relative h-full w-full bg-black">
+                                <div className="relative h-full w-full">
                                     {image && (
                                         <Image
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className="object-contain"
+                                            className="object-cover"
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
