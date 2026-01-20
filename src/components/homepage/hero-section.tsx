@@ -31,9 +31,9 @@ const heroSlides = [
     },
     {
         imageId: 'hero-armagnac',
-        label: 'DONNELLI',
-        href: '/san-pham/vang-no-00-donelli-white-grape-khong-con',  
-        description: 'Donnelli không cồn – lựa chọn tinh tế cho những khoảnh khắc nâng ly trọn vẹn, nơi phong vị Ý được thưởng thức theo cách an toàn và lịch lãm',
+        label: 'Rượu Vang Chính Hãng',
+        href: '/danh-muc/ruou-vang',
+        description: 'Khám phá bộ sưu tập rượu vang chính hãng, được lựa chọn cẩn thận từ các vùng rượu vang danh tiếng trên thế giới.',
         bgColor: 'bg-primary',
         textColor: 'text-white'
     },
