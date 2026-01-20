@@ -14,7 +14,7 @@ const heroSlides = [
         label: 'Master of Wine',
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
-        tag: 'Master of wine',
+        tag: '',
         titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
         bgColor: 'bg-primary',
@@ -211,3 +211,4 @@ export default function HeroSection() {
         </section>
     );
 }
+    
