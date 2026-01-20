@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -115,7 +116,7 @@ export default function HeroSection() {
                                     <div className="absolute inset-0 bg-black/40" />
 
                                     {/* Text Content */}
-                                    <div className="container relative z-10 flex h-full flex-col items-start justify-end pb-40 text-left text-white">
+                                    <div className="container relative z-10 flex h-full flex-col items-start justify-center text-left text-white">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
