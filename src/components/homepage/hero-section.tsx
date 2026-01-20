@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -83,7 +82,7 @@ export default function HeroSection() {
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
                         const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                        const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+                        const linkProps = (slide as any).external ? { target: "_blank", rel: "noopener noreferrer" } : {};
                         const isActive = index === current;
                         return (
                             <motion.div
@@ -94,13 +93,13 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                <div className="relative h-full w-full">
+                                <div className="relative h-full w-full bg-black">
                                     {image && (
                                         <Image
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className="object-cover"
+                                            className="object-contain"
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
