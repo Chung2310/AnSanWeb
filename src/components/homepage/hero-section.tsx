@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -15,7 +14,6 @@ const heroSlides = [
         label: 'Master of Wine',
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
-        tag: '',
         titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
     },
@@ -23,7 +21,6 @@ const heroSlides = [
         imageId: 'hero-sale',
         label: 'Grande Alberone',
         title: 'Grande Alberone',
-        tag: 'Grande Alberone',
         href: '/gioi-thieu',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
     },
@@ -31,7 +28,6 @@ const heroSlides = [
         imageId: 'hero-armagnac',
         label: 'Rượu Vang Chính Hãng',
         title: ['Rượu Vang', 'Chính Hãng'],
-        tag: 'Rượu Vang Chính Hãng',
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
         titleClassName: 'leading-loose'
@@ -40,7 +36,6 @@ const heroSlides = [
         imageId: 'hero-smws',
         label: 'QUÀ TẾT',
         title: 'QUÀ TẾT',
-        tag: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         external: false,
@@ -50,7 +45,6 @@ const heroSlides = [
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
         title: 'RƯỢU MẠNH',
-        tag: 'RƯỢU MẠNH',
         href: '/danh-muc/ruou-manh',
         description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
     },
@@ -131,10 +125,7 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
-                                                        {slide.tag || slide.label}
-                                                    </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline", slide.titleClassName || 'leading-tight')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-6xl lg:text-7xl font-black uppercase font-headline", slide.titleClassName || 'leading-tight')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line: string, i: number) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
