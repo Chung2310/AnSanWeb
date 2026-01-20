@@ -22,21 +22,6 @@ import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
 
 
-const mainNavLinks = [
-  { 
-    href: '/trac-nghiem-ruou-vang', 
-    label: 'Trắc nghiệm Rượu Vang',
-  },
-  {
-      href: '/gioi-thieu',
-      label: 'GIỚI THIỆU',
-  },
-  {
-      href: '/tin-tuc',
-      label: 'KIẾN THỨC',
-  }
-];
-
 const categoryNavLinks = [
     {
         href: '/collection/gia-tot',
@@ -45,12 +30,7 @@ const categoryNavLinks = [
     {
         href: '/danh-muc/ruou-vang',
         label: 'RƯỢU VANG',
-        sublinks: [
-            { label: 'Rượu vang đỏ', href: '/danh-muc/ruou-vang' },
-            { label: 'Rượu vang trắng', href: '/danh-muc/ruou-vang' },
-            { label: 'Rượu vang sủi', href: '/danh-muc/ruou-vang' },
-            { label: 'Champagne', href: '/danh-muc/ruou-vang' }
-        ]
+        megaMenu: true,
     },
     {
         href: '/danh-muc/ruou-manh',
@@ -81,13 +61,152 @@ const categoryNavLinks = [
             { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
         ]
     },
+    {
+        href: '/gioi-thieu',
+        label: 'GIỚI THIỆU',
+    },
+    {
+        href: '/tin-tuc',
+        label: 'KIẾN THỨC',
+    }
 ];
 
-const NavLink = ({ href, label, sublinks, megaMenuData, className }: { 
+const wineMegaMenuData = {
+    theoLoai: [
+        { label: "Rượu vang đỏ", href: "/danh-muc/ruou-vang/vang-do" },
+        { label: "Rượu vang trắng", href: "/danh-muc/ruou-vang/vang-trang" },
+        { label: "Rượu vang sủi", href: "/danh-muc/ruou-vang/vang-sui" },
+        { label: "Champagne", href: "/danh-muc/ruou-vang/champagne" },
+    ],
+    theoQuocGia: [
+        { label: "Vang Pháp", href: "/danh-muc/ruou-vang/vang-phap" },
+        { label: "Vang Úc", href: "/danh-muc/ruou-vang/vang-uc" },
+        { label: "Vang Ý", href: "/danh-muc/ruou-vang/vang-y" },
+        { label: "Vang Tây Ban Nha", href: "/danh-muc/ruou-vang/vang-tay-ban-nha" },
+        { label: "Vang Đức", href: "/danh-muc/ruou-vang/vang-duc" },
+        { label: "Vang Nga", href: "/danh-muc/ruou-vang/vang-nga" },
+    ],
+    theoVung: [
+        { label: "Saint-Émilion", href: "/danh-muc/ruou-vang/vung/saint-emilion" },
+        { label: "Pomerol", href: "/danh-muc/ruou-vang/vung/pomerol" },
+        { label: "Languedoc", href: "/danh-muc/ruou-vang/vung/languedoc" },
+        { label: "Puglia", href: "/danh-muc/ruou-vang/vang-y/puglia" },
+        { label: "Veneto", href: "/danh-muc/ruou-vang/vang-y/veneto" },
+        { label: "Abruzzo", href: "/danh-muc/ruou-vang/vang-y/abruzzo" },
+        { label: "Crecchio", href: "/danh-muc/ruou-vang/vung/crecchio" },
+        { label: "Tuscany", href: "/danh-muc/ruou-vang/vang-y/toscana" },
+        { label: "Salento", href: "/danh-muc/ruou-vang/vung/salento" },
+        { label: "Sicily", href: "/danh-muc/ruou-vang/vang-y/sicilia" },
+    ],
+    theoGiongNho: [
+        { label: "Cabernet Sauvignon", href: "/danh-muc/ruou-vang/giong-nho/cabernet-sauvignon" },
+        { label: "Merlot", href: "/danh-muc/ruou-vang/giong-nho/merlot" },
+        { label: "Shiraz", href: "/danh-muc/ruou-vang/giong-nho/shiraz" },
+        { label: "Chardonnay", href: "/danh-muc/ruou-vang/giong-nho/chardonnay" },
+        { label: "Garnacha", href: "/danh-muc/ruou-vang/giong-nho/garnacha" },
+        { label: "Malvasia", href: "/danh-muc/ruou-vang/giong-nho/malvasia" },
+        { label: "Montepulciano", href: "/danh-muc/ruou-vang/giong-nho/montepulciano" },
+        { label: "Moscato", href: "/danh-muc/ruou-vang/giong-nho/moscato" },
+        { label: "Negroamaro", href: "/danh-muc/ruou-vang/giong-nho/negroamaro" },
+        { label: "Petit Verdot", href: "/danh-muc/ruou-vang/giong-nho/petit-verdot" },
+        { label: "Pinot Grigio", href: "/danh-muc/ruou-vang/giong-nho/pinot-grigio" },
+        { label: "Primitivo", href: "/danh-muc/ruou-vang/giong-nho/primitivo" },
+        { label: "Riesling", href: "/danh-muc/ruou-vang/giong-nho/riesling" },
+        { label: "Sangiovese", href: "/danh-muc/ruou-vang/giong-nho/sangiovese" },
+        { label: "Tempranillo", href: "/danh-muc/ruou-vang/giong-nho/tempranillo" },
+        { label: "Zinfandel", href: "/danh-muc/ruou-vang/giong-nho/zinfandel" },
+    ],
+    featuredProducts: [
+        { name: "Old Vine Cabernet Sauvignon", price: 890000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/old-vine-cabernet-sauvignon" },
+        { name: "Old Vine Shiraz", price: 890000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/old-vine-shiraz" },
+        { name: "Gigino Grande (80 anniv.) – Vang Đỏ", price: 2100000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/gigino-grande-80-anniv" },
+    ]
+};
+
+const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenuData }) => {
+    if (!isOpen) return null;
+
+    const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+    return (
+        <div className="absolute top-full left-0 w-full bg-white shadow-lg z-20">
+            <div className="container mx-auto max-w-screen-2xl p-8">
+                <div className="grid grid-cols-5 gap-8">
+                    {/* Column 1: Loại Vang */}
+                    <div>
+                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo loại</h3>
+                        <ul className="space-y-2">
+                            {data.theoLoai.map(item => (
+                                <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Column 2: Xuất Xứ */}
+                    <div>
+                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo quốc gia</h3>
+                         <ul className="space-y-2">
+                            {data.theoQuocGia.map(item => (
+                                <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Column 3: Vùng Làm Vang */}
+                    <div>
+                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo vùng</h3>
+                        <ScrollArea className="h-48">
+                            <ul className="space-y-2">
+                                {data.theoVung.map(item => (
+                                    <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                ))}
+                            </ul>
+                        </ScrollArea>
+                    </div>
+
+                    {/* Column 4: Giống Nho */}
+                    <div>
+                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo giống nho</h3>
+                        <ScrollArea className="h-48">
+                            <ul className="space-y-2">
+                                {data.theoGiongNho.map(item => (
+                                    <li key={item.label}><Link href={item.href} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                ))}
+                            </ul>
+                        </ScrollArea>
+                    </div>
+                    
+                    {/* Column 5: Featured Products */}
+                    <div>
+                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Sản phẩm bán chạy</h3>
+                        <ul className="space-y-4">
+                            {data.featuredProducts.map(product => (
+                                <li key={product.name}>
+                                    <Link href={product.link} className="flex items-center gap-4 group">
+                                        <div className="w-16 h-16 relative flex-shrink-0">
+                                            <Image src={product.imageURL} alt={product.name} fill className="object-contain" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-gray-800 group-hover:text-primary transition-colors text-sm">{product.name}</p>
+                                            <p className="text-primary font-bold text-sm">{formatPrice(product.price)}</p>
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const NavLink = ({ href, label, sublinks, megaMenu, className }: { 
   href: string; 
   label: string; 
   sublinks?: {href: string, label: string}[];
-  megaMenuData?: any; // Keeping for potential future use, but logic is removed
+  megaMenu?: boolean;
   className?: string;
 }) => {
   const pathname = usePathname();
@@ -99,6 +218,25 @@ const NavLink = ({ href, label, sublinks, megaMenuData, className }: {
     isActive ? 'text-foreground' : 'text-header-nav hover:text-header-nav-hover',
     className
   );
+
+  const megaMenuData = megaMenu ? wineMegaMenuData : null;
+
+  if (megaMenuData) {
+    return (
+       <div 
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="relative h-14 flex items-center"
+      >
+        <Link href={href} className={linkClasses}>
+          {label}
+          <ChevronDown className="h-4 w-4 ml-1" />
+        </Link>
+        <MegaMenu isOpen={isOpen} data={megaMenuData} />
+      </div>
+    )
+  }
+
 
   if (sublinks) {
     return (
@@ -177,7 +315,7 @@ export default function Header() {
       <div className="bg-secondary text-secondary-foreground">
         <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
             <div className="flex-1 flex justify-start">
-                <form onSubmit={handleSearch} className="relative w-full max-w-xs">
+                <form onSubmit={handleSearch} className="relative w-full max-w-xs hidden lg:block">
                     <Input 
                       type="text" 
                       placeholder="Tìm kiếm" 
@@ -199,9 +337,9 @@ export default function Header() {
             
             {isHydrated && (
               <>
-                <nav className="hidden lg:flex flex-1 justify-end items-center gap-6">
-                    {mainNavLinks.map((link) => <NavLink key={link.href} {...link} />)}
-                </nav>
+                <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
+                    <Link href="/trac-nghiem-ruou-vang" className='transition-colors text-sm font-medium uppercase text-header-nav hover:text-header-nav-hover'>Trắc nghiệm Rượu Vang</Link>
+                </div>
 
                 <div className="lg:hidden flex-1 flex justify-end">
                   <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -210,43 +348,102 @@ export default function Header() {
                         <Menu className="h-6 w-6" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-full bg-white p-6 overflow-y-auto">
-                      <SheetHeader className="sr-only">
-                        <SheetTitle>Main Menu</SheetTitle>
-                        <SheetDescription>Main navigation links for the website.</SheetDescription>
-                      </SheetHeader>
-                      <div className="flex flex-col space-y-6">
-                        <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
-                        <nav className="flex flex-col space-y-4">
-                          {mainNavLinks.map(link => (
-                            <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-lg font-medium uppercase">{link.label}</Link>
-                          ))}
-                        </nav>
-                        <div className="border-t pt-4">
-                          <h3 className="font-bold uppercase mb-4">Danh mục</h3>
-                           <nav className="flex flex-col space-y-1">
-                            {[...categoryNavLinks, ...mainNavLinks.filter(l => l.href.startsWith('/danh-muc') || l.href.startsWith('/collection'))].map(link => {
-                                if (link.sublinks) {
-                                   return (
-                                        <Accordion type="single" collapsible className="w-full" key={link.href}>
-                                             <AccordionItem value={link.label} className="border-b-0">
-                                                <AccordionTrigger className="text-sm font-medium uppercase text-header-nav hover:no-underline py-2">{link.label}</AccordionTrigger>
-                                                <AccordionContent className="pl-4 pb-0">
-                                                    {link.sublinks.map(sublink => (
-                                                        <Link key={sublink.href} href={sublink.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground/80 hover:text-primary">
-                                                            {sublink.label}
-                                                        </Link>
-                                                    ))}
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                   )
-                                }
-                                return <Link key={link.href} href={link.href} onClick={() => setIsSheetOpen(false)} className="text-sm font-medium uppercase text-header-nav py-2">{link.label}</Link>
-                            })}
-                          </nav>
-                        </div>
-                      </div>
+                    <SheetContent side="right" className="w-full bg-white p-0 overflow-y-auto">
+                        <ScrollArea className="h-full">
+                          <div className="p-6">
+                              <SheetHeader className="sr-only">
+                                <SheetTitle>Main Menu</SheetTitle>
+                                <SheetDescription>Main navigation links for the website.</SheetDescription>
+                              </SheetHeader>
+                              <div className="flex flex-col space-y-6">
+                                <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
+                                
+                                <form onSubmit={handleSearch} className="relative w-full">
+                                    <Input 
+                                      type="text" 
+                                      placeholder="Tìm kiếm" 
+                                      value={searchQuery}
+                                      onChange={(e) => setSearchQuery(e.target.value)}
+                                      className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
+                                    />
+                                    <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                      <Search className="h-5 w-5 text-gray-500" />
+                                    </button>
+                                </form>
+
+                                 <Accordion type="multiple" className="w-full">
+                                    {categoryNavLinks.map(link => {
+                                        const mainContent = (
+                                            <Link 
+                                                href={link.href} 
+                                                onClick={() => {if (!link.megaMenu && !link.sublinks) setIsSheetOpen(false)}}
+                                                className="flex-1 py-3 font-semibold uppercase text-gray-800"
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        );
+                                        
+                                        if(link.megaMenu) {
+                                            return (
+                                                <AccordionItem value={link.label} key={link.href}>
+                                                    <AccordionTrigger className="hover:no-underline py-0">
+                                                        {mainContent}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="pl-4 pb-0">
+                                                        <Accordion type="multiple" className="w-full">
+                                                            <AccordionItem value="loai">
+                                                                <AccordionTrigger>Theo loại</AccordionTrigger>
+                                                                <AccordionContent className="pl-4">
+                                                                    {wineMegaMenuData.theoLoai.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                             <AccordionItem value="quoc-gia">
+                                                                <AccordionTrigger>Theo quốc gia</AccordionTrigger>
+                                                                <AccordionContent className="pl-4">
+                                                                    {wineMegaMenuData.theoQuocGia.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                             <AccordionItem value="vung">
+                                                                <AccordionTrigger>Theo vùng</AccordionTrigger>
+                                                                <AccordionContent className="pl-4">
+                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                            <AccordionItem value="giong-nho">
+                                                                <AccordionTrigger>Theo giống nho</AccordionTrigger>
+                                                                <AccordionContent className="pl-4">
+                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.href} href={sub.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                        </Accordion>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            )
+                                        }
+
+                                        if (link.sublinks) {
+                                            return (
+                                                <AccordionItem value={link.label} key={link.href}>
+                                                    <AccordionTrigger className="hover:no-underline py-0">
+                                                        {mainContent}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="pl-4">
+                                                        {link.sublinks.map(sublink => (
+                                                            <Link key={sublink.href} href={sublink.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
+                                                                {sublink.label}
+                                                            </Link>
+                                                        ))}
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            )
+                                        }
+
+                                        return <div className="border-b" key={link.href}>{mainContent}</div>
+                                    })}
+                                 </Accordion>
+                              </div>
+                          </div>
+                      </ScrollArea>
                     </SheetContent>
                   </Sheet>
                 </div>
