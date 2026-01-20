@@ -16,6 +16,7 @@ const brandLogos = [
   'brand-springbank',
   'brand-yamazaki',
   'brand-glenfiddich',
+  'brand-sgarzi-luigi',
 ];
 
 export default function FamousBrands() {
@@ -101,7 +102,7 @@ export default function FamousBrands() {
                       sizes="(max-width: 768px) 33vw, 20vw"
                       className={cn(
                         "object-contain",
-                        logoId === 'brand-lakes' && 'mix-blend-multiply'
+                        (logoId === 'brand-lakes' || logoId === 'brand-sgarzi-luigi') && 'mix-blend-multiply'
                       )}
                       data-ai-hint={logo.imageHint}
                     />
