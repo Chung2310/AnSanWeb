@@ -26,9 +26,9 @@
     },
     {
       "id": "hero-armagnac",
-      "description": "Bottle of Armagnac",
-      "imageUrl": "/images/banner/3.jpg",
-      "imageHint": "armagnac bottle"
+      "description": "Collection of authentic wines",
+      "imageUrl": "https://res.cloudinary.com/dqhgnzmtk/image/upload/v1768883382/R%C6%B0%E1%BB%A3u_bestchoise-01_d9hgxw.jpg",
+      "imageHint": "authentic wine"
     },
     {
       "id": "hero-smws",
@@ -165,7 +165,7 @@
     {
       "id": "wine-5",
       "description": "Bottle of rich dessert wine",
-      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1760393339679-2b47bae7893f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkZXNzZXJ0JTIwd2luZXxlbnwwfHx8fDE3Njc1NzcyMjF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "dessert wine"
     },
     {
@@ -189,13 +189,13 @@
     {
       "id": "category-rose",
       "description": "Glass of rose wine outdoors",
-      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1762328870092-569dc8401825?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwZ2xhc3N8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rose glass"
     },
     {
       "id": "category-sparkling",
       "description": "Champagne flutes being filled",
-      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1705944601076-ffa84903c6cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFtcGFnbmUlMjBmbHV0ZXN8ZW58MHx8fHwxNzY3NTc3MjIxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "champagne flutes"
     },
     {
@@ -207,7 +207,7 @@
     {
       "id": "brand-story",
       "description": "Interior of an old wine cellar",
-      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1561906814-23da9a8bfee0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aW5lJTIwY2VsbGFyfGVufDB8fHx8MTc2NzUzNjI0MXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wine cellar"
     },
     {
@@ -255,7 +255,7 @@
     {
       "id": "avatar-2",
       "description": "Smiling woman",
-      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzY3NTI2NTExfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "woman smiling"
     },
     {
@@ -291,7 +291,7 @@
     {
       "id": "quiz-flavor-smoke",
       "description": "Wisps of aromatic smoke.",
-      "imageUrl": "https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbW9rZXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbW9rZXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "smoke"
     },
     {
