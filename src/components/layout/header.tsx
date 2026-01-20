@@ -9,7 +9,7 @@ import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import { useHydration } from '@/hooks/use-hydration';
 import {
@@ -99,15 +99,10 @@ const categoryNavLinks: NavLinkData[] = [
         label: 'LY - CỐC PHA LÊ',
         megaMenuColumns: [
             {
-                title: 'LY WHISKY',
+                title: 'LY & PHỤ KIỆN',
                 items: [
                     { href: '/danh-muc/ly-coc-pha-le/ly-whisky', label: 'Ly Whisky' },
                     { href: '/danh-muc/ly-coc-pha-le/coc-whisky', label: 'Cốc Whisky' },
-                ]
-            },
-            {
-                title: 'DECANTER/BÌNH THỞ',
-                items: [
                     { href: '/danh-muc/ly-coc-pha-le/decanter', label: 'Decanter/Bình thở rượu vang' },
                 ]
             }
@@ -136,25 +131,28 @@ const categoryNavLinks: NavLinkData[] = [
     }
 ];
 
-const MegaMenu = ({ columns, isOpen }: { 
+const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: { 
     columns: MenuColumn[];
     isOpen: boolean;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
 }) => {
     return (
         <div 
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             className={cn(
-                "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50",
+                "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
                 "transition-opacity duration-300 ease-in-out",
                 isOpen ? "opacity-100 visible" : "opacity-0 invisible"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
-                <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${Math.min(columns.length, 4)}, minmax(0, 1fr))` }}>
+                <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
                             <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
-                           
-                            <ul className="space-y-2">
+                            <ul className="space-y-3">
                                 {column.items.map(item => (
                                     <li key={item.label}>
                                         <Link 
@@ -182,7 +180,6 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const handleOpenMenu = () => {
     if (timerRef.current) {
         clearTimeout(timerRef.current);
-        timerRef.current = null;
     }
     setIsOpen(true);
   };
@@ -192,11 +189,19 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         setIsOpen(false);
     }, 300);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
   
   const hasDropdown = !!megaMenuColumns;
-  const isActive = (isOpen && hasDropdown) || pathname.startsWith(href);
+  const isActive = (isOpen && hasDropdown) || pathname === href || (href !== '/' && pathname.startsWith(href));
   
-  const LinkComponent = hasDropdown ? 'div' : Link;
+  const LinkComponent = 'div';
 
   return (
       <div 
@@ -205,14 +210,13 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         onMouseLeave={handleCloseMenu}
       >
         <LinkComponent
-            href={href} 
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
-                'text-primary-foreground/80 hover:text-primary-foreground',
-                 isActive ? 'text-popover-foreground bg-popover' : ''
+                'hover:text-primary-foreground',
+                 isActive ? 'text-popover-foreground bg-popover' : 'text-primary-foreground/80'
             )}
         >
-          {label}
+          <Link href={href}>{label}</Link>
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </LinkComponent>
         
@@ -220,6 +224,8 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
             <MegaMenu 
                 columns={megaMenuColumns}
                 isOpen={isOpen}
+                onMouseEnter={handleOpenMenu}
+                onMouseLeave={handleCloseMenu}
             />
         )}
       </div>
