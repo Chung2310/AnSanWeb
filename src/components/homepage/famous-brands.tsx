@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -100,7 +99,10 @@ export default function FamousBrands() {
                       alt={logo.description}
                       fill
                       sizes="(max-width: 768px) 33vw, 20vw"
-                      className="object-contain"
+                      className={cn(
+                        "object-contain",
+                        logoId === 'brand-lakes' && 'mix-blend-multiply'
+                      )}
                       data-ai-hint={logo.imageHint}
                     />
                   </div>
