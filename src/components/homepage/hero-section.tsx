@@ -115,7 +115,7 @@ export default function HeroSection() {
                                     <div className="absolute inset-0 bg-black/40" />
                                     
                                     {/* Text Content */}
-                                    <div className={cn("container mx-auto max-w-screen-2xl relative z-10 flex h-full w-full flex-col items-start justify-center text-left", slide.textColor)}>
+                                    <div className={cn("mx-auto max-w-screen-2xl px-4 md:px-24 lg:px-32 relative z-10 flex h-full w-full flex-col items-start justify-center text-left", slide.textColor)}>
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div 
