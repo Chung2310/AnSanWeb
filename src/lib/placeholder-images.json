@@ -20,9 +20,9 @@
     },
     {
       "id": "hero-sale",
-      "description": "Wine bottles lined up for a sale event",
-      "imageUrl": "/images/banner/3.jpg",
-      "imageHint": "wine sale"
+      "description": "Grande Alberone wine banner",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768896911/Baner_r%C6%B0%E1%BB%A3u_web-01_1_nvownd.jpg",
+      "imageHint": "wine banner"
     },
     {
       "id": "hero-armagnac",
