@@ -116,22 +116,15 @@ const wineMegaMenuData = {
         { label: "Tempranillo", href: "/danh-muc/ruou-vang/giong-nho/tempranillo" },
         { label: "Zinfandel", href: "/danh-muc/ruou-vang/giong-nho/zinfandel" },
     ],
-    featuredProducts: [
-        { name: "Old Vine Cabernet Sauvignon", price: 890000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/old-vine-cabernet-sauvignon" },
-        { name: "Old Vine Shiraz", price: 890000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/old-vine-shiraz" },
-        { name: "Gigino Grande (80 anniv.) – Vang Đỏ", price: 2100000, imageURL: "/images/homepage/Chivas.png", link: "/san-pham/gigino-grande-80-anniv" },
-    ]
 };
 
 const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenuData }) => {
     if (!isOpen) return null;
 
-    const formatPrice = (price: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-
     return (
         <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50">
             <div className="container mx-auto max-w-screen-2xl p-8">
-                <div className="grid grid-cols-5 gap-8">
+                <div className="grid grid-cols-4 gap-8">
                     {/* Column 1: Loại Vang */}
                     <div>
                         <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Theo loại</h3>
@@ -174,26 +167,6 @@ const MegaMenu = ({ isOpen, data }: { isOpen: boolean, data: typeof wineMegaMenu
                                 ))}
                             </ul>
                         </ScrollArea>
-                    </div>
-                    
-                    {/* Column 5: Featured Products */}
-                    <div>
-                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4">Sản phẩm bán chạy</h3>
-                        <ul className="space-y-4">
-                            {data.featuredProducts.map(product => (
-                                <li key={product.name}>
-                                    <Link href={product.link} className="flex items-center gap-4 group">
-                                        <div className="w-16 h-16 relative flex-shrink-0">
-                                            <Image src={product.imageURL} alt={product.name} fill className="object-contain" />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-gray-800 group-hover:text-primary transition-colors text-sm">{product.name}</p>
-                                            <p className="text-primary font-bold text-sm">{formatPrice(product.price)}</p>
-                                        </div>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -465,3 +438,4 @@ export default function Header() {
     </header>
   );
 }
+
