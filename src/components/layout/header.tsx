@@ -163,13 +163,13 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: {
                 <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
-                            <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
+                            <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
                             <ul className="space-y-3">
                                 {column.items.map(item => (
                                     <li key={item.label}>
                                         <Link 
                                             href={item.href} 
-                                            className="font-medium text-foreground hover:text-primary transition-colors"
+                                            className="font-bold text-foreground hover:text-primary transition-colors"
                                         >
                                             {item.label}
                                         </Link>
@@ -229,7 +229,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                   : isCurrentPage
                   ? 'text-primary-foreground font-bold'
                   : 'text-primary-foreground/80',
-                'hover:text-black'
+                'hover:text-primary-foreground'
             )}
         >
           {label}
