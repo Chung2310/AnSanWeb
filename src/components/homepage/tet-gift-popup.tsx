@@ -4,31 +4,23 @@ import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
-
-const POPUP_SESSION_KEY = 'tet-popup-shown';
 
 export default function TetGiftPopup() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Check if the popup has been shown in this session
-    const hasBeenShown = sessionStorage.getItem(POPUP_SESSION_KEY);
+    // Show the popup after a delay
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 2000); // 2-second delay
 
-    if (!hasBeenShown) {
-      // Show the popup after a delay
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        sessionStorage.setItem(POPUP_SESSION_KEY, 'true');
-      }, 2000); // 2-second delay
-
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   return (
