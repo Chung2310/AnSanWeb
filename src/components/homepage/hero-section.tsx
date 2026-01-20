@@ -25,7 +25,7 @@ const heroSlides = [
         imageId: 'hero-sale',
         label: 'Grande Alberone',
         href: '/gioi-thieu',       
-        description: 'ANSAN không chỉ mang đến rượu vang, mà còn là cách thể hiện đẳng cấp, sự trân trọng và phong vị sống của người thưởng thức',
+        description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
         bgColor: 'bg-primary',
         textColor: 'text-white'
     },
