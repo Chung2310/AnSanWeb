@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -16,7 +15,7 @@ const heroSlides = [
         label: 'Master of Wine',
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
-        tag: 'Master of wine',      
+        tag: 'Master of wine',
         titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
         bgColor: 'bg-primary',
@@ -26,7 +25,7 @@ const heroSlides = [
         imageId: 'hero-sale',
         label: 'Grande Alberone',
         title: 'Grande Alberone',
-        href: '/gioi-thieu',       
+        href: '/gioi-thieu',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
         bgColor: 'bg-primary',
         textColor: 'text-white'
@@ -123,7 +122,7 @@ export default function HeroSection() {
                                                     <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
                                                         {slide.tag}
                                                     </motion.p>
-                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-tight", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-relaxed", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line, i) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
@@ -213,3 +212,5 @@ export default function HeroSection() {
         </section>
     );
 }
+
+    
