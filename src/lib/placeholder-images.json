@@ -68,21 +68,21 @@
     },
     {
       "id": "brand-springbank",
-      "description": "Springbank Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_5.webp",
-      "imageHint": "springbank logo"
+      "description": "GCF Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904365/GCF-Client-Testimonial-Logo-800px-1_wtixoe.png",
+      "imageHint": "gcf logo"
     },
     {
       "id": "brand-yamazaki",
-      "description": "The Yamazaki Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_17.webp",
-      "imageHint": "yamazaki logo"
+      "description": "Provinco Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904664/Provinco_nomegm.png",
+      "imageHint": "provinco logo"
     },
     {
       "id": "brand-glenfiddich",
-      "description": "Glenfiddich Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_8.webp",
-      "imageHint": "glenfiddich logo"
+      "description": "Hechtsheimer Winzer Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904665/Hechtsheimer_Winzer_Logo_600_qae4re.png",
+      "imageHint": "hechtsheimer winzer logo"
     },
     {
       "id": "influence-image",
