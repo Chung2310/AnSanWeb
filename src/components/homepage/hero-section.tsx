@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -164,7 +165,7 @@ export default function HeroSection() {
             </div>
             <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
-                    <div className="flex items-center justify-start space-x-2 overflow-x-auto pb-2">
+                    <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
                             <div key={slide.label} className="flex items-center">
                                 <button
