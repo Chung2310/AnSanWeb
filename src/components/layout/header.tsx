@@ -80,7 +80,7 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
 
     return (
         <div 
-            className="absolute top-full left-0 right-0 bg-white shadow-lg z-50"
+            className="absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
@@ -88,43 +88,43 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                 <div className="grid grid-cols-4 gap-x-8">
                     {/* Column 1: Theo Loại */}
                     <div className="pr-8">
-                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo loại</h3>
+                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo loại</h3>
                         <ul className="space-y-2">
                             {data.theoLoai.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
 
                     {/* Column 2: Theo Quốc Gia */}
-                    <div className="px-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo quốc gia</h3>
+                    <div className="px-8 border-l">
+                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo quốc gia</h3>
                          <ul className="space-y-2">
                             {data.theoQuocGia.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
 
                     {/* Column 3: Theo Vùng */}
-                    <div className="px-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo vùng</h3>
+                    <div className="px-8 border-l">
+                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo vùng</h3>
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoVung.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
                     </div>
 
                     {/* Column 4: Theo Giống Nho */}
-                    <div className="pl-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo giống nho</h3>
+                    <div className="pl-8 border-l">
+                        <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo giống nho</h3>
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoGiongNho.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
@@ -169,16 +169,14 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
       <div 
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
-        className="relative h-full flex items-center"
+        className="h-full flex items-center"
       >
         <Link 
             href={href} 
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
-                (isOpen && hasDropdown)
-                  ? 'text-gray-900 bg-white'
-                  : 'text-white/90 hover:text-white',
-                isActive && !isOpen && 'text-white',
+                'text-primary-foreground/80 hover:text-primary-foreground',
+                isActive && 'text-primary-foreground',
                 className
             )}
         >
@@ -196,7 +194,7 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
         ) : sublinks ? (
            <div 
              className={cn(
-                "absolute top-full mt-0 w-56 rounded-b-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2",
+                "absolute top-full mt-0 w-56 rounded-b-md shadow-lg bg-popover text-popover-foreground ring-1 ring-black ring-opacity-5 z-20 p-2",
                 isOpen ? "block" : "hidden"
              )}
             onMouseEnter={handleOpenMenu}
@@ -207,7 +205,7 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
                   <Link 
                     key={`${link.href}-${link.label}`} 
                     href={link.href} 
-                    className="block px-4 py-2 text-sm font-bold text-gray-800 hover:text-primary hover:bg-gray-100 w-full text-left rounded-md"
+                    className="block px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-accent w-full text-left rounded-md"
                     role="menuitem"
                   >
                     {link.label}
@@ -396,7 +394,7 @@ export default function Header() {
 
       {/* Category Nav */}
       {isHydrated && (
-        <div className="relative hidden lg:block border-t border-border" style={{ backgroundColor: '#b0955e' }}>
+        <div className="relative hidden lg:block bg-primary">
             <nav className="container relative flex h-14 items-center justify-center gap-x-2">
                 {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </nav>
