@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -114,8 +115,9 @@ const categoryNavLinks: NavLinkData[] = [
             {
                 title: 'Phân loại',
                 items: [
-                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
+                    { href: '/danh-muc/bo-qua-tang/qua-tet-an-san', label: 'Quà Tết An San' },
                     { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
+                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
                 ]
             }
         ]
@@ -216,7 +218,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                  isMenuOpen 
                     ? 'text-popover-foreground bg-popover' 
                     : isCurrentPage 
-                    ? 'text-primary-foreground'
+                    ? 'text-primary-foreground font-bold'
                     : 'text-primary-foreground/80'
             )}
         >
