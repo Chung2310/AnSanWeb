@@ -17,7 +17,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ScrollArea } from '../ui/scroll-area';
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
@@ -81,10 +80,10 @@ const categoryNavLinks: NavLinkData[] = [
             }
         ]
     },
-     {
+    {
         href: '/danh-muc/cigar',
         label: 'CIGAR',
-        megaMenuColumns: [
+         megaMenuColumns: [
             {
                 title: 'Thương hiệu',
                 items: [
@@ -118,25 +117,19 @@ const categoryNavLinks: NavLinkData[] = [
     }
 ];
 
-const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: { 
+const MegaMenu = ({ columns, isOpen }: { 
     columns: MenuColumn[];
     isOpen: boolean;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
 }) => {
-    const gridColsClass = `grid-cols-${Math.min(columns.length, 4)}`;
-
     return (
         <div 
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50",
                 isOpen ? "block" : "hidden"
             )}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
-                <div className={cn("grid gap-x-8", gridColsClass)} style={{ gridTemplateColumns: `repeat(${Math.min(columns.length, 4)}, minmax(0, 1fr))` }}>
+                <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${Math.min(columns.length, 4)}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
                             <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
@@ -193,7 +186,7 @@ const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { cl
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 'text-primary-foreground/80 hover:text-primary-foreground',
-                isActive && 'text-primary-foreground bg-popover',
+                isActive && 'text-popover-foreground bg-popover',
                 className
             )}
         >
@@ -205,8 +198,6 @@ const NavLink = ({ href, label, megaMenuColumns, className }: NavLinkData & { cl
             <MegaMenu 
                 columns={megaMenuColumns!}
                 isOpen={isOpen}
-                onMouseEnter={handleOpenMenu}
-                onMouseLeave={handleCloseMenu}
             />
         )}
       </div>
@@ -224,6 +215,7 @@ export default function Header() {
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
+      if (isSheetOpen) setIsSheetOpen(false);
     }
   };
 
@@ -282,73 +274,71 @@ export default function Header() {
                         <Menu className="h-6 w-6" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-full bg-white p-0 overflow-y-auto">
-                        <ScrollArea className="h-full">
-                          <div className="p-6">
-                              <SheetHeader className="sr-only">
-                                <SheetTitle>Main Menu</SheetTitle>
-                                <SheetDescription>Main navigation links for the website.</SheetDescription>
-                              </SheetHeader>
-                              <div className="flex flex-col space-y-6">
-                                <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
-                                
-                                <form onSubmit={handleSearch} className="relative w-full">
-                                    <Input 
-                                      type="text" 
-                                      placeholder="Tìm kiếm" 
-                                      value={searchQuery}
-                                      onChange={(e) => setSearchQuery(e.target.value)}
-                                      className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
-                                    />
-                                    <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                                      <Search className="h-5 w-5 text-gray-500" />
-                                    </button>
-                                </form>
+                    <SheetContent side="right" className="w-full max-w-[400px] bg-white p-0">
+                        <div className="p-6 flex flex-col h-full">
+                            <SheetHeader className="sr-only">
+                              <SheetTitle>Main Menu</SheetTitle>
+                              <SheetDescription>Main navigation links for the website.</SheetDescription>
+                            </SheetHeader>
+                            <div className="mb-6">
+                              <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
+                            </div>
+                            
+                            <form onSubmit={handleSearch} className="relative w-full mb-6">
+                                <Input 
+                                  type="text" 
+                                  placeholder="Tìm kiếm" 
+                                  value={searchQuery}
+                                  onChange={(e) => setSearchQuery(e.target.value)}
+                                  className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
+                                />
+                                <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                  <Search className="h-5 w-5 text-gray-500" />
+                                </button>
+                            </form>
 
-                                 <Accordion type="multiple" className="w-full">
-                                    {categoryNavLinks.map(link => {
-                                        const mainContent = (
-                                            <Link 
-                                                href={link.href} 
-                                                onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
-                                                className="flex-1 py-3 font-semibold uppercase text-gray-800"
-                                            >
-                                                {link.label}
-                                            </Link>
-                                        );
-                                        
-                                        if(link.megaMenuColumns) {
-                                            return (
-                                                <AccordionItem value={link.label} key={link.href}>
-                                                    <AccordionTrigger className="hover:no-underline py-0">
-                                                        {mainContent}
-                                                    </AccordionTrigger>
-                                                    <AccordionContent className="pl-4 pb-0">
-                                                        <Accordion type="multiple" className="w-full">
-                                                            {link.megaMenuColumns.map(column => (
-                                                                <AccordionItem value={column.title} key={column.title}>
-                                                                    <AccordionTrigger>{column.title}</AccordionTrigger>
-                                                                    <AccordionContent className="pl-4">
-                                                                        {column.items.map(item => (
-                                                                            <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
-                                                                                {item.label}
-                                                                            </Link>
-                                                                        ))}
-                                                                    </AccordionContent>
-                                                                </AccordionItem>
-                                                            ))}
-                                                        </Accordion>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            )
-                                        }
+                             <Accordion type="multiple" className="w-full flex-grow">
+                                {categoryNavLinks.map(link => {
+                                    const mainContent = (
+                                        <Link 
+                                            href={link.href} 
+                                            onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
+                                            className="flex-1 py-3 font-semibold uppercase text-gray-800"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    );
+                                    
+                                    if(link.megaMenuColumns) {
+                                        return (
+                                            <AccordionItem value={link.label} key={link.href}>
+                                                <AccordionTrigger className="hover:no-underline py-0">
+                                                    {mainContent}
+                                                </AccordionTrigger>
+                                                <AccordionContent className="pl-4 pb-0">
+                                                    <Accordion type="multiple" className="w-full">
+                                                        {link.megaMenuColumns.map(column => (
+                                                            <AccordionItem value={column.title} key={column.title}>
+                                                                <AccordionTrigger>{column.title}</AccordionTrigger>
+                                                                <AccordionContent className="pl-4">
+                                                                    {column.items.map(item => (
+                                                                        <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
+                                                                            {item.label}
+                                                                        </Link>
+                                                                    ))}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                        ))}
+                                                    </Accordion>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        )
+                                    }
 
-                                        return <div className="border-b" key={link.href}>{mainContent}</div>
-                                    })}
-                                 </Accordion>
-                              </div>
-                          </div>
-                        </ScrollArea>
+                                    return <div className="border-b" key={link.href}>{mainContent}</div>
+                                })}
+                             </Accordion>
+                        </div>
                     </SheetContent>
                   </Sheet>
                 </div>
@@ -358,8 +348,8 @@ export default function Header() {
       </div>
 
       {isHydrated && (
-        <nav className="bg-primary">
-            <div className="container relative flex h-14 items-center justify-center gap-x-2">
+        <nav className="bg-primary relative">
+            <div className="container flex h-14 items-center justify-center gap-x-2">
                 {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </div>
         </nav>
