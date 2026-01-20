@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -68,7 +69,7 @@ const categoryNavLinks: NavLinkData[] = [
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
         megaMenuColumns: [
-            {
+             {
                 title: 'Theo loại rượu',
                 items: [
                     { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
@@ -85,7 +86,7 @@ const categoryNavLinks: NavLinkData[] = [
                     { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
                 ]
             },
-            {
+             {
                 title: 'Quà tặng',
                 items: [
                     { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà tặng rượu mạnh' }
@@ -96,6 +97,21 @@ const categoryNavLinks: NavLinkData[] = [
     {
         href: '/danh-muc/ly-coc-pha-le',
         label: 'LY - CỐC PHA LÊ',
+        megaMenuColumns: [
+            {
+                title: 'LY WHISKY',
+                items: [
+                    { href: '/danh-muc/ly-coc-pha-le/ly-whisky', label: 'Ly Whisky' },
+                    { href: '/danh-muc/ly-coc-pha-le/coc-whisky', label: 'Cốc Whisky' },
+                ]
+            },
+            {
+                title: 'DECANTER/BÌNH THỞ',
+                items: [
+                    { href: '/danh-muc/ly-coc-pha-le/decanter', label: 'Decanter/Bình thở rượu vang' },
+                ]
+            }
+        ]
     },
     { 
         href: '/danh-muc/bo-qua-tang', 
@@ -137,6 +153,7 @@ const MegaMenu = ({ columns, isOpen }: {
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
                             <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
+                           
                             <ul className="space-y-2">
                                 {column.items.map(item => (
                                     <li key={item.label}>
@@ -178,6 +195,8 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   
   const hasDropdown = !!megaMenuColumns;
   const isActive = (isOpen && hasDropdown) || pathname.startsWith(href);
+  
+  const LinkComponent = hasDropdown ? 'div' : Link;
 
   return (
       <div 
@@ -185,7 +204,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
       >
-        <Link 
+        <LinkComponent
             href={href} 
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
@@ -195,7 +214,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         >
           {label}
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
-        </Link>
+        </LinkComponent>
         
         {hasDropdown && (
             <MegaMenu 
