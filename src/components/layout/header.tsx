@@ -76,11 +76,9 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
     onMouseEnter: () => void;
     onMouseLeave: () => void;
 }) => {
-    if (!isOpen) return null;
-
     return (
         <div 
-            className="absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50"
+            className={cn("absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg z-50", { 'hidden': !isOpen })}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
@@ -91,7 +89,14 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo loại</h3>
                         <ul className="space-y-2">
                             {data.theoLoai.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}>
+                                    <Link 
+                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
+                                        className="font-medium text-foreground hover:text-primary transition-colors"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -101,7 +106,14 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo quốc gia</h3>
                          <ul className="space-y-2">
                             {data.theoQuocGia.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}>
+                                    <Link 
+                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
+                                        className="font-medium text-foreground hover:text-primary transition-colors"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -111,7 +123,14 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo vùng</h3>
                         <ul className="space-y-2">
                             {data.theoVung.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}>
+                                    <Link 
+                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
+                                        className="font-medium text-foreground hover:text-primary transition-colors"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -121,7 +140,14 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
                         <h3 className="font-semibold text-sm uppercase text-muted-foreground mb-4 tracking-wider">Theo giống nho</h3>
                         <ul className="space-y-2">
                             {data.theoGiongNho.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-medium text-foreground hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}>
+                                    <Link 
+                                        href={`/danh-muc/ruou-vang/${item.slug}`} 
+                                        className="font-medium text-foreground hover:text-primary transition-colors"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -156,23 +182,23 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
         setIsOpen(false);
     }, 300);
   };
-
-  const isActive = pathname.startsWith(href);
+  
+  const hasDropdown = !!(sublinks || megaMenu);
+  const isActive = (isOpen && hasDropdown) || pathname.startsWith(href);
   const megaMenuData = megaMenu ? wineMegaMenuData : null;
-  const hasDropdown = !!(sublinks || megaMenuData);
 
   return (
       <div 
+        className='h-full'
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
-        className="h-full flex items-center"
       >
         <Link 
             href={href} 
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 'text-primary-foreground/80 hover:text-primary-foreground',
-                isActive && 'text-primary-foreground',
+                isActive ? 'text-primary-foreground bg-popover' : 'text-primary-foreground/80',
                 className
             )}
         >
@@ -190,18 +216,18 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
         ) : sublinks ? (
            <div 
              className={cn(
-                "absolute top-full mt-0 w-56 rounded-b-md shadow-lg bg-popover text-popover-foreground ring-1 ring-black ring-opacity-5 z-20 p-2",
+                "absolute top-full bg-popover text-popover-foreground border-t shadow-lg z-50 rounded-b-md p-2",
                 isOpen ? "block" : "hidden"
              )}
             onMouseEnter={handleOpenMenu}
             onMouseLeave={handleCloseMenu}
            >
-             <div className="space-y-1" role="menu">
+             <div className="space-y-1 min-w-[224px]" role="menu">
                {sublinks.map((link) => (
                   <Link 
                     key={`${link.href}-${link.label}`} 
                     href={link.href} 
-                    className="block px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-accent w-full text-left rounded-md"
+                    className="block px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors w-full text-left rounded-md"
                     role="menuitem"
                   >
                     {link.label}
@@ -342,13 +368,13 @@ export default function Header() {
                                                              <AccordionItem value="vung">
                                                                 <AccordionTrigger>Theo vùng</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/vung/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoVung.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                             <AccordionItem value="giong-nho">
                                                                 <AccordionTrigger>Theo giống nho</AccordionTrigger>
                                                                 <AccordionContent className="pl-4">
-                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/giong-nho/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
+                                                                    {wineMegaMenuData.theoGiongNho.map(sub => <Link key={sub.slug} href={`/danh-muc/ruou-vang/${sub.slug}`} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">{sub.label}</Link>)}
                                                                 </AccordionContent>
                                                             </AccordionItem>
                                                         </Accordion>
@@ -390,11 +416,11 @@ export default function Header() {
 
       {/* Category Nav */}
       {isHydrated && (
-        <div className="relative hidden lg:block bg-primary">
-            <nav className="container relative flex h-14 items-center justify-center gap-x-2">
+        <nav className="relative hidden lg:block bg-primary">
+            <div className="container relative flex h-14 items-center justify-center gap-x-2">
                 {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
-            </nav>
-        </div>
+            </div>
+        </nav>
       )}
     </header>
   );
