@@ -19,14 +19,6 @@ const mainNavLinks = [
     href: '/trac-nghiem-ruou-vang', 
     label: 'Trắc nghiệm Rượu Vang',
   },
-  { 
-    href: '/gioi-thieu', 
-    label: 'Về chúng tôi',
-  },
-  {
-    href: '/tin-tuc',
-    label: 'Tin Tức',
-  },
 ];
 
 const categoryNavLinks = [
@@ -75,6 +67,14 @@ const categoryNavLinks = [
             { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
         ]
     },
+    {
+        href: '/gioi-thieu',
+        label: 'GIỚI THIỆU',
+    },
+    {
+        href: '/tin-tuc',
+        label: 'KIẾN THỨC',
+    }
 ];
 
 const NavLink = ({ href, label, sublinks, className }: { href: string; label: string; sublinks?: {href: string, label: string, sublinks?: {href: string, label: string}[]}[] | undefined, className?: string }) => {
