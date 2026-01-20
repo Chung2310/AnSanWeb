@@ -210,20 +210,20 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
       >
-        <div
+        <Link
+            href={href}
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
-                'hover:text-black',
                  isMenuOpen
-                    ? 'text-black font-bold'
+                    ? 'bg-popover text-popover-foreground'
                     : isCurrentPage 
-                    ? 'text-primary-foreground font-bold'
-                    : 'text-primary-foreground/80'
+                    ? 'text-primary-foreground font-bold hover:text-white'
+                    : 'text-primary-foreground/80 hover:text-white'
             )}
         >
-          <Link href={href}>{label}</Link>
+          {label}
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
-        </div>
+        </Link>
         
         {hasDropdown && (
             <MegaMenu 
@@ -236,6 +236,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
       </div>
   );
 };
+
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
