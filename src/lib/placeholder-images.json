@@ -62,9 +62,9 @@
     },
     {
       "id": "brand-ichiros",
-      "description": "Ichiro's Malt Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_14.webp",
-      "imageHint": "ichiros malt"
+      "description": "Grande Alberone Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768900953/alberone-white_stqc5t.png",
+      "imageHint": "alberone logo"
     },
     {
       "id": "brand-springbank",
