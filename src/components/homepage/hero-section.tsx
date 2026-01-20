@@ -14,8 +14,6 @@ const heroSlides = [
         label: 'Master of Wine',
         title: 'Master of Wine',
         href: '/danh-muc-san-pham',
-        tag: '',
-        titleAccent: '',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
         textColor: 'text-white',
     },
@@ -117,7 +115,7 @@ export default function HeroSection() {
                                     <div className="absolute inset-0 bg-black/40" />
                                     
                                     {/* Text Content */}
-                                    <div className={cn("container mx-auto max-w-screen-2xl relative z-10 flex h-full w-full flex-col items-start justify-center p-8 text-left", slide.textColor)}>
+                                    <div className={cn("container mx-auto max-w-screen-2xl relative z-10 flex h-full w-full flex-col items-start justify-center text-left", slide.textColor)}>
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div 
@@ -127,15 +125,15 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
+                                                    {slide.tag && <motion.p variants={textItemVariants} className="font-semibold tracking-widest uppercase text-lg text-white/80 font-headline">
                                                         {slide.tag}
-                                                    </motion.p>
+                                                    </motion.p>}
                                                     <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-loose", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line, i) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
                                                         }
-                                                        <span className="text-white">{slide.titleAccent}</span>
+                                                        {slide.titleAccent && <span className="text-white">{slide.titleAccent}</span>}
                                                     </motion.h1>
                                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line", slide.textColor === 'text-white' ? 'text-white/80' : 'text-black/80')}>
                                                         {slide.description}
