@@ -40,7 +40,8 @@ const heroSlides = [
         href: '/danh-muc/bo-qua-tang',
         description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
         textColor: 'text-white',
-        external: false
+        external: false,
+        objectFit: 'contain',
     },
     {
         imageId: 'hero-wine',
@@ -85,7 +86,7 @@ export default function HeroSection() {
         <section className="relative w-full font-body h-[85vh] min-h-[700px] md:h-screen md:min-h-[800px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
-                    {heroSlides.map((slide, index) => {
+                    {heroSlides.map((slide: any, index) => {
                          const image = PlaceHolderImages.find(img => img.id === slide.imageId);
                          const linkProps = slide.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
                          const isActive = index === current;
@@ -99,14 +100,14 @@ export default function HeroSection() {
                                 variants={slideVariants}
                                 className="absolute inset-0"
                             >
-                                <div className="relative h-full w-full">
+                                <div className={cn("relative h-full w-full", slide.objectFit === 'contain' && 'bg-black')}>
                                     {/* Background Image */}
                                     {image && (
                                         <Image
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className="object-cover"
+                                            className={slide.objectFit === 'contain' ? 'object-contain' : 'object-cover'}
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
@@ -130,7 +131,7 @@ export default function HeroSection() {
                                                     </motion.p>}
                                                     <motion.h1 variants={textItemVariants} className={cn("mt-4 text-6xl lg:text-7xl font-black uppercase font-headline leading-loose", slide.label === 'Master of Wine' && 'whitespace-nowrap')}>
                                                         {Array.isArray(slide.title)
-                                                            ? slide.title.map((line, i) => <span key={i} className="block">{line}</span>)
+                                                            ? slide.title.map((line:string, i:number) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
                                                         }
                                                         {slide.titleAccent && <span className="text-white">{slide.titleAccent}</span>}
