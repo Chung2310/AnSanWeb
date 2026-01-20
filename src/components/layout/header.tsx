@@ -86,45 +86,45 @@ const MegaMenu = ({ isOpen, data, onMouseEnter, onMouseLeave }: {
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
                 <div className="grid grid-cols-4 gap-x-8">
-                    {/* Column 1: Loại Vang */}
-                    <div>
-                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4 tracking-wider">Theo loại</h3>
+                    {/* Column 1: Theo Loại */}
+                    <div className="pr-8">
+                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo loại</h3>
                         <ul className="space-y-2">
                             {data.theoLoai.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/loai/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Column 2: Xuất Xứ */}
-                    <div className="pl-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4 tracking-wider">Theo quốc gia</h3>
+                    {/* Column 2: Theo Quốc Gia */}
+                    <div className="px-8 border-l border-gray-200">
+                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo quốc gia</h3>
                          <ul className="space-y-2">
                             {data.theoQuocGia.map(item => (
-                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                <li key={item.label}><Link href={`/danh-muc/ruou-vang/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Column 3: Vùng Làm Vang */}
-                    <div className="pl-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4 tracking-wider">Theo vùng</h3>
+                    {/* Column 3: Theo Vùng */}
+                    <div className="px-8 border-l border-gray-200">
+                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo vùng</h3>
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoVung.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/vung/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
                     </div>
 
-                    {/* Column 4: Giống Nho */}
+                    {/* Column 4: Theo Giống Nho */}
                     <div className="pl-8 border-l border-gray-200">
-                        <h3 className="font-bold text-sm uppercase text-gray-500 mb-4 tracking-wider">Theo giống nho</h3>
+                        <h3 className="font-bold text-sm uppercase text-gray-400 mb-4 tracking-wider">Theo giống nho</h3>
                         <ScrollArea className="h-48">
                             <ul className="space-y-2">
                                 {data.theoGiongNho.map(item => (
-                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="text-gray-700 hover:text-primary transition-colors">{item.label}</Link></li>
+                                    <li key={item.label}><Link href={`/danh-muc/ruou-vang/giong-nho/${item.slug}`} className="font-bold text-gray-800 hover:text-primary transition-colors">{item.label}</Link></li>
                                 ))}
                             </ul>
                         </ScrollArea>
@@ -162,77 +162,61 @@ const NavLink = ({ href, label, sublinks, megaMenu, className }: {
   };
 
   const isActive = pathname.startsWith(href);
-
-  const linkClasses = cn(
-    'transition-colors text-sm font-medium uppercase flex items-center',
-    isActive ? 'text-foreground' : 'text-header-nav hover:text-header-nav-hover',
-    className
-  );
-
   const megaMenuData = megaMenu ? wineMegaMenuData : null;
+  const hasDropdown = !!(sublinks || megaMenuData);
 
-  if (megaMenuData) {
-    return (
-       <div 
-        onMouseEnter={handleOpenMenu}
-        onMouseLeave={handleCloseMenu}
-        className="static h-14 flex items-center"
-      >
-        <Link href={href} className={linkClasses}>
-          {label}
-          <ChevronDown className="h-4 w-4 ml-1" />
-        </Link>
-        <MegaMenu 
-          isOpen={isOpen} 
-          data={megaMenuData}
-          onMouseEnter={handleOpenMenu}
-          onMouseLeave={handleCloseMenu}
-        />
-      </div>
-    )
-  }
-
-
-  if (sublinks) {
-    return (
+  return (
       <div 
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
-        className="relative h-14 flex items-center"
+        className="relative h-full flex items-center"
       >
-        <Link href={href} className={linkClasses}>
+        <Link 
+            href={href} 
+            className={cn(
+                'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
+                (isOpen && hasDropdown)
+                  ? 'text-gray-900 bg-white'
+                  : 'text-white/90 hover:text-white',
+                isActive && !isOpen && 'text-white',
+                className
+            )}
+        >
           {label}
-          <ChevronDown className="h-4 w-4 ml-1" />
+          { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
-        {isOpen && (
+        
+        {megaMenuData ? (
+          <MegaMenu 
+            isOpen={isOpen} 
+            data={megaMenuData}
+            onMouseEnter={handleOpenMenu}
+            onMouseLeave={handleCloseMenu}
+          />
+        ) : sublinks ? (
            <div 
-            className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2"
+             className={cn(
+                "absolute top-full mt-0 w-56 rounded-b-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2",
+                isOpen ? "block" : "hidden"
+             )}
             onMouseEnter={handleOpenMenu}
             onMouseLeave={handleCloseMenu}
            >
-             <div className="space-y-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+             <div className="space-y-1" role="menu">
                {sublinks.map((link) => (
-                  <div key={`${link.href}-${link.label}`} className="relative group p-1">
-                     <Link 
-                       href={link.href} 
-                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left border border-transparent rounded-md"
-                       role="menuitem"
-                     >
-                       {link.label}
-                     </Link>
-                  </div>
+                  <Link 
+                    key={`${link.href}-${link.label}`} 
+                    href={link.href} 
+                    className="block px-4 py-2 text-sm font-bold text-gray-800 hover:text-primary hover:bg-gray-100 w-full text-left rounded-md"
+                    role="menuitem"
+                  >
+                    {link.label}
+                  </Link>
                ))}
              </div>
            </div>
-        )}
+        ) : null}
       </div>
-    );
-  }
-
-  return (
-    <Link href={href} className={cn(linkClasses, 'h-14 flex items-center')}>
-      {label}
-    </Link>
   );
 };
 
@@ -297,7 +281,6 @@ export default function Header() {
             {isHydrated && (
               <>
                 <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
-                    <Link href="/trac-nghiem-ruou-vang" className='transition-colors text-sm font-medium uppercase text-header-nav hover:text-header-nav-hover'>Trắc nghiệm Rượu Vang</Link>
                 </div>
 
                 <div className="lg:hidden flex-1 flex justify-end">
@@ -413,12 +396,10 @@ export default function Header() {
 
       {/* Category Nav */}
       {isHydrated && (
-        <div className="relative bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
-            <div className="container flex h-auto min-h-14 items-center justify-center py-2">
-                <nav className="flex items-center gap-8 flex-wrap justify-center">
-                    {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
-                </nav>
-            </div>
+        <div className="relative hidden lg:block border-t border-border" style={{ backgroundColor: '#b0955e' }}>
+            <nav className="container relative flex h-14 items-center justify-center gap-x-2">
+                {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
+            </nav>
         </div>
       )}
     </header>
