@@ -50,9 +50,9 @@
     },
     {
       "id": "brand-macallan",
-      "description": "The Macallan Logo",
-      "imageUrl": "/images/thuonghieu/dt_brand_logo_18.webp",
-      "imageHint": "macallan logo"
+      "description": "Barbanera Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768904105/Barbanera_LOGO_sjjse4.png",
+      "imageHint": "barbanera logo"
     },
     {
       "id": "brand-lakes",
