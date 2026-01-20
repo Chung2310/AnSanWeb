@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -18,7 +19,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
-import { ScrollArea } from '../ui/scroll-area';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -94,18 +94,8 @@ const categoryNavLinks: NavLinkData[] = [
         ]
     },
     {
-        href: '/danh-muc/cigar',
-        label: 'CIGAR',
-         megaMenuColumns: [
-            {
-                title: 'Thương hiệu',
-                items: [
-                    { href: '/danh-muc/cigar/hanos', label: 'Cigar Hanos' },
-                    { href: '/danh-muc/cigar/lotus', label: 'Cigar Lotus' },
-                    { href: '/danh-muc/cigar/vinaboss', label: "Cigar Vinaboss's" },
-                ]
-            }
-        ]
+        href: '/danh-muc/ly-coc-pha-le',
+        label: 'LY - CỐC PHA LÊ',
     },
     { 
         href: '/danh-muc/bo-qua-tang', 
