@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -17,49 +17,77 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
+import Image from 'next/image';
+import { ScrollArea } from '../ui/scroll-area';
 
 
 const wineMegaMenuData = [
   {
-    title: 'Loại Vang',
+    title: 'Theo Loại Vang',
     links: [
-      { label: 'Vang Đỏ', href: '/danh-muc/ruou-vang' },
-      { label: 'Vang Trắng', href: '/danh-muc/ruou-vang' },
-      { label: 'Vang Hồng', href: '/danh-muc/ruou-vang' },
-      { label: 'Vang Sủi', href: '/danh-muc/ruou-vang' },
-    ],
+      { label: 'Rượu vang đỏ', href: '/danh-muc/ruou-vang' },
+      { label: 'Rượu vang trắng', href: '/danh-muc/ruou-vang' },
+      { label: 'Rượu vang sủi', href: '/danh-muc/ruou-vang' },
+      { label: 'Champagne', href: '/danh-muc/ruou-vang' }
+    ]
   },
   {
-    title: 'Xuất Xứ',
+    title: 'Theo Xuất Xứ',
     links: [
       { label: 'Vang Pháp', href: '/danh-muc/ruou-vang/vang-phap' },
+      { label: 'Vang Úc', href: '/danh-muc/ruou-vang/vang-uc' },
       { label: 'Vang Ý', href: '/danh-muc/ruou-vang/vang-y' },
       { label: 'Vang Tây Ban Nha', href: '/danh-muc/ruou-vang/vang-tay-ban-nha' },
-      { label: 'Vang Úc', href: '/danh-muc/ruou-vang/vang-uc' },
-      { label: 'Vang Nga', href: '/danh-muc/ruou-vang/vang-nga' },
       { label: 'Vang Đức', href: '/danh-muc/ruou-vang/vang-duc' },
-    ],
+      { label: 'Vang Nga', href: '/danh-muc/ruou-vang/vang-nga' }
+    ]
   },
   {
-    title: 'Vùng Làm Vang (Ý)',
+    title: 'Theo Giống Nho',
+    scrollable: true,
     links: [
+      'Cabernet Sauvignon', 'Merlot', 'Shiraz', 'Chardonnay', 'Garnacha', 'Malvasia', 
+      'Montepulciano', 'Moscato', 'Negroamaro', 'Petit Verdot', 'Pinot Grigio', 'Primitivo', 
+      'Riesling', 'Sangiovese', 'Tempranillo', 'Zinfandel'
+    ].map(grape => ({ label: grape, href: '/danh-muc/ruou-vang' }))
+  },
+  {
+    title: 'Theo Vùng',
+    scrollable: true,
+    links: [
+      { label: 'Saint-Émilion', href: '/danh-muc/ruou-vang' },
+      { label: 'Pomerol', href: '/danh-muc/ruou-vang' },
+      { label: 'Languedoc', href: '/danh-muc/ruou-vang' },
       { label: 'Puglia', href: '/danh-muc/ruou-vang/vang-y/puglia' },
-      { label: 'Toscana', href: '/danh-muc/ruou-vang/vang-y/toscana' },
       { label: 'Veneto', href: '/danh-muc/ruou-vang/vang-y/veneto' },
-      { label: 'Sicilia', href: '/danh-muc/ruou-vang/vang-y/sicilia' },
-      { label: 'Piemonte', href: '/danh-muc/ruou-vang/vang-y/piemonte' },
-    ],
+      { label: 'Abruzzo', href: '/danh-muc/ruou-vang/vang-y' },
+      { label: 'Crecchio', href: '/danh-muc/ruou-vang/vang-y' },
+      { label: 'Tuscany', href: '/danh-muc/ruou-vang/vang-y/toscana' },
+      { label: 'Salento', href: '/danh-muc/ruou-vang/vang-y' },
+      { label: 'Sicily', href: '/danh-muc/ruou-vang/vang-y/sicilia' }
+    ]
+  }
+];
+
+const featuredProducts = [
+  { 
+    name: 'Chateau La Grace Dieu 2015', 
+    price: '3.500.000₫',
+    imageURL: '/product/Chateau La Grace Dieu 2015.png', 
+    link: '/san-pham/chateau-la-grace-dieu-2015'
   },
-  {
-    title: 'Giống Nho (Phổ biến)',
-    links: [
-      { label: 'Cabernet Sauvignon', href: '/danh-muc/ruou-vang' },
-      { label: 'Merlot', href: '/danh-muc/ruou-vang' },
-      { label: 'Chardonnay', href: '/danh-muc/ruou-vang' },
-      { label: 'Primitivo', href: '/danh-muc/ruou-vang' },
-      { label: 'Syrah', href: '/danh-muc/ruou-vang' },
-    ],
+  { 
+    name: 'Sâm panh Nga Đỏ', 
+    price: '240.000₫', 
+    imageURL: '/product/Minskoye Shampanskoye7.png', 
+    link: '/san-pham/sam-panh-nga-do'
+  },
+  { 
+    name: 'Cuvee Les Naiades Languedoc', 
+    price: '500.000₫',
+    imageURL: '/product/Cuvee Les Naiades Languedoc.jpg', 
+    link: '/san-pham/cuvee-les-naiades-languedoc'
   },
 ];
 
@@ -142,30 +170,60 @@ const NavLink = ({ href, label, sublinks, megaMenuData, className }: {
       <div
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
-        className="relative flex items-center"
+        className="relative flex items-center h-14"
       >
         <Link href={href} className={linkClasses}>
           {label}
           <ChevronDown className="h-4 w-4 ml-1" />
         </Link>
         {isOpen && (
-          <div className="absolute top-full left-1/2 -translate-x-1/2 w-screen mt-2 bg-white shadow-lg border-t z-20">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-screen mt-0 bg-white shadow-lg border-t z-20">
             <div className="container mx-auto max-w-screen-2xl p-8">
-              <div className="grid grid-cols-4 gap-8">
+              <div className="grid grid-cols-5 gap-8">
                 {megaMenuData.map((column) => (
                   <div key={column.title}>
                     <h3 className="font-bold uppercase text-sm mb-4 text-foreground">{column.title}</h3>
-                    <ul className="space-y-3">
-                      {column.links.map((item) => (
-                        <li key={item.label}>
-                          <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary">
-                            {item.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    {column.scrollable ? (
+                        <ScrollArea className="h-64">
+                            <ul className="space-y-3">
+                            {column.links.map((item) => (
+                                <li key={item.label}>
+                                <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary">
+                                    {item.label}
+                                </Link>
+                                </li>
+                            ))}
+                            </ul>
+                        </ScrollArea>
+                    ) : (
+                        <ul className="space-y-3">
+                        {column.links.map((item) => (
+                            <li key={item.label}>
+                            <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary">
+                                {item.label}
+                            </Link>
+                            </li>
+                        ))}
+                        </ul>
+                    )}
                   </div>
                 ))}
+                 <div>
+                    <h3 className="font-bold uppercase text-sm mb-4 text-foreground">Sản phẩm bán chạy</h3>
+                    <div className="space-y-4">
+                        {featuredProducts.map(product => (
+                            <Link key={product.name} href={product.link} className="flex items-center gap-3 group">
+                                <div className="w-16 h-16 bg-secondary rounded-md p-1">
+                                    <Image src={product.imageURL} alt={product.name} width={64} height={64} className="object-contain w-full h-full" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{product.name}</p>
+                                    <p className="text-sm text-primary font-bold">{product.price}</p>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -179,14 +237,14 @@ const NavLink = ({ href, label, sublinks, megaMenuData, className }: {
       <div 
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
-        className="relative"
+        className="relative h-14 flex items-center"
       >
         <Link href={href} className={linkClasses}>
           {label}
           <ChevronDown className="h-4 w-4 ml-1" />
         </Link>
         {isOpen && (
-           <div className="absolute top-full left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2">
+           <div className="absolute top-full left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 p-2">
              <div className="space-y-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                {sublinks.map((link) => (
                   <div key={`${link.href}-${link.label}`} className="relative group p-1">
@@ -207,7 +265,7 @@ const NavLink = ({ href, label, sublinks, megaMenuData, className }: {
   }
 
   return (
-    <Link href={href} className={linkClasses}>
+    <Link href={href} className={cn(linkClasses, 'h-14 flex items-center')}>
       {label}
     </Link>
   );
@@ -359,7 +417,7 @@ export default function Header() {
       {/* Category Nav */}
       {isHydrated && (
         <div className="bg-secondary text-secondary-foreground border-t border-border hidden lg:block">
-            <div className="container flex h-auto min-h-14 items-center justify-center py-2">
+            <div className="container flex h-auto min-h-14 items-center justify-center py-0">
                 <nav className="flex items-center gap-8 flex-wrap justify-center">
                     {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
                 </nav>
