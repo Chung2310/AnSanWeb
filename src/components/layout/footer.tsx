@@ -89,16 +89,23 @@ export default function Footer() {
 
             <div className="mt-12">
                 <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
-                <div className="overflow-hidden rounded-md border">
+                <div className="overflow-hidden rounded-md border relative">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.5517269147593!2d105.9529555759163!3d21.20986568048601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31350f5800000001%3A0x10f73f446377708!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2sus"
                         width="100%"
                         height="300"
-                        style={{ border: 0 }}
+                        style={{ border: 0, pointerEvents: 'none' }}
                         allowFullScreen={false}
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
+                     <a href="https://www.google.com/maps/place/R%C6%B0%E1%BB%A3u+Vang+An+San/@21.2098657,105.9529556,17z/data=!4m6!3m5!1s0x31350f5800000001:0x10f73f446377708!8m2!3d21.2098657!4d105.9555305!16s%2Fg%2F11f3l6y_08?entry=ttu" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       className="absolute inset-0"
+                       aria-label="View map in a new tab">
+                       <span className="sr-only">View full map</span>
+                     </a>
                 </div>
             </div>
         </div>
