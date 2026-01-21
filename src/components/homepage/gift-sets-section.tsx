@@ -5,10 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useRef, useEffect } from 'react';
+import { Button } from '../ui/button';
 
 interface GiftSetCardProps {
   imageId: string;
-  title: string; // For alt text
+  title: string;
+  subtitle?: string;
   href: string;
 }
 
@@ -20,7 +22,8 @@ const giftCards: GiftSetCardProps[] = [
   },
   {
     imageId: 'cigar-gift-set',
-    title: 'Cigar',
+    subtitle: 'CIGAR',
+    title: 'QUÀ TẶNG DOANH NGHIỆP',
     href: '/danh-muc/cigar',
   },
 ];
@@ -34,15 +37,27 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
   if (!image) return null;
 
   return (
-    <Link href={card.href} className="group relative block aspect-[4/3] overflow-hidden rounded-lg">
-        <Image
-          src={image.imageUrl}
-          alt={card.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          data-ai-hint={image.imageHint}
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+    <Link href={card.href} className="group relative block aspect-[16/9] overflow-hidden rounded-lg">
+      <Image
+        src={image.imageUrl}
+        alt={card.title}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        data-ai-hint={image.imageHint}
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+      <div className="absolute bottom-0 left-0 p-8 text-white">
+        {card.subtitle && <p className="text-sm font-semibold uppercase tracking-widest text-white/80">{card.subtitle}</p>}
+        <h3 className="mt-2 font-headline text-3xl font-bold uppercase">{card.title}</h3>
+        <Button
+            asChild
+            variant="link"
+            className="mt-4 p-0 text-white font-bold uppercase tracking-widest opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        >
+            <span>Khám Phá Sản Phẩm</span>
+        </Button>
+      </div>
     </Link>
   );
 }
