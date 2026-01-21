@@ -82,19 +82,19 @@ export default function Footer() {
                 <div className="space-y-4">
                     <h3 className="font-bold uppercase tracking-wider text-base">KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div className="space-y-2">
-                        <Link href="https://www.facebook.com/profile.php?id=100075802071016" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">FACEBOOK</Link>
-                        <Link href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</Link>
+                        <a href="https://www.facebook.com/profile.php?id=100075802071016" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">FACEBOOK</a>
+                        <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</a>
                     </div>
                 </div>
             </div>
 
             <div className="mt-12">
                 <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
-                <div className="overflow-hidden rounded-lg border shadow-lg">
+                <div className="overflow-hidden rounded-lg border shadow-lg h-[450px]">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.176426189993!2d105.9610764153835!3d21.11884318599496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313507d363d71ddb%3A0x7a29b7c779b993e1!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2s"
                         width="100%"
-                        height="450"
+                        height="100%"
                         style={{ border: 0 }}
                         allowFullScreen
                         loading="lazy"
