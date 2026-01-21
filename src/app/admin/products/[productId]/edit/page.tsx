@@ -11,7 +11,7 @@ import loadingAnimation from '@/components/loading.json';
 
 export default function EditProductPage() {
   const params = useParams();
-  const { productId } = params;
+  const productId = params.productId as string;
   const firestore = useFirestore();
 
   const productRef = useMemoFirebase(
