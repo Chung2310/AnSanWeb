@@ -7,38 +7,48 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import type { BlogPost } from '@/lib/types';
 import { motion, useInView, useAnimation } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const BlogCard = ({ post }: { post: BlogPost }) => {
     return (
-        <Link href={`/tin-tuc/${post.slug}`} className="group block">
-            <div className="relative">
-                {post.image && (
-                    <div className="aspect-[4/3] overflow-hidden">
-                        <Image
-                            src={post.image.url}
-                            alt={post.title}
-                            width={600}
-                            height={400}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            data-ai-hint={post.image.imageHint || 'blog post'}
-                        />
-                    </div>
-                )}
-            </div>
-            <div className="mt-4 text-left">
-                <div className="flex items-center text-xs font-bold uppercase tracking-widest gap-2" style={{ color: '#8a7d6a' }}>
-                    <span>{post.categories.join(' / ')}</span>
+        <Link href={`/tin-tuc/${post.slug}`} className="group block h-full">
+            <div className="flex flex-col h-full">
+                <div className="relative">
+                    {post.image && (
+                        <div className="aspect-[4/3] overflow-hidden">
+                            <Image
+                                src={post.image.url}
+                                alt={post.title}
+                                width={600}
+                                height={400}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                data-ai-hint={post.image.imageHint || 'blog post'}
+                            />
+                        </div>
+                    )}
                 </div>
-                <h2 className="font-headline text-xl font-black uppercase mt-2 text-neutral-700 group-hover:text-primary transition-colors">
-                    {post.title}
-                </h2>
-                <p className="text-sm text-neutral-600 mt-3 line-clamp-2">
-                    {post.excerpt}
-                </p>
-                <p className="text-xs font-bold uppercase tracking-widest mt-4" style={{ color: '#8a7d6a' }}>
-                    ĐỌC TIẾP
-                </p>
+                <div className="mt-4 text-left flex-grow flex flex-col">
+                    <div className="flex items-center text-xs font-bold uppercase tracking-widest gap-2" style={{ color: '#8a7d6a' }}>
+                        <span>{post.categories.join(' / ')}</span>
+                    </div>
+                    <h2 className="font-headline text-xl font-black uppercase mt-2 text-neutral-700 group-hover:text-primary transition-colors">
+                        {post.title}
+                    </h2>
+                    <p className="text-sm text-neutral-600 mt-3 line-clamp-3 flex-grow">
+                        {post.excerpt}
+                    </p>
+                    <p className="text-xs font-bold uppercase tracking-widest mt-4" style={{ color: '#8a7d6a' }}>
+                        ĐỌC TIẾP
+                    </p>
+                </div>
             </div>
         </Link>
     );
@@ -58,7 +68,11 @@ const BlogCardSkeleton = () => (
 
 export default function HomepageBlogSection() {
     const { blogPosts, isLoading } = useBlogPosts();
-    const recentPosts = blogPosts?.slice(0, 3);
+    const recentPosts = blogPosts?.slice(0, 6); // Use more posts for carousel
+
+    const plugin = React.useRef(
+      Autoplay({ delay: 5000, stopOnInteraction: true })
+    )
 
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -93,15 +107,33 @@ export default function HomepageBlogSection() {
                     </p>
                 </div>
                 
-                <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-                    {isLoading ? (
-                        Array.from({ length: 3 }).map((_, i) => <BlogCardSkeleton key={i} />)
-                    ) : (
-                        recentPosts?.map(post => (
-                            <BlogCard key={post.id} post={post} />
-                        ))
-                    )}
-                </div>
+                {isLoading ? (
+                    <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+                        {Array.from({ length: 3 }).map((_, i) => <BlogCardSkeleton key={i} />)}
+                    </div>
+                ) : (
+                    <Carousel
+                        opts={{
+                            align: "start",
+                            loop: true,
+                        }}
+                        plugins={[plugin.current]}
+                        className="w-full max-w-screen-lg mx-auto"
+                    >
+                        <CarouselContent>
+                            {recentPosts?.map(post => (
+                                <CarouselItem key={post.id} className="md:basis-1/2 lg:basis-1/3">
+                                    <div className="p-1 h-full">
+                                        <BlogCard post={post} />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="hidden sm:flex" />
+                        <CarouselNext className="hidden sm:flex" />
+                    </Carousel>
+                )}
+
 
                 <div className="text-center mt-12">
                     <Button asChild size="lg" variant="outline">
