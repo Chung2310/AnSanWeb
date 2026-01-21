@@ -145,6 +145,38 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     name: 'attributes',
   });
   
+  const watchedTags = form.watch('tags');
+
+  const wineCategoryIds = useMemo(() => {
+    if (isLoadingCategories || !categories) {
+        return new Set<string>();
+    }
+    const wineCat = categories.find(c => c.slug === 'ruou-vang');
+    if (!wineCat) {
+        return new Set<string>();
+    }
+    
+    const allIds = new Set<string>();
+    const queue: string[] = [wineCat.id];
+    
+    while(queue.length > 0) {
+        const currentId = queue.shift()!;
+        if (!allIds.has(currentId)) {
+            allIds.add(currentId);
+            const children = categories.filter(c => c.parentId === currentId);
+            children.forEach(child => queue.push(child.id));
+        }
+    }
+    return allIds;
+  }, [categories, isLoadingCategories]);
+
+  const isWineForm = useMemo(() => {
+      if (wineCategoryIds.size === 0) return false;
+      const currentTags = watchedTags || [];
+      return currentTags.some(tagId => wineCategoryIds.has(tagId));
+  }, [wineCategoryIds, watchedTags]);
+
+
   const categoryTree = useMemo(() => {
     if (!categories) return [];
     const map: { [key: string]: Category & { children: Category[] } } = {};
@@ -468,79 +500,83 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                     <FormMessage />
                 </FormItem>
 
-                <FormItem>
-                    <div className="mb-4">
-                        <FormLabel className='text-base'>Phân loại theo quốc gia</FormLabel>
-                        <FormDescription>
-                            Chọn quốc gia của sản phẩm rượu vang.
-                        </FormDescription>
-                    </div>
-                    <ScrollArea className="h-48 rounded-md border">
-                        <div className="p-4">
-                            {wineMegaMenuData.theoQuocGia.map((item) => (
-                                <FormField
-                                    key={item.category_id}
-                                    control={form.control}
-                                    name="tags"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value?.includes(item.category_id)}
-                                                    onCheckedChange={(checked) => {
-                                                        const currentTags = field.value || [];
-                                                        return checked
-                                                            ? field.onChange([...currentTags, item.category_id])
-                                                            : field.onChange(currentTags.filter((value) => value !== item.category_id));
-                                                    }}
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="font-normal">{item.label}</FormLabel>
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
-                        </div>
-                    </ScrollArea>
-                    <FormMessage />
-                </FormItem>
+                {isWineForm && (
+                    <>
+                        <FormItem>
+                            <div className="mb-4">
+                                <FormLabel className='text-base'>Phân loại theo quốc gia</FormLabel>
+                                <FormDescription>
+                                    Chọn quốc gia của sản phẩm rượu vang.
+                                </FormDescription>
+                            </div>
+                            <ScrollArea className="h-48 rounded-md border">
+                                <div className="p-4">
+                                    {wineMegaMenuData.theoQuocGia.map((item) => (
+                                        <FormField
+                                            key={item.category_id}
+                                            control={form.control}
+                                            name="tags"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
+                                                    <FormControl>
+                                                        <Checkbox
+                                                            checked={field.value?.includes(item.category_id)}
+                                                            onCheckedChange={(checked) => {
+                                                                const currentTags = field.value || [];
+                                                                return checked
+                                                                    ? field.onChange([...currentTags, item.category_id])
+                                                                    : field.onChange(currentTags.filter((value) => value !== item.category_id));
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">{item.label}</FormLabel>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                            <FormMessage />
+                        </FormItem>
 
-                <FormItem>
-                    <div className="mb-4">
-                        <FormLabel className='text-base'>Phân loại theo giống nho</FormLabel>
-                        <FormDescription>
-                            Chọn giống nho của sản phẩm rượu vang.
-                        </FormDescription>
-                    </div>
-                    <ScrollArea className="h-48 rounded-md border">
-                        <div className="p-4 grid grid-cols-2">
-                            {wineMegaMenuData.theoGiongNho.map((item) => (
-                                <FormField
-                                    key={item.category_id}
-                                    control={form.control}
-                                    name="tags"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value?.includes(item.category_id)}
-                                                    onCheckedChange={(checked) => {
-                                                        const currentTags = field.value || [];
-                                                        return checked
-                                                            ? field.onChange([...currentTags, item.category_id])
-                                                            : field.onChange(currentTags.filter((value) => value !== item.category_id));
-                                                    }}
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="font-normal">{item.label}</FormLabel>
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
-                        </div>
-                    </ScrollArea>
-                    <FormMessage />
-                </FormItem>
+                        <FormItem>
+                            <div className="mb-4">
+                                <FormLabel className='text-base'>Phân loại theo giống nho</FormLabel>
+                                <FormDescription>
+                                    Chọn giống nho của sản phẩm rượu vang.
+                                </FormDescription>
+                            </div>
+                            <ScrollArea className="h-48 rounded-md border">
+                                <div className="p-4 grid grid-cols-2">
+                                    {wineMegaMenuData.theoGiongNho.map((item) => (
+                                        <FormField
+                                            key={item.category_id}
+                                            control={form.control}
+                                            name="tags"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
+                                                    <FormControl>
+                                                        <Checkbox
+                                                            checked={field.value?.includes(item.category_id)}
+                                                            onCheckedChange={(checked) => {
+                                                                const currentTags = field.value || [];
+                                                                return checked
+                                                                    ? field.onChange([...currentTags, item.category_id])
+                                                                    : field.onChange(currentTags.filter((value) => value !== item.category_id));
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">{item.label}</FormLabel>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                            <FormMessage />
+                        </FormItem>
+                    </>
+                )}
               </CardContent>
             </Card>
           </div>
