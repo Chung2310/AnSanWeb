@@ -180,7 +180,6 @@ const renderSpiritsMegaMenuSelectors = (control: Control<ProductFormValues>) => 
 
     return (
         <>
-            {renderCheckboxGroup("Theo loại rượu", spiritsMegaMenuData.theoLoai)}
             {renderCheckboxGroup("Thương hiệu", spiritsMegaMenuData.thuongHieu)}
             {spiritsMegaMenuData.hinhThuc && renderCheckboxGroup("Hình thức", spiritsMegaMenuData.hinhThuc)}
         </>
