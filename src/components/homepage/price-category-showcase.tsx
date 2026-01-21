@@ -117,6 +117,11 @@ export default function PriceCategoryShowcase() {
       style={{ backgroundColor: '#fdfaf5' }}
     >
       <div className="container mx-auto max-w-screen-xl">
+        <div className="mb-12">
+          <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
+            Thương hiệu rượu vang
+          </h2>
+        </div>
         <Carousel
           setApi={setWineApi}
           plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
