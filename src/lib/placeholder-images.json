@@ -305,6 +305,18 @@
       "description": "AnSan Tet Gift promotional banner with fireworks",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768967120/Baner_r%C6%B0%E1%BB%A3u_web-02_2_tuwahg.jpg",
       "imageHint": "tet gift set"
+    },
+    {
+      "id": "lakes-tasting-set",
+      "description": "The Lakes whisky tasting set",
+      "imageUrl": "/images/banner/5.jpg",
+      "imageHint": "whisky tasting set"
+    },
+    {
+      "id": "lakes-gift-set",
+      "description": "The Lakes whisky Tet gift set",
+      "imageUrl": "/images/banner/1.jpg",
+      "imageHint": "whisky gift set"
     }
   ]
 }
