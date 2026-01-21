@@ -47,6 +47,9 @@ export const wineMegaMenuData = {
 };
 
 export const spiritsMegaMenuData = {
+    theoLoai: [
+        { label: 'Whisky', slug: 'scotch-whisky', category_id: 'scotch' },
+    ],
     thuongHieu: [
         { label: "Ballantine's Finest", slug: 'ballantines-finest', category_id: 'ballantines' },
         { label: 'John Walker', slug: 'john-walker', category_id: 'john-walker' },

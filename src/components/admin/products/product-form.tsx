@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm, useFieldArray, type Control } from 'react-hook-form';
@@ -51,7 +49,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useCategories } from '@/hooks/use-categories';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
-import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -95,48 +93,57 @@ interface ProductFormProps {
   preselectedCategoryId?: string | null;
 }
 
-const renderWineMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    const renderCheckboxGroup = (title: string, items: { label: string; category_id: string }[]) => {
-        if (!items || items.length === 0) return null;
-        return (
-            <div key={title}>
-                <h4 className="font-semibold text-gray-700 mb-3 mt-5 border-b pb-2">{title}</h4>
-                <div className="grid grid-cols-2 md:grid-cols-2 gap-x-6 gap-y-3">
-                    {items.map(item => (
-                        <FormField
-                            key={item.category_id}
-                            control={control}
-                            name="tags"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value?.includes(item.category_id)}
-                                            onCheckedChange={(checked) => {
-                                                const currentTags = field.value || [];
-                                                const newTags = checked
-                                                    ? [...currentTags, item.category_id]
-                                                    : currentTags.filter(value => value !== item.category_id);
-                                                field.onChange(newTags);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
-                                </FormItem>
-                            )}
-                        />
-                    ))}
-                </div>
+const renderCheckboxGroup = (control: Control<ProductFormValues>, title: string, items: { label: string; category_id: string }[]) => {
+    if (!items || items.length === 0) return null;
+    return (
+        <div key={title}>
+            <h4 className="font-semibold text-gray-700 mb-3 mt-5 border-b pb-2">{title}</h4>
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-x-6 gap-y-3">
+                {items.map(item => (
+                    <FormField
+                        key={item.category_id}
+                        control={control}
+                        name="tags"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value?.includes(item.category_id)}
+                                        onCheckedChange={(checked) => {
+                                            const currentTags = field.value || [];
+                                            const newTags = checked
+                                                ? [...currentTags, item.category_id]
+                                                : currentTags.filter(value => value !== item.category_id);
+                                            field.onChange(newTags);
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
+                            </FormItem>
+                        )}
+                    />
+                ))}
             </div>
-        );
-    };
+        </div>
+    );
+};
 
+const renderWineMegaMenuSelectors = (control: Control<ProductFormValues>) => {
     return (
         <>
-            {renderCheckboxGroup("Theo loại", wineMegaMenuData.theoLoai)}
-            {renderCheckboxGroup("Theo quốc gia", wineMegaMenuData.theoQuocGia)}
-            {renderCheckboxGroup("Theo vùng", wineMegaMenuData.theoVung)}
-            {renderCheckboxGroup("Theo giống nho", wineMegaMenuData.theoGiongNho)}
+            {renderCheckboxGroup(control, "Theo loại", wineMegaMenuData.theoLoai)}
+            {renderCheckboxGroup(control, "Theo quốc gia", wineMegaMenuData.theoQuocGia)}
+            {renderCheckboxGroup(control, "Theo vùng", wineMegaMenuData.theoVung)}
+            {renderCheckboxGroup(control, "Theo giống nho", wineMegaMenuData.theoGiongNho)}
+        </>
+    );
+};
+
+const renderSpiritsMegaMenuSelectors = (control: Control<ProductFormValues>) => {
+    return (
+        <>
+            {renderCheckboxGroup(control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
+            {renderCheckboxGroup(control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
         </>
     );
 };
@@ -220,6 +227,31 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
       const currentTags = watchedTags || [];
       return currentTags.some(tagId => wineCategoryIds.has(tagId));
   }, [wineCategoryIds, watchedTags]);
+
+  const spiritCategoryIds = useMemo(() => {
+    if (isLoadingCategories || !categories) return new Set<string>();
+    const spiritCat = categories.find(c => c.slug === 'ruou-manh');
+    if (!spiritCat) return new Set<string>();
+    
+    const allIds = new Set<string>();
+    const queue: string[] = [spiritCat.id];
+    
+    while(queue.length > 0) {
+        const currentId = queue.shift()!;
+        if (!allIds.has(currentId)) {
+            allIds.add(currentId);
+            const children = categories.filter(c => c.parentId === currentId);
+            children.forEach(child => queue.push(child.id));
+        }
+    }
+    return allIds;
+  }, [categories, isLoadingCategories]);
+
+  const isSpiritForm = useMemo(() => {
+      if (spiritCategoryIds.size === 0) return false;
+      const currentTags = watchedTags || [];
+      return currentTags.some(tagId => spiritCategoryIds.has(tagId));
+  }, [spiritCategoryIds, watchedTags]);
 
   const categoryTree = useMemo(() => {
     if (!categories) return [];
@@ -556,6 +588,22 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                     <ScrollArea className="h-72">
                         <div className="pr-4">
                             {renderWineMegaMenuSelectors(form.control)}
+                        </div>
+                    </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
+
+            {isSpiritForm && (
+              <Card>
+                <CardHeader>
+                    <CardTitle>Phân loại Rượu Mạnh</CardTitle>
+                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm rượu mạnh.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-72">
+                        <div className="pr-4">
+                            {renderSpiritsMegaMenuSelectors(form.control)}
                         </div>
                     </ScrollArea>
                 </CardContent>
