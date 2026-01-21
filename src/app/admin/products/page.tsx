@@ -17,6 +17,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function ProductsAdminPage() {
   const { products, isLoading: isLoadingProducts } = useProducts();
@@ -24,6 +30,13 @@ export default function ProductsAdminPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedGrape, setSelectedGrape] = useState<string>('all');
+
+  const mainProductCategories = useMemo(() => {
+    if (!categories) return [];
+    const slugs = ['ruou-vang', 'ruou-manh', 'ly-coc-pha-le', 'bo-qua-tang'];
+    // Preserve order
+    return slugs.map(slug => categories.find(c => c.slug === slug)).filter((c): c is Category => !!c);
+  }, [categories]);
 
   const wineCategory = useMemo(() => {
     if (!categories) return null;
@@ -172,12 +185,23 @@ export default function ProductsAdminPage() {
               </>
             )}
 
-          <Button asChild>
-            <Link href="/admin/products/new">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Thêm sản phẩm mới
-            </Link>
-          </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Thêm sản phẩm mới
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {mainProductCategories.map((cat) => (
+                    <DropdownMenuItem key={cat.id} asChild>
+                        <Link href={`/admin/products/new?categoryId=${cat.id}`}>
+                            {cat.name}
+                        </Link>
+                    </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
         </div>
       </div>
       <div className="mt-6">

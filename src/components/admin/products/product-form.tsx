@@ -93,9 +93,10 @@ type ProductFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
   initialData?: FullProduct;
+  preselectedCategoryId?: string | null;
 }
 
-export default function ProductForm({ initialData }: ProductFormProps) {
+export default function ProductForm({ initialData, preselectedCategoryId }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -135,7 +136,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           isFeatured: false,
           isNew: true,
           attributes: [],
-          tags: [],
+          tags: preselectedCategoryId ? [preselectedCategoryId] : [],
         },
   });
 
