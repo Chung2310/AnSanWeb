@@ -9,8 +9,8 @@ import { Button } from '../ui/button';
 
 interface GiftSetCardProps {
   imageId: string;
+  subtitle: string;
   title: string;
-  subtitle?: string;
   href: string;
 }
 
@@ -47,17 +47,24 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
         data-ai-hint={image.imageHint}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-      <div className="absolute bottom-0 left-0 p-8 text-white">
-        {card.subtitle && card.subtitle.length > 0 && <p className="text-sm font-semibold uppercase tracking-widest text-white/80">{card.subtitle}</p>}
-        <h3 className="mt-2 font-headline text-3xl font-bold uppercase">{card.title}</h3>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+      <div className="absolute inset-0 p-8 flex flex-col justify-between items-start text-white">
+        <div>
+          {card.subtitle && card.subtitle.length > 0 && <p className="text-sm font-semibold uppercase tracking-widest text-white/80 text-shadow">{card.subtitle}</p>}
+          <h3 className="mt-2 font-headline text-3xl font-bold uppercase text-shadow">{card.title}</h3>
+        </div>
         <Button
             variant="outline"
-            className="mt-4 bg-transparent border-white text-white rounded-sm px-6 py-3 transition-colors text-xs font-bold tracking-widest opacity-0 group-hover:opacity-100 hover:bg-white hover:text-black"
+            className="bg-transparent border-white text-white rounded-sm px-6 py-3 transition-colors text-xs font-bold tracking-widest hover:bg-white hover:text-black"
         >
             KHÁM PHÁ SẢN PHẨM
         </Button>
       </div>
+       <style jsx>{`
+        .text-shadow {
+          text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+      `}</style>
     </Link>
   );
 }
