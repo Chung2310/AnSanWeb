@@ -49,22 +49,18 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại',
-                href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo quốc gia',
-                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo vùng',
-                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo giống nho',
-                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
         ]
