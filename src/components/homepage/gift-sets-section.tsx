@@ -16,12 +16,12 @@ interface GiftSetCardProps {
 
 const giftCards: GiftSetCardProps[] = [
   {
-    imageId: 'gift-set-tasting',
+    imageId: 'hero-tet-gift',
     title: 'BỘ QUÀ TẾT 2026',
     href: '/danh-muc/bo-qua-tang',
   },
   {
-    imageId: 'gift-set-lakes-tet',
+    imageId: 'cigar-gift-set',
     title: 'CIGAR',
     href: '/danh-muc/cigar',
   },
@@ -88,7 +88,7 @@ export default function GiftSetsSection() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
+        className="py-20" style={{backgroundColor: '#fdfaf5'}}>
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-left mb-12">
           <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>

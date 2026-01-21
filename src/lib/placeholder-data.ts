@@ -159,7 +159,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'the-lakes-tasting-set',
     price: 2500000,
     description: 'Bộ sản phẩm khám phá hương vị đa dạng từ nhà The Lakes, bao gồm các phiên bản giới hạn.',
-    image: getImage('gift-set-tasting'),
+    image: getImage('hero-lakes'),
     status: 'published',
     tags: ['tasting-set'],
     attributes: [
@@ -175,7 +175,7 @@ export const sampleWines: FullProduct[] = [
     slug: 'the-lakes-gift-set',
     price: 4800000,
     description: 'Bộ quà tặng sang trọng từ The Lakes, lựa chọn hoàn hảo cho những dịp đặc biệt.',
-    image: getImage('gift-set-lakes-tet'),
+    image: getImage('featured-macallan-25'),
     status: 'published',
     tags: ['gift-set'],
     attributes: [
@@ -738,7 +738,7 @@ export const sampleBlogPosts: BlogPost[] = [
     slug: 'whisky-tasting-guide-for-beginners',
     excerpt: 'Học cách nếm thử whisky như một chuyên gia. Hướng dẫn chi tiết từ màu sắc, hương thơm đến hậu vị để bạn có trải nghiệm trọn vẹn nhất.',
     createdAt: new Date('2024-05-15'),
-    image: getImage('gift-set-tasting'),
+    image: getImage('hero-lakes'),
     categories: ['WHISKY BASICS'],
   },
   {
