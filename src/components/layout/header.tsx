@@ -123,7 +123,7 @@ const staticNavLinks: NavLinkData[] = [
             },
             {
                 title: 'DECANTER/BÌNH THỞ',
-                href: '/danh-muc/ly-coc-pha-le',
+                 href: '/danh-muc/ly-coc-pha-le',
                 items: []
             }
         ]
@@ -133,7 +133,7 @@ const staticNavLinks: NavLinkData[] = [
         label: 'BỘ QUÀ TẶNG',
         megaMenuColumns: [
             {
-                title: 'Phân loại',
+                title: 'Quà tặng',
                 href: '/danh-muc/bo-qua-tang',
                 items: [
                     { href: '/danh-muc/bo-qua-tang/qua-tet-an-san', label: 'Quà Tết An San' },
