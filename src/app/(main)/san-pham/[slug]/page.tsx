@@ -273,13 +273,13 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <Link href="tel:0933333313"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</Link>
+                                  <a href="tel:0933333313"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <Link href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</Link>
+                                  <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <Link href="https://zalo.me/0933333313" target="_blank"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</Link>
+                                  <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</a>
                                 </Button>
                                 <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-5 w-5"/> WHATSAPP</Button>
                             </div>
