@@ -12,7 +12,6 @@ import { motion, useInView, useAnimation } from 'framer-motion';
 const brandLogos = [
   'brand-macallan',
   'brand-lakes',
-  'brand-ichiros',
   'brand-springbank',
   'brand-yamazaki',
   'brand-glenfiddich',
@@ -71,10 +70,9 @@ export default function FamousBrands() {
         initial="hidden"
         animate={mainControls}
         transition={{ duration: 1, delay: 0.3 }}
-        className="py-16"
-        style={{ backgroundColor: '#5A2F35' }}>
+        className="py-16 bg-white">
       <div className="container">
-        <h2 className="text-center text-3xl font-bold tracking-wider uppercase text-white">
+        <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
           Những Thương Hiệu Nổi Tiếng
         </h2>
         <Carousel
@@ -117,8 +115,8 @@ export default function FamousBrands() {
                     key={index}
                     onClick={() => api?.scrollTo(index)}
                     className={cn(
-                        "w-2 h-2 rounded-full",
-                        current === index ? "bg-white" : "bg-white/50"
+                        "w-2.5 h-2.5 rounded-full transition-colors",
+                        current === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
                     )}
                     aria-label={`Go to slide ${index + 1}`}
                 />
