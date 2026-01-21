@@ -60,7 +60,7 @@ const spiritCategories: PriceCategory[] = [
         href: '/danh-muc/ruou-manh/john-walker',
     },
     {
-        src: '/images/homepage/Chivas.png',
+        src: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1768966376/Baner_r%C6%B0%E1%BB%A3u_m%E1%BA%A1nh_web-04_uvwswo.jpg',
         title: 'Rượu mạnh khác',
         href: '/danh-muc/ruou-manh',
     }
