@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, type Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -95,6 +95,52 @@ interface ProductFormProps {
   initialData?: FullProduct;
   preselectedCategoryId?: string | null;
 }
+
+const renderWineMegaMenuSelectors = (control: Control<ProductFormValues>) => {
+    const renderCheckboxGroup = (title: string, items: { label: string; category_id: string }[]) => {
+        if (!items || items.length === 0) return null;
+        return (
+            <div key={title}>
+                <h4 className="font-semibold text-gray-700 mb-3 mt-5 border-b pb-2">{title}</h4>
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-x-6 gap-y-3">
+                    {items.map(item => (
+                        <FormField
+                            key={item.category_id}
+                            control={control}
+                            name="tags"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value?.includes(item.category_id)}
+                                            onCheckedChange={(checked) => {
+                                                const currentTags = field.value || [];
+                                                const newTags = checked
+                                                    ? [...currentTags, item.category_id]
+                                                    : currentTags.filter(value => value !== item.category_id);
+                                                field.onChange(newTags);
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
+                                </FormItem>
+                            )}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <>
+            {renderCheckboxGroup("Theo loại", wineMegaMenuData.theoLoai)}
+            {renderCheckboxGroup("Theo quốc gia", wineMegaMenuData.theoQuocGia)}
+            {renderCheckboxGroup("Theo vùng", wineMegaMenuData.theoVung)}
+            {renderCheckboxGroup("Theo giống nho", wineMegaMenuData.theoGiongNho)}
+        </>
+    );
+};
 
 export default function ProductForm({ initialData, preselectedCategoryId }: ProductFormProps) {
   const { toast } = useToast();
@@ -483,9 +529,9 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                 
                 <FormItem>
                     <div className="mb-4">
-                        <FormLabel className='text-base'>Danh mục</FormLabel>
+                        <FormLabel className='text-base'>Danh mục chính</FormLabel>
                         <FormDescription>
-                          Chọn các danh mục phù hợp cho sản phẩm này.
+                          Chọn danh mục chính cho sản phẩm.
                         </FormDescription>
                     </div>
                     <ScrollArea className="h-48 rounded-md border">
@@ -501,6 +547,23 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                 </FormItem>
               </CardContent>
             </Card>
+
+            {isWineForm && (
+              <Card>
+                <CardHeader>
+                    <CardTitle>Phân loại Rượu Vang</CardTitle>
+                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm rượu vang.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-72">
+                        <div className="pr-4">
+                            {renderWineMegaMenuSelectors(form.control)}
+                        </div>
+                    </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
+
           </div>
         </div>
         <div className="flex items-center gap-4">
