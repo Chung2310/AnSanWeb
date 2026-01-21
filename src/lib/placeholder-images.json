@@ -313,10 +313,10 @@
       "imageHint": "white wine"
     },
     {
-      "id": "drink-cat-rose-wine",
-      "description": "Glass of rose wine being poured",
-      "imageUrl": "https://images.unsplash.com/photo-1622119395800-3d347e285b2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxyb3NlJTIwd2luZXxlbnwwfHx8fDE3Njg4Nzc1OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "rose wine"
+      "id": "drink-cat-zero-degree-wine",
+      "description": "Bottle and glass of zero degree wine",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768959315/Vang_0_%C4%91%E1%BB%99_w6kvfo.jpg",
+      "imageHint": "zero degree wine"
     },
     {
       "id": "drink-cat-sparkling-wine",

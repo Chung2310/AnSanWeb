@@ -18,8 +18,8 @@ const drinkCategories = [
         href: '/danh-muc/ruou-vang/ruou-vang-trang',
     },
     {
-        title: 'VANG HỒNG',
-        imageId: 'drink-cat-rose-wine',
+        title: 'VANG 0 ĐỘ',
+        imageId: 'drink-cat-zero-degree-wine',
         href: '/danh-muc/ruou-vang', // No specific page yet
     },
     {
