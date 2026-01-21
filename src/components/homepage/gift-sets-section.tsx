@@ -17,9 +17,9 @@ interface GiftSetCardProps {
 const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'lakes-tasting-set',
-    subtitle: 'TASTING SETS',
-    title: 'TÌM RA HƯƠNG VỊ LAKES PHÙ HỢP',
-    href: '/danh-muc/ruou-manh',
+    subtitle: '',
+    title: 'Quà Tết',
+    href: '/danh-muc/bo-qua-tang',
   },
   {
     imageId: 'lakes-gift-set',
@@ -49,7 +49,7 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-8">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/90">{card.subtitle}</p>
+            {card.subtitle && <p className="text-xs font-bold uppercase tracking-widest text-white/90">{card.subtitle}</p>}
             <h3 className="mt-2 font-headline text-3xl font-black uppercase">
                 {card.title}
             </h3>
