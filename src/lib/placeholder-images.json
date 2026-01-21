@@ -309,7 +309,7 @@
     {
       "id": "drink-cat-white-wine",
       "description": "Glass of white wine being poured",
-      "imageUrl": "https://images.unsplash.com/photo-1458945037814-389ec6994cbd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aGl0ZSUyMHdpbmV8ZW58MHx8fHwxNzY4OTU5NzM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768959313/Vang_tr%E1%BA%AFng_vsq3er.jpg",
       "imageHint": "white wine"
     },
     {
@@ -321,13 +321,13 @@
     {
       "id": "drink-cat-sparkling-wine",
       "description": "Glass of sparkling wine",
-      "imageUrl": "https://images.unsplash.com/photo-1623428454697-08da4a100602?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzcGFya2xpbmclMjB3aW5lfGVufDB8fHx8MTc2ODg3NzU5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768960073/Vang_s%E1%BB%A7i_1_1_dfhpun.jpg",
       "imageHint": "sparkling wine"
     },
     {
       "id": "drink-cat-whisky",
       "description": "Glass of whisky",
-      "imageUrl": "https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aGlza3l8ZW58MHx8fHwxNzY4OTU5NzM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768959314/Whisky_ifvtmd.jpg",
       "imageHint": "whisky"
     },
     {
