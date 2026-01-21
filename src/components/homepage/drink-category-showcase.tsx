@@ -82,7 +82,7 @@ export default function DrinkCategoryShowcase() {
                         if (!image) return null;
                         return (
                             <motion.div key={category.title} variants={itemVariants}>
-                                <Link href={category.href} className="group relative block overflow-hidden rounded-lg aspect-[4/3]">
+                                <Link href={category.href} className="group relative block overflow-hidden rounded-lg aspect-square">
                                     <Image
                                         src={image.imageUrl}
                                         alt={category.title}
