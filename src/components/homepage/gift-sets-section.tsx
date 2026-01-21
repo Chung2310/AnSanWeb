@@ -35,27 +35,36 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
   if (!image) return null;
 
   return (
-    <Link href={card.href} className="group relative block h-[500px] w-full overflow-hidden text-white bg-neutral-800">
-      <Image
-        src={image.imageUrl}
-        alt={card.title}
-        fill
-        className="object-contain transition-transform duration-500 group-hover:scale-105"
-        data-ai-hint={image.imageHint}
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
-      <div className="absolute bottom-0 left-0 p-8">       
-        <h3 className="mt-2 font-headline text-3xl font-black uppercase">{card.title}</h3>
+    <div className="group flex h-full flex-col overflow-hidden bg-white text-black shadow-lg transition-shadow duration-300 hover:shadow-2xl">
+      <Link href={card.href} className="block">
+        <div className="relative aspect-video bg-gray-50">
+          <Image
+            src={image.imageUrl}
+            alt={card.title}
+            fill
+            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            data-ai-hint={image.imageHint}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+      </Link>
+      <div className="flex flex-grow flex-col p-6 text-center">
+        <h3 className="font-headline text-2xl font-black uppercase text-gray-800">
+          {card.title}
+        </h3>
+        <div className="flex-grow" />
         <Button
+          asChild
           variant="outline"
-          className="mt-6 rounded-none border-2 border-white bg-transparent px-8 py-6 text-xs font-bold tracking-widest text-white transition-colors hover:bg-white hover:text-black"
+          className="mt-6 w-fit self-center rounded-none border-2 border-black bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white"
         >
-          KHÁM PHÁ SẢN PHẨM
+          <Link href={card.href}>Khám Phá Sản Phẩm</Link>
         </Button>
       </div>
-    </Link>
+    </div>
   );
 }
+
 
 export default function GiftSetsSection() {
     const ref = useRef(null);
@@ -94,7 +103,7 @@ export default function GiftSetsSection() {
             Quà Tết Ansan & Cigar
           </h2>
         </motion.div>
-        <motion.div variants={containerVariants} className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <motion.div variants={containerVariants} className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {giftCards.map((card) => (
             <motion.div key={card.imageId} variants={itemVariants}>
               <GiftCard card={card} />
