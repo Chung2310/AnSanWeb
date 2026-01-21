@@ -106,8 +106,8 @@ export default function WhiskyRegionShowcase() {
               onClick={() => handleClick(region.imageId, region.name)}
               className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 ${
                   selectedRegion === region.name
-                    ? 'text-6xl text-white'
-                    : 'text-5xl text-white/60'
+                    ? 'text-5xl text-white'
+                    : 'text-4xl text-white/60'
                 }`}
             >
               {region.name}
