@@ -60,7 +60,7 @@ const spiritCategories: PriceCategory[] = [
         href: '/danh-muc/ruou-manh/john-walker',
     },
     {
-        src: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1768966376/Baner_r%C6%B0%E1%BB%A3u_m%E1%BA%A1nh_web-04_uvwswo.jpg',
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768966376/Baner_r%C6%B0%E1%BB%A3u_m%E1%BA%A1nh_web-04_uvwswo.jpg",
         title: 'Rượu mạnh khác',
         href: '/danh-muc/ruou-manh',
     }
@@ -142,14 +142,14 @@ export default function PriceCategoryShowcase() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 80vw"
                     />
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-start items-start">
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between items-start">
                       <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
                         {category.title}
                       </h3>
                       <Button 
                         asChild 
                         variant="outline" 
-                        className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
+                        className="bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
                       >
                         <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
                       </Button>
@@ -201,14 +201,14 @@ export default function PriceCategoryShowcase() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 80vw"
                     />
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-start items-start">
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between items-start">
                       <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
                         {category.title}
                       </h3>
                       <Button 
                         asChild 
                         variant="outline" 
-                        className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
+                        className="bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
                       >
                         <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
                       </Button>
