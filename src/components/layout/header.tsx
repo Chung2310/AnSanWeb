@@ -29,6 +29,7 @@ type MenuItem = {
 type MenuColumn = {
     title: string;
     items: MenuItem[];
+    href?: string;
 };
 
 type NavLinkData = {
@@ -87,6 +88,7 @@ const categoryNavLinks: NavLinkData[] = [
             },
              {
                 title: 'Quà tặng',
+                href: '/danh-muc/bo-qua-tang',
                 items: []
             }
         ]
@@ -97,6 +99,7 @@ const categoryNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'LY PHA LÊ RIEDEL',
+                href: '/danh-muc/ly-coc-pha-le',
                 items: [
                     { href: '/danh-muc/ly-coc-pha-le/ly-vang-do', label: 'Ly Vang Đỏ' },
                     { href: '/danh-muc/ly-coc-pha-le/ly-vang-trang', label: 'Ly Vang Trắng' },
@@ -106,6 +109,7 @@ const categoryNavLinks: NavLinkData[] = [
             },
             {
                 title: 'LY WHISKY',
+                href: '/danh-muc/ly-coc-pha-le',
                 items: [
                     { href: '/danh-muc/ly-coc-pha-le/ly-whisky', label: 'Ly Whisky' },
                     { href: '/danh-muc/ly-coc-pha-le/coc-whisky', label: 'Cốc Whisky' },
@@ -113,6 +117,7 @@ const categoryNavLinks: NavLinkData[] = [
             },
             {
                 title: 'DECANTER/BÌNH THỞ',
+                href: '/danh-muc/ly-coc-pha-le',
                 items: []
             }
         ]
@@ -141,11 +146,12 @@ const categoryNavLinks: NavLinkData[] = [
     }
 ];
 
-const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: { 
+const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: { 
     columns: MenuColumn[];
     isOpen: boolean;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    onLinkClick: () => void;
 }) => {
     if (!columns || columns.length === 0) return null;
     
@@ -163,13 +169,20 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave }: {
                 <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
-                            <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
+                            {column.href ? (
+                                <Link href={column.href} onClick={onLinkClick}>
+                                    <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider hover:text-primary transition-colors">{column.title}</h3>
+                                </Link>
+                            ) : (
+                                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
+                            )}
                             <ul className="space-y-3">
                                 {column.items.map(item => (
                                     <li key={item.label}>
                                         <Link 
                                             href={item.href} 
                                             className="font-bold text-foreground hover:text-primary transition-colors"
+                                            onClick={onLinkClick}
                                         >
                                             {item.label}
                                         </Link>
@@ -202,6 +215,13 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
     }, 300);
   };
 
+  const handleImmediateClose = () => {
+    if (timerRef.current) {
+        clearTimeout(timerRef.current);
+    }
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     return () => {
       if (timerRef.current) {
@@ -222,6 +242,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
       >
         <Link
             href={href}
+            onClick={handleImmediateClose}
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 isMenuOpen
@@ -242,6 +263,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                 isOpen={isOpen}
                 onMouseEnter={handleOpenMenu}
                 onMouseLeave={handleCloseMenu}
+                onLinkClick={handleImmediateClose}
             />
         )}
       </div>
@@ -362,18 +384,32 @@ export default function Header() {
                                                 </AccordionTrigger>
                                                 <AccordionContent className="pl-4 pb-0">
                                                     <Accordion type="multiple" className="w-full">
-                                                        {link.megaMenuColumns.map(column => (
-                                                            <AccordionItem value={column.title} key={column.title}>
-                                                                <AccordionTrigger>{column.title}</AccordionTrigger>
-                                                                <AccordionContent className="pl-4">
-                                                                    {column.items.map(item => (
-                                                                        <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground">
-                                                                            {item.label}
-                                                                        </Link>
-                                                                    ))}
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                        ))}
+                                                        {link.megaMenuColumns.map(column => {
+                                                            if (column.items.length === 0 && column.href) {
+                                                                return (
+                                                                    <Link key={column.title} href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-semibold uppercase text-gray-800 border-b">
+                                                                        {column.title}
+                                                                    </Link>
+                                                                )
+                                                            }
+                                                            return (
+                                                                <AccordionItem value={column.title} key={column.title}>
+                                                                    <AccordionTrigger>{column.title}</AccordionTrigger>
+                                                                    <AccordionContent className="pl-4">
+                                                                        {column.href && (
+                                                                            <Link href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground font-bold hover:text-primary">
+                                                                                Tất cả {column.title}
+                                                                            </Link>
+                                                                        )}
+                                                                        {column.items.map(item => (
+                                                                            <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
+                                                                                {item.label}
+                                                                            </Link>
+                                                                        ))}
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            )
+                                                        })}
                                                     </Accordion>
                                                 </AccordionContent>
                                             </AccordionItem>
