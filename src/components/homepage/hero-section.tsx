@@ -27,7 +27,7 @@ const heroSlides = [
     {
         imageId: 'hero-armagnac',
         label: 'Rượu Vang Chính Hãng',
-        title: ['Rượu Vang', 'Chính Hãng'],
+        title: 'RƯỢU VANG CHÍNH HÃNG',
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
     },
