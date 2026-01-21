@@ -99,7 +99,7 @@
     {
       "id": "featured-macallan-25",
       "description": "The Macallan 25 Year Old Sherry Oak Single Malt Scotch Whisky with its wooden box on a white pedestal against a red-brown background.",
-      "imageUrl": "/images/dt_world_whisky_banner.webp",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768961468/R%C6%B0%E1%BB%A3u_bestchoise-05_iojkaj.jpg",
       "imageHint": "macallan whisky"
     },
     {
@@ -189,13 +189,13 @@
     {
       "id": "banner-japanese-whisky",
       "description": "Japanese whisky banner image.",
-      "imageUrl": "/images/dt_japanese_whisky_banner.webp",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768961476/R%C6%B0%E1%BB%A3u_bestchoise-07_ogmwr8.jpg",
       "imageHint": "japanese whisky"
     },
     {
       "id": "banner-world-whisky",
       "description": "World whisky banner image.",
-      "imageUrl": "/images/Artboard-19-2.webp",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768961475/R%C6%B0%E1%BB%A3u_bestchoise-08_bs2w3u.jpg",
       "imageHint": "world whisky"
     },
     {
