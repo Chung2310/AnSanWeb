@@ -18,7 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -69,7 +69,7 @@ const staticNavLinks: NavLinkData[] = [
         href: '/danh-muc/ruou-manh',
         label: 'RƯỢU MẠNH',
         megaMenuColumns: [
-             {
+            {
                 title: 'Theo loại rượu',
                 items: [
                     { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
@@ -77,16 +77,9 @@ const staticNavLinks: NavLinkData[] = [
             },
             {
                 title: 'Thương hiệu',
-                items: [
-                    { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
-                    { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
-                    { href: '/danh-muc/ruou-manh/mortlach', label: 'Mortlach' },
-                    { href: '/danh-muc/ruou-manh/chivas', label: 'Chivas' },
-                    { href: '/danh-muc/ruou-manh/royal-salute', label: 'Royal Salute' },
-                    { href: '/danh-muc/ruou-manh/the-singleton', label: 'The Singleton' },
-                ]
+                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
             },
-             {
+            {
                 title: 'Quà tặng',
                 href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
                 items: []
