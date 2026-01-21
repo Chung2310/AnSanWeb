@@ -71,14 +71,12 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
              {
                 title: 'Theo loại rượu',
-                href: '/danh-muc/ruou-manh',
                 items: [
                     { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
                 ]
             },
             {
                 title: 'Thương hiệu',
-                href: '/danh-muc/ruou-manh',
                 items: [
                     { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
                     { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
