@@ -82,7 +82,7 @@ export default function DrinkCategoryShowcase() {
                         if (!image) return null;
                         return (
                             <motion.div key={category.title} variants={itemVariants}>
-                                <Link href={category.href} className="group relative block overflow-hidden rounded-lg aspect-[5/6]">
+                                <Link href={category.href} className="group relative block overflow-hidden rounded-lg aspect-[4/3]">
                                     <Image
                                         src={image.imageUrl}
                                         alt={category.title}
@@ -92,8 +92,8 @@ export default function DrinkCategoryShowcase() {
                                         data-ai-hint={image.imageHint}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                    <div className="absolute inset-0 flex items-end p-4">
-                                        <h3 className="font-headline text-xl font-bold text-white uppercase">
+                                    <div className="absolute inset-0 flex items-end justify-center p-4">
+                                        <h3 className="font-headline text-xl font-bold text-white uppercase text-center">
                                             {category.title}
                                         </h3>
                                     </div>
