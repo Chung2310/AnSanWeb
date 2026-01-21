@@ -55,7 +55,7 @@ const spiritCategories: PriceCategory[] = [
         href: '/danh-muc/ruou-manh/chivas',
     },
     {
-        src: '/images/homepage/Chivas.png',
+        src: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1768966377/Baner_r%C6%B0%E1%BB%A3u_m%E1%BA%A1nh_web-02_xeotlm.jpg',
         title: 'John Walker Series',
         href: '/danh-muc/ruou-manh/john-walker',
     },
@@ -118,7 +118,7 @@ export default function PriceCategoryShowcase() {
     >
       <div className="container mx-auto max-w-screen-xl">
         <div className="mb-12">
-          <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
+           <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
             Thương hiệu rượu vang
           </h2>
         </div>
