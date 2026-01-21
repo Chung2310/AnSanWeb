@@ -18,6 +18,7 @@ const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'gift-set-tet',
     title: 'Quà Tết',
+    subtitle: '',
     href: '/danh-muc/bo-qua-tang',
   },
   {
@@ -48,14 +49,13 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       <div className="absolute bottom-0 left-0 p-8 text-white">
-        {card.subtitle && <p className="text-sm font-semibold uppercase tracking-widest text-white/80">{card.subtitle}</p>}
+        {card.subtitle && card.subtitle.length > 0 && <p className="text-sm font-semibold uppercase tracking-widest text-white/80">{card.subtitle}</p>}
         <h3 className="mt-2 font-headline text-3xl font-bold uppercase">{card.title}</h3>
         <Button
-            asChild
-            variant="link"
-            className="mt-4 p-0 text-white font-bold uppercase tracking-widest opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            variant="outline"
+            className="mt-4 bg-transparent border-white text-white rounded-sm px-6 py-3 transition-colors text-xs font-bold tracking-widest opacity-0 group-hover:opacity-100 hover:bg-white hover:text-black"
         >
-            <span>Khám Phá Sản Phẩm</span>
+            KHÁM PHÁ SẢN PHẨM
         </Button>
       </div>
     </Link>
@@ -95,6 +95,11 @@ export default function GiftSetsSection() {
         animate={mainControls}
         className="py-20" style={{backgroundColor: '#fdfaf5'}}>
       <div className="container mx-auto max-w-screen-xl">
+        <motion.div variants={itemVariants} className="text-center mb-12">
+            <h2 className="font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
+                Quà Tết Ansan &amp; Cigar
+            </h2>
+        </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {giftCards.map((card) => (
             <motion.div key={card.imageId} variants={itemVariants}>
