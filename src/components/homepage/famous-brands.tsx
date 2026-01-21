@@ -10,6 +10,7 @@ import { motion, useInView, useAnimation } from 'framer-motion';
 
 
 const brandLogos = [
+  'brand-logo-4',
   'brand-macallan',
   'brand-lakes',
   'brand-springbank',
@@ -90,6 +91,8 @@ export default function FamousBrands() {
             {brandLogos.map((logoId, index) => {
               const logo = PlaceHolderImages.find(img => img.id === logoId);
               if (!logo) return null;
+              // Skip rendering the white logo
+              if (logoId === 'brand-ichiros') return null;
               return (
                 <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/5 pl-4 flex justify-center">
                    <div className="relative h-20 w-36">
