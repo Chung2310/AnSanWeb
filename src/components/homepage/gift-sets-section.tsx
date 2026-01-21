@@ -17,14 +17,14 @@ interface GiftSetCardProps {
 const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'gift-set-tet',
-    title: 'Quà Tết',
     subtitle: '',
+    title: 'Quà Tết',
     href: '/danh-muc/bo-qua-tang',
   },
   {
     imageId: 'cigar-gift-set',
-    subtitle: 'CIGAR',
-    title: 'QUÀ TẶNG DOANH NGHIỆP',
+    subtitle: '',
+    title: 'Cigar',
     href: '/danh-muc/cigar',
   },
 ];
@@ -97,7 +97,7 @@ export default function GiftSetsSection() {
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
-                Quà Tết Ansan &amp; Cigar
+                Quà Tết Ansan & Cigar
             </h2>
         </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-8 md:grid-cols-2">
