@@ -83,7 +83,7 @@ export default function Footer() {
                     <h3 className="font-bold uppercase tracking-wider text-base">KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div className="space-y-2">
                         <Link href="https://www.facebook.com/profile.php?id=100075802071016" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">FACEBOOK</Link>
-                        <Link href="https://zalo.me/0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</Link>
+                        <Link href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</Link>
                     </div>
                 </div>
             </div>
