@@ -77,29 +77,28 @@ export default function Footer() {
                     </div>
                 </div>
                 
-                {/* Col 4: Map & Social */}
-                <div className="space-y-8">
-                    <div className="space-y-4">
-                        <h3 className="font-bold uppercase tracking-wider text-base">BẢN ĐỒ</h3>
-                        <div className="overflow-hidden rounded-md">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.5517269147593!2d105.9529555759163!3d21.20986568048601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31350f5800000001%3A0x10f73f446377708!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2sus"
-                                width="100%"
-                                height="150"
-                                style={{ border: 0 }}
-                                allowFullScreen={false}
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            ></iframe>
-                        </div>
+                {/* Col 4: Social */}
+                <div className="space-y-4">
+                    <h3 className="font-bold uppercase tracking-wider text-base">KẾT NỐI VỚI CHÚNG TÔI</h3>
+                    <div className="space-y-2">
+                        <Link href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">FACEBOOK</Link>
+                        <Link href="https://zalo.me/0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</Link>
                     </div>
-                    <div className="space-y-4">
-                        <h3 className="font-bold uppercase tracking-wider text-base">KẾT NỐI VỚI CHÚNG TÔI</h3>
-                        <div className="space-y-2">
-                            <Link href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">FACEBOOK</Link>
-                            <Link href="https://zalo.me/0933333313" target="_blank" rel="noopener noreferrer" className="block text-gray-700 hover:text-primary">ZALO</Link>
-                        </div>
-                    </div>
+                </div>
+            </div>
+
+            <div className="mt-12">
+                <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
+                <div className="overflow-hidden rounded-md border">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.5517269147593!2d105.9529555759163!3d21.20986568048601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31350f5800000001%3A0x10f73f446377708!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2sus"
+                        width="100%"
+                        height="300"
+                        style={{ border: 0 }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
                 </div>
             </div>
         </div>
