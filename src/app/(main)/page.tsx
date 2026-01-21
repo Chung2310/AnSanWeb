@@ -7,12 +7,14 @@ import HeroSection from '@/components/homepage/hero-section';
 import InfluenceSection from '@/components/homepage/influence-section';
 import PriceCategoryShowcase from '@/components/homepage/price-category-showcase';
 import Testimonials from '@/components/homepage/testimonials';
+import DrinkCategoryShowcase from '@/components/homepage/drink-category-showcase';
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <FamousBrands />
+      <DrinkCategoryShowcase />
       <InfluenceSection />
       <WhiskyRegionShowcase />
       <PriceCategoryShowcase />
