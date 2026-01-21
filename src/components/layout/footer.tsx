@@ -35,7 +35,7 @@ export default function Footer() {
                     <h3 className="font-bold uppercase tracking-wider text-base">HỘ KINH DOANH NGÔ QUANG HÙNG</h3>
                     <div className="space-y-2 text-gray-700">
                         <p><span className='font-semibold'>Người đại diện:</span> Ngô Quang Hùng</p>
-                        <p><span className='font-semibold'>Địa chỉ:</span> Vườn Hoa, Ngõ Quy Chế, TX. Từ Sơn, Bắc Ninh</p>
+                        <p><span className='font-semibold'>Địa chỉ:</span> Đường Trần Phú, Phường Đình Bảng, thành phố Từ Sơn, Bắc Ninh</p>
                         <p><span className='font-semibold'>Hotline:</span> 0933.333.313</p>
                         <p><span className='font-semibold'>Email:</span> ruouvangansan@gmail.com</p>
                     </div>
@@ -91,7 +91,7 @@ export default function Footer() {
                 <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
                 <div className="overflow-hidden rounded-md border relative">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.5517269147593!2d105.9529555759163!3d21.20986568048601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31350f5800000001%3A0x10f73f446377708!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2sus"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.176426189993!2d105.9610764153835!3d21.11884318599496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313507d363d71ddb%3A0x7a29b7c779b993e1!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2s"
                         width="100%"
                         height="300"
                         style={{ border: 0, pointerEvents: 'none' }}
@@ -99,7 +99,7 @@ export default function Footer() {
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
-                     <a href="https://www.google.com/maps/place/R%C6%B0%E1%BB%A3u+Vang+An+San/@21.2098657,105.9529556,17z/data=!4m6!3m5!1s0x31350f5800000001:0x10f73f446377708!8m2!3d21.2098657!4d105.9555305!16s%2Fg%2F11f3l6y_08?entry=ttu" 
+                     <a href="https://www.google.com/maps/place/R%C6%B0%E1%BB%A3u+Vang+An+San/@21.1188432,105.9610764,17z/data=!3m1!4b1!4m6!3m5!1s0x313507d363d71ddb:0x7a29b7c779b993e1!8m2!3d21.1188432!4d105.9636513!16s%2Fg%2F11rmq7dkbn?hl=vi-VN&entry=ttu" 
                        target="_blank" 
                        rel="noopener noreferrer" 
                        className="absolute inset-0"
