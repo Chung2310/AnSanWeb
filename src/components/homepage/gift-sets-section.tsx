@@ -1,4 +1,3 @@
-
 'use client';
 
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
@@ -36,12 +35,12 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
   if (!image) return null;
 
   return (
-    <Link href={card.href} className="group relative block h-[500px] w-full overflow-hidden text-white">
+    <Link href={card.href} className="group relative block h-[500px] w-full overflow-hidden text-white bg-neutral-800">
       <Image
         src={image.imageUrl}
         alt={card.title}
         fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        className="object-contain transition-transform duration-500 group-hover:scale-105"
         data-ai-hint={image.imageHint}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
