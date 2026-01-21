@@ -90,29 +90,16 @@ export default function Footer() {
 
             <div className="mt-12">
                 <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
-                <div className="overflow-hidden rounded-lg border relative group shadow-lg">
+                <div className="overflow-hidden rounded-lg border shadow-lg">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.176426189993!2d105.9610764153835!3d21.11884318599496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313507d363d71ddb%3A0x7a29b7c779b993e1!2zUsaw4bujdSBWYW5nIEFuIFNhbg!5e0!3m2!1sen!2s"
                         width="100%"
                         height="450"
                         style={{ border: 0 }}
-                        allowFullScreen={false}
+                        allowFullScreen
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
-                        className="pointer-events-none"
                     ></iframe>
-                     <a 
-                       href="https://www.google.com/maps/place/R%C6%B0%E1%BB%A3u+Vang+An+San/@21.1188432,105.9610764,17z/data=!3m1!4b1!4m6!3m5!1s0x313507d363d71ddb:0x7a29b7c779b993e1!8m2!3d21.1188432!4d105.9636513!16s%2Fg%2F11rmq7dkbn?hl=vi-VN&entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoASAFQAw%3D%3D"
-                       target="_blank" 
-                       rel="noopener noreferrer" 
-                       className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                       aria-label="Mở trên Google Maps"
-                    >
-                       <span className="bg-white text-black px-4 py-2 rounded-md font-semibold flex items-center gap-2">
-                           <MapPin className="h-4 w-4" />
-                           Mở trên Google Maps
-                       </span>
-                     </a>
                 </div>
             </div>
         </div>
