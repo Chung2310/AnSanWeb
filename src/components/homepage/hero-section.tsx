@@ -26,13 +26,13 @@ const heroSlides = [
     },
     {
         imageId: 'hero-armagnac',
-        label: 'Rượu Vang Chính Hãng',
+        label: 'RƯỢU VANG CHÍNH HÃNG',
         title: 'RƯỢU VANG CHÍNH HÃNG',
         href: '/danh-muc/ruou-vang',
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
     },
     {
-        imageId: 'hero-smws',
+        imageId: 'hero-tet-gift',
         label: 'QUÀ TẾT',
         title: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
@@ -117,7 +117,7 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.h1 variants={textItemVariants} className={cn("text-5xl lg:text-6xl font-black uppercase font-headline", 'leading-tight')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-5xl lg:text-5xl font-black uppercase font-headline", 'leading-tight')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line: string, i: number) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
