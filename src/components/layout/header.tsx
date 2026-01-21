@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -38,7 +39,7 @@ type NavLinkData = {
     megaMenuColumns?: MenuColumn[];
 };
 
-const categoryNavLinks: NavLinkData[] = [
+const staticNavLinks: NavLinkData[] = [
     {
         href: '/collection/gia-tot',
         label: 'GIÁ TỐT',
@@ -49,18 +50,22 @@ const categoryNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại',
+                href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo quốc gia',
+                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo vùng',
+                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Theo giống nho',
+                 href: '/danh-muc/ruou-vang',
                 items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
             },
         ]
@@ -71,12 +76,14 @@ const categoryNavLinks: NavLinkData[] = [
         megaMenuColumns: [
              {
                 title: 'Theo loại rượu',
+                href: '/danh-muc/ruou-manh',
                 items: [
                     { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
                 ]
             },
             {
                 title: 'Thương hiệu',
+                href: '/danh-muc/ruou-manh',
                 items: [
                     { href: '/danh-muc/ruou-manh/ballantines-finest', label: "Ballantine's Finest" },
                     { href: '/danh-muc/ruou-manh/john-walker', label: 'John Walker' },
@@ -128,6 +135,7 @@ const categoryNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Phân loại',
+                href: '/danh-muc/bo-qua-tang',
                 items: [
                     { href: '/danh-muc/bo-qua-tang/qua-tet-an-san', label: 'Quà Tết An San' },
                     { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
@@ -166,7 +174,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
-                <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
+                <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length > 5 ? 5 : columns.length}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
                             {column.href ? (
@@ -277,6 +285,42 @@ export default function Header() {
   const router = useRouter();
   const isHydrated = useHydration();
 
+  const { blogPosts, isLoading: isLoadingBlogPosts } = useBlogPosts();
+
+  const categoryNavLinks = React.useMemo(() => {
+        if (isLoadingBlogPosts || !blogPosts) {
+            return staticNavLinks;
+        }
+
+        const knowledgeMenu: MenuColumn[] = [];
+        const postCategories = ['DISTILLERIES', 'NEWS', 'SPIRITS', 'WHISKY BASICS', 'WHISKY REVIEW'];
+        
+        postCategories.forEach(cat => {
+            const postsInCategory = blogPosts.filter(p => p.categories.includes(cat)).slice(0, 5);
+            if (postsInCategory.length > 0) {
+                knowledgeMenu.push({
+                    title: cat,
+                    href: `/tin-tuc?category=${cat}`,
+                    items: postsInCategory.map(post => ({
+                        href: `/tin-tuc/${post.slug}`,
+                        label: post.title,
+                    }))
+                });
+            }
+        });
+
+        return staticNavLinks.map(link => {
+            if (link.label === 'KIẾN THỨC') {
+                return {
+                    ...link,
+                    megaMenuColumns: knowledgeMenu,
+                };
+            }
+            return link;
+        });
+
+    }, [blogPosts, isLoadingBlogPosts]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -383,6 +427,11 @@ export default function Header() {
                                                     {mainContent}
                                                 </AccordionTrigger>
                                                 <AccordionContent className="pl-4 pb-0">
+                                                    {link.href && (
+                                                        <Link href={link.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-bold uppercase text-gray-700 border-b">
+                                                            Tất cả {link.label}
+                                                        </Link>
+                                                    )}
                                                     <Accordion type="multiple" className="w-full">
                                                         {link.megaMenuColumns.map(column => {
                                                             if (column.items.length === 0 && column.href) {
