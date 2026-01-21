@@ -48,7 +48,7 @@ export default function WhiskyRegionShowcase() {
   
   const defaultImage = getImage('featured-macallan-25');
   const [activeImage, setActiveImage] = useState<ImagePlaceholder | undefined>(defaultImage);
-  const [selectedRegion, setSelectedRegion] = useState('SCOTCH WHISKY');
+  const [selectedRegion, setSelectedRegion] = useState('Old Vine Cabernet Sauvignon');
 
   useEffect(() => {
     if (isInView) {
@@ -94,7 +94,7 @@ export default function WhiskyRegionShowcase() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="container relative z-10 flex flex-col items-start justify-center text-left"
+        className="container relative z-10 flex h-full flex-col items-start justify-center text-left md:items-end md:text-right"
       >
         <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 shadow-text">
           lựa chọn các dòng vang
