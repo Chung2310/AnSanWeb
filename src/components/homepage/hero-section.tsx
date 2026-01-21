@@ -117,7 +117,7 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.h1 variants={textItemVariants} className={cn("text-6xl lg:text-7xl font-black uppercase font-headline", 'leading-tight')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-5xl lg:text-6xl font-black uppercase font-headline", 'leading-tight')}>
                                                         {Array.isArray(slide.title)
                                                             ? slide.title.map((line: string, i: number) => <span key={i} className="block">{line}</span>)
                                                             : slide.title
