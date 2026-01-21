@@ -100,7 +100,7 @@ export default function HeroSection() {
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className="object-contain"
+                                            className="object-cover"
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
@@ -117,11 +117,8 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.h1 variants={textItemVariants} className={cn("text-5xl lg:text-5xl font-black uppercase font-headline", 'leading-tight')}>
-                                                        {Array.isArray(slide.title)
-                                                            ? slide.title.map((line: string, i: number) => <span key={i} className="block">{line}</span>)
-                                                            : slide.title
-                                                        }
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-4xl lg:text-5xl font-black uppercase font-headline", 'leading-tight')}>
+                                                        {slide.title}
                                                     </motion.h1>
                                                     <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line text-white/90")}>
                                                         {slide.description}
