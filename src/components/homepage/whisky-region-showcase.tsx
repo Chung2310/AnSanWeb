@@ -33,7 +33,7 @@ const itemVariants = {
 
 const regions = [
   { name: 'Old Vine Cabernet Sauvignon', href: '/san-pham/the-macallan-25-sherry-oak', prominent: true, imageId: 'featured-macallan-25' },
-  { name: 'Old Vine Shiraz', href: '/san-pham/yamazaki-12', prominent: false, imageId: 'banner-japanese-whisky' },
+  { name: 'Sgarzi Luigi Primitivo di Manduria DOC', href: '/san-pham/yamazaki-12', prominent: false, imageId: 'banner-japanese-whisky' },
   { name: 'Gigino Grande (80 anniv.)', href: '/danh-muc/ruou-manh', prominent: false, imageId: 'banner-world-whisky' },
 ];
 
