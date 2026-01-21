@@ -9,20 +9,23 @@ import { useRef, useEffect } from 'react';
 
 interface GiftSetCardProps {
   imageId: string;
+  subtitle: string;
   title: string;
   href: string;
 }
 
 const giftCards: GiftSetCardProps[] = [
   {
-    imageId: 'gift-set-tet',
-    title: 'BỘ QUÀ TẾT 2026',
-    href: '/danh-muc/bo-qua-tang',
+    imageId: 'lakes-tasting-set',
+    subtitle: 'TASTING SETS',
+    title: 'TÌM RA HƯƠNG VỊ LAKES PHÙ HỢP',
+    href: '/danh-muc/ruou-manh',
   },
   {
-    imageId: 'cigar-gift-set',
-    title: 'CIGAR',
-    href: '/danh-muc/cigar',
+    imageId: 'lakes-gift-set',
+    subtitle: 'GIFT SET',
+    title: 'BỘ QUÀ TẶNG WHISKY TẾT 2025',
+    href: '/danh-muc/bo-qua-tang',
   },
 ];
 
@@ -35,33 +38,30 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
   if (!image) return null;
 
   return (
-    <div className="group flex h-full flex-col overflow-hidden bg-white text-black shadow-lg transition-shadow duration-300 hover:shadow-2xl">
-      <Link href={card.href} className="block">
-        <div className="relative aspect-video bg-gray-50">
-          <Image
-            src={image.imageUrl}
-            alt={card.title}
-            fill
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
-            data-ai-hint={image.imageHint}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+    <Link href={card.href} className="group relative block aspect-[4/3] overflow-hidden text-white rounded-lg">
+        <Image
+          src={image.imageUrl}
+          alt={card.title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          data-ai-hint={image.imageHint}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-end p-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-white/90">{card.subtitle}</p>
+            <h3 className="mt-2 font-headline text-3xl font-black uppercase">
+                {card.title}
+            </h3>
+            <Button
+              asChild
+              variant="outline"
+              className="mt-6 w-fit rounded-none border-2 border-white bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-white hover:text-black"
+            >
+              <span>Khám Phá Sản Phẩm</span>
+            </Button>
         </div>
-      </Link>
-      <div className="flex flex-grow flex-col p-6 text-center">
-        <h3 className="font-headline text-2xl font-black uppercase text-gray-800">
-          {card.title}
-        </h3>
-        <div className="flex-grow" />
-        <Button
-          asChild
-          variant="outline"
-          className="mt-6 w-fit self-center rounded-none border-2 border-black bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white"
-        >
-          <Link href={card.href}>Khám Phá Sản Phẩm</Link>
-        </Button>
-      </div>
-    </div>
+    </Link>
   );
 }
 
@@ -98,11 +98,6 @@ export default function GiftSetsSection() {
         animate={mainControls}
         className="py-20" style={{backgroundColor: '#fdfaf5'}}>
       <div className="container mx-auto max-w-screen-xl">
-        <motion.div variants={itemVariants} className="text-left mb-12">
-          <h2 className="mt-2 font-headline text-4xl font-black uppercase" style={{ color: '#5a5a5a' }}>
-            Quà Tết Ansan & Cigar
-          </h2>
-        </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {giftCards.map((card) => (
             <motion.div key={card.imageId} variants={itemVariants}>
