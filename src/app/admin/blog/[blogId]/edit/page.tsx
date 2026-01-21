@@ -10,11 +10,11 @@ import { doc } from 'firebase/firestore';
 
 export default function EditBlogPage() {
   const params = useParams();
-  const { blogId } = params;
+  const blogId = params.blogId as string;
   const firestore = useFirestore();
   
   const postRef = useMemoFirebase(
-    () => (blogId ? doc(firestore, 'blogPosts', blogId as string) : null),
+    () => (blogId ? doc(firestore, 'blogPosts', blogId) : null),
     [firestore, blogId]
   );
   

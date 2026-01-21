@@ -10,11 +10,11 @@ import { doc } from 'firebase/firestore';
 
 export default function EditCategoryPage() {
   const params = useParams();
-  const { categoryId } = params;
+  const categoryId = params.categoryId as string;
   const firestore = useFirestore();
   
   const categoryRef = useMemoFirebase(
-    () => (categoryId ? doc(firestore, 'categories', categoryId as string) : null),
+    () => (categoryId ? doc(firestore, 'categories', categoryId) : null),
     [firestore, categoryId]
   );
   
