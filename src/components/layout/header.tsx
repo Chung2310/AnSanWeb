@@ -88,7 +88,7 @@ const staticNavLinks: NavLinkData[] = [
             },
              {
                 title: 'Quà tặng',
-                href: '/danh-muc/bo-qua-tang',
+                href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
                 items: []
             }
         ]
