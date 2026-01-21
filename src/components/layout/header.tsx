@@ -19,7 +19,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
-import { useBlogPosts } from '@/hooks/use-blog-posts';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -285,42 +284,6 @@ export default function Header() {
   const router = useRouter();
   const isHydrated = useHydration();
 
-  const { blogPosts, isLoading: isLoadingBlogPosts } = useBlogPosts();
-
-  const categoryNavLinks = React.useMemo(() => {
-        if (isLoadingBlogPosts || !blogPosts) {
-            return staticNavLinks;
-        }
-
-        const knowledgeMenu: MenuColumn[] = [];
-        const postCategories = ['DISTILLERIES', 'NEWS', 'SPIRITS', 'WHISKY BASICS', 'WHISKY REVIEW'];
-        
-        postCategories.forEach(cat => {
-            const postsInCategory = blogPosts.filter(p => p.categories.includes(cat)).slice(0, 5);
-            if (postsInCategory.length > 0) {
-                knowledgeMenu.push({
-                    title: cat,
-                    href: `/tin-tuc?category=${cat}`,
-                    items: postsInCategory.map(post => ({
-                        href: `/tin-tuc/${post.slug}`,
-                        label: post.title,
-                    }))
-                });
-            }
-        });
-
-        return staticNavLinks.map(link => {
-            if (link.label === 'KIẾN THỨC') {
-                return {
-                    ...link,
-                    megaMenuColumns: knowledgeMenu,
-                };
-            }
-            return link;
-        });
-
-    }, [blogPosts, isLoadingBlogPosts]);
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -409,7 +372,7 @@ export default function Header() {
                             </form>
 
                              <Accordion type="multiple" className="w-full flex-grow">
-                                {categoryNavLinks.map(link => {
+                                {staticNavLinks.map(link => {
                                     const mainContent = (
                                         <Link 
                                             href={link.href} 
@@ -479,7 +442,7 @@ export default function Header() {
 
       <nav className="bg-primary relative">
             <div className="container relative flex h-14 items-center justify-center gap-x-2">
-                {categoryNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
+                {staticNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </div>
         </nav>
     </header>
