@@ -8,6 +8,7 @@ import InfluenceSection from '@/components/homepage/influence-section';
 import PriceCategoryShowcase from '@/components/homepage/price-category-showcase';
 import Testimonials from '@/components/homepage/testimonials';
 import DrinkCategoryShowcase from '@/components/homepage/drink-category-showcase';
+import HomepageBlogSection from '@/components/homepage/homepage-blog-section';
 
 export default function HomePage() {
   return (
@@ -20,6 +21,7 @@ export default function HomePage() {
       <PriceCategoryShowcase />
       <GiftSetsSection />
       <Testimonials />
+      <HomepageBlogSection />
     </>
   );
 }
