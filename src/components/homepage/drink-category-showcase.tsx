@@ -18,14 +18,14 @@ const drinkCategories = [
         href: '/danh-muc/ruou-vang/ruou-vang-trang',
     },
     {
-        title: 'VANG 0 ĐỘ',
-        imageId: 'drink-cat-zero-degree-wine',
-        href: '/danh-muc/ruou-vang', // No specific page yet
-    },
-    {
         title: 'VANG SỦI',
         imageId: 'drink-cat-sparkling-wine',
         href: '/danh-muc/ruou-vang/ruou-vang-sui',
+    },
+    {
+        title: 'VANG 0 ĐỘ',
+        imageId: 'drink-cat-zero-degree-wine',
+        href: '/danh-muc/ruou-vang', // No specific page yet
     },
     {
         title: 'WHISKY',
@@ -71,7 +71,7 @@ export default function DrinkCategoryShowcase() {
             className="py-16 bg-white"
         >
             <div className="container">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                     {drinkCategories.map((category) => {
                         const image = getImage(category.imageId);
                         if (!image) return null;
