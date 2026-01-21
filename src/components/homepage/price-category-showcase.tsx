@@ -15,7 +15,7 @@ interface PriceCategory {
   href: string;
 }
 
-const priceCategories: PriceCategory[] = [
+const wineCategories: PriceCategory[] = [
     {
         src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965642/Baner_r%C6%B0%E1%BB%A3u_web-06_und4dc.jpg",
         title: 'Vang Đức',
@@ -46,6 +46,9 @@ const priceCategories: PriceCategory[] = [
         title: 'Vang Úc',
         href: '/danh-muc/ruou-vang/vang-uc',
     },
+];
+
+const spiritCategories: PriceCategory[] = [
     {
         src: '/images/homepage/Chivas.png',
         title: 'Chivas Series',
@@ -64,8 +67,10 @@ const priceCategories: PriceCategory[] = [
 ];
 
 export default function PriceCategoryShowcase() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
+  const [wineApi, setWineApi] = useState<CarouselApi>();
+  const [wineCurrent, setWineCurrent] = useState(0);
+  const [spiritApi, setSpiritApi] = useState<CarouselApi>();
+  const [spiritCurrent, setSpiritCurrent] = useState(0);
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -78,21 +83,25 @@ export default function PriceCategoryShowcase() {
   }, [isInView, mainControls]);
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
-
+    if (!wineApi) return;
     const onSelect = (api: CarouselApi) => {
       if (!api) return;
-      setCurrent(api.selectedScrollSnap());
+      setWineCurrent(api.selectedScrollSnap());
     };
-
-    api.on("select", onSelect);
-
-    return () => {
-      api.off("select", onSelect);
+    wineApi.on("select", onSelect);
+    return () => { wineApi.off("select", onSelect) };
+  }, [wineApi]);
+  
+  useEffect(() => {
+    if (!spiritApi) return;
+    const onSelect = (api: CarouselApi) => {
+      if (!api) return;
+      setSpiritCurrent(api.selectedScrollSnap());
     };
-  }, [api]);
+    spiritApi.on("select", onSelect);
+    return () => { spiritApi.off("select", onSelect) };
+  }, [spiritApi]);
+
 
   return (
     <motion.section 
@@ -109,12 +118,12 @@ export default function PriceCategoryShowcase() {
     >
       <div className="container mx-auto max-w-screen-xl">
         <Carousel
-          setApi={setApi}
+          setApi={setWineApi}
           plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
           opts={{ loop: true, align: 'start' }}
         >
           <CarouselContent className="items-center">
-            {priceCategories.map((category, index) => (
+            {wineCategories.map((category) => (
               <CarouselItem 
                 key={category.href}
                 className="basis-full md:basis-4/5 lg:basis-4/5 pl-4 md:pl-6"
@@ -146,21 +155,80 @@ export default function PriceCategoryShowcase() {
             ))}
           </CarouselContent>
 
-          {/* Dot navigation */}
           <div className="flex justify-center mt-8 space-x-2">
-            {priceCategories.map((_, index) => (
+            {wineCategories.map((_, index) => (
               <button
                 key={index}
-                onClick={() => api?.scrollTo(index)}
+                onClick={() => wineApi?.scrollTo(index)}
                 className={cn(
                   "w-2.5 h-2.5 rounded-full transition-colors",
-                  current === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
+                  wineCurrent === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
                 )}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={`Go to wine slide ${index + 1}`}
               />
             ))}
           </div>
         </Carousel>
+        
+        <div className="my-16">
+          <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
+            Thương Hiệu Rượu Mạnh
+          </h2>
+        </div>
+
+        <Carousel
+          setApi={setSpiritApi}
+          plugins={[Autoplay({ delay: 5500, stopOnInteraction: true })]}
+          opts={{ loop: true, align: 'start' }}
+        >
+          <CarouselContent className="items-center">
+            {spiritCategories.map((category) => (
+              <CarouselItem 
+                key={category.href}
+                className="basis-full md:basis-4/5 lg:basis-4/5 pl-4 md:pl-6"
+              >
+                <Link href={category.href}>
+                  <div className="relative aspect-[2/1] w-full text-white rounded-lg overflow-hidden">
+                    <Image 
+                      src={category.src}
+                      alt={category.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 80vw"
+                    />
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start">
+                      <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
+                        {category.title}
+                      </h3>
+                      <Button 
+                        asChild 
+                        variant="outline" 
+                        className="mt-4 bg-transparent border-white text-white hover:bg-white hover:text-black rounded-sm px-6 py-4 transition-all text-xs font-bold tracking-widest"
+                      >
+                        <span className="cursor-pointer">KHÁM PHÁ SẢN PHẨM</span>
+                      </Button>
+                    </div>
+                  </div>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          <div className="flex justify-center mt-8 space-x-2">
+            {spiritCategories.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => spiritApi?.scrollTo(index)}
+                className={cn(
+                  "w-2.5 h-2.5 rounded-full transition-colors",
+                  spiritCurrent === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
+                )}
+                aria-label={`Go to spirit slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </Carousel>
+
         <style jsx>{`
             .text-shadow {
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
