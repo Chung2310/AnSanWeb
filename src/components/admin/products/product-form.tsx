@@ -51,8 +51,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useCategories } from '@/hooks/use-categories';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
-import { Progress } from '@/components/ui/progress';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -142,50 +141,6 @@ const renderWineMegaMenuSelectors = (control: Control<ProductFormValues>) => {
     );
 };
 
-const renderSpiritsMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    const renderCheckboxGroup = (title: string, items: { label: string; category_id: string }[]) => {
-        if (!items || items.length === 0) return null;
-        return (
-            <div key={title}>
-                <h4 className="font-semibold text-gray-700 mb-3 mt-5 border-b pb-2">{title}</h4>
-                <div className="grid grid-cols-2 md:grid-cols-2 gap-x-6 gap-y-3">
-                    {items.map(item => (
-                        <FormField
-                            key={item.category_id}
-                            control={control}
-                            name="tags"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value?.includes(item.category_id)}
-                                            onCheckedChange={(checked) => {
-                                                const currentTags = field.value || [];
-                                                const newTags = checked
-                                                    ? [...currentTags, item.category_id]
-                                                    : currentTags.filter(value => value !== item.category_id);
-                                                field.onChange(newTags);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
-                                </FormItem>
-                            )}
-                        />
-                    ))}
-                </div>
-            </div>
-        );
-    };
-
-    return (
-        <>
-            {renderCheckboxGroup("Thương hiệu", spiritsMegaMenuData.thuongHieu)}
-            {spiritsMegaMenuData.hinhThuc && renderCheckboxGroup("Hình thức", spiritsMegaMenuData.hinhThuc)}
-        </>
-    );
-};
-
 export default function ProductForm({ initialData, preselectedCategoryId }: ProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -260,41 +215,11 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     return allIds;
   }, [categories, isLoadingCategories]);
 
-  const spiritsCategoryIds = useMemo(() => {
-    if (isLoadingCategories || !categories) {
-        return new Set<string>();
-    }
-    const spiritsCat = categories.find(c => c.slug === 'ruou-manh');
-    if (!spiritsCat) {
-        return new Set<string>();
-    }
-    
-    const allIds = new Set<string>();
-    const queue: string[] = [spiritsCat.id];
-    
-    while(queue.length > 0) {
-        const currentId = queue.shift()!;
-        if (!allIds.has(currentId)) {
-            allIds.add(currentId);
-            const children = categories.filter(c => c.parentId === currentId);
-            children.forEach(child => queue.push(child.id));
-        }
-    }
-    return allIds;
-  }, [categories, isLoadingCategories]);
-
   const isWineForm = useMemo(() => {
       if (wineCategoryIds.size === 0) return false;
       const currentTags = watchedTags || [];
       return currentTags.some(tagId => wineCategoryIds.has(tagId));
   }, [wineCategoryIds, watchedTags]);
-
-  const isSpiritsForm = useMemo(() => {
-    if (spiritsCategoryIds.size === 0) return false;
-    const currentTags = watchedTags || [];
-    return currentTags.some(tagId => spiritsCategoryIds.has(tagId));
-  }, [spiritsCategoryIds, watchedTags]);
-
 
   const categoryTree = useMemo(() => {
     if (!categories) return [];
@@ -636,23 +561,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                 </CardContent>
               </Card>
             )}
-
-            {isSpiritsForm && (
-              <Card>
-                <CardHeader>
-                    <CardTitle>Phân loại Rượu Mạnh</CardTitle>
-                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm rượu mạnh.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ScrollArea className="h-72">
-                        <div className="pr-4">
-                            {renderSpiritsMegaMenuSelectors(form.control)}
-                        </div>
-                    </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
-
           </div>
         </div>
         <div className="flex items-center gap-4">
