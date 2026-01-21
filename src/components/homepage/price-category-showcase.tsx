@@ -142,7 +142,7 @@ export default function PriceCategoryShowcase() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 80vw"
                     />
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start">
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-start items-start">
                       <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
                         {category.title}
                       </h3>
@@ -201,7 +201,7 @@ export default function PriceCategoryShowcase() {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 80vw"
                     />
-                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start">
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-start items-start">
                       <h3 className="font-headline text-3xl md:text-4xl font-black uppercase text-shadow">
                         {category.title}
                       </h3>
