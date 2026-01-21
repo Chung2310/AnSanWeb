@@ -225,7 +225,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
             className={cn(
                 'transition-colors text-sm font-medium uppercase flex items-center h-full px-4 py-2',
                 isMenuOpen
-                  ? 'bg-popover text-popover-foreground'
+                  ? 'bg-popover text-primary'
                   : isCurrentPage
                   ? 'text-primary-foreground font-bold'
                   : 'text-primary-foreground/80',
