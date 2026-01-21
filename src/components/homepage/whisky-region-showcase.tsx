@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -94,7 +93,7 @@ export default function WhiskyRegionShowcase() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="container relative z-10 flex h-full flex-col items-start justify-center text-left md:items-end md:text-right"
+        className="container relative z-10 flex h-full flex-col items-start justify-center text-left"
       >
         <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 shadow-text">
           lựa chọn các dòng vang
