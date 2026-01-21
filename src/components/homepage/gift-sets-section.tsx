@@ -16,7 +16,7 @@ interface GiftSetCardProps {
 
 const giftCards: GiftSetCardProps[] = [
   {
-    imageId: 'hero-tet-gift',
+    imageId: 'gift-set-tet',
     title: 'BỘ QUÀ TẾT 2026',
     href: '/danh-muc/bo-qua-tang',
   },

@@ -51,7 +51,7 @@
     {
       "id": "hero-tet-gift-2",
       "description": "AnSan Tet Gift promotional banner",
-      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768963519/Gemini_Generated_Image_lpkp9alpkp9alpkp_1_c8cx1a.png",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768962924/Gemini_Generated_Image_lpkp9alpkp9alpkp_meivxt.png",
       "imageHint": "tet gift set"
     },
     {
@@ -265,6 +265,12 @@
       "imageHint": "whisky"
     },
     {
+      "id": "cigar-gift-set",
+      "description": "A set of premium cigars in a gift box.",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965001/cigar-gift.jpg",
+      "imageHint": "cigar gift box"
+    },
+    {
       "id": "engraving-banner",
       "description": "An engraved whisky bottle for promotional banner.",
       "imageUrl": "https://images.unsplash.com/photo-1569529462445-932135d45023?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -295,10 +301,10 @@
       "imageHint": "exclusive whisky"
     },
     {
-      "id": "cigar-gift-set",
-      "description": "A set of premium cigars in a gift box.",
-      "imageUrl": "https://images.unsplash.com/photo-1599039340578-19b883f3a09a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaWdhciUyMGdpZnQlMjBib3h8ZW58MHx8fHwxNzY4OTY1MDAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "cigar gift box"
+      "id": "gift-set-tet",
+      "description": "AnSan Tet Gift promotional banner with fireworks",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768899296/Banner_4_ds55j7.png",
+      "imageHint": "tet gift set"
     }
   ]
 }
