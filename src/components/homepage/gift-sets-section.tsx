@@ -3,29 +3,25 @@
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '../ui/button';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useRef, useEffect } from 'react';
 
 interface GiftSetCardProps {
   imageId: string;
-  subtitle: string;
-  title: string;
+  title: string; // For alt text
   href: string;
 }
 
 const giftCards: GiftSetCardProps[] = [
   {
     imageId: 'gift-set-tet',
-    subtitle: '',
     title: 'Quà Tết',
     href: '/danh-muc/bo-qua-tang',
   },
   {
-    imageId: 'lakes-gift-set',
-    subtitle: 'GIFT SET',
-    title: 'BỘ QUÀ TẶNG WHISKY TẾT 2025',
-    href: '/danh-muc/bo-qua-tang',
+    imageId: 'cigar-gift-set',
+    title: 'Cigar',
+    href: '/danh-muc/cigar',
   },
 ];
 
@@ -38,7 +34,7 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
   if (!image) return null;
 
   return (
-    <Link href={card.href} className="group relative block aspect-[4/3] overflow-hidden text-white rounded-lg">
+    <Link href={card.href} className="group relative block aspect-[4/3] overflow-hidden rounded-lg">
         <Image
           src={image.imageUrl}
           alt={card.title}
@@ -47,20 +43,6 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
           data-ai-hint={image.imageHint}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-end p-8">
-            {card.subtitle && <p className="text-xs font-bold uppercase tracking-widest text-white/90">{card.subtitle}</p>}
-            <h3 className="mt-2 font-headline text-3xl font-black uppercase">
-                {card.title}
-            </h3>
-            <Button
-              asChild
-              variant="outline"
-              className="mt-6 w-fit rounded-none border-2 border-white bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-white hover:text-black"
-            >
-              <span>Khám Phá Sản Phẩm</span>
-            </Button>
-        </div>
     </Link>
   );
 }
