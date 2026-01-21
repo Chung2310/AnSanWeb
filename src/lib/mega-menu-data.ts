@@ -45,3 +45,17 @@ export const wineMegaMenuData = {
         { label: "Zinfandel", slug: "zinfandel", category_id: "zinfandel" },
     ],
 };
+
+export const spiritsMegaMenuData = {
+    theoLoai: [
+        { label: 'Whisky', slug: 'scotch-whisky', category_id: 'scotch' },
+    ],
+    thuongHieu: [
+        { label: "Ballantine's Finest", slug: 'ballantines-finest', category_id: 'ballantines' },
+        { label: 'John Walker', slug: 'john-walker', category_id: 'john-walker' },
+        { label: 'Mortlach', slug: 'mortlach', category_id: 'mortlach' },
+        { label: 'Chivas', slug: 'chivas', category_id: 'chivas' },
+        { label: 'Royal Salute', slug: 'royal-salute', category_id: 'royal-salute' },
+        { label: 'The Singleton', slug: 'the-singleton', category_id: 'singleton' },
+    ],
+};
