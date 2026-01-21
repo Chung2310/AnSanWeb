@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -16,48 +15,49 @@ interface PriceCategory {
   href: string;
 }
 
-// Tạm thời dùng chung 1 ảnh cho tất cả category
-// Bạn sẽ cập nhật src riêng cho từng cái sau
-const TEMP_IMAGE_SRC = '/images/homepage/Chivas.png';
-
 const priceCategories: PriceCategory[] = [
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965642/Baner_r%C6%B0%E1%BB%A3u_web-06_und4dc.jpg",
         title: 'Vang Đức',
         href: '/danh-muc/ruou-vang/vang-duc',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965639/Baner_r%C6%B0%E1%BB%A3u_web-07_enldf1.jpg",
         title: 'Vang Nga',
         href: '/danh-muc/ruou-vang/vang-nga',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965639/Baner_r%C6%B0%E1%BB%A3u_web-04_lwieht.jpg",
         title: 'Vang Pháp',
         href: '/danh-muc/ruou-vang/vang-phap',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965639/Baner_r%C6%B0%E1%BB%A3u_web-05_vq3ezy.jpg",
         title: 'Vang Tây Ban Nha',
         href: '/danh-muc/ruou-vang/vang-tay-ban-nha',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965637/R%C6%B0%E1%BB%A3u_bestchoise-01_3_g5resg.jpg",
         title: 'Vang Ý',
         href: '/danh-muc/ruou-vang/vang-y',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965638/Baner_r%C6%B0%E1%BB%A3u_web-08_z67cs4.jpg",
+        title: 'Vang Úc',
+        href: '/danh-muc/ruou-vang/vang-uc',
+    },
+    {
+        src: '/images/homepage/Chivas.png',
         title: 'Chivas Series',
         href: '/danh-muc/ruou-manh/chivas',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: '/images/homepage/Chivas.png',
         title: 'John Walker Series',
         href: '/danh-muc/ruou-manh/john-walker',
     },
     {
-        src: TEMP_IMAGE_SRC,
+        src: '/images/homepage/Chivas.png',
         title: 'Rượu mạnh khác',
         href: '/danh-muc/ruou-manh',
     }
