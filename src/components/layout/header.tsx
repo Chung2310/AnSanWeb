@@ -229,7 +229,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                   : isCurrentPage
                   ? 'text-primary-foreground font-bold'
                   : 'text-primary-foreground/80',
-                'hover:text-primary-foreground'
+                !isMenuOpen && 'hover:text-primary-foreground'
             )}
         >
           {label}
