@@ -32,7 +32,7 @@ const heroSlides = [
         description: 'Rượu vang nhập khẩu chính hãng\n\n Tinh tuyển từ các vùng vang danh tiếng thế giới, phân phối bởi Rượu vang An San',
     },
     {
-        imageId: 'hero-tet-gift',
+        imageId: 'hero-tet-gift-2',
         label: 'QUÀ TẾT',
         title: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
@@ -100,7 +100,7 @@ export default function HeroSection() {
                                             src={image.imageUrl}
                                             alt={image.description}
                                             fill
-                                            className="object-cover"
+                                            className="object-contain"
                                             sizes="100vw"
                                             priority={isActive}
                                             data-ai-hint={image.imageHint}
