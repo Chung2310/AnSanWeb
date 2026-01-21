@@ -39,7 +39,13 @@
     {
       "id": "hero-tet-gift",
       "description": "AnSan Tet Gift promotional banner",
-      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768899296/Banner_4_ds55j7.png",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768962924/Gemini_Generated_Image_lpkp9alpkp9alpkp_meivxt.png",
+      "imageHint": "tet gift set"
+    },
+    {
+      "id": "hero-tet-gift-2",
+      "description": "AnSan Tet Gift promotional banner",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768962924/Gemini_Generated_Image_lpkp9alpkp9alpkp_meivxt.png",
       "imageHint": "tet gift set"
     },
     {
@@ -107,90 +113,6 @@
       "description": "The Macallan 25 Year Old Sherry Oak Single Malt Scotch Whisky with its wooden box on a white pedestal against a red-brown background.",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768961468/R%C6%B0%E1%BB%A3u_bestchoise-05_iojkaj.jpg",
       "imageHint": "macallan whisky"
-    },
-    {
-      "id": "price-category-50",
-      "description": "Whisky bottle and box for under 50 million category",
-      "imageUrl": "/images/whisky/whisky_duoi_20_banner_1.webp",
-      "imageHint": "hibiki whisky"
-    },
-    {
-      "id": "price-category-20",
-      "description": "Whisky bottle on a pedestal for under 20 million category",
-      "imageUrl": "/images/whisky/whisky_duoi_10_banner_1.webp",
-      "imageHint": "whisky bottle"
-    },
-    {
-      "id": "price-category-10",
-      "description": "A different whisky bottle for under 10 million category",
-      "imageUrl": "/images/whisky/whisky_duoi_6_banner_1.webp",
-      "imageHint": "premium whisky"
-    },
-    {
-      "id": "price-category-5",
-      "description": "A whisky bottle for a lower price category",
-      "imageUrl": "/images/whisky/whisky_duoi_4_banner-1.webp",
-      "imageHint": "affordable whisky"
-    },
-    {
-      "id": "gift-set-tasting",
-      "description": "Hands holding The Lakes Whiskymaker's Editions tasting set box.",
-      "imageUrl": "/images/Banner 4.webp",
-      "imageHint": "whisky tasting set"
-    },
-    {
-      "id": "gift-set-lakes-tet",
-      "description": "The Lakes Single Malt whisky gift set with a red box.",
-      "imageUrl": "/images/Banner 4.webp",
-      "imageHint": "whisky gift set"
-    },
-    {
-      "id": "engraving-banner",
-      "description": "Personalised engraving on a wine bottle, saying Congratulations.",
-      "imageUrl": "/images/engraving.webp",
-      "imageHint": "bottle engraving"
-    },
-    {
-      "id": "quiz-flavor-fruit",
-      "description": "Colorful display of various fruits.",
-      "imageUrl": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcnVpdHN8ZW58MHx8fHwxNzY3NjAwMTQ2fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "fruits"
-    },
-    {
-      "id": "quiz-flavor-smoke",
-      "description": "Wisps of aromatic smoke.",
-      "imageUrl": "https://images.unsplash.com/photo-1602410086232-0cdfb78b434f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbW9rZXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "smoke"
-    },
-    {
-      "id": "quiz-flavor-grain",
-      "description": "Handful of mixed grains.",
-      "imageUrl": "https://images.unsplash.com/photo-1615485500710-aa71300612aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3JhaW5zfGVufDB8fHx8MTc2NzU1Njg4MHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "grains"
-    },
-    {
-      "id": "quiz-flavor-wood",
-      "description": "Stack of oak wood logs.",
-      "imageUrl": "https://images.unsplash.com/photo-1544840280-80e54213dfdc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d29vZHxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "wood"
-    },
-    {
-      "id": "quiz-flavor-leather",
-      "description": "Close-up of a leather texture.",
-      "imageUrl": "https://images.unsplash.com/photo-1573227896778-8f378c4029d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyfGVufDB8fHx8MTc2NzYwMDE0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "leather"
-    },
-    {
-      "id": "quiz-flavor-candy",
-      "description": "Assortment of colorful candies.",
-      "imageUrl": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW5keXxlbnwwfHx8fDE3Njc2MDAxNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "candy"
-    },
-    {
-      "id": "banner-campbeltown",
-      "description": "Springbank 27 Year Old whisky bottle and box.",
-      "imageUrl": "/images/banner/campbeltown.jpg",
-      "imageHint": "springbank whisky"
     },
     {
       "id": "banner-japanese-whisky",
@@ -335,6 +257,42 @@
       "description": "Glass of whisky",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768959314/Whisky_ifvtmd.jpg",
       "imageHint": "whisky"
+    },
+    {
+      "id": "cigar-gift-set",
+      "description": "A set of premium cigars in a gift box.",
+      "imageUrl": "https://images.unsplash.com/photo-1599039340578-19b883f3a09a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaWdhciUyMGdpZnQlMjBib3h8ZW58MHx8fHwxNzY4OTY1MDAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cigar gift box"
+    },
+    {
+      "id": "engraving-banner",
+      "description": "An engraved whisky bottle for promotional banner.",
+      "imageUrl": "https://images.unsplash.com/photo-1569529462445-932135d45023?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "engraved bottle"
+    },
+    {
+      "id": "price-category-5",
+      "description": "A collection of affordable whiskies.",
+      "imageUrl": "https://images.unsplash.com/photo-1511518333335-bab743a41151?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "whisky bottles"
+    },
+    {
+      "id": "price-category-10",
+      "description": "Mid-range premium whisky bottles.",
+      "imageUrl": "https://images.unsplash.com/photo-1619451151324-c1055726715b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "premium whisky"
+    },
+    {
+      "id": "price-category-20",
+      "description": "High-end collection of whisky.",
+      "imageUrl": "https://images.unsplash.com/photo-1608885828475-b6d25c9b9a4c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "rare whisky"
+    },
+    {
+      "id": "price-category-50",
+      "description": "A very exclusive and rare bottle of whisky.",
+      "imageUrl": "https://images.unsplash.com/photo-1619451151324-c1055726715b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "exclusive whisky"
     }
   ]
 }
