@@ -35,7 +35,7 @@ export default function Footer() {
                     <h3 className="font-bold uppercase tracking-wider text-base">HỘ KINH DOANH NGÔ QUANG HÙNG</h3>
                     <div className="space-y-2 text-gray-700">
                         <p><span className='font-semibold'>Người đại diện:</span> Ngô Quang Hùng</p>
-                        <p><span className='font-semibold'>Địa chỉ:</span> Công viên Quy Chế, Từ Sơn, Bắc Ninh</p>
+                        <p><span className='font-semibold'>Địa chỉ:</span> Vườn Hoa, Ngõ Quy Chế, TX. Từ Sơn, Bắc Ninh</p>
                         <p><span className='font-semibold'>Hotline:</span> 0933.333.313</p>
                         <p><span className='font-semibold'>Email:</span> ruouvangansan@gmail.com</p>
                     </div>
