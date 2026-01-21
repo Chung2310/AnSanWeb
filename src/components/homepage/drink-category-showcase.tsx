@@ -32,11 +32,6 @@ const drinkCategories = [
         imageId: 'drink-cat-whisky',
         href: '/danh-muc/ruou-manh',
     },
-    {
-        title: 'LY - DECANTER',
-        imageId: 'drink-cat-decanter',
-        href: '/danh-muc/ly-coc-pha-le',
-    },
 ];
 
 const getImage = (id: string) => {
