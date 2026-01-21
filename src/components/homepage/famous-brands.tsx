@@ -25,7 +25,7 @@ export default function FamousBrands() {
   const [count, setCount] = useState(0)
   
   const plugin = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 2000, stopOnInteraction: false })
   )
 
   const ref = useRef(null);
@@ -80,8 +80,6 @@ export default function FamousBrands() {
           setApi={setApi}
           className="w-full mt-12"
           plugins={[plugin.current]}
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
           opts={{
             align: "start",
             loop: true,
