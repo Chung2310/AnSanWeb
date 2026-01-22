@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -192,6 +193,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const isHydrated = useHydration();
 
   const handleOpenMenu = () => {
     if (timerRef.current) {
@@ -222,7 +224,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   }, []);
   
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
-  const isMenuOpen = isOpen && hasDropdown;
+  const isMenuOpen = isHydrated && isOpen && hasDropdown;
   const isCurrentPage = pathname === href || (href !== '/' && pathname.startsWith(href));
   
   return (
@@ -251,7 +253,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         {hasDropdown && (
             <MegaMenu 
                 columns={megaMenuColumns}
-                isOpen={isOpen}
+                isOpen={isMenuOpen}
                 onMouseEnter={handleOpenMenu}
                 onMouseLeave={handleCloseMenu}
                 onLinkClick={handleImmediateClose}
