@@ -145,7 +145,6 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
     onMouseLeave: () => void;
     onLinkClick: () => void;
 }) => {
-    const isHydrated = useHydration();
     if (!columns || columns.length === 0) return null;
     
     return (
@@ -155,7 +154,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
                 "transition-all duration-150 ease-in-out transform",
-                (isHydrated && isOpen) ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
@@ -254,7 +253,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         {hasDropdown && (
             <MegaMenu 
                 columns={megaMenuColumns}
-                isOpen={isOpen}
+                isOpen={isMenuOpen}
                 onMouseEnter={handleOpenMenu}
                 onMouseLeave={handleCloseMenu}
                 onLinkClick={handleImmediateClose}
@@ -323,111 +322,108 @@ export default function Header() {
                 </Link>
             </div>
             
-            {isHydrated && (
-              <>
-                <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
-                </div>
+            <div className="flex-1 flex justify-end">
+              {isHydrated && (
+                  <div className="lg:hidden">
+                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                      <SheetTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <Menu className="h-6 w-6" />
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent side="right" className="w-full max-w-[400px] bg-white p-0">
+                          <div className="p-6 flex flex-col h-full">
+                              <SheetHeader className="sr-only">
+                                <SheetTitle>Main Menu</SheetTitle>
+                                <SheetDescription>Main navigation links for the website.</SheetDescription>
+                              </SheetHeader>
+                              <div className="mb-6">
+                                <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
+                              </div>
+                              
+                              <form onSubmit={handleSearch} className="relative w-full mb-6">
+                                  <Input 
+                                    type="text" 
+                                    placeholder="Tìm kiếm" 
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
+                                  />
+                                  <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                    <Search className="h-5 w-5 text-gray-500" />
+                                  </button>
+                              </form>
 
-                <div className="lg:hidden flex-1 flex justify-end">
-                  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Menu className="h-6 w-6" />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="right" className="w-full max-w-[400px] bg-white p-0">
-                        <div className="p-6 flex flex-col h-full">
-                            <SheetHeader className="sr-only">
-                              <SheetTitle>Main Menu</SheetTitle>
-                              <SheetDescription>Main navigation links for the website.</SheetDescription>
-                            </SheetHeader>
-                            <div className="mb-6">
-                              <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
-                            </div>
-                            
-                            <form onSubmit={handleSearch} className="relative w-full mb-6">
-                                <Input 
-                                  type="text" 
-                                  placeholder="Tìm kiếm" 
-                                  value={searchQuery}
-                                  onChange={(e) => setSearchQuery(e.target.value)}
-                                  className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
-                                />
-                                <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                                  <Search className="h-5 w-5 text-gray-500" />
-                                </button>
-                            </form>
+                              <Accordion type="multiple" className="w-full flex-grow">
+                                  {staticNavLinks.map(link => {
+                                      const mainContent = (
+                                          <Link 
+                                              href={link.href} 
+                                              onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
+                                              className="flex-1 py-3 font-semibold uppercase text-gray-800"
+                                          >
+                                              {link.label}
+                                          </Link>
+                                      );
+                                      
+                                      if(link.megaMenuColumns) {
+                                          return (
+                                              <AccordionItem value={link.label} key={link.href}>
+                                                  <AccordionTrigger className="hover:no-underline py-0">
+                                                      {mainContent}
+                                                  </AccordionTrigger>
+                                                  <AccordionContent className="pl-4 pb-0">
+                                                      {link.href && (
+                                                          <Link href={link.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-bold uppercase text-gray-700 border-b">
+                                                              Tất cả {link.label}
+                                                          </Link>
+                                                      )}
+                                                      <Accordion type="multiple" className="w-full">
+                                                          {link.megaMenuColumns.map(column => {
+                                                              if (column.items.length === 0 && column.href) {
+                                                                  return (
+                                                                      <Link key={column.title} href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-semibold uppercase text-gray-800 border-b">
+                                                                          {column.title}
+                                                                      </Link>
+                                                                  )
+                                                              }
+                                                              return (
+                                                                  <AccordionItem value={column.title} key={column.title}>
+                                                                      <AccordionTrigger>{column.title}</AccordionTrigger>
+                                                                      <AccordionContent className="pl-4">
+                                                                          {column.href && (
+                                                                              <Link href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground font-bold hover:text-primary">
+                                                                                  Tất cả {column.title}
+                                                                              </Link>
+                                                                          )}
+                                                                          {column.items.map(item => (
+                                                                              <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
+                                                                                  {item.label}
+                                                                              </Link>
+                                                                          ))}
+                                                                      </AccordionContent>
+                                                                  </AccordionItem>
+                                                              )
+                                                          })}
+                                                      </Accordion>
+                                                  </AccordionContent>
+                                              </AccordionItem>
+                                          )
+                                      }
 
-                             <Accordion type="multiple" className="w-full flex-grow">
-                                {staticNavLinks.map(link => {
-                                    const mainContent = (
-                                        <Link 
-                                            href={link.href} 
-                                            onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
-                                            className="flex-1 py-3 font-semibold uppercase text-gray-800"
-                                        >
-                                            {link.label}
-                                        </Link>
-                                    );
-                                    
-                                    if(link.megaMenuColumns) {
-                                        return (
-                                            <AccordionItem value={link.label} key={link.href}>
-                                                <AccordionTrigger className="hover:no-underline py-0">
-                                                    {mainContent}
-                                                </AccordionTrigger>
-                                                <AccordionContent className="pl-4 pb-0">
-                                                    {link.href && (
-                                                        <Link href={link.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-bold uppercase text-gray-700 border-b">
-                                                            Tất cả {link.label}
-                                                        </Link>
-                                                    )}
-                                                    <Accordion type="multiple" className="w-full">
-                                                        {link.megaMenuColumns.map(column => {
-                                                            if (column.items.length === 0 && column.href) {
-                                                                return (
-                                                                    <Link key={column.title} href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-semibold uppercase text-gray-800 border-b">
-                                                                        {column.title}
-                                                                    </Link>
-                                                                )
-                                                            }
-                                                            return (
-                                                                <AccordionItem value={column.title} key={column.title}>
-                                                                    <AccordionTrigger>{column.title}</AccordionTrigger>
-                                                                    <AccordionContent className="pl-4">
-                                                                        {column.href && (
-                                                                            <Link href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground font-bold hover:text-primary">
-                                                                                Tất cả {column.title}
-                                                                            </Link>
-                                                                        )}
-                                                                        {column.items.map(item => (
-                                                                            <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
-                                                                                {item.label}
-                                                                            </Link>
-                                                                        ))}
-                                                                    </AccordionContent>
-                                                                </AccordionItem>
-                                                            )
-                                                        })}
-                                                    </Accordion>
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        )
-                                    }
-
-                                    return <div className="border-b" key={link.href}>{mainContent}</div>
-                                })}
-                             </Accordion>
-                        </div>
-                    </SheetContent>
-                  </Sheet>
-                </div>
-              </>
-            )}
+                                      return <div className="border-b" key={link.href}>{mainContent}</div>
+                                  })}
+                              </Accordion>
+                          </div>
+                      </SheetContent>
+                    </Sheet>
+                  </div>
+              )}
+            </div>
         </div>
       </div>
 
-      <nav className="bg-primary relative">
+      <nav className="bg-primary relative hidden lg:flex">
             <div className="container relative flex h-14 items-center justify-center gap-x-2">
                 {staticNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
             </div>
@@ -435,4 +431,3 @@ export default function Header() {
     </header>
   );
 }
-
