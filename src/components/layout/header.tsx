@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -71,9 +70,7 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại rượu',
-                items: [
-                    { href: '/danh-muc/scotch-whisky', label: 'Whisky' },
-                ]
+                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Thương hiệu',
@@ -155,8 +152,8 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             onMouseLeave={onMouseLeave}
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
-                "transition-opacity duration-300 ease-in-out",
-                isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                "transition-all duration-300 ease-in-out transform",
+                isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
