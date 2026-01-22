@@ -152,7 +152,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             onMouseLeave={onMouseLeave}
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
-                "transition-all duration-300 ease-in-out transform",
+                "transition-all duration-200 ease-in-out transform",
                 isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
             )}
         >
@@ -203,7 +203,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const handleCloseMenu = () => {
     timerRef.current = setTimeout(() => {
         setIsOpen(false);
-    }, 300);
+    }, 150);
   };
 
   const handleImmediateClose = () => {
