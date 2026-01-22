@@ -145,6 +145,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
     onMouseLeave: () => void;
     onLinkClick: () => void;
 }) => {
+    const isHydrated = useHydration();
     if (!columns || columns.length === 0) return null;
     
     return (
@@ -153,8 +154,8 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             onMouseLeave={onMouseLeave}
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
-                "transition-all duration-200 ease-in-out transform",
-                isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                "transition-all duration-150 ease-in-out transform",
+                (isHydrated && isOpen) ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
@@ -253,7 +254,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
         {hasDropdown && (
             <MegaMenu 
                 columns={megaMenuColumns}
-                isOpen={isMenuOpen}
+                isOpen={isOpen}
                 onMouseEnter={handleOpenMenu}
                 onMouseLeave={handleCloseMenu}
                 onLinkClick={handleImmediateClose}
@@ -434,3 +435,4 @@ export default function Header() {
     </header>
   );
 }
+
