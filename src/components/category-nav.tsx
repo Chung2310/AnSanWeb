@@ -32,6 +32,11 @@ const mainCategoriesConfig = [
         slug: "cigar",
         href: "/danh-muc/cigar",
     },
+    {
+        label: "Ly & Cốc Pha Lê",
+        slug: "ly-coc-pha-le",
+        href: '/danh-muc/ly-coc-pha-le',
+    },
     { 
         label: "Bộ Quà Tặng", 
         slug: "bo-qua-tang", 
