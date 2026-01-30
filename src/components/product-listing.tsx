@@ -38,16 +38,19 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
     let filtered = [...initialProducts];
 
-    // Price range filtering
-    const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
-        const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
-        return option?.value;
-    }).filter(Boolean);
+    const categoryFilters = activeFilters["DANH MỤC"];
+        
+    if (categoryFilters && categoryFilters.length > 0) {
+        const categoryIdsToFilter = categoryFilters.map(label => {
+            const option = (SidebarFilter.staticFiltersData["DANH MỤC"] || []).find(o => o.label === label);
+            return option?.value;
+        }).filter((value): value is string => !!value);
 
-    if (priceRanges && priceRanges.length > 0) {
-        filtered = filtered.filter(p => 
-            priceRanges.some(range => range && p.price >= range[0] && p.price < range[1])
-        );
+        if (categoryIdsToFilter.length > 0) {
+            filtered = filtered.filter(p => 
+                p.tags?.some(tag => categoryIdsToFilter.includes(tag))
+            );
+        }
     }
     
     return filtered;
