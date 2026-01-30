@@ -36,10 +36,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
 
   const filteredProducts = useMemo(() => {
-    if (Object.keys(activeFilters).length === 0) {
-      return initialProducts;
-    }
-
     let filtered = [...initialProducts];
 
     const categoryFilters = activeFilters["DANH MỤC"];
@@ -80,7 +76,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         products.sort((a, b) => a.price - b.price);
         break;
       case "GIÁ GIẢM DẦN":
-        products.sort((a, b) => b.price - a.price);
+        products.sort((a, b) => b.price - b.price);
         break;
       case "MỚI NHẤT":
         products.sort((a, b) => {
@@ -160,7 +156,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               </div>
             </div>
             {paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6">
                     {paginatedProducts.map((product) => (
                         <WineCard key={product.id} product={product} />
                     ))}
