@@ -34,68 +34,56 @@ export default function WineCard({ product }: WineCardProps) {
   const badgeText = product.bestChoice ? 'Best Choice' : product.isFeatured ? 'Nổi Bật' : null;
 
   return (
-    <div className="relative group w-full rounded-lg bg-white p-6 border transition-shadow hover:shadow-lg">
+    <div className="bg-white border rounded-lg p-4 flex flex-col h-full group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
       
-      {badgeText && (
-         <div className="absolute top-4 left-4 z-10 rounded-md bg-primary px-2 py-1 text-xs font-semibold uppercase text-primary-foreground">
-            {badgeText}
-        </div>
-      )}
+      <Link href={`/san-pham/${product.slug}`} className="block relative w-full h-48 mb-4">
+        {badgeText && (
+          <div className="absolute top-0 left-0 z-10 rounded-br-lg bg-primary px-2 py-1 text-xs font-semibold uppercase text-primary-foreground">
+              {badgeText}
+          </div>
+        )}
+        <Image
+          src={product.image?.url || '/placeholder.svg'}
+          alt={product.nameVN}
+          fill
+          className="object-contain drop-shadow-lg group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+        />
+      </Link>
 
-      {/* Top Section: Image + Specs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center border-b pb-6 mb-6">
-        {/* Image Column */}
-        <div className="md:col-span-1 flex items-center justify-center">
-            <Link href={`/san-pham/${product.slug}`} className="block w-full">
-                <div className="aspect-[3/4] w-full max-w-[150px] mx-auto relative">
-                    <Image
-                    src={product.image?.url || '/placeholder.svg'}
-                    alt={product.nameVN}
-                    fill
-                    className="object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 50vw, 15vw"
-                    />
-                </div>
-            </Link>
-        </div>
-        
-        {/* Specs Column */}
-        <div className="md:col-span-2 flex flex-col justify-center space-y-3 text-sm font-medium">
-             {grape && <div className="flex items-center gap-3 text-primary"><Grape className="h-5 w-5"/><span>{grape}</span></div>}
-             {wineType && <div className="flex items-center gap-3 text-primary"><Wine className="h-5 w-5"/><span>{wineType}</span></div>}
-             {brand && <div className="flex items-center gap-3 text-primary"><Home className="h-5 w-5"/><span>{brand}</span></div>}
-             {country && <div className="flex items-center gap-3 text-primary"><Globe className="h-5 w-5"/><span>{country}</span></div>}
-             {abv && <div className="flex items-center gap-3 text-primary"><Percent className="h-5 w-5"/><span>{abv}</span></div>}
-        </div>
+      <div className="space-y-1.5 text-xs text-gray-500 mb-3">
+        {grape && <div className="flex items-center gap-2 truncate"><Grape size={14} className="text-primary/70 shrink-0" /><span>{grape}</span></div>}
+        {wineType && <div className="flex items-center gap-2 truncate"><Wine size={14} className="text-primary/70 shrink-0"/><span>{wineType}</span></div>}
+        {brand && <div className="flex items-center gap-2 truncate"><Home size={14} className="text-primary/70 shrink-0"/><span>{brand}</span></div>}
+        {country && <div className="flex items-center gap-2 truncate"><Globe size={14} className="text-primary/70 shrink-0"/><span>{country}</span></div>}
+        {abv && <div className="flex items-center gap-2 truncate"><Percent size={14} className="text-primary/70 shrink-0"/><span>{abv}</span></div>}
       </div>
 
-      {/* Bottom Section: Info & Action */}
-      <div>
+      <div className="flex-grow">
         <Link href={`/san-pham/${product.slug}`}>
-            <h3 className="font-headline text-xl font-bold leading-tight text-primary hover:text-primary/80 transition-colors">
+            <h3 className="font-headline font-bold text-base leading-snug text-primary group-hover:text-primary/80 transition-colors line-clamp-2" title={product.nameVN}>
                 {product.nameVN}
             </h3>
         </Link>
-        
-        {product.shortDescription && <p className="mt-2 text-sm text-gray-600 line-clamp-3">{product.shortDescription}</p>}
-      
-        <div className="mt-4 flex items-end justify-between gap-4">
-            <div>
-                <p className="text-2xl font-bold text-red-600">
-                    {formatPrice(product.price)}
-                    {product.priceDescription && <span className="ml-1 text-sm font-normal text-gray-500">{product.priceDescription}</span>}
+        {product.shortDescription && <p className="mt-2 text-xs text-gray-500 line-clamp-2">{product.shortDescription}</p>}
+      </div>
+
+      <div className="mt-4 pt-4 border-t flex items-center justify-between">
+        <div className='flex flex-col'>
+            <p className="text-base font-bold text-red-600 leading-tight">
+              {formatPrice(product.price)}
+              {product.priceDescription && <span className="ml-1 text-xs font-normal text-gray-500">{product.priceDescription}</span>}
+            </p>
+            {product.secondaryPrice && (
+                <p className="text-xs font-bold text-red-600/80 leading-tight">
+                {formatPrice(product.secondaryPrice)}
+                {product.secondaryPriceDescription && <span className="ml-1 text-xs font-normal text-gray-500">{product.secondaryPriceDescription}</span>}
                 </p>
-                {product.secondaryPrice && (
-                    <p className="text-sm font-bold text-red-600/80">
-                    {formatPrice(product.secondaryPrice)}
-                    {product.secondaryPriceDescription && <span className="ml-1 text-sm font-normal text-gray-500">{product.secondaryPriceDescription}</span>}
-                    </p>
-                )}
-            </div>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase rounded-sm whitespace-nowrap shrink-0">
-                Thêm vào giỏ hàng
-            </Button>
+            )}
         </div>
+        <Button size="sm" className="bg-primary text-xs font-bold uppercase rounded-sm h-9 px-3">
+            Thêm vào giỏ
+        </Button>
       </div>
     </div>
   );
