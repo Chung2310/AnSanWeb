@@ -58,9 +58,10 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
 interface SidebarFilterProps {
     products: Product[];
     onFilterChange: (activeFilters: ActiveFilters) => void;
+    isWineCategory?: boolean;
 }
 
-export default function SidebarFilter({ products, onFilterChange }: SidebarFilterProps) {
+export default function SidebarFilter({ products, onFilterChange, isWineCategory }: SidebarFilterProps) {
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
     // When products change (navigating to a new category), reset local filters
@@ -89,17 +90,22 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
 
     return (
         <div className="w-full">
-            {Object.entries(staticFiltersData).map(([groupTitle, options]) => (
-                 <FilterGroup
-                    key={groupTitle}
-                    title={groupTitle}
-                    options={options.map(opt => ({
-                        label: opt.label,
-                    }))}
-                    onFilterChange={handleFilterClick}
-                    activeFilters={activeFilters[groupTitle] || []}
-                />
-            ))}
+            {Object.entries(staticFiltersData).map(([groupTitle, options]) => {
+                if (groupTitle === "DANH MỤC" && !isWineCategory) {
+                    return null;
+                }
+                return (
+                    <FilterGroup
+                        key={groupTitle}
+                        title={groupTitle}
+                        options={options.map(opt => ({
+                            label: opt.label,
+                        }))}
+                        onFilterChange={handleFilterClick}
+                        activeFilters={activeFilters[groupTitle] || []}
+                    />
+                );
+            })}
         </div>
     );
 }

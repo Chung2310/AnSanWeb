@@ -24,6 +24,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
+  const isWineCategory = useMemo(() => {
+    return title.toLowerCase().includes('vang');
+  }, [title]);
+
   // Reset page to 1 when initialProducts change (i.e., category changes)
   useEffect(() => {
     setCurrentPage(1);
@@ -131,7 +135,11 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
-            <SidebarFilter products={initialProducts} onFilterChange={handleFilterChange} />
+            <SidebarFilter 
+              products={initialProducts} 
+              onFilterChange={handleFilterChange}
+              isWineCategory={isWineCategory}
+            />
           </div>
 
           <div className="lg:col-span-3">
