@@ -11,6 +11,13 @@ export type ActiveFilters = {
 };
 
 const staticFiltersData = {
+    "KHOẢNG GIÁ": [
+        { label: 'DƯỚI 5 TRĂM', value: [0, 500000] },
+        { label: '5 TRĂM - 1 TRIỆU', value: [500000, 1000000] },
+        { label: '1 - 2 TRIỆU', value: [1000000, 2000000] },
+        { label: '2 - 3 TRIỆU', value: [2000000, 3000000] },
+        { label: 'TRÊN 3 TRIỆU', value: [3000000, Infinity] },
+    ],
     "DANH MỤC": wineMegaMenuData.theoLoai.map(item => ({
         label: item.label,
         value: item.category_id,
@@ -19,7 +26,7 @@ const staticFiltersData = {
 
 const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
     title: string;
-    options: { label: string, count: number }[];
+    options: { label: string }[];
     onFilterChange: (group: string, value: string) => void;
     activeFilters: string[];
 }) => (
@@ -80,10 +87,6 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
         });
     };
 
-    const getCountForCategory = (categoryId: string) => {
-        return products.filter(p => p.tags?.includes(categoryId)).length;
-    };
-    
     return (
         <div className="w-full">
             {Object.entries(staticFiltersData).map(([groupTitle, options]) => (
@@ -92,7 +95,6 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
                     title={groupTitle}
                     options={options.map(opt => ({
                         label: opt.label,
-                        count: getCountForCategory(opt.value)
                     }))}
                     onFilterChange={handleFilterClick}
                     activeFilters={activeFilters[groupTitle] || []}

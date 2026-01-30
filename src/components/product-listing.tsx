@@ -53,6 +53,18 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         }
     }
     
+    // Price range filtering
+    const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
+        const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
+        return option?.value;
+    }).filter(Boolean);
+
+    if (priceRanges && priceRanges.length > 0) {
+        filtered = filtered.filter(p => 
+            priceRanges.some(range => range && p.price >= (range as number[])[0] && p.price < (range as number[])[1])
+        );
+    }
+
     return filtered;
   }, [initialProducts, activeFilters]);
 
