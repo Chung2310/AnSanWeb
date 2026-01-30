@@ -4,19 +4,17 @@ import { useState, useMemo, useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { wineMegaMenuData } from "@/lib/mega-menu-data";
 
 export type ActiveFilters = {
   [key: string]: string[];
 };
 
 const staticFiltersData = {
-    "KHOẢNG GIÁ": [
-        { label: "DƯỚI 5 TRĂM", value: [0, 500000] },
-        { label: "5 TRĂM - 1 TRIỆU", value: [500000, 1000000] },
-        { label: "1 - 2 TRIỆU", value: [1000000, 2000000] },
-        { label: "2 - 3 TRIỆU", value: [2000000, 3000000] },
-        { label: "TRÊN 3 TRIỆU", value: [3000000, Infinity] },
-    ],
+    "DANH MỤC": wineMegaMenuData.theoLoai.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
 };
 
 const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
@@ -73,14 +71,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
         setActiveFilters(prev => {
             const currentGroupFilters = prev[group] || [];
             const isCurrentlyActive = currentGroupFilters.includes(value);
-            
-            // For price range, allow only one selection
-            if (group === "KHOẢNG GIÁ") {
-                 const newGroupFilters = isCurrentlyActive ? [] : [value];
-                 return { ...prev, [group]: newGroupFilters };
-            }
 
-            // For other filters, allow multiple selections
             const newGroupFilters = isCurrentlyActive
                 ? currentGroupFilters.filter(item => item !== value)
                 : [...currentGroupFilters, value];
@@ -89,9 +80,9 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
         });
     };
 
-    const getCountForPriceRange = (range: number[]) => {
-      return products.filter(p => p.price >= range[0] && p.price < range[1]).length;
-    }
+    const getCountForCategory = (categoryId: string) => {
+        return products.filter(p => p.tags?.includes(categoryId)).length;
+    };
     
     return (
         <div className="w-full">
@@ -101,7 +92,7 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
                     title={groupTitle}
                     options={options.map(opt => ({
                         label: opt.label,
-                        count: getCountForPriceRange(opt.value)
+                        count: getCountForCategory(opt.value)
                     }))}
                     onFilterChange={handleFilterClick}
                     activeFilters={activeFilters[groupTitle] || []}
