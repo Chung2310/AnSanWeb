@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useMemo, useEffect } from "react";
-import type { Product, Category } from "@/lib/types";
+import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useCategories } from "@/hooks/use-categories";
 
 export type ActiveFilters = {
   [key: string]: string[];
@@ -58,7 +57,6 @@ interface SidebarFilterProps {
 
 export default function SidebarFilter({ products, onFilterChange }: SidebarFilterProps) {
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-    const { categories: allCategories, isLoading: isLoadingCategories } = useCategories();
 
     // When products change (navigating to a new category), reset local filters
     useEffect(() => {
@@ -95,72 +93,8 @@ export default function SidebarFilter({ products, onFilterChange }: SidebarFilte
       return products.filter(p => p.price >= range[0] && p.price < range[1]).length;
     }
     
-    const dynamicCategoryFilter = useMemo(() => {
-        if (isLoadingCategories || !allCategories || products.length === 0) {
-            return null;
-        }
-
-        const productCategoryIds = new Set(products.flatMap(p => p.tags || []));
-        
-        let parentCategory: Category | undefined;
-        let potentialParents = allCategories.filter(c => !c.parentId && productCategoryIds.has(c.id));
-
-        if (potentialParents.length === 1) {
-            parentCategory = potentialParents[0];
-        } else if (potentialParents.length > 1) {
-             const parentCounts = potentialParents.map(p => {
-                const childIds = allCategories.filter(c => c.parentId === p.id).map(c => c.id);
-                const count = products.filter(prod => prod.tags?.some(t => childIds.includes(t))).length;
-                return { parent: p, count };
-             });
-             parentCategory = parentCounts.sort((a,b) => b.count - a.count)[0]?.parent;
-        } else {
-             const firstProductTags = products[0]?.tags;
-             if(firstProductTags && firstProductTags.length > 0) {
-                 const firstCat = allCategories.find(c => c.id === firstProductTags[0]);
-                 if (firstCat?.parentId) {
-                     parentCategory = allCategories.find(c => c.id === firstCat.parentId);
-                 }
-             }
-        }
-
-        if (!parentCategory) {
-            return null;
-        }
-        
-        const subCategories = allCategories.filter(c => c.parentId === parentCategory?.id);
-        if (subCategories.length === 0) return null;
-        
-        const getCountForSubCategory = (subCatId: string) => {
-             const descendantIds = (function getIds(id: string): string[] {
-                const children = allCategories.filter(c => c.parentId === id);
-                return [id, ...children.flatMap(c => getIds(c.id))];
-            })(subCatId);
-
-            return products.filter(p => p.tags?.some(tag => descendantIds.includes(tag))).length;
-        }
-
-
-        const options = subCategories.map(subCat => ({
-            label: subCat.name,
-            count: getCountForSubCategory(subCat.id),
-        }));
-
-        return (
-            <FilterGroup
-                title="Danh mục con"
-                options={options}
-                onFilterChange={handleFilterClick}
-                activeFilters={activeFilters["Danh mục con"] || []}
-            />
-        );
-
-    }, [products, allCategories, isLoadingCategories, activeFilters]);
-
     return (
         <div className="w-full">
-            {dynamicCategoryFilter}
-
             {Object.entries(staticFiltersData).map(([groupTitle, options]) => (
                  <FilterGroup
                     key={groupTitle}
