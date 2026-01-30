@@ -19,7 +19,7 @@ interface ProductListingProps {
     itemsPerPage?: number;
 }
 
-function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 18 }: ProductListingProps) {
+function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12 }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
@@ -76,7 +76,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         products.sort((a, b) => a.price - b.price);
         break;
       case "GIÁ GIẢM DẦN":
-        products.sort((a, b) => b.price - b.price);
+        products.sort((a, b) => b.price - a.price);
         break;
       case "MỚI NHẤT":
         products.sort((a, b) => {
@@ -156,7 +156,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               </div>
             </div>
             {paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {paginatedProducts.map((product) => (
                         <WineCard key={product.id} product={product} />
                     ))}
