@@ -3,12 +3,11 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
-import type { Product, Category } from "@/lib/types";
+import type { Product } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
 import { Paginator } from "./paginator";
-import { useCategories } from "@/hooks/use-categories";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -24,7 +23,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-  const { categories: allCategories } = useCategories();
 
   // Reset page to 1 when initialProducts change (i.e., category changes)
   useEffect(() => {
@@ -52,29 +50,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         );
     }
     
-    // Sub-category filtering
-    const selectedSubCategories = activeFilters["Danh mục con"];
-    if (selectedSubCategories && selectedSubCategories.length > 0 && allCategories) {
-        const selectedSubCategoryIds = allCategories
-            .filter(cat => selectedSubCategories.includes(cat.name))
-            .map(cat => cat.id);
-
-        if (selectedSubCategoryIds.length > 0) {
-          const getDescendantIds = (catId: string): string[] => {
-            const children = allCategories.filter(c => c.parentId === catId);
-            return [catId, ...children.flatMap(c => getDescendantIds(c.id))];
-          };
-          
-          const allFilterableIds = new Set(selectedSubCategoryIds.flatMap(getDescendantIds));
-            
-          filtered = filtered.filter(p => 
-              p.tags?.some(tagId => allFilterableIds.has(tagId))
-          );
-        }
-    }
-    
     return filtered;
-  }, [initialProducts, activeFilters, allCategories]);
+  }, [initialProducts, activeFilters]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
@@ -84,7 +61,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         products.sort((a, b) => a.price - b.price);
         break;
       case "GIÁ GIẢM DẦN":
-        products.sort((a, b) => b.price - b.price);
+        products.sort((a, b) => b.price - a.price);
         break;
       case "MỚI NHẤT":
         products.sort((a, b) => {
