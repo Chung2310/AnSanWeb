@@ -18,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['"Roboto"', 'sans-serif'],
-        headline: ['"Oswald"', 'sans-serif'],
+        headline: ['"Playfair Display"', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
