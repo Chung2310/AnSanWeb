@@ -1,3 +1,4 @@
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
@@ -9,12 +10,12 @@ import type { Category } from '@/lib/types';
 
 export default function ProductsPage() {
   const params = useParams();
-  // For a route like /danh-muc/ruou-vang/vang-y, slug will be ['ruou-vang', 'vang-y']
   const slugParts = (params.slug as string[]) || [];
 
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
 
+  // Find the target category by validating the full hierarchical slug path.
   const categoryInfo = useMemo(() => {
     if (!categories || slugParts.length === 0) return null;
 
@@ -22,21 +23,17 @@ export default function ProductsPage() {
     let foundCategory: Category | null = null;
 
     for (const slug of slugParts) {
-      // Find the category with the current slug and correct parent
       const category = categories.find(c => c.slug === slug && c.parentId === currentParentId);
       
       if (category) {
         foundCategory = category;
         currentParentId = category.id;
       } else {
-        // If any part of the path doesn't resolve, it's not a valid hierarchical URL.
-        // As a fallback for simple slugs, check if there's any category with the last slug.
-        const lastSlug = slugParts[slugParts.length - 1];
-        return categories.find(c => c.slug === lastSlug) || null;
+        // If any part of the path does not resolve, the entire path is invalid.
+        return null;
       }
     }
     
-    // The final category in the chain is our target
     return foundCategory;
   }, [categories, slugParts]);
 
@@ -44,22 +41,31 @@ export default function ProductsPage() {
   const pageTitle = categoryInfo ? categoryInfo.name : "Danh mục sản phẩm";
   const isLoading = isLoadingProducts || isLoadingCategories;
 
-  const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
-      const children = allCategories.filter(cat => cat.parentId === parentId);
-      let ids = children.map(cat => cat.id);
-      children.forEach(child => {
-          ids = [...ids, ...getDescendantIds(child.id, allCategories)];
-      });
-      return ids;
-  };
+  // Memoized function to get all descendant IDs for a given category.
+  const getDescendantIds = useMemo(() => {
+    const getIds = (parentId: string, allCategories: Category[]): string[] => {
+        const children = allCategories.filter(cat => cat.parentId === parentId);
+        let ids = children.map(cat => cat.id);
+        children.forEach(child => {
+            ids = [...ids, ...getIds(child.id, allCategories)];
+        });
+        return ids;
+    };
+    return getIds;
+  }, []);
 
   const filteredProducts = useMemo(() => {
     if (!products || !categories || !categoryInfo) return [];
 
-    const allCategoryIds = [categoryInfo.id, ...getDescendantIds(categoryInfo.id, categories)];
+    // Get the ID of the current category and all its descendants.
+    const descendantIds = getDescendantIds(categoryInfo.id, categories);
+    const allCategoryIds = [categoryInfo.id, ...descendantIds];
 
-    return products.filter(wine => wine.tags?.some(tag => allCategoryIds.includes(tag)));
-  }, [products, categories, categoryInfo]);
+    // Filter products that have at least one tag matching any of the category IDs.
+    return products.filter(wine => 
+      wine.tags?.some(tag => allCategoryIds.includes(tag))
+    );
+  }, [products, categories, categoryInfo, getDescendantIds]);
 
   if (isLoading) {
     return (
@@ -85,7 +91,7 @@ export default function ProductsPage() {
     )
   }
 
-  // After loading, if we couldn't find category info for the slug, it's a 404
+  // After loading, if we couldn't find a valid category for the slug, it's a 404.
   if (!isLoading && !categoryInfo) {
       notFound();
   }
