@@ -149,8 +149,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
     extensions: [
         StarterKit, 
         ImageExtension.configure({
-            inline: false, // Allows images to be on their own line
-            allowBase64: true, // This is important for pasting images
+            inline: false,
+            allowBase64: false, // Disable base64 to prevent large data URIs
         })
     ],
     content: value,
