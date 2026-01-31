@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Filter } from 'lucide-react';
+import { PlusCircle, Filter, Download } from 'lucide-react';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/use-products';
 import { DataTable } from '@/components/admin/products/data-table';
@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import type { Category } from '@/lib/types';
+import * as XLSX from 'xlsx';
 import {
   Select,
   SelectContent,
@@ -179,6 +180,54 @@ export default function ProductsAdminPage() {
 
   const isLoading = isLoadingProducts || isLoadingCategories;
   
+  const handleExport = () => {
+    if (!filteredProducts || filteredProducts.length === 0) {
+      alert("Không có dữ liệu để xuất.");
+      return;
+    }
+
+    const categoryMap = new Map(categories?.map(c => [c.id, c.name]));
+    
+    const allAttributeLabels = [...new Set(
+        filteredProducts.flatMap(p => p.attributes ? p.attributes.map(a => a.label) : [])
+    )];
+
+    const dataToExport = filteredProducts.map(product => {
+        const row: { [key: string]: any } = {
+            'ID': product.id,
+            'Tên sản phẩm': product.nameVN,
+            'Đường dẫn (slug)': product.slug,
+            'Giá': product.price,
+            'Mô tả giá': product.priceDescription,
+            'Giá phụ': product.secondaryPrice,
+            'Mô tả giá phụ': product.secondaryPriceDescription,
+            'Trạng thái': product.status === 'published' ? 'Đã xuất bản' : 'Bản nháp',
+            'Nổi bật': product.isFeatured ? 'Có' : 'Không',
+            'Sản phẩm mới': product.isNew ? 'Có' : 'Không',
+            'Lựa chọn tốt nhất': product.bestChoice ? 'Có' : 'Không',
+            'Danh mục': product.tags?.map(tagId => categoryMap.get(tagId) || tagId).join(', '),
+            'Mô tả ngắn': product.shortDescription,
+            'URL Ảnh bìa': product.image?.url,
+            'URL Ảnh chi tiết': product.detailImages?.map(img => img.url).join(', \n'),
+            'Ngày tạo': product.createdAt?.toDate ? product.createdAt.toDate().toISOString() : '',
+            // Description is often too long for a single cell, maybe omit or truncate
+            // 'Mô tả chi tiết': product.description,
+        };
+
+        allAttributeLabels.forEach(label => {
+            const attr = product.attributes?.find(a => a.label === label);
+            row[label] = attr ? attr.value : '';
+        });
+
+        return row;
+    });
+    
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sản phẩm");
+    XLSX.writeFile(workbook, "danh-sach-san-pham.xlsx");
+  };
+
   const handleWineFilterChange = (group: keyof WineFilters, tagId: string, checked: boolean) => {
     setWineFilters(prev => {
         const currentGroup = prev[group];
@@ -338,6 +387,11 @@ export default function ProductsAdminPage() {
                 </SheetContent>
               </Sheet>
             )}
+
+            <Button variant="outline" onClick={handleExport}>
+              <Download className="mr-2 h-4 w-4" />
+              Xuất Excel
+            </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
