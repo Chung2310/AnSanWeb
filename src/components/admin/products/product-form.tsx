@@ -49,7 +49,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useCategories } from '@/hooks/use-categories';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -144,6 +144,24 @@ const renderSpiritsMegaMenuSelectors = (control: Control<ProductFormValues>) => 
         <>
             {renderCheckboxGroup(control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
             {renderCheckboxGroup(control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
+        </>
+    );
+};
+
+const renderGlasswareMegaMenuSelectors = (control: Control<ProductFormValues>) => {
+    return (
+        <>
+            {renderCheckboxGroup(control, "Ly Pha Lê Riedel", glasswareMegaMenuData.lyPhaLeRiedel)}
+            {renderCheckboxGroup(control, "Ly Whisky", glasswareMegaMenuData.lyWhisky)}
+            {renderCheckboxGroup(control, "Loại khác", glasswareMegaMenuData.khac)}
+        </>
+    );
+};
+
+const renderGiftSetMegaMenuSelectors = (control: Control<ProductFormValues>) => {
+    return (
+        <>
+            {renderCheckboxGroup(control, "Loại quà tặng", giftSetMegaMenuData.quaTang)}
         </>
     );
 };
@@ -277,6 +295,58 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
       const currentTags = watchedTags || [];
       return currentTags.some(tagId => spiritCategoryIds.has(tagId));
   }, [spiritCategoryIds, watchedTags]);
+
+    const glasswareCategoryIds = useMemo(() => {
+    if (isLoadingCategories || !categories) return new Set<string>();
+    const glasswareCat = categories.find(c => c.slug === 'ly-coc-pha-le');
+    if (!glasswareCat) return new Set<string>();
+    
+    const allIds = new Set<string>();
+    const queue: string[] = [glasswareCat.id];
+    
+    while(queue.length > 0) {
+        const currentId = queue.shift()!;
+        if (!allIds.has(currentId)) {
+            allIds.add(currentId);
+            const children = categories.filter(c => c.parentId === currentId);
+            children.forEach(child => queue.push(child.id));
+        }
+    }
+    return allIds;
+  }, [categories, isLoadingCategories]);
+
+  const isGlasswareForm = useMemo(() => {
+      if (glasswareCategoryIds.size === 0) return false;
+      const currentTags = watchedTags || [];
+      return currentTags.some(tagId => glasswareCategoryIds.has(tagId));
+  }, [glasswareCategoryIds, watchedTags]);
+
+
+  const giftSetCategoryIds = useMemo(() => {
+    if (isLoadingCategories || !categories) return new Set<string>();
+    const giftSetCat = categories.find(c => c.slug === 'bo-qua-tang');
+    if (!giftSetCat) return new Set<string>();
+    
+    const allIds = new Set<string>();
+    const queue: string[] = [giftSetCat.id];
+    
+    while(queue.length > 0) {
+        const currentId = queue.shift()!;
+        if (!allIds.has(currentId)) {
+            allIds.add(currentId);
+            const children = categories.filter(c => c.parentId === currentId);
+            children.forEach(child => queue.push(child.id));
+        }
+    }
+    return allIds;
+  }, [categories, isLoadingCategories]);
+
+  const isGiftSetForm = useMemo(() => {
+      if (giftSetCategoryIds.size === 0) return false;
+      const currentTags = watchedTags || [];
+      return currentTags.some(tagId => giftSetCategoryIds.has(tagId));
+  }, [giftSetCategoryIds, watchedTags]);
+
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -592,6 +662,38 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                     <ScrollArea className="h-72">
                         <div className="pr-4">
                             {renderSpiritsMegaMenuSelectors(form.control)}
+                        </div>
+                    </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
+
+            {isGlasswareForm && (
+              <Card>
+                <CardHeader>
+                    <CardTitle>Phân loại Ly & Cốc</CardTitle>
+                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-72">
+                        <div className="pr-4">
+                            {renderGlasswareMegaMenuSelectors(form.control)}
+                        </div>
+                    </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
+
+            {isGiftSetForm && (
+              <Card>
+                <CardHeader>
+                    <CardTitle>Phân loại Bộ Quà Tặng</CardTitle>
+                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-72">
+                        <div className="pr-4">
+                            {renderGiftSetMegaMenuSelectors(form.control)}
                         </div>
                     </ScrollArea>
                 </CardContent>

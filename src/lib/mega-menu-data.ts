@@ -62,3 +62,27 @@ export const spiritsMegaMenuData = {
         { label: 'Hộp Quà', slug: 'hop-qua-ruou-manh', category_id: 'ruou-manh-hop-qua' },
     ]
 };
+
+export const glasswareMegaMenuData = {
+    lyPhaLeRiedel: [
+        { label: "Ly Vang Đỏ", slug: "ly-vang-do", category_id: "ly-vang-do" },
+        { label: "Ly Vang Trắng", slug: "ly-vang-trang", category_id: "ly-vang-trang" },
+        { label: "Ly Champagne", slug: "ly-champagne", category_id: "ly-champagne" },
+        { label: "Ly thủy tinh rẻ", slug: "ly-thuy-tinh-re", category_id: "ly-thuy-tinh-re" },
+    ],
+    lyWhisky: [
+        { label: "Ly Whisky", slug: "ly-whisky-item", category_id: "ly-whisky-item" },
+        { label: "Cốc Whisky", slug: "coc-whisky", category_id: "coc-whisky" },
+    ],
+    khac: [
+      { label: "Decanter/Bình Thở", slug: "decanter-binh-tho", category_id: "decanter-binh-tho" },
+    ]
+};
+
+export const giftSetMegaMenuData = {
+    quaTang: [
+        { label: "Quà Tết An San", slug: "qua-tet-an-san", category_id: "qua-tet-an-san" },
+        { label: "Quà Tết Rượu Vang", slug: "qua-tet-ruou-vang", category_id: "qua-tet-ruou-vang" },
+        { label: "Quà Tết Rượu Mạnh", slug: "qua-tet-ruou-manh", category_id: "qua-tet-ruou-manh" },
+    ]
+};
