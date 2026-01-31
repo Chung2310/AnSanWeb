@@ -185,43 +185,84 @@ export default function ProductsAdminPage() {
       alert("Không có dữ liệu để xuất.");
       return;
     }
-
+  
     const categoryMap = new Map(categories?.map(c => [c.id, c.name]));
     
+    const wineTagToGroupMap = new Map<string, string>();
+    const wineTagToLabelMap = new Map<string, string>();
+    for (const [groupKey, items] of Object.entries(wineMegaMenuData)) {
+      for (const item of items) {
+        wineTagToGroupMap.set(item.category_id, groupKey);
+        wineTagToLabelMap.set(item.category_id, item.label);
+      }
+    }
+  
+    const wineCategory = categories?.find(c => c.slug === 'ruou-vang');
+    const wineCategoryAndDescendantIds = new Set<string>();
+    if (wineCategory && categories) {
+      const descendantIds = getDescendantIds(wineCategory.id, categories);
+      wineCategoryAndDescendantIds.add(wineCategory.id);
+      descendantIds.forEach(id => wineCategoryAndDescendantIds.add(id));
+    }
+  
     const allAttributeLabels = [...new Set(
-        filteredProducts.flatMap(p => p.attributes ? p.attributes.map(a => a.label) : [])
+      filteredProducts.flatMap(p => p.attributes ? p.attributes.map(a => a.label) : [])
     )];
-
+  
     const dataToExport = filteredProducts.map(product => {
-        const row: { [key: string]: any } = {
-            'ID': product.id,
-            'Tên sản phẩm': product.nameVN,
-            'Đường dẫn (slug)': product.slug,
-            'Giá': product.price,
-            'Mô tả giá': product.priceDescription,
-            'Giá phụ': product.secondaryPrice,
-            'Mô tả giá phụ': product.secondaryPriceDescription,
-            'Trạng thái': product.status === 'published' ? 'Đã xuất bản' : 'Bản nháp',
-            'Nổi bật': product.isFeatured ? 'Có' : 'Không',
-            'Sản phẩm mới': product.isNew ? 'Có' : 'Không',
-            'Lựa chọn tốt nhất': product.bestChoice ? 'Có' : 'Không',
-            'Danh mục': product.tags?.map(tagId => categoryMap.get(tagId) || tagId).join(', '),
-            'Mô tả ngắn': product.shortDescription,
-            'URL Ảnh bìa': product.image?.url,
-            'URL Ảnh chi tiết': product.detailImages?.map(img => img.url).join(', \n'),
-            'Ngày tạo': product.createdAt?.toDate ? product.createdAt.toDate().toISOString() : '',
-            // Description is often too long for a single cell, maybe omit or truncate
-            // 'Mô tả chi tiết': product.description,
-        };
-
-        allAttributeLabels.forEach(label => {
-            const attr = product.attributes?.find(a => a.label === label);
-            row[label] = attr ? attr.value : '';
-        });
-
-        return row;
+      const isWineProduct = product.tags?.some(tag => wineCategoryAndDescendantIds.has(tag));
+      
+      const generalCategories: string[] = [];
+      const wineClassification = {
+        theoLoai: [] as string[],
+        theoQuocGia: [] as string[],
+        theoVung: [] as string[],
+        theoGiongNho: [] as string[],
+      };
+  
+      product.tags?.forEach(tagId => {
+        if (isWineProduct && wineTagToGroupMap.has(tagId)) {
+          const group = wineTagToGroupMap.get(tagId) as keyof typeof wineClassification;
+          const label = wineTagToLabelMap.get(tagId);
+          if (group && label) {
+            wineClassification[group].push(label);
+          }
+        } else if (categoryMap.has(tagId)) {
+          generalCategories.push(categoryMap.get(tagId)!);
+        }
+      });
+  
+      const row: { [key: string]: any } = {
+        'ID': product.id,
+        'Tên sản phẩm': product.nameVN,
+        'Đường dẫn (slug)': product.slug,
+        'Giá': product.price,
+        'Mô tả giá': product.priceDescription,
+        'Giá phụ': product.secondaryPrice,
+        'Mô tả giá phụ': product.secondaryPriceDescription,
+        'Trạng thái': product.status === 'published' ? 'Đã xuất bản' : 'Bản nháp',
+        'Nổi bật': product.isFeatured ? 'Có' : 'Không',
+        'Sản phẩm mới': product.isNew ? 'Có' : 'Không',
+        'Lựa chọn tốt nhất': product.bestChoice ? 'Có' : 'Không',
+        'Danh mục chung': generalCategories.join(', '),
+        'Loại rượu': isWineProduct ? wineClassification.theoLoai.join(', ') : '',
+        'Quốc gia': isWineProduct ? wineClassification.theoQuocGia.join(', ') : '',
+        'Vùng': isWineProduct ? wineClassification.theoVung.join(', ') : '',
+        'Giống nho': isWineProduct ? wineClassification.theoGiongNho.join(', ') : '',
+        'Mô tả ngắn': product.shortDescription,
+        'URL Ảnh bìa': product.image?.url,
+        'URL Ảnh chi tiết': product.detailImages?.map(img => img.url).join(', \n'),
+        'Ngày tạo': product.createdAt?.toDate ? product.createdAt.toDate().toISOString() : '',
+      };
+  
+      allAttributeLabels.forEach(label => {
+        const attr = product.attributes?.find(a => a.label === label);
+        row[label] = attr ? attr.value : '';
+      });
+  
+      return row;
     });
-    
+      
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sản phẩm");

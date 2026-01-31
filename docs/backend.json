@@ -16,6 +16,7 @@
         "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
         "isFeatured": { "type": "boolean", "description": "Indicates if the wine is featured." },
         "isNew": { "type": "boolean", "description": "Indicates if the wine is a new arrival." },
+        "bestChoice": { "type": "boolean", "description": "Indicates if the wine is a best choice." },
         "status": { "type": "string", "enum": ["published", "draft"] },
         "tags": { "type": "array", "items": { "type": "string" }, "description": "Holds the category IDs" },
         "attributes": { 
@@ -54,9 +55,10 @@
         "slug": { "type": "string" },
         "excerpt": { "type": "string" },
         "content": { "type": "string" },
-        "image": { "type": "object", "properties": { "imageUrl": { "type": "string" }, "path": { "type": "string" } } },
+        "image": { "type": "object", "properties": { "url": { "type": "string" }, "path": { "type": "string" } } },
         "author": { "type": "string" },
-        "categories": { "type": "array", "items": { "type": "string" } }
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "title", "slug", "excerpt", "author", "categories"]
     },
