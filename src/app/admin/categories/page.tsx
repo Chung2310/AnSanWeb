@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Filter, PlusCircle } from 'lucide-react';
@@ -20,10 +21,12 @@ import { useFirestore } from '@/firebase';
 import { collection, doc, writeBatch } from 'firebase/firestore';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const [filter, setFilter] = useState('all'); // 'all' or 'parents'
+    const [nameFilter, setNameFilter] = useState('');
     const firestore = useFirestore();
     const { toast } = useToast();
     const [isRestoring, setIsRestoring] = useState(false);
@@ -156,6 +159,14 @@ export default function CategoriesAdminPage() {
           <AccordionContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="space-y-4">
+                    <h4 className='font-semibold text-base border-b pb-2'>Tìm theo tên</h4>
+                     <Input 
+                        placeholder="Tên danh mục..."
+                        value={nameFilter}
+                        onChange={(e) => setNameFilter(e.target.value)}
+                    />
+                </div>
+                <div className="space-y-4">
                     <h4 className='font-semibold text-base border-b pb-2'>Hiển thị</h4>
                     <RadioGroup value={filter} onValueChange={setFilter} className="mt-3 space-y-2">
                         <div className="flex items-center space-x-2">
@@ -170,14 +181,17 @@ export default function CategoriesAdminPage() {
                 </div>
             </div>
             <div className="mt-6 flex justify-end">
-              <Button type="button" variant="secondary" onClick={() => setFilter('all')}>Xóa bộ lọc</Button>
+              <Button type="button" variant="secondary" onClick={() => {
+                  setFilter('all');
+                  setNameFilter('');
+              }}>Xóa bộ lọc</Button>
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
       
       <div className="mt-6">
-        <DataTable columns={memoizedColumns} data={filteredCategories || []} />
+        <DataTable columns={memoizedColumns} data={filteredCategories || []} nameFilter={nameFilter} />
       </div>
     </div>
   );

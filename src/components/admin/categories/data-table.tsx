@@ -24,7 +24,6 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Trash } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -46,11 +45,13 @@ import type { Category } from '@/lib/types';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  nameFilter?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  nameFilter,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -90,6 +91,10 @@ export function DataTable<TData, TValue>({
   });
 
   useEffect(() => {
+    table.getColumn('name')?.setFilterValue(nameFilter);
+  }, [nameFilter, table]);
+
+  useEffect(() => {
     const currentPageFromUrl = parseInt(page, 10);
     const tablePageIndex = table.getState().pagination.pageIndex + 1;
     if (currentPageFromUrl !== tablePageIndex) {
@@ -119,17 +124,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border bg-card">
-      <div className="flex items-center gap-4 p-4">
-        <Input
-          placeholder="Lọc danh mục..."
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        {table.getSelectedRowModel().flatRows.length > 0 && (
-             <AlertDialog>
+       {table.getSelectedRowModel().flatRows.length > 0 && (
+         <div className="p-4">
+            <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="destructive" disabled={isDeleting}>
                         <Trash className="mr-2 h-4 w-4" />
@@ -155,8 +152,8 @@ export function DataTable<TData, TValue>({
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        )}
-      </div>
+        </div>
+       )}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
