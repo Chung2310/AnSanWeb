@@ -48,7 +48,7 @@ export const wineMegaMenuData = {
 
 export const spiritsMegaMenuData = {
     theoLoai: [
-        { label: 'Whisky', slug: 'scotch-whisky', category_id: 'scotch' },
+        { label: 'Whisky', slug: 'whisky', category_id: 'scotch' },
     ],
     thuongHieu: [
         { label: "Ballantine's Finest", slug: 'ballantines-finest', category_id: 'ballantines' },
@@ -71,7 +71,7 @@ export const glasswareMegaMenuData = {
         { label: "Ly thủy tinh rẻ", slug: "ly-thuy-tinh-re", category_id: "ly-thuy-tinh-re" },
     ],
     lyWhisky: [
-        { label: "Ly Whisky", slug: "ly-whisky-item", category_id: "ly-whisky-item" },
+        { label: "Ly Whisky", slug: "ly-whisky", category_id: "ly-whisky-item" },
         { label: "Cốc Whisky", slug: "coc-whisky", category_id: "coc-whisky" },
     ],
     khac: [
