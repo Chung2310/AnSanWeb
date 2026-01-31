@@ -98,9 +98,10 @@ const staticNavLinks: NavLinkData[] = [
                 items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             },
             {
-                title: 'DECANTER/BÌNH THỞ',
-                 href: `/danh-muc/ly-coc-pha-le/${glasswareMegaMenuData.khac[0].slug}`,
-                items: []
+                title: 'KHÁC',
+                items: [
+                    { href: `/danh-muc/ly-coc-pha-le/${glasswareMegaMenuData.khac[0].slug}`, label: glasswareMegaMenuData.khac[0].label }
+                ]
             }
         ]
     },
