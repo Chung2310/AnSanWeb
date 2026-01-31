@@ -78,8 +78,10 @@ const staticNavLinks: NavLinkData[] = [
             },
             {
                 title: 'Quà tặng',
-                href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
-                items: []
+                items: [{
+                    href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh',
+                    label: 'Quà Tết Rượu Mạnh'
+                }]
             }
         ]
     },
@@ -89,19 +91,15 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'LY PHA LÊ RIEDEL',
-                href: '/danh-muc/ly-coc-pha-le',
                 items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             },
             {
                 title: 'LY WHISKY',
-                href: '/danh-muc/ly-coc-pha-le',
                 items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             },
             {
                 title: 'KHÁC',
-                items: [
-                    { href: `/danh-muc/ly-coc-pha-le/${glasswareMegaMenuData.khac[0].slug}`, label: glasswareMegaMenuData.khac[0].label }
-                ]
+                items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             }
         ]
     },
@@ -111,7 +109,6 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Quà tặng',
-                href: '/danh-muc/bo-qua-tang',
                 items: giftSetMegaMenuData.quaTang.map(item => ({
                     href: `/danh-muc/bo-qua-tang/${item.slug}`,
                     label: item.label
@@ -152,13 +149,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
                 <div className={cn("grid gap-x-8")} style={{ gridTemplateColumns: `repeat(${columns.length > 5 ? 5 : columns.length}, minmax(0, 1fr))` }}>
                     {columns.map((column, index) => (
                         <div key={column.title} className={cn(index > 0 && "pl-8 border-l")}>
-                            {column.href ? (
-                                <Link href={column.href} onClick={onLinkClick}>
-                                    <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider hover:text-primary transition-colors">{column.title}</h3>
-                                </Link>
-                            ) : (
-                                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
-                            )}
+                            <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">{column.title}</h3>
                             <ul className="space-y-3">
                                 {column.items.map(item => (
                                     <li key={item.label}>
@@ -380,13 +371,8 @@ export default function Header() {
                                                               }
                                                               return (
                                                                   <AccordionItem value={column.title} key={column.title}>
-                                                                      <AccordionTrigger>{column.title}</AccordionTrigger>
+                                                                      <AccordionTrigger className="font-semibold uppercase text-gray-800">{column.title}</AccordionTrigger>
                                                                       <AccordionContent className="pl-4">
-                                                                          {column.href && (
-                                                                              <Link href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground font-bold hover:text-primary">
-                                                                                  Tất cả {column.title}
-                                                                              </Link>
-                                                                          )}
                                                                           {column.items.map(item => (
                                                                               <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
                                                                                   {item.label}
