@@ -11,6 +11,7 @@ import {
   SortingState,
   ColumnFiltersState,
   getFilteredRowModel,
+  RowSelectionState,
 } from '@tanstack/react-table';
 
 import {
@@ -25,8 +26,21 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Trash } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useDeleteCategory } from '@/hooks/use-delete-category';
+import type { Category } from '@/lib/types';
 
 
 interface DataTableProps<TData, TValue> {
@@ -45,6 +59,8 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const { deleteCategory, isDeleting } = useDeleteCategory();
 
   const table = useReactTable({
     data,
@@ -55,6 +71,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
@@ -62,12 +79,14 @@ export function DataTable<TData, TValue>({
         pageIndex: parseInt(page, 10) - 1,
         pageSize: 15,
       },
+      rowSelection,
     },
     initialState: {
       pagination: {
         pageSize: 15,
       },
     },
+    enableRowSelection: true,
   });
 
   useEffect(() => {
@@ -88,9 +107,19 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  const handleDeleteSelected = () => {
+    const selectedRows = table.getSelectedRowModel().flatRows;
+    const promises = selectedRows.map(row => 
+        deleteCategory(row.original as Category)
+    );
+    Promise.all(promises).then(() => {
+        table.resetRowSelection();
+    });
+  };
+
   return (
     <div className="rounded-md border bg-card">
-      <div className="p-4">
+      <div className="flex items-center gap-4 p-4">
         <Input
           placeholder="Lọc danh mục..."
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
@@ -99,6 +128,34 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {table.getSelectedRowModel().flatRows.length > 0 && (
+             <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button variant="destructive" disabled={isDeleting}>
+                        <Trash className="mr-2 h-4 w-4" />
+                        Xóa ({table.getSelectedRowModel().flatRows.length})
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Hành động này sẽ xóa vĩnh viễn các danh mục đã chọn và các danh mục con của chúng. Các sản phẩm liên quan cũng sẽ được cập nhật.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDeleteSelected}
+                            disabled={isDeleting}
+                            className="bg-destructive hover:bg-destructive/90"
+                        >
+                            {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        )}
       </div>
       <Table>
         <TableHeader>
