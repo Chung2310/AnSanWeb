@@ -69,7 +69,7 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại rượu',
-                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Thương hiệu',
@@ -77,10 +77,7 @@ const staticNavLinks: NavLinkData[] = [
             },
             {
                 title: 'Quà tặng',
-                items: [{
-                    href: '/danh-muc/qua-tet-ruou-manh',
-                    label: 'Quà Tết Rượu Mạnh'
-                }]
+                items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/bo-qua-tang/${item.slug}`, label: item.label }))
             }
         ]
     },
@@ -109,7 +106,7 @@ const staticNavLinks: NavLinkData[] = [
             {
                 title: 'Quà tặng',
                 items: giftSetMegaMenuData.quaTang.map(item => ({
-                    href: `/danh-muc/${item.slug}`,
+                    href: `/danh-muc/bo-qua-tang/${item.slug}`,
                     label: item.label
                 })),
             }
