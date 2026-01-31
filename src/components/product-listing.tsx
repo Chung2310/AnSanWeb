@@ -194,7 +194,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       </div>
       {categoryDescription && (
         <div className="container py-20">
-            <div className="mx-auto max-w-4xl border-t pt-10 text-gray-700 leading-relaxed prose prose-lg">
+            <div className="mx-auto border-t pt-10 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                 <div dangerouslySetInnerHTML={{ __html: categoryDescription }} />
             </div>
         </div>
