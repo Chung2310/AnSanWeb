@@ -40,7 +40,8 @@
         "id": { "type": "string" },
         "name": { "type": "string" },
         "slug": { "type": "string" },
-        "parentId": { "type": ["string", "null"], "description": "The ID of the parent category, if any." }
+        "parentId": { "type": ["string", "null"], "description": "The ID of the parent category, if any." },
+        "description": { "type": "string", "description": "A detailed HTML-enabled description of the category." }
       },
       "required": ["id", "name", "slug"]
     },

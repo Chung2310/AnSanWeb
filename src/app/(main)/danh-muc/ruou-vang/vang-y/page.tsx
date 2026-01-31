@@ -10,16 +10,19 @@ export default function ProductsPage() {
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Vang Ý";
 
-  const italianWines = useMemo(() => {
-    if (!products || !categories) return [];
-    const italianWineCategory = categories.find(c => c.slug === 'vang-y');
-    if (!italianWineCategory) return [];
+  const italianWineCategory = useMemo(() => {
+    if (!categories) return undefined;
+    return categories.find(c => c.slug === 'vang-y');
+  }, [categories]);
 
+  const italianWines = useMemo(() => {
+    if (!products || !categories || !italianWineCategory) return [];
+    
     const childCategoryIds = categories.filter(c => c.parentId === italianWineCategory.id).map(c => c.id);
     const allItalianWineIds = [italianWineCategory.id, ...childCategoryIds];
 
     return products.filter(wine => wine.tags?.some(tag => allItalianWineIds.includes(tag)));
-  }, [products, categories]);
+  }, [products, categories, italianWineCategory]);
 
   const isLoading = isLoadingProducts || isLoadingCategories;
 
@@ -52,6 +55,7 @@ export default function ProductsPage() {
       key={pageTitle}
       initialProducts={italianWines}
       title={pageTitle}
+      categoryDescription={italianWineCategory?.description}
     />
   );
 }

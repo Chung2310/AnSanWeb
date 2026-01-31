@@ -30,12 +30,14 @@ import slugify from 'slugify';
 import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useCategories } from '@/hooks/use-categories';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   parentId: z.string().nullable().optional(),
+  description: z.string().optional(),
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>;
@@ -61,6 +63,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
           name: '',
           slug: '',
           parentId: null,
+          description: '',
         },
   });
   
@@ -173,6 +176,23 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mô tả danh mục</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Viết mô tả chi tiết cho danh mục này. Bạn có thể sử dụng HTML."
+                      {...field}
+                      rows={10}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

@@ -12,8 +12,10 @@ export default function ProductsPage() {
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const pageTitle = "Rượu Vang";
   
+  const wineCategory = useMemo(() => categories?.find(c => c.slug === 'ruou-vang'), [categories]);
+
   const wineProducts = useMemo(() => {
-    if (!products || !categories) return [];
+    if (!products || !categories || !wineCategory) return [];
     
     const bestChoiceProductNames = [
       "Old Vine Cabernet Sauvignon",
@@ -34,17 +36,11 @@ export default function ProductsPage() {
         return ids;
     };
 
-    // Find the 'ruou-vang' category and its descendants
-    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
-    if (!wineCategory) return [];
-
     const descendantCategoryIds = getDescendantIds(wineCategory.id, categories);
     const allWineIds = [wineCategory.id, ...descendantCategoryIds];
     
-    // Get all products belonging to the wine category
     const allWineProducts = products.filter(wine => wine.tags?.some(tag => allWineIds.includes(tag)));
 
-    // Separate into best choice and others
     const bestChoiceProducts: typeof products = [];
     const otherProducts: typeof products = [];
 
@@ -57,9 +53,8 @@ export default function ProductsPage() {
       }
     });
 
-    // Combine them with best choice products at the top
     return [...bestChoiceProducts, ...otherProducts];
-  }, [products, categories]);
+  }, [products, categories, wineCategory]);
 
   const isLoading = isLoadingProducts || isLoadingCategories;
 
@@ -92,6 +87,7 @@ export default function ProductsPage() {
       key={pageTitle}
       initialProducts={wineProducts}
       title={pageTitle}
+      categoryDescription={wineCategory?.description}
     />
   );
 }
