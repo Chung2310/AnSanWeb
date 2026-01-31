@@ -15,10 +15,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useFirestore } from '@/firebase';
+import { collection, doc, writeBatch } from 'firebase/firestore';
+import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { useToast } from '@/hooks/use-toast';
 
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const [filter, setFilter] = useState('all'); // 'all' or 'parents'
+    const firestore = useFirestore();
+    const { toast } = useToast();
+    const [isRestoring, setIsRestoring] = useState(false);
     
     const categoryMap = useMemo(() => {
       if (!categories) return new Map<string, string>();
@@ -33,6 +40,71 @@ export default function CategoriesAdminPage() {
         return categories;
     }, [categories, filter]);
 
+    const handleRestore = async () => {
+        setIsRestoring(true);
+        toast({ title: 'Đang khôi phục danh mục...' });
+
+        try {
+            const batch = writeBatch(firestore);
+            const categoriesCol = collection(firestore, 'categories');
+
+            const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt'>[] = [];
+
+            const mainCats = [
+                { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang' },
+                { id: 'ruou-manh', name: 'Rượu Mạnh', slug: 'ruou-manh' },
+                { id: 'ly-coc-pha-le', name: 'Ly - Cốc Pha Lê', slug: 'ly-coc-pha-le' },
+                { id: 'bo-qua-tang', name: 'Bộ Quà Tặng', slug: 'bo-qua-tang' },
+                { id: 'cigar', name: 'Cigar', slug: 'cigar' },
+            ];
+            mainCats.forEach(cat => {
+                allCategoriesToCreate.push({ ...cat, description: '', tags: [], parentId: null });
+            });
+
+            Object.values(wineMegaMenuData).flat().forEach(item => {
+                allCategoriesToCreate.push({
+                    id: item.category_id,
+                    name: item.label,
+                    slug: item.slug,
+                    description: '',
+                    tags: [],
+                    parentId: null,
+                });
+            });
+
+            Object.values(spiritsMegaMenuData).flat().forEach(item => {
+                allCategoriesToCreate.push({
+                    id: item.category_id,
+                    name: item.label,
+                    slug: item.slug,
+                    description: '',
+                    tags: [],
+                    parentId: null,
+                });
+            });
+            
+            const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
+
+            uniqueCategories.forEach(category => {
+                const docRef = doc(categoriesCol, category.id);
+                batch.set(docRef, category);
+            });
+
+            await batch.commit();
+
+            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục mặc định đã được khôi phục.` });
+
+        } catch (error) {
+            console.error("Error restoring categories:", error);
+            toast({
+                variant: 'destructive',
+                title: 'Lỗi',
+                description: 'Không thể khôi phục danh mục.',
+            });
+        } finally {
+            setIsRestoring(false);
+        }
+    };
   
     const memoizedColumns = useMemo(() => columns(categoryMap), [categoryMap]);
 
@@ -65,6 +137,9 @@ export default function CategoriesAdminPage() {
                     <SelectItem value="parents">Chỉ danh mục cha</SelectItem>
                 </SelectContent>
             </Select>
+            <Button onClick={handleRestore} disabled={isRestoring} variant="outline">
+                {isRestoring ? 'Đang khôi phục...' : 'Khôi phục mặc định'}
+            </Button>
             <Button asChild>
             <Link href="/admin/categories/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
