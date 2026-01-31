@@ -17,9 +17,10 @@ interface ProductListingProps {
     title: string;
     bannerData?: CategoryBannerProps;
     itemsPerPage?: number;
+    categoryDescription?: string;
 }
 
-function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12 }: ProductListingProps) {
+function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
@@ -191,6 +192,13 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
           </div>
         </div>
       </div>
+      {categoryDescription && (
+        <div className="container py-20">
+            <div className="mx-auto max-w-4xl border-t pt-10 text-gray-700 leading-relaxed prose prose-lg">
+                <div dangerouslySetInnerHTML={{ __html: categoryDescription }} />
+            </div>
+        </div>
+      )}
     </div>
   );
 }
