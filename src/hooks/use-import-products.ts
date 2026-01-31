@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { FullProduct } from '@/lib/types';
 import { useCategories } from './use-categories';
 import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import slugify from 'slugify';
 
 export function useImportProducts() {
   const { firestore } = useFirebase();
@@ -36,16 +37,27 @@ export function useImportProducts() {
 
       const batch = writeBatch(firestore);
       const productsCollection = collection(firestore, 'products');
+      let processedCount = 0;
+      let skippedCount = 0;
 
       for (const row of jsonData) {
+        const nameVN = row['Tên sản phẩm'];
+        const price = row['Giá'];
+
+        if (!nameVN || price == null || isNaN(Number(price))) {
+          console.warn('Skipping row due to missing name or price:', row);
+          skippedCount++;
+          continue;
+        }
+
         const productId = row['ID'] ? String(row['ID']) : null;
         const productRef = productId ? doc(productsCollection, productId) : doc(productsCollection);
 
         const tagsFromName = (columnName: string): string[] => {
-            return row[columnName]?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => tagLabelToIdMap.get(name)).filter(Boolean) || [];
+            return row[columnName]?.toString().split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => tagLabelToIdMap.get(name)).filter(Boolean) || [];
         }
         
-        const generalCategories: string[] = row['Danh mục chung']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => categoryMap.get(name)).filter(Boolean) || [];
+        const generalCategories: string[] = row['Danh mục chung']?.toString().split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => categoryMap.get(name)).filter(Boolean) || [];
         const wineLoai = tagsFromName('Loại rượu');
         const wineQuocGia = tagsFromName('Quốc gia');
         const wineVung = tagsFromName('Vùng');
@@ -58,30 +70,36 @@ export function useImportProducts() {
         );
 
         const productData: any = {
-          nameVN: row['Tên sản phẩm'],
-          slug: row['Đường dẫn (slug)'],
-          price: Number(row['Giá']),
-          priceDescription: row['Mô tả giá'],
-          status: row['Trạng thái'] === 'Đã xuất bản' ? 'published' : 'draft',
+          nameVN: nameVN,
+          slug: row['Đường dẫn (slug)'] || slugify(nameVN, { lower: true, strict: true, locale: 'vi' }),
+          price: Number(price),
           isFeatured: row['Nổi bật'] === 'Có',
           isNew: row['Sản phẩm mới'] === 'Có',
           bestChoice: row['Lựa chọn tốt nhất'] === 'Có',
-          shortDescription: row['Mô tả ngắn'],
-          image: row['URL Ảnh bìa'] ? { url: row['URL Ảnh bìa'], path: '' } : null,
-          detailImages: row['URL Ảnh chi tiết']?.split(',').map((url: string) => ({ url: url.trim(), path: '' })) || [],
+          status: row['Trạng thái'] === 'Đã xuất bản' ? 'published' : 'draft',
           tags: allTags,
-          attributes: allAttributeLabels.map(label => ({ label, value: row[label] })).filter(attr => attr.value),
           updatedAt: serverTimestamp(),
         };
 
-        const secondaryPriceVal = row['Giá phụ'];
-        if (secondaryPriceVal && !isNaN(Number(secondaryPriceVal))) {
-            productData.secondaryPrice = Number(secondaryPriceVal);
+        // --- Handle Optional Fields ---
+        if (row['Mô tả giá']) productData.priceDescription = row['Mô tả giá'];
+        if (row['Mô tả ngắn']) productData.shortDescription = row['Mô tả ngắn'];
+
+        const secondaryPrice = row['Giá phụ'];
+        if (secondaryPrice != null && !isNaN(Number(secondaryPrice))) {
+            productData.secondaryPrice = Number(secondaryPrice);
         }
 
         if (row['Mô tả giá phụ']) {
             productData.secondaryPriceDescription = row['Mô tả giá phụ'];
         }
+        
+        productData.image = row['URL Ảnh bìa'] ? { url: row['URL Ảnh bìa'], path: '' } : null;
+        productData.detailImages = row['URL Ảnh chi tiết'] ? String(row['URL Ảnh chi tiết']).split(',').map((url: string) => ({ url: url.trim(), path: '' })) : [];
+        
+        productData.attributes = allAttributeLabels
+          .map(label => ({ label, value: row[label] }))
+          .filter(attr => attr.value != null && String(attr.value).trim() !== '');
 
         if (!productId) {
             productData.id = productRef.id;
@@ -89,13 +107,14 @@ export function useImportProducts() {
         }
 
         batch.set(productRef, productData, { merge: true });
+        processedCount++;
       }
 
       await batch.commit();
 
       toast({
-        title: 'Nhập thành công!',
-        description: `${jsonData.length} sản phẩm đã được xử lý.`,
+        title: 'Nhập hoàn tất!',
+        description: `${processedCount} sản phẩm đã được xử lý. ${skippedCount} sản phẩm bị bỏ qua do thiếu dữ liệu.`,
       });
 
     } catch (error) {
