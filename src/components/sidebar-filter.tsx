@@ -5,6 +5,14 @@ import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { wineMegaMenuData } from "@/lib/mega-menu-data";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export type ActiveFilters = {
   [key: string]: string[];
@@ -19,6 +27,10 @@ const staticFiltersData = {
         { label: 'TRÊN 3 TRIỆU', value: [3000000, Infinity] },
     ],
     "DANH MỤC": wineMegaMenuData.theoLoai.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
+    "GIỐNG NHO": wineMegaMenuData.theoGiongNho.map(item => ({
         label: item.label,
         value: item.category_id,
     })),
@@ -52,6 +64,42 @@ const FilterGroup = ({ title, options, onFilterChange, activeFilters }: {
             )
         })}
         </div>
+    </div>
+);
+
+const AccordionFilterGroup = ({ title, options, onFilterChange, activeFilters }: {
+    title: string;
+    options: { label: string; value: string; }[];
+    onFilterChange: (group: string, value: string) => void;
+    activeFilters: string[];
+}) => (
+    <div className="mb-8 border p-4 rounded-md">
+        <Accordion type="single" collapsible defaultValue="item-1">
+            <AccordionItem value="item-1" className="border-b-0">
+                <AccordionTrigger className="text-sm font-bold tracking-widest uppercase text-foreground hover:no-underline p-0">
+                    {title}
+                </AccordionTrigger>
+                <AccordionContent className="pt-4">
+                    <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                        {options.map((option) => {
+                            const isActive = activeFilters.includes(option.label);
+                            return (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id={option.value}
+                                        checked={isActive}
+                                        onCheckedChange={() => onFilterChange(title, option.label)}
+                                    />
+                                    <Label htmlFor={option.value} className="font-normal cursor-pointer text-sm">
+                                        {option.label}
+                                    </Label>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
     </div>
 );
 
@@ -90,22 +138,28 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
 
     return (
         <div className="w-full">
-            {Object.entries(staticFiltersData).map(([groupTitle, options]) => {
-                if (groupTitle === "DANH MỤC" && !isWineCategory) {
-                    return null;
-                }
-                return (
+            <FilterGroup
+                title="KHOẢNG GIÁ"
+                options={staticFiltersData["KHOẢNG GIÁ"]}
+                onFilterChange={handleFilterClick}
+                activeFilters={activeFilters["KHOẢNG GIÁ"] || []}
+            />
+            {isWineCategory && (
+                <>
                     <FilterGroup
-                        key={groupTitle}
-                        title={groupTitle}
-                        options={options.map(opt => ({
-                            label: opt.label,
-                        }))}
+                        title="DANH MỤC"
+                        options={staticFiltersData["DANH MỤC"]}
                         onFilterChange={handleFilterClick}
-                        activeFilters={activeFilters[groupTitle] || []}
+                        activeFilters={activeFilters["DANH MỤC"] || []}
                     />
-                );
-            })}
+                    <AccordionFilterGroup
+                        title="GIỐNG NHO"
+                        options={staticFiltersData["GIỐNG NHO"]}
+                        onFilterChange={handleFilterClick}
+                        activeFilters={activeFilters["GIỐNG NHO"] || []}
+                    />
+                </>
+            )}
         </div>
     );
 }
