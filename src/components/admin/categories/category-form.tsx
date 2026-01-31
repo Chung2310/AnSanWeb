@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -30,7 +28,7 @@ import slugify from 'slugify';
 import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useCategories } from '@/hooks/use-categories';
-import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from '@/components/admin/blog/rich-text-editor';
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -58,6 +56,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     defaultValues: initialData
       ? {
           ...initialData,
+          description: initialData.description || '',
         }
       : {
           name: '',
@@ -86,6 +85,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
       const processedData = {
         ...data,
         parentId: data.parentId || null,
+        description: data.description || '',
       };
 
       if (initialData && initialData.id) {
@@ -185,12 +185,11 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mô tả danh mục</FormLabel>
+                  <FormLabel>Mô tả danh mục (Nội dung SEO)</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Viết mô tả chi tiết cho danh mục này. Bạn có thể sử dụng HTML."
-                      {...field}
-                      rows={10}
+                    <RichTextEditor
+                      value={field.value || ''}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
