@@ -11,13 +11,6 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import type { Category, FullProduct } from '@/lib/types';
 import * as XLSX from 'xlsx';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -38,6 +31,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useImportProducts } from '@/hooks/use-import-products';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 // Define filter types
 type WineFilters = {
@@ -96,7 +90,7 @@ export default function ProductsAdminPage() {
     if (!isSpiritCategorySelected) {
         setSpiritFilters({ thuongHieu: [] });
     }
-  }, [isWineCategorySelected, isSpiritCategorySelected]);
+  }, [selectedCategoryId, isWineCategorySelected, isSpiritCategorySelected]);
 
 
   const getDescendantIds = useCallback((parentId: string, allCategories: Category[]): string[] => {
@@ -312,7 +306,7 @@ export default function ProductsAdminPage() {
 
   const renderWineFilterGroup = (title: string, groupKey: keyof WineFilters, items: { label: string, slug: string, category_id: string }[]) => (
     <div className='mb-4'>
-        <h4 className='font-semibold mb-2 text-lg border-b pb-2'>{title}</h4>
+        <h4 className='font-semibold mb-2 text-base'>{title}</h4>
         <div className="grid grid-cols-2 gap-2 mt-2">
             {items.map(item => (
                 <div key={item.category_id} className="flex items-center space-x-2">
@@ -349,98 +343,84 @@ export default function ProductsAdminPage() {
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">Sản phẩm</h1>
         <div className="flex items-center flex-wrap justify-end gap-4">
-           <Select value={selectedCategoryId} onValueChange={setSelectedCategoryId}>
-              <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder="Lọc theo danh mục" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tất cả danh mục</SelectItem>
-                {categories?.filter(c => !c.parentId).map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {isWineCategorySelected && (
-              <Sheet>
+            <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="outline">
                         <Filter className="mr-2 h-4 w-4" />
-                        Lọc Rượu Vang
+                        Lọc sản phẩm
                     </Button>
                 </SheetTrigger>
-                <SheetContent className='w-full sm:max-w-md'>
+                <SheetContent className="w-full sm:max-w-md">
                     <SheetHeader>
-                        <SheetTitle>Bộ lọc Rượu Vang</SheetTitle>
+                        <SheetTitle>Bộ lọc sản phẩm</SheetTitle>
                         <SheetDescription>
-                            Tinh chỉnh danh sách rượu vang theo các tiêu chí dưới đây.
+                            Lọc sản phẩm theo danh mục và các tiêu chí khác.
                         </SheetDescription>
                     </SheetHeader>
                     <ScrollArea className="h-[calc(100vh-150px)] mt-4">
-                        <div className='pr-6'>
-                            {renderWineFilterGroup('Theo loại rượu', 'theoLoai', wineMegaMenuData.theoLoai)}
-                            {renderWineFilterGroup('Theo Quốc Gia', 'theoQuocGia', wineMegaMenuData.theoQuocGia)}
-                            {renderWineFilterGroup('Theo vùng', 'theoVung', wineMegaMenuData.theoVung)}
-                            {renderWineFilterGroup('Theo giống nho', 'theoGiongNho', wineMegaMenuData.theoGiongNho)}
+                        <div className="pr-6 space-y-6">
+                            <div>
+                                <h4 className='font-semibold mb-3 text-lg border-b pb-2'>Danh mục chính</h4>
+                                <RadioGroup value={selectedCategoryId} onValueChange={setSelectedCategoryId} className="mt-3 space-y-2">
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="all" id="cat-all" />
+                                        <Label htmlFor="cat-all" className="font-normal cursor-pointer">Tất cả danh mục</Label>
+                                    </div>
+                                    {categories?.filter(c => !c.parentId).map((cat) => (
+                                        <div key={cat.id} className="flex items-center space-x-2">
+                                            <RadioGroupItem value={cat.id} id={`cat-${cat.id}`} />
+                                            <Label htmlFor={`cat-${cat.id}`} className="font-normal cursor-pointer">{cat.name}</Label>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
+                            </div>
+
+                            {isWineCategorySelected && (
+                                <div>
+                                    <h4 className='font-semibold mb-3 text-lg border-b pb-2'>Chi tiết Rượu Vang</h4>
+                                    {renderWineFilterGroup('Theo loại rượu', 'theoLoai', wineMegaMenuData.theoLoai)}
+                                    {renderWineFilterGroup('Theo Quốc Gia', 'theoQuocGia', wineMegaMenuData.theoQuocGia)}
+                                    {renderWineFilterGroup('Theo vùng', 'theoVung', wineMegaMenuData.theoVung)}
+                                    {renderWineFilterGroup('Theo giống nho', 'theoGiongNho', wineMegaMenuData.theoGiongNho)}
+                                </div>
+                            )}
+
+                            {isSpiritCategorySelected && (
+                                <div>
+                                    <h4 className='font-semibold mb-3 text-lg border-b pb-2'>Chi tiết Rượu Mạnh</h4>
+                                    <div className='mb-4'>
+                                        <h4 className='font-semibold mb-2 text-base'>Thương hiệu</h4>
+                                        <div className="grid grid-cols-2 gap-2 mt-2">
+                                            {spiritsMegaMenuData.thuongHieu.map(item => (
+                                                <div key={item.category_id} className="flex items-center space-x-2">
+                                                    <Checkbox
+                                                        id={`spirit-${item.category_id}`}
+                                                        checked={spiritFilters.thuongHieu.includes(item.category_id)}
+                                                        onCheckedChange={(checked) => handleSpiritFilterChange('thuongHieu', item.category_id, !!checked)}
+                                                    />
+                                                    <Label htmlFor={`spirit-${item.category_id}`} className='font-normal cursor-pointer'>
+                                                        {item.label}
+                                                    </Label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </ScrollArea>
                     <SheetFooter className="mt-4 gap-2 sm:justify-between">
-                         <Button type="button" variant="secondary" onClick={clearWineFilters}>Xóa bộ lọc</Button>
+                         <Button type="button" variant="secondary" onClick={() => {
+                             clearWineFilters();
+                             clearSpiritFilters();
+                             setSelectedCategoryId('all');
+                         }}>Xóa bộ lọc</Button>
                          <SheetClose asChild>
                             <Button type="button">Áp dụng</Button>
                          </SheetClose>
                     </SheetFooter>
                 </SheetContent>
-              </Sheet>
-            )}
-
-            {isSpiritCategorySelected && (
-              <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline">
-                        <Filter className="mr-2 h-4 w-4" />
-                        Lọc Rượu Mạnh
-                    </Button>
-                </SheetTrigger>
-                <SheetContent className='w-full sm:max-w-md'>
-                    <SheetHeader>
-                        <SheetTitle>Bộ lọc Rượu Mạnh</SheetTitle>
-                        <SheetDescription>
-                            Tinh chỉnh danh sách rượu mạnh theo thương hiệu.
-                        </SheetDescription>
-                    </SheetHeader>
-                    <ScrollArea className="h-[calc(100vh-150px)] mt-4">
-                        <div className='pr-6'>
-                           <div className='mb-4'>
-                              <h4 className='font-semibold mb-2 text-lg border-b pb-2'>Thương hiệu</h4>
-                              <div className="grid grid-cols-2 gap-2 mt-2">
-                                  {spiritsMegaMenuData.thuongHieu.map(item => (
-                                      <div key={item.category_id} className="flex items-center space-x-2">
-                                          <Checkbox
-                                              id={`spirit-${item.category_id}`}
-                                              checked={spiritFilters.thuongHieu.includes(item.category_id)}
-                                              onCheckedChange={(checked) => handleSpiritFilterChange('thuongHieu', item.category_id, !!checked)}
-                                          />
-                                          <Label htmlFor={`spirit-${item.category_id}`} className='font-normal cursor-pointer'>
-                                              {item.label}
-                                          </Label>
-                                      </div>
-                                  ))}
-                              </div>
-                          </div>
-                        </div>
-                    </ScrollArea>
-                    <SheetFooter className="mt-4 gap-2 sm:justify-between">
-                         <Button type="button" variant="secondary" onClick={clearSpiritFilters}>Xóa bộ lọc</Button>
-                         <SheetClose asChild>
-                            <Button type="button">Áp dụng</Button>
-                         </SheetClose>
-                    </SheetFooter>
-                </SheetContent>
-              </Sheet>
-            )}
+            </Sheet>
 
             <Button
                 variant="outline"
