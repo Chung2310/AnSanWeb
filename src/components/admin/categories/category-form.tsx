@@ -33,6 +33,7 @@ import RichTextEditor from '@/components/admin/blog/rich-text-editor';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { useMemo } from 'react';
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -127,6 +128,44 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
           tags: [],
         },
   });
+
+  const categoryOptions = useMemo(() => {
+    if (!categories) return [];
+
+    const parentToChildren: Map<string | null, Category[]> = new Map();
+
+    categories.forEach(cat => {
+      const parentId = cat.parentId || null;
+      if (!parentToChildren.has(parentId)) {
+        parentToChildren.set(parentId, []);
+      }
+      parentToChildren.get(parentId)!.push(cat);
+    });
+
+    const buildOptions = (parentId: string | null, level: number): JSX.Element[] => {
+      const children = parentToChildren.get(parentId) || [];
+      let options: JSX.Element[] = [];
+
+      children.sort((a, b) => a.name.localeCompare(b.name));
+
+      for (const category of children) {
+        if (category.id === initialData?.id) continue;
+
+        options.push(
+          <SelectItem key={category.id} value={category.id}>
+            <span style={{ paddingLeft: `${level * 1.5}rem` }}>
+              {level > 0 ? '— ' : ''}{category.name}
+            </span>
+          </SelectItem>
+        );
+        options.push(...buildOptions(category.id, level + 1));
+      }
+      return options;
+    }
+
+    return buildOptions(null, 0);
+
+  }, [categories, initialData?.id]);
 
   const getRedirectUrl = () => {
     const page = searchParams.get('page');
@@ -244,12 +283,8 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                             </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                            <SelectItem value="none">Không có</SelectItem>
-                            {categories?.filter(c => c.id !== initialData?.id).map((category) => (
-                                <SelectItem key={category.id} value={category.id}>
-                                {category.name}
-                                </SelectItem>
-                            ))}
+                              <SelectItem value="none">Không có</SelectItem>
+                              {categoryOptions}
                             </SelectContent>
                         </Select>
                         <FormMessage />
