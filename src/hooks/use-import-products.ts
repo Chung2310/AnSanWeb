@@ -57,13 +57,11 @@ export function useImportProducts() {
             !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
         );
 
-        const productData: Partial<FullProduct> = {
+        const productData: any = {
           nameVN: row['Tên sản phẩm'],
           slug: row['Đường dẫn (slug)'],
           price: Number(row['Giá']),
           priceDescription: row['Mô tả giá'],
-          secondaryPrice: row['Giá phụ'] ? Number(row['Giá phụ']) : undefined,
-          secondaryPriceDescription: row['Mô tả giá phụ'],
           status: row['Trạng thái'] === 'Đã xuất bản' ? 'published' : 'draft',
           isFeatured: row['Nổi bật'] === 'Có',
           isNew: row['Sản phẩm mới'] === 'Có',
@@ -75,6 +73,15 @@ export function useImportProducts() {
           attributes: allAttributeLabels.map(label => ({ label, value: row[label] })).filter(attr => attr.value),
           updatedAt: serverTimestamp(),
         };
+
+        const secondaryPriceVal = row['Giá phụ'];
+        if (secondaryPriceVal && !isNaN(Number(secondaryPriceVal))) {
+            productData.secondaryPrice = Number(secondaryPriceVal);
+        }
+
+        if (row['Mô tả giá phụ']) {
+            productData.secondaryPriceDescription = row['Mô tả giá phụ'];
+        }
 
         if (!productId) {
             productData.id = productRef.id;
