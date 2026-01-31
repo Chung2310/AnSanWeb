@@ -38,8 +38,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let filtered = [...initialProducts];
 
+    // Category filters ("DANH MỤC")
     const categoryFilters = activeFilters["DANH MỤC"];
-        
     if (categoryFilters && categoryFilters.length > 0) {
         const categoryIdsToFilter = categoryFilters.map(label => {
             const option = (SidebarFilter.staticFiltersData["DANH MỤC"] || []).find(o => o.label === label);
@@ -63,6 +63,21 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         filtered = filtered.filter(p => 
             priceRanges.some(range => range && p.price >= (range as number[])[0] && p.price < (range as number[])[1])
         );
+    }
+    
+    // Grape varietal filters ("GIỐNG NHO")
+    const grapeFilters = activeFilters["GIỐNG NHO"];
+    if (grapeFilters && grapeFilters.length > 0) {
+        const grapeCategoryIdsToFilter = grapeFilters.map(label => {
+            const option = (SidebarFilter.staticFiltersData["GIỐNG NHO"] || []).find(o => o.label === label);
+            return option?.value;
+        }).filter((value): value is string => !!value);
+
+        if (grapeCategoryIdsToFilter.length > 0) {
+            filtered = filtered.filter(p => 
+                p.tags?.some(tag => grapeCategoryIdsToFilter.includes(tag))
+            );
+        }
     }
 
     return filtered;
@@ -156,7 +171,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               </div>
             </div>
             {paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-x-8 gap-y-12">
                     {paginatedProducts.map((product) => (
                         <WineCard key={product.id} product={product} />
                     ))}
