@@ -218,8 +218,8 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
       // Remove all main category IDs from current tags
       const otherTags = currentTags.filter(tag => !mainCategoryIds.includes(tag));
 
-      // Add the newly selected main category ID
-      const newTags = selectedId ? [...otherTags, selectedId] : otherTags;
+      // Add the newly selected main category ID if it's not 'none'
+      const newTags = selectedId && selectedId !== 'none' ? [...otherTags, selectedId] : otherTags;
 
       form.setValue('tags', newTags, { shouldDirty: true });
   };
@@ -334,7 +334,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-        const finalData = { ...data } as any;
+        const finalData: Partial<FullProduct> = { ...data };
 
         // Convert prices to numbers, handle empty strings
         finalData.price = Number(data.price);
@@ -348,20 +348,20 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
             delete finalData.secondaryPriceDescription;
         }
 
-        finalData.updatedAt = serverTimestamp();
+        (finalData as any).updatedAt = serverTimestamp();
         
         if (initialData) {
             const productId = initialData.id;
-            delete finalData.id;
+            delete (finalData as any).id;
 
             const productRef = doc(firestore, 'products', productId);
             await updateDoc(productRef, finalData);
             toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
         } else {
-            delete finalData.id;
-            finalData.createdAt = serverTimestamp();
+            delete (finalData as any).id;
+            (finalData as any).createdAt = serverTimestamp();
             const collectionRef = collection(firestore, 'products');
-            const newDoc = await addDoc(collectionRef, finalData);
+            const newDoc = await addDoc(collectionRef, finalData as FullProduct);
             await updateDoc(newDoc, { id: newDoc.id });
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
@@ -538,7 +538,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                     <FormItem>
                       <FormLabel className="text-base">Danh mục chính</FormLabel>
                       <Select
-                        value={currentMainCategoryId || ''}
+                        value={currentMainCategoryId || 'none'}
                         onValueChange={handleMainCategoryChange}
                         disabled={isLoadingCategories}
                       >
@@ -548,7 +548,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="">Không có</SelectItem>
+                          <SelectItem value="none">Không có</SelectItem>
                           {mainCategories.map((cat) => (
                             <SelectItem key={cat.id} value={cat.id}>
                               {cat.name}
