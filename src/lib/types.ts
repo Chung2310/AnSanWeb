@@ -81,6 +81,7 @@ export type Category = {
   image?: ImageInfo | null;
   status?: 'active' | 'inactive';
   parentId?: string | null;
+  tags?: string[];
 };
 
 export type BlogPost = {

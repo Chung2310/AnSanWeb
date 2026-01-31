@@ -41,7 +41,8 @@
         "name": { "type": "string" },
         "slug": { "type": "string" },
         "parentId": { "type": ["string", "null"], "description": "The ID of the parent category, if any." },
-        "description": { "type": "string", "description": "A detailed HTML-enabled description of the category." }
+        "description": { "type": "string", "description": "A detailed HTML-enabled description of the category." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Holds classification tag IDs (e.g., from mega menu data)." }
       },
       "required": ["id", "name", "slug"]
     },
