@@ -51,7 +51,7 @@ function PostDetailView({ post }: { post: BlogPost }) {
                         
                         {post.content && (
                             <article 
-                                className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700 prose-img:mx-auto prose-img:block" 
+                                className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700" 
                                 style={{color: '#5a5a5a'}}
                                 dangerouslySetInnerHTML={{ __html: post.content }}
                             >
