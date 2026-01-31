@@ -8,7 +8,7 @@ import { columns } from '@/components/admin/products/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import type { Category } from '@/lib/types';
+import type { Category, FullProduct } from '@/lib/types';
 import * as XLSX from 'xlsx';
 import {
   Select,
