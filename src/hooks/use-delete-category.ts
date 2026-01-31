@@ -32,7 +32,7 @@ export function useDeleteCategory() {
       const descendantIds: string[] = [];
       const queue: string[] = [category.id];
       const allCategoriesSnapshot = await getDocs(categoriesCollection);
-      const allCategories = allCategoriesSnapshot.docs.map(d => d.data() as Category);
+      const allCategories = allCategoriesSnapshot.docs.map(d => ({...d.data(), id: d.id}) as Category);
 
       const processed = new Set<string>();
 
