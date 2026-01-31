@@ -32,7 +32,7 @@ import { useCategories } from '@/hooks/use-categories';
 import RichTextEditor from '@/components/admin/blog/rich-text-editor';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useMemo } from 'react';
 
 const formSchema = z.object({
@@ -97,6 +97,24 @@ const renderSpiritsMegaMenuSelectors = (control: Control<CategoryFormValues>) =>
         <>
             {renderCheckboxGroup(control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
             {renderCheckboxGroup(control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
+        </>
+    );
+};
+
+const renderGlasswareMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
+    return (
+        <>
+            {renderCheckboxGroup(control, "Ly Pha Lê Riedel", glasswareMegaMenuData.lyPhaLeRiedel)}
+            {renderCheckboxGroup(control, "Ly Whisky", glasswareMegaMenuData.lyWhisky)}
+            {renderCheckboxGroup(control, "Loại khác", glasswareMegaMenuData.khac)}
+        </>
+    );
+};
+
+const renderGiftSetMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
+    return (
+        <>
+            {renderCheckboxGroup(control, "Loại quà tặng", giftSetMegaMenuData.quaTang)}
         </>
     );
 };
@@ -337,6 +355,32 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                         <ScrollArea className="h-72">
                             <div className="pr-4">
                                 {renderSpiritsMegaMenuSelectors(form.control)}
+                            </div>
+                        </ScrollArea>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Phân loại Ly & Cốc</CardTitle>
+                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ScrollArea className="h-72">
+                            <div className="pr-4">
+                                {renderGlasswareMegaMenuSelectors(form.control)}
+                            </div>
+                        </ScrollArea>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Phân loại Bộ Quà Tặng</CardTitle>
+                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ScrollArea className="h-72">
+                            <div className="pr-4">
+                                {renderGiftSetMegaMenuSelectors(form.control)}
                             </div>
                         </ScrollArea>
                     </CardContent>
