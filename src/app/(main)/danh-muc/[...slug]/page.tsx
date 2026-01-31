@@ -10,19 +10,47 @@ import type { Category } from '@/lib/types';
 
 export default function ProductsPage() {
   const params = useParams();
-  const slugParts = (params.slug as string[]) || [];
+  const slugParts = params?.slug ? (params.slug as string[]) : [];
 
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const isLoading = isLoadingProducts || isLoadingCategories;
 
-  const categoryInfo = useMemo(() => {
-    if (!categories || slugParts.length === 0) return null;
-    const slug = slugParts[slugParts.length - 1];
-    return categories.find(c => c.slug === slug) || null;
-  }, [categories, slugParts]);
+  const findCategoryBySlugs = useCallback((slugs: string[], allCategories: Category[] | null): Category | null => {
+    if (!slugs || slugs.length === 0 || !allCategories) return null;
 
-  const getDescendantIds = useCallback((parentId: string, allCategories: Category[]): string[] => {
+    let parentId: string | null = null;
+    let foundCategory: Category | null = null;
+
+    for (const slug of slugs) {
+      const nextCategory = allCategories.find(
+        (cat) => cat.slug === slug && cat.parentId === parentId
+      );
+
+      if (nextCategory) {
+        foundCategory = nextCategory;
+        parentId = nextCategory.id;
+      } else {
+        return null; // Path is broken
+      }
+    }
+    return foundCategory;
+  }, []);
+
+  const categoryInfo = useMemo(() => {
+    if (!categories || !slugParts || slugParts.length === 0) return null;
+    // Try to find category by full path first
+    let found = findCategoryBySlugs(slugParts, categories);
+    // If not found, try finding by just the last part of the slug
+    if (!found) {
+        const lastSlug = slugParts[slugParts.length - 1];
+        found = categories.find(c => c.slug === lastSlug) || null;
+    }
+    return found;
+  }, [categories, slugParts, findCategoryBySlugs]);
+
+  const getDescendantIds = useCallback((parentId: string, allCategories: Category[] | null): string[] => {
+    if (!allCategories) return [];
     const descendantIds: string[] = [];
     const queue: string[] = [parentId];
     const visited = new Set<string>();
