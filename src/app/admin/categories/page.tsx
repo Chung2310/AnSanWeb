@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { Filter, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
@@ -9,12 +9,13 @@ import { useCategories } from '@/hooks/use-categories';
 import { useState, useMemo } from 'react';
 import type { Category } from '@/lib/types';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { useFirestore } from '@/firebase';
 import { collection, doc, writeBatch } from 'firebase/firestore';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
@@ -76,14 +77,16 @@ export default function CategoriesAdminPage() {
 
             Object.values(wineMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-vang'));
             Object.values(spiritsMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-manh'));
-            Object.values(glasswareMegaMenuData).flat().forEach(item => addItemsWithParent(item, 'ly-coc-pha-le'));
+            addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-coc-pha-le');
+            addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-coc-pha-le');
+            addItemsWithParent(glasswareMegaMenuData.khac, 'ly-coc-pha-le');
             addItemsWithParent(giftSetMegaMenuData.quaTang, 'bo-qua-tang');
             
             const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
 
             uniqueCategories.forEach(category => {
                 const docRef = doc(categoriesCol, category.id);
-                batch.set(docRef, category, { merge: true });
+                batch.set(docRef, { ...category, description: category.description || '' }, { merge: true });
             });
 
             await batch.commit();
@@ -110,7 +113,13 @@ export default function CategoriesAdminPage() {
       <div>
         <div className="flex items-center justify-between">
           <Skeleton className="h-10 w-48" />
-          <Skeleton className="h-10 w-32" />
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-40" />
+            <Skeleton className="h-10 w-44" />
+          </div>
+        </div>
+        <div className="my-4">
+             <Skeleton className="h-14 w-full" />
         </div>
         <div className="mt-6">
           <Skeleton className="h-96 w-full" />
@@ -124,15 +133,6 @@ export default function CategoriesAdminPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Danh mục sản phẩm</h1>
          <div className="flex items-center gap-4">
-            <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="w-[200px]">
-                    <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Tất cả danh mục</SelectItem>
-                    <SelectItem value="parents">Chỉ danh mục cha</SelectItem>
-                </SelectContent>
-            </Select>
             <Button onClick={handleRestore} disabled={isRestoring} variant="outline">
                 {isRestoring ? 'Đang khôi phục...' : 'Khôi phục mặc định'}
             </Button>
@@ -144,8 +144,40 @@ export default function CategoriesAdminPage() {
             </Button>
         </div>
       </div>
+
+      <Accordion type="single" collapsible className="my-4 bg-card p-4 rounded-md border">
+        <AccordionItem value="filters" className="border-none">
+          <AccordionTrigger>
+            <div className='flex items-center gap-2 text-base font-semibold'>
+              <Filter className="h-4 w-4" />
+              <span>Lọc danh mục ({filteredCategories.length} / {categories?.length || 0} kết quả)</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="space-y-4">
+                    <h4 className='font-semibold text-base border-b pb-2'>Hiển thị</h4>
+                    <RadioGroup value={filter} onValueChange={setFilter} className="mt-3 space-y-2">
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="all" id="cat-all" />
+                            <Label htmlFor="cat-all" className="font-normal cursor-pointer">Tất cả danh mục</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="parents" id="cat-parents" />
+                            <Label htmlFor="cat-parents" className="font-normal cursor-pointer">Chỉ danh mục cha</Label>
+                        </div>
+                    </RadioGroup>
+                </div>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button type="button" variant="secondary" onClick={() => setFilter('all')}>Xóa bộ lọc</Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      
       <div className="mt-6">
-        <DataTable columns={memoizedColumns} data={filteredCategories} />
+        <DataTable columns={memoizedColumns} data={filteredCategories || []} />
       </div>
     </div>
   );
