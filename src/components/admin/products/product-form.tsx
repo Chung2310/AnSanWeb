@@ -199,6 +199,31 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
   
   const watchedTags = form.watch('tags');
 
+  const mainCategories = useMemo(() => {
+    if (!categories) return [];
+    const slugs = ['ruou-vang', 'ruou-manh', 'ly-coc-pha-le', 'bo-qua-tang'];
+    return slugs.map(slug => categories.find(c => c.slug === slug)).filter((c): c is Category => !!c);
+  }, [categories]);
+
+  const currentMainCategoryId = useMemo(() => {
+    const currentTags = watchedTags || [];
+    const mainCategory = mainCategories.find(mc => currentTags.includes(mc.id));
+    return mainCategory?.id;
+  }, [watchedTags, mainCategories]);
+
+  const handleMainCategoryChange = (selectedId: string) => {
+      const currentTags = form.getValues('tags') || [];
+      const mainCategoryIds = mainCategories.map(mc => mc.id);
+
+      // Remove all main category IDs from current tags
+      const otherTags = currentTags.filter(tag => !mainCategoryIds.includes(tag));
+
+      // Add the newly selected main category ID
+      const newTags = selectedId ? [...otherTags, selectedId] : otherTags;
+
+      form.setValue('tags', newTags, { shouldDirty: true });
+  };
+
   const wineCategoryIds = useMemo(() => {
     if (isLoadingCategories || !categories) {
         return new Set<string>();
@@ -252,26 +277,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
       const currentTags = watchedTags || [];
       return currentTags.some(tagId => spiritCategoryIds.has(tagId));
   }, [spiritCategoryIds, watchedTags]);
-
-  const categoryTree = useMemo(() => {
-    if (!categories) return [];
-    const map: { [key: string]: Category & { children: Category[] } } = {};
-    const roots: (Category & { children: Category[] })[] = [];
-
-    categories.forEach(cat => {
-      map[cat.id] = { ...cat, children: [] };
-    });
-
-    categories.forEach(cat => {
-      if (cat.parentId && map[cat.parentId]) {
-        map[cat.parentId].children.push(map[cat.id]);
-      } else {
-        roots.push(map[cat.id]);
-      }
-    });
-
-    return roots;
-  }, [categories]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -371,37 +376,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     }
   };
   
-    const renderCategoryCheckboxes = (categories: (Category & { children: Category[] })[], level = 0) => {
-        return categories.map(category => (
-            <div key={category.id} style={{ marginLeft: `${level * 1.5}rem` }}>
-                <FormField
-                    control={form.control}
-                    name="tags"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 my-2">
-                            <FormControl>
-                                <Checkbox
-                                    checked={field.value?.includes(category.id)}
-                                    onCheckedChange={(checked) => {
-                                        return checked
-                                            ? field.onChange([...(field.value || []), category.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                    (value) => value !== category.id
-                                                )
-                                            );
-                                    }}
-                                />
-                            </FormControl>
-                            <FormLabel className="font-normal">{category.name}</FormLabel>
-                        </FormItem>
-                    )}
-                />
-                {category.children.length > 0 && renderCategoryCheckboxes(category.children, level + 1)}
-            </div>
-        ));
-    };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -557,24 +531,38 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                     </FormItem>
                  )} />
                 
-                <FormItem>
-                    <div className="mb-4">
-                        <FormLabel className='text-base'>Danh mục chính</FormLabel>
-                        <FormDescription>
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel className="text-base">Danh mục chính</FormLabel>
+                      <Select
+                        value={currentMainCategoryId || ''}
+                        onValueChange={handleMainCategoryChange}
+                        disabled={isLoadingCategories}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn danh mục chính" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="">Không có</SelectItem>
+                          {mainCategories.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
                           Chọn danh mục chính cho sản phẩm.
-                        </FormDescription>
-                    </div>
-                    <ScrollArea className="h-48 rounded-md border">
-                        <div className="p-4">
-                            {isLoadingCategories ? (
-                                <p>Đang tải danh mục...</p>
-                            ) : (
-                                renderCategoryCheckboxes(categoryTree)
-                            )}
-                        </div>
-                    </ScrollArea>
-                    <FormMessage />
-                </FormItem>
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
 
