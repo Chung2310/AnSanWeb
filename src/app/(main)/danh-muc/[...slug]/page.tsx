@@ -11,15 +11,35 @@ export default function ProductsPage() {
   const params = useParams();
   // For a route like /danh-muc/ruou-vang/vang-y, slug will be ['ruou-vang', 'vang-y']
   const slugParts = (params.slug as string[]) || [];
-  const currentSlug = slugParts[slugParts.length - 1];
 
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const categoryInfo = useMemo(() => {
-    if (!categories || !currentSlug) return null;
-    return categories.find(c => c.slug === currentSlug);
-  }, [categories, currentSlug]);
+    if (!categories || slugParts.length === 0) return null;
+
+    let currentParentId: string | null = null;
+    let foundCategory: Category | null = null;
+
+    for (const slug of slugParts) {
+      // Find the category with the current slug and correct parent
+      const category = categories.find(c => c.slug === slug && c.parentId === currentParentId);
+      
+      if (category) {
+        foundCategory = category;
+        currentParentId = category.id;
+      } else {
+        // If any part of the path doesn't resolve, it's not a valid hierarchical URL.
+        // As a fallback for simple slugs, check if there's any category with the last slug.
+        const lastSlug = slugParts[slugParts.length - 1];
+        return categories.find(c => c.slug === lastSlug) || null;
+      }
+    }
+    
+    // The final category in the chain is our target
+    return foundCategory;
+  }, [categories, slugParts]);
+
 
   const pageTitle = categoryInfo ? categoryInfo.name : "Danh mục sản phẩm";
   const isLoading = isLoadingProducts || isLoadingCategories;
