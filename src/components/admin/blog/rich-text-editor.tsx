@@ -3,6 +3,7 @@
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import ImageExtension from '@tiptap/extension-image';
+import TextAlign from '@tiptap/extension-text-align';
 import {
   Bold,
   Italic,
@@ -14,6 +15,9 @@ import {
   ListOrdered,
   Quote,
   Image as ImageIcon,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Toggle } from '@/components/ui/toggle';
@@ -130,6 +134,27 @@ const MenuBar = ({ editor, folder }: { editor: Editor | null; folder: string }) 
       </Toggle>
       <Toggle
         size="sm"
+        pressed={editor.isActive({ textAlign: 'left' })}
+        onPressedChange={() => editor.chain().focus().setTextAlign('left').run()}
+      >
+        <AlignLeft className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive({ textAlign: 'center' })}
+        onPressedChange={() => editor.chain().focus().setTextAlign('center').run()}
+      >
+        <AlignCenter className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive({ textAlign: 'right' })}
+        onPressedChange={() => editor.chain().focus().setTextAlign('right').run()}
+      >
+        <AlignRight className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        size="sm"
         onPressedChange={addImage}
         disabled={isUploading}
       >
@@ -152,7 +177,10 @@ export default function RichTextEditor({ value, onChange, folder = 'content-imag
         ImageExtension.configure({
             inline: false,
             allowBase64: false, // Disable base64 to prevent large data URIs
-        })
+        }),
+        TextAlign.configure({
+            types: ['heading', 'paragraph'],
+        }),
     ],
     content: value,
     editorProps: {
