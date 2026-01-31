@@ -269,6 +269,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                             <RichTextEditor
                             value={field.value || ''}
                             onChange={field.onChange}
+                            folder="category-content"
                             />
                         </FormControl>
                         <FormMessage />

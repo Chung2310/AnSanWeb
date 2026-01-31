@@ -22,7 +22,7 @@ import { useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
+const MenuBar = ({ editor, folder }: { editor: Editor | null; folder: string }) => {
   const { startUpload, isUploading } = useUploadStorage();
   const { toast } = useToast();
 
@@ -36,7 +36,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         try {
-          const imageInfo = await startUpload(file, 'blog-content');
+          const imageInfo = await startUpload(file, folder);
           if (imageInfo) {
             editor.chain().focus().setImage({ src: imageInfo.url }).run();
           }
@@ -50,7 +50,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       }
     };
     input.click();
-  }, [editor, startUpload, toast]);
+  }, [editor, startUpload, toast, folder]);
 
 
   if (!editor) {
@@ -142,9 +142,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 interface RichTextEditorProps {
   value: string;
   onChange: (richText: string) => void;
+  folder?: string;
 }
 
-export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+export default function RichTextEditor({ value, onChange, folder = 'content-images' }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
         StarterKit, 
@@ -169,7 +170,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
 
   return (
     <div>
-      <MenuBar editor={editor} />
+      <MenuBar editor={editor} folder={folder} />
       <EditorContent editor={editor} />
     </div>
   );
