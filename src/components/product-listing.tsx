@@ -171,7 +171,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               </div>
             </div>
             {paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 gap-x-8 gap-y-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {paginatedProducts.map((product) => (
                         <WineCard key={product.id} product={product} />
                     ))}
