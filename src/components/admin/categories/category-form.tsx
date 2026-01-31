@@ -29,7 +29,6 @@ import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'fir
 import { useFirestore } from '@/firebase';
 import { useCategories } from '@/hooks/use-categories';
 import RichTextEditor from '@/components/admin/blog/rich-text-editor';
-import { useMemo } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
@@ -141,36 +140,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     const page = searchParams.get('page');
     return page ? `/admin/categories?page=${page}` : '/admin/categories';
   };
-
-  const watchedParentId = form.watch('parentId');
-
-  const getDescendantIds = useMemo(() => {
-    return (parentId: string, allCategories: Category[]): string[] => {
-      const children = allCategories.filter(cat => cat.parentId === parentId);
-      let ids: string[] = children.map(cat => cat.id);
-      children.forEach(child => {
-          ids = [...ids, ...getDescendantIds(child.id, allCategories)];
-      });
-      return ids;
-    }
-  }, []);
-
-  const wineCategory = useMemo(() => categories?.find(c => c.slug === 'ruou-vang'), [categories]);
-  const spiritCategory = useMemo(() => categories?.find(c => c.slug === 'ruou-manh'), [categories]);
-
-  const isWineCategoryContext = useMemo(() => {
-      if (!watchedParentId || !wineCategory || !categories) return false;
-      if (watchedParentId === wineCategory.id) return true;
-      const wineDescendants = getDescendantIds(wineCategory.id, categories);
-      return wineDescendants.includes(watchedParentId);
-  }, [watchedParentId, wineCategory, categories, getDescendantIds]);
-
-  const isSpiritCategoryContext = useMemo(() => {
-      if (!watchedParentId || !spiritCategory || !categories) return false;
-      if (watchedParentId === spiritCategory.id) return true;
-      const spiritDescendants = getDescendantIds(spiritCategory.id, categories);
-      return spiritDescendants.includes(watchedParentId);
-  }, [watchedParentId, spiritCategory, categories, getDescendantIds]);
 
 
   const onSubmit = async (data: CategoryFormValues) => {
@@ -296,7 +265,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                 </Card>
             </div>
             <div className="lg:col-span-1 space-y-8">
-                {isWineCategoryContext && (
                 <Card>
                     <CardHeader>
                         <CardTitle>Phân loại Rượu Vang</CardTitle>
@@ -310,9 +278,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                         </ScrollArea>
                     </CardContent>
                 </Card>
-                )}
-
-                {isSpiritCategoryContext && (
                 <Card>
                     <CardHeader>
                         <CardTitle>Phân loại Rượu Mạnh</CardTitle>
@@ -326,7 +291,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                         </ScrollArea>
                     </CardContent>
                 </Card>
-                )}
             </div>
         </div>
 
