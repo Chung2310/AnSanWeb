@@ -221,6 +221,7 @@ export default function BlogForm({ initialData }: BlogFormProps) {
                         <RichTextEditor
                           value={field.value || ''}
                           onChange={field.onChange}
+                          folder="blog-content"
                         />
                       </FormControl>
                       <FormMessage />
