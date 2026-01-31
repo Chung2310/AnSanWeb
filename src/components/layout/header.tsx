@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -18,7 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { wineMegaMenuData, spiritsMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -71,7 +70,7 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại rượu',
-                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Thương hiệu',
@@ -91,24 +90,16 @@ const staticNavLinks: NavLinkData[] = [
             {
                 title: 'LY PHA LÊ RIEDEL',
                 href: '/danh-muc/ly-coc-pha-le',
-                items: [
-                    { href: '/danh-muc/ly-coc-pha-le/ly-vang-do', label: 'Ly Vang Đỏ' },
-                    { href: '/danh-muc/ly-coc-pha-le/ly-vang-trang', label: 'Ly Vang Trắng' },
-                    { href: '/danh-muc/ly-coc-pha-le/ly-champagne', label: 'Ly Champagne' },
-                    { href: '/danh-muc/ly-coc-pha-le/ly-thuy-tinh-re', label: 'Ly thủy tinh rẻ' },
-                ]
+                items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             },
             {
                 title: 'LY WHISKY',
                 href: '/danh-muc/ly-coc-pha-le',
-                items: [
-                    { href: '/danh-muc/ly-coc-pha-le/ly-whisky', label: 'Ly Whisky' },
-                    { href: '/danh-muc/ly-coc-pha-le/coc-whisky', label: 'Cốc Whisky' },
-                ]
+                items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
             },
             {
                 title: 'DECANTER/BÌNH THỞ',
-                 href: '/danh-muc/ly-coc-pha-le',
+                 href: `/danh-muc/ly-coc-pha-le/${glasswareMegaMenuData.khac[0].slug}`,
                 items: []
             }
         ]
@@ -121,7 +112,7 @@ const staticNavLinks: NavLinkData[] = [
                 title: 'Quà tặng',
                 href: '/danh-muc/bo-qua-tang',
                 items: giftSetMegaMenuData.quaTang.map(item => ({
-                    href: `/danh-muc/${item.slug}`,
+                    href: `/danh-muc/bo-qua-tang/${item.slug}`,
                     label: item.label
                 })),
             }
@@ -430,4 +421,3 @@ export default function Header() {
     </header>
   );
 }
-

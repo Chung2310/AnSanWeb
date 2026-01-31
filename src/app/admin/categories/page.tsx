@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { useFirestore } from '@/firebase';
 import { collection, doc, writeBatch } from 'firebase/firestore';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useToast } from '@/hooks/use-toast';
 
 export default function CategoriesAdminPage() {
@@ -48,7 +48,7 @@ export default function CategoriesAdminPage() {
             const batch = writeBatch(firestore);
             const categoriesCol = collection(firestore, 'categories');
 
-            const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt'>[] = [];
+            const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt' | 'status' | 'image'>[] = [];
 
             const mainCats = [
                 { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang' },
@@ -61,38 +61,34 @@ export default function CategoriesAdminPage() {
                 allCategoriesToCreate.push({ ...cat, description: '', tags: [], parentId: null });
             });
 
-            Object.values(wineMegaMenuData).flat().forEach(item => {
+            const addItemsWithParent = (items: { label: string; slug: string; category_id: string }[], parentId: string) => {
+              items.forEach(item => {
                 allCategoriesToCreate.push({
-                    id: item.category_id,
-                    name: item.label,
-                    slug: item.slug,
-                    description: '',
-                    tags: [],
-                    parentId: null,
+                  id: item.category_id,
+                  name: item.label,
+                  slug: item.slug,
+                  description: '',
+                  tags: [],
+                  parentId: parentId,
                 });
-            });
+              });
+            };
 
-            Object.values(spiritsMegaMenuData).flat().forEach(item => {
-                allCategoriesToCreate.push({
-                    id: item.category_id,
-                    name: item.label,
-                    slug: item.slug,
-                    description: '',
-                    tags: [],
-                    parentId: null,
-                });
-            });
+            Object.values(wineMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-vang'));
+            Object.values(spiritsMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-manh'));
+            Object.values(glasswareMegaMenuData).flat().forEach(item => addItemsWithParent(item, 'ly-coc-pha-le'));
+            addItemsWithParent(giftSetMegaMenuData.quaTang, 'bo-qua-tang');
             
             const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
 
             uniqueCategories.forEach(category => {
                 const docRef = doc(categoriesCol, category.id);
-                batch.set(docRef, category);
+                batch.set(docRef, category, { merge: true });
             });
 
             await batch.commit();
 
-            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục mặc định đã được khôi phục.` });
+            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục mặc định đã được khôi phục/cập nhật.` });
 
         } catch (error) {
             console.error("Error restoring categories:", error);
