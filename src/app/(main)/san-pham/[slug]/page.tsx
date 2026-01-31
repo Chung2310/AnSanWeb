@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useProducts } from '@/hooks/use-products';
 import { useCategories } from '@/hooks/use-categories';
 import { Separator } from '@/components/ui/separator';
-import type { ProductStructuredDetails, FullProduct, ImageInfo } from '@/lib/types';
+import type { ProductStructuredDetails, FullProduct, ImageInfo, Category } from '@/lib/types';
 import ProductInfoSection from '@/components/product-info-section';
 import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
@@ -122,6 +122,27 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return images;
   }, [product]);
 
+  const isWineProduct = React.useMemo(() => {
+    if (!product.tags || !categories) return false;
+
+    const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
+        const children = allCategories.filter(cat => cat.parentId === parentId);
+        let ids = children.map(cat => cat.id);
+        children.forEach(child => {
+            ids = [...ids, ...getDescendantIds(child.id, allCategories)];
+        });
+        return ids;
+    };
+
+    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
+    if (!wineCategory) return false;
+
+    const descendantCategoryIds = getDescendantIds(wineCategory.id, categories);
+    const allWineIds = [wineCategory.id, ...descendantCategoryIds];
+    
+    return product.tags.some(tag => allWineIds.includes(tag));
+  }, [product.tags, categories]);
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
@@ -165,6 +186,9 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                  return match[1].trim().replace(/\.$/, '');
             }
         }
+    }
+    if (labels.some(l => ['dung tích', 'volume'].includes(l.toLowerCase().trim()))) {
+      if (isWineProduct) return '750ml';
     }
     return 'N/A';
   }
