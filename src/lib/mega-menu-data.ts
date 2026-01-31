@@ -58,9 +58,6 @@ export const spiritsMegaMenuData = {
         { label: 'Royal Salute', slug: 'royal-salute', category_id: 'royal-salute' },
         { label: 'The Singleton', slug: 'the-singleton', category_id: 'singleton' },
     ],
-    hinhThuc: [
-        { label: 'Hộp Quà', slug: 'hop-qua-ruou-manh', category_id: 'ruou-manh-hop-qua' },
-    ]
 };
 
 export const glasswareMegaMenuData = {

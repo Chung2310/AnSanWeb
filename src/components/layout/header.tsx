@@ -28,7 +28,6 @@ type MenuItem = {
 type MenuColumn = {
     title: string;
     items: MenuItem[];
-    href?: string;
 };
 
 type NavLinkData = {
@@ -362,12 +361,8 @@ export default function Header() {
                                                       )}
                                                       <Accordion type="multiple" className="w-full">
                                                           {link.megaMenuColumns.map(column => {
-                                                              if (column.items.length === 0 && column.href) {
-                                                                  return (
-                                                                      <Link key={column.title} href={column.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-semibold uppercase text-gray-800 border-b">
-                                                                          {column.title}
-                                                                      </Link>
-                                                                  )
+                                                              if (column.items.length === 0) {
+                                                                  return null;
                                                               }
                                                               return (
                                                                   <AccordionItem value={column.title} key={column.title}>
