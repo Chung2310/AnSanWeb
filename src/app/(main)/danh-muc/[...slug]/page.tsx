@@ -5,25 +5,41 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useMemo } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
+import type { Category } from '@/lib/types';
 
 export default function ProductsPage() {
   const params = useParams();
-  const slug = params.slug as string;
+  // For a route like /danh-muc/ruou-vang/vang-y, slug will be ['ruou-vang', 'vang-y']
+  const slugParts = (params.slug as string[]) || [];
+  const currentSlug = slugParts[slugParts.length - 1];
+
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
-  
+
   const categoryInfo = useMemo(() => {
-    if (!categories) return null;
-    return categories.find(c => c.slug === slug);
-  }, [categories, slug]);
-  
-  const pageTitle = categoryInfo ? categoryInfo.name : "Sản phẩm";
+    if (!categories || !currentSlug) return null;
+    return categories.find(c => c.slug === currentSlug);
+  }, [categories, currentSlug]);
+
+  const pageTitle = categoryInfo ? categoryInfo.name : "Danh mục sản phẩm";
   const isLoading = isLoadingProducts || isLoadingCategories;
 
+  const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
+      const children = allCategories.filter(cat => cat.parentId === parentId);
+      let ids = children.map(cat => cat.id);
+      children.forEach(child => {
+          ids = [...ids, ...getDescendantIds(child.id, allCategories)];
+      });
+      return ids;
+  };
+
   const filteredProducts = useMemo(() => {
-    if (!products || !categoryInfo) return [];
-    return products.filter(wine => wine.tags?.includes(categoryInfo.id));
-  }, [products, categoryInfo]);
+    if (!products || !categories || !categoryInfo) return [];
+
+    const allCategoryIds = [categoryInfo.id, ...getDescendantIds(categoryInfo.id, categories)];
+
+    return products.filter(wine => wine.tags?.some(tag => allCategoryIds.includes(tag)));
+  }, [products, categories, categoryInfo]);
 
   if (isLoading) {
     return (
@@ -50,12 +66,12 @@ export default function ProductsPage() {
   }
 
   // After loading, if we couldn't find category info for the slug, it's a 404
-  if (!categoryInfo) {
+  if (!isLoading && !categoryInfo) {
       notFound();
   }
 
   return (
-    <ProductListing 
+    <ProductListing
       key={pageTitle}
       initialProducts={filteredProducts}
       title={pageTitle}
