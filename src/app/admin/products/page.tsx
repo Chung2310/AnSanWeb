@@ -1,13 +1,13 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Filter, Download } from 'lucide-react';
+import { PlusCircle, Filter, Download, FileUp } from 'lucide-react';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/use-products';
 import { DataTable } from '@/components/admin/products/data-table';
 import { columns } from '@/components/admin/products/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import type { Category } from '@/lib/types';
 import * as XLSX from 'xlsx';
 import {
@@ -37,6 +37,7 @@ import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { useImportProducts } from '@/hooks/use-import-products';
 
 // Define filter types
 type WineFilters = {
@@ -55,6 +56,8 @@ export default function ProductsAdminPage() {
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
+  const { importProducts, isImporting } = useImportProducts();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [wineFilters, setWineFilters] = useState<WineFilters>({
     theoLoai: [],
@@ -297,6 +300,16 @@ export default function ProductsAdminPage() {
       setSpiritFilters({ thuongHieu: [] });
   }
 
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      await importProducts(file);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   const renderWineFilterGroup = (title: string, groupKey: keyof WineFilters, items: { label: string, slug: string, category_id: string }[]) => (
     <div className='mb-4'>
         <h4 className='font-semibold mb-2 text-lg border-b pb-2'>{title}</h4>
@@ -428,6 +441,22 @@ export default function ProductsAdminPage() {
                 </SheetContent>
               </Sheet>
             )}
+
+            <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isImporting}
+            >
+                <FileUp className="mr-2 h-4 w-4" />
+                {isImporting ? 'Đang nhập...' : 'Nhập Excel'}
+            </Button>
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept=".xlsx, .xls, .csv"
+                onChange={handleFileSelect}
+            />
 
             <Button variant="outline" onClick={handleExport}>
               <Download className="mr-2 h-4 w-4" />
