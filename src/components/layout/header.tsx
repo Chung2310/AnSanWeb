@@ -18,7 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -120,11 +120,10 @@ const staticNavLinks: NavLinkData[] = [
             {
                 title: 'Quà tặng',
                 href: '/danh-muc/bo-qua-tang',
-                items: [
-                    { href: '/danh-muc/bo-qua-tang/qua-tet-an-san', label: 'Quà Tết An San' },
-                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
-                    { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
-                ]
+                items: giftSetMegaMenuData.quaTang.map(item => ({
+                    href: `/danh-muc/${item.slug}`,
+                    label: item.label
+                })),
             }
         ]
     },
@@ -431,4 +430,3 @@ export default function Header() {
     </header>
   );
 }
-
