@@ -5,9 +5,9 @@ import * as XLSX from 'xlsx';
 import { useFirebase } from '@/firebase';
 import { collection, doc, writeBatch, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import type { FullProduct, Category } from '@/lib/types';
+import type { FullProduct } from '@/lib/types';
 import { useCategories } from './use-categories';
-import { wineMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 
 export function useImportProducts() {
   const { firestore } = useFirebase();
@@ -30,8 +30,9 @@ export function useImportProducts() {
       }
 
       const categoryMap = new Map(categories.map(c => [c.name.toLowerCase(), c.id]));
-      const wineTagMap = new Map<string, string>();
-      Object.values(wineMegaMenuData).flat().forEach(item => wineTagMap.set(item.label.toLowerCase(), item.category_id));
+      const tagLabelToIdMap = new Map<string, string>();
+      Object.values(wineMegaMenuData).flat().forEach(item => tagLabelToIdMap.set(item.label.toLowerCase(), item.category_id));
+      Object.values(spiritsMegaMenuData).flat().forEach(item => tagLabelToIdMap.set(item.label.toLowerCase(), item.category_id));
 
       const batch = writeBatch(firestore);
       const productsCollection = collection(firestore, 'products');
@@ -40,12 +41,15 @@ export function useImportProducts() {
         const productId = row['ID'] ? String(row['ID']) : null;
         const productRef = productId ? doc(productsCollection, productId) : doc(productsCollection);
 
-        // Map general categories and tags
+        const tagsFromName = (columnName: string): string[] => {
+            return row[columnName]?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => tagLabelToIdMap.get(name)).filter(Boolean) || [];
+        }
+        
         const generalCategories: string[] = row['Danh mục chung']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => categoryMap.get(name)).filter(Boolean) || [];
-        const wineLoai: string[] = row['Loại rượu']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => wineTagMap.get(name)).filter(Boolean) || [];
-        const wineQuocGia: string[] = row['Quốc gia']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => wineTagMap.get(name)).filter(Boolean) || [];
-        const wineVung: string[] = row['Vùng']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => wineTagMap.get(name)).filter(Boolean) || [];
-        const wineGiongNho: string[] = row['Giống nho']?.split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => wineTagMap.get(name)).filter(Boolean) || [];
+        const wineLoai = tagsFromName('Loại rượu');
+        const wineQuocGia = tagsFromName('Quốc gia');
+        const wineVung = tagsFromName('Vùng');
+        const wineGiongNho = tagsFromName('Giống nho');
         
         const allTags = [...new Set([...generalCategories, ...wineLoai, ...wineQuocGia, ...wineVung, ...wineGiongNho])];
 
