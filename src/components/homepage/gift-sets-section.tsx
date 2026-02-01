@@ -60,11 +60,6 @@ function GiftCard({ card }: { card: GiftSetCardProps }) {
             KHÁM PHÁ SẢN PHẨM
         </Button>
       </div>
-       <style jsx>{`
-        .text-shadow {
-          text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
-        }
-      `}</style>
     </Link>
   );
 }

@@ -233,12 +233,6 @@ export default function PriceCategoryShowcase() {
             ))}
           </div>
         </Carousel>
-
-        <style jsx>{`
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            }
-        `}</style>
       </div>
     </motion.section>
   );
