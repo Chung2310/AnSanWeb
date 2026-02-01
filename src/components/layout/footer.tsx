@@ -1,33 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useInView, useAnimation } from 'framer-motion';
-import { useEffect, useRef } from 'react';
 import { MapPin } from 'lucide-react';
 
-const containerVariants = {
-    hidden: { opacity: 0, y: 75 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.2 } },
-};
-
 export default function Footer() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
-  const mainControls = useAnimation();
-
-  useEffect(() => {
-      if (isInView) {
-          mainControls.start("visible");
-      }
-  }, [isInView, mainControls]);
 
   return (
-    <motion.footer 
-      ref={ref}
-      variants={containerVariants}
-      initial="hidden"
-      animate={mainControls}
-      className="bg-white text-black border-t">
+    <footer className="bg-white text-black border-t">
         <div className="container mx-auto max-w-screen-2xl px-4 py-16">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm">
                 
@@ -120,6 +99,6 @@ export default function Footer() {
                 </div>
             </div>
         </div>
-    </motion.footer>
+    </footer>
   );
 }
