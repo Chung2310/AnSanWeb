@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -162,12 +163,13 @@ export default function PriceCategoryShowcase() {
 
           <div className="flex justify-center mt-8 space-x-2">
             {wineCategories.map((_, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={() => wineApi?.scrollTo(index)}
+                variant="ghost"
                 className={cn(
-                  "w-2.5 h-2.5 rounded-full transition-colors",
-                  wineCurrent === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
+                  "w-2.5 h-2.5 rounded-full transition-colors p-0",
+                  wineCurrent === index ? "bg-stone-800 hover:bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
                 )}
                 aria-label={`Go to wine slide ${index + 1}`}
               />
@@ -221,12 +223,13 @@ export default function PriceCategoryShowcase() {
 
           <div className="flex justify-center mt-8 space-x-2">
             {spiritCategories.map((_, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={() => spiritApi?.scrollTo(index)}
+                variant="ghost"
                 className={cn(
-                  "w-2.5 h-2.5 rounded-full transition-colors",
-                  spiritCurrent === index ? "bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
+                  "w-2.5 h-2.5 rounded-full transition-colors p-0",
+                  spiritCurrent === index ? "bg-stone-800 hover:bg-stone-800" : "bg-stone-400 hover:bg-stone-600"
                 )}
                 aria-label={`Go to spirit slide ${index + 1}`}
               />
