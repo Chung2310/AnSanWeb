@@ -68,11 +68,11 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại rượu',
-                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Thương hiệu',
-                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Quà tặng',
@@ -105,7 +105,7 @@ const staticNavLinks: NavLinkData[] = [
             {
                 title: 'Quà tặng',
                 items: giftSetMegaMenuData.quaTang.map(item => ({
-                    href: `/danh-muc/bo-qua-tang/${item.slug}`,
+                    href: `/danh-muc/${item.slug}`,
                     label: item.label
                 })),
             }
@@ -285,9 +285,9 @@ export default function Header() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80" 
                     />
-                    <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2">
+                    <Button type="submit" variant="ghost" className="absolute right-0 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent">
                       <Search className="h-5 w-5 text-secondary-foreground/80" />
-                    </button>
+                    </Button>
                 </form>
             </div>
 
@@ -323,9 +323,9 @@ export default function Header() {
                                   onChange={(e) => setSearchQuery(e.target.value)}
                                   className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
                                 />
-                                <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                <Button type="submit" variant="ghost" className="absolute right-2.5 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent">
                                   <Search className="h-5 w-5 text-gray-500" />
-                                </button>
+                                </Button>
                             </form>
 
                             <Accordion type="multiple" className="w-full flex-grow">
