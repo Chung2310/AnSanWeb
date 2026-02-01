@@ -147,6 +147,7 @@ export default function WineQuizPage() {
                         <button
                             key={answerIndex}
                             onClick={() => handleAnswerSelect(quizItem.id, answer)}
+                            suppressHydrationWarning
                             className={cn(
                             'p-6 text-left border transition-all duration-300',
                             isSelected 
