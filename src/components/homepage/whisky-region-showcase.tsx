@@ -95,7 +95,7 @@ export default function WhiskyRegionShowcase() {
         animate={mainControls}
         className="container relative z-10 flex h-full flex-col items-start justify-center text-left"
       >
-        <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 shadow-text">
+        <motion.p variants={itemVariants} className="font-semibold tracking-widest uppercase text-sm text-white/90 text-shadow-sm">
           lựa chọn các dòng vang
         </motion.p>
         <div className="my-6">
@@ -104,7 +104,7 @@ export default function WhiskyRegionShowcase() {
               key={region.name} 
               variants={itemVariants}
               onClick={() => handleClick(region.imageId, region.name)}
-              className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 ${
+              className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 text-shadow ${
                   selectedRegion === region.name
                     ? 'text-5xl text-white'
                     : 'text-4xl text-white/60'
@@ -124,14 +124,6 @@ export default function WhiskyRegionShowcase() {
           </Button>
         </motion.div>
       </motion.div>
-      <style jsx>{`
-        .shadow-text {
-          text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-        .font-headline {
-          text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-        }
-      `}</style>
     </section>
   );
 }
