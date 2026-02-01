@@ -10,7 +10,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
 import { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
-import { useHydration } from '@/hooks/use-hydration';
 import {
   Accordion,
   AccordionContent,
@@ -69,11 +68,11 @@ const staticNavLinks: NavLinkData[] = [
         megaMenuColumns: [
             {
                 title: 'Theo loại rượu',
-                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Thương hiệu',
-                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
             },
             {
                 title: 'Quà tặng',
@@ -106,7 +105,7 @@ const staticNavLinks: NavLinkData[] = [
             {
                 title: 'Quà tặng',
                 items: giftSetMegaMenuData.quaTang.map(item => ({
-                    href: `/danh-muc/${item.slug}`,
+                    href: `/danh-muc/bo-qua-tang/${item.slug}`,
                     label: item.label
                 })),
             }
@@ -171,7 +170,6 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const isHydrated = useHydration();
 
   const handleOpenMenu = () => {
     if (timerRef.current) {
@@ -202,7 +200,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   }, []);
   
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
-  const isMenuOpen = isHydrated && isOpen && hasDropdown;
+  const isMenuOpen = isOpen && hasDropdown;
   const isCurrentPage = pathname === href || (href !== '/' && pathname.startsWith(href));
   
   return (
@@ -246,7 +244,6 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const isHydrated = useHydration();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -301,93 +298,91 @@ export default function Header() {
             </div>
             
             <div className="flex-1 flex justify-end">
-              {isHydrated && (
-                  <div className="lg:hidden">
-                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                      <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <Menu className="h-6 w-6" />
-                        </Button>
-                      </SheetTrigger>
-                      <SheetContent side="right" className="w-full max-w-[400px] bg-white p-0">
-                          <div className="p-6 flex flex-col h-full">
-                              <SheetHeader className="sr-only">
-                                <SheetTitle>Main Menu</SheetTitle>
-                                <SheetDescription>Main navigation links for the website.</SheetDescription>
-                              </SheetHeader>
-                              <div className="mb-6">
-                                <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
-                              </div>
-                              
-                              <form onSubmit={handleSearch} className="relative w-full mb-6">
-                                  <Input 
-                                    type="text" 
-                                    placeholder="Tìm kiếm" 
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
-                                  />
-                                  <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                                    <Search className="h-5 w-5 text-gray-500" />
-                                  </button>
-                              </form>
+                <div className="lg:hidden">
+                  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Menu className="h-6 w-6" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-full max-w-[400px] bg-white p-0">
+                        <div className="p-6 flex flex-col h-full">
+                            <SheetHeader className="sr-only">
+                              <SheetTitle>Main Menu</SheetTitle>
+                              <SheetDescription>Main navigation links for the website.</SheetDescription>
+                            </SheetHeader>
+                            <div className="mb-6">
+                              <Link href="/" onClick={() => setIsSheetOpen(false)}><Logo /></Link>
+                            </div>
+                            
+                            <form onSubmit={handleSearch} className="relative w-full mb-6">
+                                <Input 
+                                  type="text" 
+                                  placeholder="Tìm kiếm" 
+                                  value={searchQuery}
+                                  onChange={(e) => setSearchQuery(e.target.value)}
+                                  className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary" 
+                                />
+                                <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                  <Search className="h-5 w-5 text-gray-500" />
+                                </button>
+                            </form>
 
-                              <Accordion type="multiple" className="w-full flex-grow">
-                                  {staticNavLinks.map(link => {
-                                      const mainContent = (
-                                          <Link 
-                                              href={link.href} 
-                                              onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
-                                              className="flex-1 py-3 font-semibold uppercase text-gray-800"
-                                          >
-                                              {link.label}
-                                          </Link>
-                                      );
-                                      
-                                      if(link.megaMenuColumns) {
-                                          return (
-                                              <AccordionItem value={link.label} key={link.href}>
-                                                  <AccordionTrigger className="hover:no-underline py-0">
-                                                      {mainContent}
-                                                  </AccordionTrigger>
-                                                  <AccordionContent className="pl-4 pb-0">
-                                                      {link.href && (
-                                                          <Link href={link.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-bold uppercase text-gray-700 border-b">
-                                                              Tất cả {link.label}
-                                                          </Link>
-                                                      )}
-                                                      <Accordion type="multiple" className="w-full">
-                                                          {link.megaMenuColumns.map(column => {
-                                                              if (column.items.length === 0) {
-                                                                  return null;
-                                                              }
-                                                              return (
-                                                                  <AccordionItem value={column.title} key={column.title}>
-                                                                      <AccordionTrigger className="font-semibold uppercase text-gray-800">{column.title}</AccordionTrigger>
-                                                                      <AccordionContent className="pl-4">
-                                                                          {column.items.map(item => (
-                                                                              <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
-                                                                                  {item.label}
-                                                                              </Link>
-                                                                          ))}
-                                                                      </AccordionContent>
-                                                                  </AccordionItem>
-                                                              )
-                                                          })}
-                                                      </Accordion>
-                                                  </AccordionContent>
-                                              </AccordionItem>
-                                          )
-                                      }
+                            <Accordion type="multiple" className="w-full flex-grow">
+                                {staticNavLinks.map(link => {
+                                    const mainContent = (
+                                        <Link 
+                                            href={link.href} 
+                                            onClick={() => {if (!link.megaMenuColumns) setIsSheetOpen(false)}}
+                                            className="flex-1 py-3 font-semibold uppercase text-gray-800"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    );
+                                    
+                                    if(link.megaMenuColumns) {
+                                        return (
+                                            <AccordionItem value={link.label} key={link.href}>
+                                                <AccordionTrigger className="hover:no-underline py-0">
+                                                    {mainContent}
+                                                </AccordionTrigger>
+                                                <AccordionContent className="pl-4 pb-0">
+                                                    {link.href && (
+                                                        <Link href={link.href} onClick={() => setIsSheetOpen(false)} className="block py-3 font-bold uppercase text-gray-700 border-b">
+                                                            Tất cả {link.label}
+                                                        </Link>
+                                                    )}
+                                                    <Accordion type="multiple" className="w-full">
+                                                        {link.megaMenuColumns.map(column => {
+                                                            if (column.items.length === 0) {
+                                                                return null;
+                                                            }
+                                                            return (
+                                                                <AccordionItem value={column.title} key={column.title}>
+                                                                    <AccordionTrigger className="font-semibold uppercase text-gray-800">{column.title}</AccordionTrigger>
+                                                                    <AccordionContent className="pl-4">
+                                                                        {column.items.map(item => (
+                                                                            <Link key={item.href} href={item.href} onClick={() => setIsSheetOpen(false)} className="block py-2 text-muted-foreground hover:text-primary">
+                                                                                {item.label}
+                                                                            </Link>
+                                                                        ))}
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            )
+                                                        })}
+                                                    </Accordion>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        )
+                                    }
 
-                                      return <div className="border-b" key={link.href}>{mainContent}</div>
-                                  })}
-                              </Accordion>
-                          </div>
-                      </SheetContent>
-                    </Sheet>
-                  </div>
-              )}
+                                    return <div className="border-b" key={link.href}>{mainContent}</div>
+                                })}
+                            </Accordion>
+                        </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
             </div>
         </div>
       </div>
