@@ -147,16 +147,17 @@ export default function HeroSection() {
                     <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
                             <div key={slide.label} className="flex items-center">
-                                <button
+                                <Button
                                     onClick={() => setCurrent(index)}
+                                    variant="ghost"
                                     className={cn(
-                                        "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20",
-                                        current === index && "border-white bg-white text-black"
+                                        "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 h-auto font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20 hover:text-white",
+                                        current === index && "border-white bg-white text-black hover:bg-white hover:text-black"
                                     )}
                                     style={{ fontSize: '19px' }}
                                 >
                                     {slide.label}
-                                </button>
+                                </Button>
                                 {index < heroSlides.length - 1 && (
                                     <div className="w-8 h-px bg-white/50 mx-2 hidden md:block"></div>
                                 )}
