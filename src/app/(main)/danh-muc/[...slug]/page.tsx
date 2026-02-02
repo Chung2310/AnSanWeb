@@ -4,12 +4,14 @@ import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemo, useCallback } from 'react';
-import { useParams, notFound } from 'next/navigation';
+import { useParams, notFound, useSearchParams } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
+import type { ActiveFilters } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const slugParts = params?.slug ? (params.slug as string[]) : [];
 
   const { products, isLoading: isLoadingProducts } = useProducts();
@@ -23,24 +25,31 @@ export default function ProductsPage() {
     let parentId: string | null = null;
 
     for (const slug of slugParts) {
-        // Make the parent ID check more robust by treating undefined/empty string as null
         const currentParentId = parentId;
-        category = categories.find(c => c.slug === slug && (c.parentId || null) === currentParentId);
+        const foundCategory = categories.find(c => c.slug === slug && (c.parentId || null) === currentParentId);
         
-        if (!category) {
-            // Fallback for flat URLs if the hierarchical search fails.
-            // This handles cases where a direct slug is used without its parent path.
+        if (!foundCategory) {
             if (slugParts.length === 1) {
               return categories.find(c => c.slug === slug) || null;
             }
-            // For multi-part slugs, if a part is not found in the hierarchy, fail.
             return null; 
         }
+        category = foundCategory;
         parentId = category.id;
     }
 
     return category || null;
   }, [categories, slugParts]);
+
+  const queryFilters = useMemo(() => {
+    const filterGroup = searchParams.get('filter_group');
+    const filterLabel = searchParams.get('filter_label');
+
+    if (filterGroup && filterLabel) {
+        return { [filterGroup]: [filterLabel] } as ActiveFilters;
+    }
+    return undefined;
+  }, [searchParams]);
 
 
   const getDescendantIds = useCallback((parentId: string, allCategories: Category[] | null): string[] => {
@@ -109,6 +118,7 @@ export default function ProductsPage() {
       title={categoryInfo?.name || 'Danh mục sản phẩm'}
       categoryDescription={categoryInfo?.description}
       initialCategory={categoryInfo}
+      queryFilters={queryFilters}
     />
   );
 }
