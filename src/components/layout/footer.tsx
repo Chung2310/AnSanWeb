@@ -16,7 +16,17 @@ export default function Footer() {
                     <h3 className="font-bold uppercase tracking-wider text-base">HỘ KINH DOANH NGÔ QUANG HÙNG</h3>
                     <div className="space-y-2 text-gray-700">
                         <p><span className='font-semibold'>Người đại diện:</span> Ngô Quang Hùng</p>
-                        <p><span className='font-semibold'>Địa chỉ:</span> Đường Trần Phú, Phường Đình Bảng, thành phố Từ Sơn, Bắc Ninh</p>
+                        <p>
+                          <span className='font-semibold'>Địa chỉ:</span>{' '}
+                          <a
+                            href="https://www.google.com/maps/place/R%C6%B0%E1%BB%A3u+Vang+An+San/@21.1188432,105.9584962,17z/data=!3m1!4b1!4m6!3m5!1s0x313507d363d71ddb:0x7a29b7c779b993e1!8m2!3d21.1188432!4d105.9610764!16s%2Fg%2F11h9q5p9_n?entry=ttu"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-primary transition-colors"
+                          >
+                            Đường Trần Phú, Phường Đình Bảng, thành phố Từ Sơn, Bắc Ninh
+                          </a>
+                        </p>
                         <p><span className='font-semibold'>Hotline:</span> 0933.333.313</p>
                         <p><span className='font-semibold'>Email:</span> ruouvangansan@gmail.com</p>
                     </div>
