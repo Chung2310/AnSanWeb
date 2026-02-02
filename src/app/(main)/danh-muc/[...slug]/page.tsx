@@ -23,13 +23,17 @@ export default function ProductsPage() {
     let parentId: string | null = null;
 
     for (const slug of slugParts) {
-        category = categories.find(c => c.slug === slug && c.parentId === parentId);
+        // Make the parent ID check more robust by treating undefined/empty string as null
+        const currentParentId = parentId;
+        category = categories.find(c => c.slug === slug && (c.parentId || null) === currentParentId);
+        
         if (!category) {
-            // Fallback for flat URLs if the hierarchical search fails on the first level.
+            // Fallback for flat URLs if the hierarchical search fails.
             // This handles cases where a direct slug is used without its parent path.
             if (slugParts.length === 1) {
               return categories.find(c => c.slug === slug) || null;
             }
+            // For multi-part slugs, if a part is not found in the hierarchy, fail.
             return null; 
         }
         parentId = category.id;
