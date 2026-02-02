@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
-import type { Product } from "@/lib/types";
+import type { Product, Category } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
@@ -18,26 +18,54 @@ interface ProductListingProps {
     bannerData?: CategoryBannerProps;
     itemsPerPage?: number;
     categoryDescription?: string;
+    initialCategory?: Category | null;
 }
 
-function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription }: ProductListingProps) {
+function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
+  
+  const getInitialFilters = useMemo(() => {
+    if (!initialCategory) return {};
+    
+    const filters: ActiveFilters = {};
+    const categoryId = initialCategory.id;
+
+    const giftOption = SidebarFilter.staticFiltersData["QUÀ TẶNG"].find(o => o.value === categoryId);
+    if (giftOption) {
+        filters["QUÀ TẶNG"] = [giftOption.label];
+        return filters;
+    }
+
+    const categoryOption = SidebarFilter.staticFiltersData["DANH MỤC"].find(o => o.value === categoryId);
+    if (categoryOption) {
+        filters["DANH MỤC"] = [categoryOption.label];
+        return filters;
+    }
+
+    const grapeOption = SidebarFilter.staticFiltersData["GIỐNG NHO"].find(o => o.value === categoryId);
+    if (grapeOption) {
+        filters["GIỐNG NHO"] = [grapeOption.label];
+        return filters;
+    }
+    
+    return filters;
+  }, [initialCategory]);
+  
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
   const isWineCategory = useMemo(() => {
-    return title.toLowerCase().includes('vang');
-  }, [title]);
+    return title.toLowerCase().includes('vang') || !!initialCategory?.slug.includes('vang');
+  }, [title, initialCategory]);
 
   const isGiftSetCategory = useMemo(() => {
-    return title.toLowerCase().includes('quà tặng');
-  }, [title]);
+    return title.toLowerCase().includes('quà tặng') || !!initialCategory?.slug.includes('bo-qua-tang');
+  }, [title, initialCategory]);
 
-  // Reset page to 1 when initialProducts change (i.e., category changes)
   useEffect(() => {
     setCurrentPage(1);
-    setActiveFilters({});
-  }, [initialProducts]);
+    setActiveFilters(getInitialFilters);
+  }, [initialProducts, getInitialFilters]);
 
 
   const filteredProducts = useMemo(() => {
@@ -171,6 +199,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               onFilterChange={handleFilterChange}
               isWineCategory={isWineCategory}
               isGiftSetCategory={isGiftSetCategory}
+              activeFilters={activeFilters}
             />
           </div>
 
