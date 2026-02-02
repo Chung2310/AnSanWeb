@@ -210,7 +210,10 @@ export default function Header() {
               },
               {
                   title: 'Quà tặng',
-                  items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/bo-qua-tang/${item.slug}`, label: item.label }))
+                  items: spiritsMegaMenuData.quaTang.map(item => ({ 
+                      href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
+                      label: item.label 
+                  }))
               }
           ]
       },
