@@ -37,8 +37,8 @@ import { useMemo } from 'react';
 
 const formSchema = z.object({
   id: z.string().optional(),
-  name: z.string().optional(),
-  slug: z.string().optional(),
+  name: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
+  slug: z.string().min(2, { message: 'Đường dẫn phải có ít nhất 2 ký tự.' }),
   parentId: z.string().nullable().optional(),
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
@@ -146,6 +146,12 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
           tags: [],
         },
   });
+  
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    form.setValue('name', name);
+    form.setValue('slug', slugify(name, { lower: true, strict: true, locale: 'vi' }));
+  };
 
   const categoryOptions = useMemo(() => {
     if (!categories) return [];
@@ -190,55 +196,24 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     return page ? `/admin/categories?page=${page}` : '/admin/categories';
   };
 
-
   const onSubmit = async (data: CategoryFormValues) => {
     try {
-      const processedData: any = { ...data };
-
-      // Logic for creation: auto-generate name and slug from description
-      if (!initialData) {
-        const description = processedData.description || '';
-        let newName = '';
-        
-        // Attempt to extract name from H1, H2, or H3 in description
-        const headingMatch = description.match(/<h[1-3][^>]*>(.*?)<\/h[1-3]>/);
-        if (headingMatch && headingMatch[1]) {
-          const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = headingMatch[1];
-          newName = (tempDiv.textContent || tempDiv.innerText || '').trim();
-        }
-
-        if (newName) {
-          processedData.name = newName;
-          processedData.slug = slugify(newName, { lower: true, strict: true, locale: 'vi' });
-        } else {
-            toast({
-                variant: 'destructive',
-                title: 'Không thể tạo danh mục',
-                description: 'Vui lòng thêm một tiêu đề (H1, H2, hoặc H3) vào phần mô tả để tự động tạo tên danh mục.',
-            });
-            return;
-        }
-      }
+        const finalData = {
+          ...data,
+          slug: data.slug || slugify(data.name, { lower: true, strict: true, locale: 'vi' }),
+          parentId: data.parentId || null,
+          description: data.description || '',
+          tags: data.tags || [],
+        };
       
-      const finalData = {
-          name: processedData.name,
-          slug: processedData.slug,
-          parentId: processedData.parentId || null,
-          description: processedData.description || '',
-          tags: processedData.tags || [],
-      };
-
-
       if (initialData && initialData.id) {
         const docRef = doc(firestore, 'categories', initialData.id);
         await updateDoc(docRef, {
-            ...finalData,
-            name: initialData.name, // Preserve original name and slug on edit
-            slug: initialData.slug,
-            description: processedData.description,
-            parentId: processedData.parentId,
-            tags: processedData.tags
+            // On edit, name and slug are not editable from the form.
+            // We only update parentId, description, and tags.
+            parentId: finalData.parentId,
+            description: finalData.description,
+            tags: finalData.tags
         });
         toast({ title: 'Thành công', description: 'Danh mục đã được cập nhật.' });
       } else {
@@ -272,7 +247,40 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                     <CardTitle>Thông tin danh mục</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    { initialData && (
+                    { !initialData ? (
+                        <div className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Tên danh mục</FormLabel>
+                                    <FormControl>
+                                    <Input
+                                        placeholder="Vd: Rượu Vang Đỏ"
+                                        {...field}
+                                        onChange={handleNameChange}
+                                    />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="slug"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Đường dẫn (slug)</FormLabel>
+                                    <FormControl>
+                                    <Input placeholder="ruou-vang-do" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+                        </div>
+                    ) : (
                         <div className="space-y-4">
                             <FormItem>
                                 <FormLabel>Tên danh mục (Không thể chỉnh sửa)</FormLabel>
@@ -315,9 +323,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel>Mô tả danh mục (Nội dung SEO)</FormLabel>
-                        <FormDescription>
-                           { !initialData && "Để tạo danh mục, hãy thêm một tiêu đề (H1/H2/H3) trong phần mô tả này. Tiêu đề sẽ được dùng làm tên danh mục."}
-                        </FormDescription>
                         <FormControl>
                             <RichTextEditor
                             value={field.value || ''}
