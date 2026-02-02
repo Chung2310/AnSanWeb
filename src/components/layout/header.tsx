@@ -160,7 +160,7 @@ export default function Header() {
   const router = useRouter();
 
   const navLinks: NavLinkData[] = useMemo(() => {
-    return [
+    const staticNavLinks: NavLinkData[] = [
       {
           href: '/collection/gia-tot',
           label: 'GIÁ TỐT',
@@ -240,6 +240,8 @@ export default function Header() {
           label: 'KIẾN THỨC',
       }
     ];
+
+    return staticNavLinks;
   }, []);
 
 
