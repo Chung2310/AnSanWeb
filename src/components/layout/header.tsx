@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -17,7 +16,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useCategories } from '@/hooks/use-categories';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
@@ -157,28 +155,19 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
 
 
 export default function Header() {
-  const { categories, isLoading: isLoadingCategories } = useCategories();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
-    const giftSetMegaMenuColumns = useMemo(() => {
-        if (isLoadingCategories || !categories) return undefined;
-        const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
-        if (!giftSetParent) return undefined;
-
-        const giftSetChildren = categories.filter(c => c.parentId === giftSetParent.id);
-        if (giftSetChildren.length === 0) return undefined;
-        
-        const items = giftSetChildren.map(cat => ({
-            href: `/danh-muc/${cat.slug}`, 
-            label: cat.name
-        }));
-
-        return [{ title: 'Quà tặng', items }];
-    }, [categories, isLoadingCategories]);
-
   const navLinks: NavLinkData[] = useMemo(() => {
+    const giftSetMegaMenuColumns: MenuColumn[] = [{
+        title: 'Loại quà tặng',
+        items: giftSetMegaMenuData.quaTang.map(item => ({ 
+            href: `/danh-muc/${item.category_id}`, 
+            label: item.label 
+        }))
+    }];
+
     const navLinksList: NavLinkData[] = [
       {
           href: '/collection/gia-tot',
@@ -262,7 +251,7 @@ export default function Header() {
     ];
     
     return navLinksList;
-  }, [giftSetMegaMenuColumns]);
+  }, []);
 
 
   const handleSearch = (e: React.FormEvent) => {
