@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect, Suspense } from "react";
@@ -19,9 +20,10 @@ interface ProductListingProps {
     itemsPerPage?: number;
     categoryDescription?: string;
     initialCategory?: Category | null;
+    queryFilters?: ActiveFilters;
 }
 
-function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory }: ProductListingProps) {
+function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory, queryFilters }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   
@@ -44,7 +46,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     return filters;
   }, [initialCategory]);
   
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(queryFilters || getInitialFilters);
 
   const isWineCategory = useMemo(() => {
     return title.toLowerCase().includes('vang') || !!initialCategory?.slug.includes('vang');
@@ -56,8 +58,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
   useEffect(() => {
     setCurrentPage(1);
-    setActiveFilters(getInitialFilters);
-  }, [initialProducts, getInitialFilters]);
+    setActiveFilters(queryFilters || getInitialFilters);
+  }, [initialProducts, getInitialFilters, queryFilters]);
 
 
   const filteredProducts = useMemo(() => {
