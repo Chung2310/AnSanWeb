@@ -16,8 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useCategories } from '@/hooks/use-categories';
-import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -159,7 +158,6 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const navLinks: NavLinkData[] = useMemo(() => {
     const navLinksList: NavLinkData[] = [
@@ -232,6 +230,12 @@ export default function Header() {
       { 
           href: '/danh-muc/bo-qua-tang', 
           label: 'BỘ QUÀ TẶNG',
+          megaMenuColumns: [
+              {
+                  title: 'Quà tặng',
+                  items: giftSetMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              }
+          ]
       },
       {
           href: '/gioi-thieu',
@@ -242,36 +246,9 @@ export default function Header() {
           label: 'KIẾN THỨC',
       }
     ];
-
-    const giftSetIndex = navLinksList.findIndex(link => link.label === 'BỘ QUÀ TẶNG');
-
-    if (giftSetIndex !== -1 && categories && !isLoadingCategories) {
-        const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
-        
-        if (giftSetParent) {
-            const giftSetSubCategories = categories
-                .filter(c => c.parentId === giftSetParent.id)
-                .sort((a, b) => a.name.localeCompare(b.name));
-
-            if (giftSetSubCategories.length > 0) {
-                navLinksList[giftSetIndex].megaMenuColumns = [
-                    {
-                        title: 'Quà tặng',
-                        items: giftSetSubCategories.map(subCat => ({
-                            href: `/danh-muc/${giftSetParent.slug}/${subCat.slug}`,
-                            label: subCat.name
-                        }))
-                    }
-                ];
-            } else {
-                delete navLinksList[giftSetIndex].megaMenuColumns;
-            }
-        }
-    }
-
-
+    
     return navLinksList;
-  }, [categories, isLoadingCategories]);
+  }, []);
 
 
   const handleSearch = (e: React.FormEvent) => {
