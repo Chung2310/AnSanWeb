@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -16,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useCategories } from '@/hooks/use-categories';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
@@ -155,9 +157,25 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
 
 
 export default function Header() {
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+
+  const giftSetMegaMenuColumns = useMemo(() => {
+    if (isLoadingCategories || !categories) return [];
+    const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
+    if (!giftSetParent) return [];
+    const giftSetChildren = categories.filter(c => c.parentId === giftSetParent.id);
+    if (giftSetChildren.length === 0) return [];
+    
+    const items = giftSetChildren.map(cat => ({
+        href: `/danh-muc/${cat.slug}`, 
+        label: cat.name
+    }));
+
+    return [{ title: 'Quà tặng', items }];
+}, [categories, isLoadingCategories]);
 
   const navLinks: NavLinkData[] = useMemo(() => {
     const navLinksList: NavLinkData[] = [
@@ -228,14 +246,9 @@ export default function Header() {
           ]
       },
       { 
-          href: '/danh-muc/bo-qua-tang', 
-          label: 'BỘ QUÀ TẶNG',
-          megaMenuColumns: [
-              {
-                  title: 'Quà tặng',
-                  items: giftSetMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-              }
-          ]
+        href: '/danh-muc/bo-qua-tang', 
+        label: 'BỘ QUÀ TẶNG',
+        megaMenuColumns: giftSetMegaMenuColumns,
       },
       {
           href: '/gioi-thieu',
@@ -248,7 +261,7 @@ export default function Header() {
     ];
     
     return navLinksList;
-  }, []);
+  }, [giftSetMegaMenuColumns]);
 
 
   const handleSearch = (e: React.FormEvent) => {
