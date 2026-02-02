@@ -153,7 +153,7 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
                 </>
             )}
             {isGiftSetCategory && (
-                <FilterGroup
+                <AccordionFilterGroup
                     title="QUÀ TẶNG"
                     options={staticFiltersData["QUÀ TẶNG"]}
                     onFilterChange={handleFilterClick}
