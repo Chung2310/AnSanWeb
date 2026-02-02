@@ -99,6 +99,20 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      typography: (theme: any) => ({
+        lg: {
+          css: {
+            img: {
+              'display': 'block',
+              'margin-left': 'auto',
+              'margin-right': 'auto',
+              'border-radius': theme('borderRadius.lg'),
+              'box-shadow': theme('boxShadow.xl'),
+              'max-width': '80%',
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
