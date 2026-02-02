@@ -104,11 +104,13 @@ export default {
           css: {
             img: {
               'display': 'block',
-              'margin-left': 'auto',
-              'margin-right': 'auto',
               'border-radius': theme('borderRadius.lg'),
               'box-shadow': theme('boxShadow.xl'),
-              'max-width': '100%',
+              'width': '100vw',
+              'max-width': '100vw',
+              'position': 'relative',
+              'left': '50%',
+              'transform': 'translateX(-50%)',
             },
           },
         },
