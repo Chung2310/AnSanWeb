@@ -162,20 +162,21 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
-  const giftSetMegaMenuColumns = useMemo(() => {
-    if (isLoadingCategories || !categories) return [];
-    const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
-    if (!giftSetParent) return [];
-    const giftSetChildren = categories.filter(c => c.parentId === giftSetParent.id);
-    if (giftSetChildren.length === 0) return [];
-    
-    const items = giftSetChildren.map(cat => ({
-        href: `/danh-muc/${cat.slug}`, 
-        label: cat.name
-    }));
+    const giftSetMegaMenuColumns = useMemo(() => {
+        if (isLoadingCategories || !categories) return undefined;
+        const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
+        if (!giftSetParent) return undefined;
 
-    return [{ title: 'Quà tặng', items }];
-}, [categories, isLoadingCategories]);
+        const giftSetChildren = categories.filter(c => c.parentId === giftSetParent.id);
+        if (giftSetChildren.length === 0) return undefined;
+        
+        const items = giftSetChildren.map(cat => ({
+            href: `/danh-muc/${cat.slug}`, 
+            label: cat.name
+        }));
+
+        return [{ title: 'Quà tặng', items }];
+    }, [categories, isLoadingCategories]);
 
   const navLinks: NavLinkData[] = useMemo(() => {
     const navLinksList: NavLinkData[] = [
@@ -248,7 +249,7 @@ export default function Header() {
       { 
         href: '/danh-muc/bo-qua-tang', 
         label: 'BỘ QUÀ TẶNG',
-        megaMenuColumns: giftSetMegaMenuColumns,
+        megaMenuColumns: giftSetMegaMenuColumns
       },
       {
           href: '/gioi-thieu',
