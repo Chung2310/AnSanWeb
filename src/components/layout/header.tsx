@@ -346,7 +346,7 @@ export default function Header() {
                                     
                                     if(link.megaMenuColumns) {
                                         return (
-                                            <AccordionItem value={link.label} key={link.href}>
+                                            <AccordionItem value={link.label} key={link.label}>
                                                 <AccordionTrigger className="hover:no-underline py-0">
                                                     {mainContent}
                                                 </AccordionTrigger>
@@ -380,7 +380,7 @@ export default function Header() {
                                         )
                                     }
 
-                                    return <div className="border-b" key={link.href}>{mainContent}</div>
+                                    return <div className="border-b" key={link.label}>{mainContent}</div>
                                 })}
                             </Accordion>
                         </div>
@@ -393,7 +393,7 @@ export default function Header() {
 
       <nav className="bg-primary relative hidden lg:flex">
             <div className="container relative flex h-14 items-center justify-center gap-x-2">
-                {staticNavLinks.map((link) => <NavLink key={link.href} {...link}/>)}
+                {staticNavLinks.map((link) => <NavLink key={link.label} {...link}/>)}
             </div>
         </nav>
     </header>
