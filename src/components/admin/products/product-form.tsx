@@ -404,7 +404,11 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-        const finalData: Partial<FullProduct> = { ...data };
+        const { tags, ...restData } = data;
+        const finalData: Partial<FullProduct> = { 
+            ...restData,
+            tags: tags || [] 
+        };
 
         // Convert prices to numbers, handle empty strings
         finalData.price = Number(data.price);
