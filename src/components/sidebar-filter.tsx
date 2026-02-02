@@ -86,7 +86,7 @@ const AccordionFilterGroup = ({ title, options, onFilterChange, activeFilters }:
     activeFilters: string[];
 }) => (
     <div className="mb-8 border p-4 rounded-md">
-        <Accordion type="single" collapsible defaultValue="item-1">
+        <Accordion type="single" collapsible>
             <AccordionItem value="item-1" className="border-b-0">
                 <AccordionTrigger className="text-sm font-bold tracking-widest uppercase text-foreground hover:no-underline p-0">
                     {title}
