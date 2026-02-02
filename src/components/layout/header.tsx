@@ -163,7 +163,7 @@ export default function Header() {
     const giftSetMegaMenuColumns: MenuColumn[] = [{
         title: 'Loại quà tặng',
         items: giftSetMegaMenuData.quaTang.map(item => ({ 
-            href: `/danh-muc/${item.category_id}`, 
+            href: `/danh-muc/${item.slug.split('/').pop()}`, 
             label: item.label 
         }))
     }];
@@ -179,19 +179,19 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'Theo loại',
-                  items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'Theo quốc gia',
-                  items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'Theo vùng',
-                  items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'Theo giống nho',
-                  items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
           ]
       },
@@ -201,15 +201,15 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'Theo loại rượu',
-                  items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'Thương hiệu',
-                  items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'Quà tặng',
-                  items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               }
           ]
       },
@@ -223,15 +223,15 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'LY PHA LÊ RIEDEL',
-                  items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'LY WHISKY',
-                  items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               },
               {
                   title: 'KHÁC',
-                  items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+                  items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/${item.slug.split('/').pop()}`, label: item.label }))
               }
           ]
       },
