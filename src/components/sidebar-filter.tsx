@@ -112,33 +112,20 @@ interface SidebarFilterProps {
     onFilterChange: (activeFilters: ActiveFilters) => void;
     isWineCategory?: boolean;
     isGiftSetCategory?: boolean;
+    activeFilters: ActiveFilters;
 }
 
-export default function SidebarFilter({ products, onFilterChange, isWineCategory, isGiftSetCategory }: SidebarFilterProps) {
-    const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-
-    // When products change (navigating to a new category), reset local filters
-    useEffect(() => {
-        setActiveFilters({});
-    }, [products]);
-
-    // When local filters change, notify the parent component
-    useEffect(() => {
-        onFilterChange(activeFilters);
-    }, [activeFilters, onFilterChange]);
-
+export default function SidebarFilter({ products, onFilterChange, isWineCategory, isGiftSetCategory, activeFilters }: SidebarFilterProps) {
 
     const handleFilterClick = (group: string, value: string) => {
-        setActiveFilters(prev => {
-            const currentGroupFilters = prev[group] || [];
-            const isCurrentlyActive = currentGroupFilters.includes(value);
+        const currentGroupFilters = activeFilters[group] || [];
+        const isCurrentlyActive = currentGroupFilters.includes(value);
 
-            const newGroupFilters = isCurrentlyActive
-                ? currentGroupFilters.filter(item => item !== value)
-                : [...currentGroupFilters, value];
-            
-            return { ...prev, [group]: newGroupFilters };
-        });
+        const newGroupFilters = isCurrentlyActive
+            ? currentGroupFilters.filter(item => item !== value)
+            : [...currentGroupFilters, value];
+        
+        onFilterChange({ ...activeFilters, [group]: newGroupFilters });
     };
 
     return (

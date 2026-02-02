@@ -114,6 +114,7 @@ export default function ProductsPage() {
       initialProducts={filteredProducts}
       title={categoryInfo?.name || 'Danh mục sản phẩm'}
       categoryDescription={categoryInfo?.description}
+      initialCategory={categoryInfo}
     />
   );
 }
