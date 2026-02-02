@@ -29,6 +29,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     return title.toLowerCase().includes('vang');
   }, [title]);
 
+  const isGiftSetCategory = useMemo(() => {
+    return title.toLowerCase().includes('quà tặng');
+  }, [title]);
+
   // Reset page to 1 when initialProducts change (i.e., category changes)
   useEffect(() => {
     setCurrentPage(1);
@@ -77,6 +81,21 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         if (grapeCategoryIdsToFilter.length > 0) {
             filtered = filtered.filter(p => 
                 p.tags?.some(tag => grapeCategoryIdsToFilter.includes(tag))
+            );
+        }
+    }
+
+    // Gift Set filters ("QUÀ TẶNG")
+    const giftSetFilters = activeFilters["QUÀ TẶNG"];
+    if (giftSetFilters && giftSetFilters.length > 0) {
+        const giftSetCategoryIdsToFilter = giftSetFilters.map(label => {
+            const option = (SidebarFilter.staticFiltersData["QUÀ TẶNG"] || []).find(o => o.label === label);
+            return option?.value;
+        }).filter((value): value is string => !!value);
+
+        if (giftSetCategoryIdsToFilter.length > 0) {
+            filtered = filtered.filter(p => 
+                p.tags?.some(tag => giftSetCategoryIdsToFilter.includes(tag))
             );
         }
     }
@@ -151,6 +170,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               products={initialProducts} 
               onFilterChange={handleFilterChange}
               isWineCategory={isWineCategory}
+              isGiftSetCategory={isGiftSetCategory}
             />
           </div>
 
