@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -106,7 +107,7 @@ export default {
               'display': 'block',
               'border-radius': theme('borderRadius.lg'),
               'box-shadow': theme('boxShadow.xl'),
-              'width': '100%',
+              'width': '66%',
               'margin-left': 'auto',
               'margin-right': 'auto',
             },
