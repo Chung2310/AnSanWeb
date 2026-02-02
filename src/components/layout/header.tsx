@@ -8,7 +8,7 @@ import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '../ui/sheet';
 import {
   Accordion,
@@ -16,7 +16,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData } from '@/lib/mega-menu-data';
+import { useCategories } from '@/hooks/use-categories';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -34,96 +35,6 @@ type NavLinkData = {
     label: string;
     megaMenuColumns?: MenuColumn[];
 };
-
-const staticNavLinks: NavLinkData[] = [
-    {
-        href: '/collection/gia-tot',
-        label: 'GIÁ TỐT',
-    },
-    {
-        href: '/danh-muc/ruou-vang',
-        label: 'RƯỢU VANG',
-        megaMenuColumns: [
-            {
-                title: 'Theo loại',
-                items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'Theo quốc gia',
-                items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'Theo vùng',
-                items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'Theo giống nho',
-                items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-        ]
-    },
-    {
-        href: '/danh-muc/ruou-manh',
-        label: 'RƯỢU MẠNH',
-        megaMenuColumns: [
-            {
-                title: 'Theo loại rượu',
-                items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'Thương hiệu',
-                items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'Quà tặng',
-                items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            }
-        ]
-    },
-    {
-        href: '/danh-muc/cigar',
-        label: 'CIGAR',
-    },
-    {
-        href: '/danh-muc/ly-coc-pha-le',
-        label: 'LY - CỐC PHA LÊ',
-        megaMenuColumns: [
-            {
-                title: 'LY PHA LÊ RIEDEL',
-                items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'LY WHISKY',
-                items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            },
-            {
-                title: 'KHÁC',
-                items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
-            }
-        ]
-    },
-    { 
-        href: '/danh-muc/bo-qua-tang', 
-        label: 'BỘ QUÀ TẶNG',
-        megaMenuColumns: [
-            {
-                title: 'Quà tặng',
-                items: giftSetMegaMenuData.quaTang.map(item => ({
-                    href: `/danh-muc/${item.slug}`,
-                    label: item.label
-                })),
-            }
-        ]
-    },
-    {
-        href: '/gioi-thieu',
-        label: 'GIỚI THIỆU',
-    },
-    {
-        href: '/tin-tuc',
-        label: 'KIẾN THỨC',
-    }
-];
 
 const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: { 
     columns: MenuColumn[];
@@ -248,6 +159,107 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+  const { categories } = useCategories();
+
+  const navLinks: NavLinkData[] = useMemo(() => {
+    const giftSetParent = categories?.find(c => c.slug === 'bo-qua-tang');
+    const giftSetChildren = giftSetParent && categories ? categories.filter(c => c.parentId === giftSetParent.id) : [];
+
+    const giftSetMegaMenuColumns: MenuColumn[] = giftSetChildren.length > 0
+      ? [
+          {
+            title: 'Quà tặng',
+            items: giftSetChildren.map(child => ({
+              href: `/danh-muc/${giftSetParent!.slug}/${child.slug}`,
+              label: child.name
+            }))
+          }
+        ]
+      : [];
+
+    return [
+      {
+          href: '/collection/gia-tot',
+          label: 'GIÁ TỐT',
+      },
+      {
+          href: '/danh-muc/ruou-vang',
+          label: 'RƯỢU VANG',
+          megaMenuColumns: [
+              {
+                  title: 'Theo loại',
+                  items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'Theo quốc gia',
+                  items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'Theo vùng',
+                  items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'Theo giống nho',
+                  items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+          ]
+      },
+      {
+          href: '/danh-muc/ruou-manh',
+          label: 'RƯỢU MẠNH',
+          megaMenuColumns: [
+              {
+                  title: 'Theo loại rượu',
+                  items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'Thương hiệu',
+                  items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'Quà tặng',
+                  items: spiritsMegaMenuData.quaTang.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              }
+          ]
+      },
+      {
+          href: '/danh-muc/cigar',
+          label: 'CIGAR',
+      },
+      {
+          href: '/danh-muc/ly-coc-pha-le',
+          label: 'LY - CỐC PHA LÊ',
+          megaMenuColumns: [
+              {
+                  title: 'LY PHA LÊ RIEDEL',
+                  items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'LY WHISKY',
+                  items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              },
+              {
+                  title: 'KHÁC',
+                  items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/${item.slug}`, label: item.label }))
+              }
+          ]
+      },
+      { 
+          href: '/danh-muc/bo-qua-tang', 
+          label: 'BỘ QUÀ TẶNG',
+          megaMenuColumns: giftSetMegaMenuColumns,
+      },
+      {
+          href: '/gioi-thieu',
+          label: 'GIỚI THIỆU',
+      },
+      {
+          href: '/tin-tuc',
+          label: 'KIẾN THỨC',
+      }
+    ];
+  }, [categories]);
+
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -333,7 +345,7 @@ export default function Header() {
                             </form>
 
                             <Accordion type="multiple" className="w-full flex-grow">
-                                {staticNavLinks.map(link => {
+                                {navLinks.map(link => {
                                     const mainContent = (
                                         <Link 
                                             href={link.href} 
@@ -393,7 +405,7 @@ export default function Header() {
 
       <nav className="bg-primary relative hidden lg:flex">
             <div className="container relative flex h-14 items-center justify-center gap-x-2">
-                {staticNavLinks.map((link) => <NavLink key={link.label} {...link}/>)}
+                {navLinks.map((link) => <NavLink key={link.label} {...link}/>)}
             </div>
         </nav>
     </header>
