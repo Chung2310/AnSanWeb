@@ -81,6 +81,10 @@ const staticNavLinks: NavLinkData[] = [
         ]
     },
     {
+        href: '/danh-muc/cigar',
+        label: 'CIGAR',
+    },
+    {
         href: '/danh-muc/ly-coc-pha-le',
         label: 'LY - CỐC PHA LÊ',
         megaMenuColumns: [
