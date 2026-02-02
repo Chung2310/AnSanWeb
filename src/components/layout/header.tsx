@@ -17,7 +17,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData } from '@/lib/mega-menu-data';
-import { useCategories } from '@/hooks/use-categories';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -159,24 +158,8 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const { categories } = useCategories();
 
   const navLinks: NavLinkData[] = useMemo(() => {
-    const giftSetParent = categories?.find(c => c.slug === 'bo-qua-tang');
-    const giftSetChildren = giftSetParent && categories ? categories.filter(c => c.parentId === giftSetParent.id) : [];
-
-    const giftSetMegaMenuColumns: MenuColumn[] = giftSetChildren.length > 0
-      ? [
-          {
-            title: 'Quà tặng',
-            items: giftSetChildren.map(child => ({
-              href: `/danh-muc/${giftSetParent!.slug}/${child.slug}`,
-              label: child.name
-            }))
-          }
-        ]
-      : [];
-
     return [
       {
           href: '/collection/gia-tot',
@@ -247,7 +230,6 @@ export default function Header() {
       { 
           href: '/danh-muc/bo-qua-tang', 
           label: 'BỘ QUÀ TẶNG',
-          megaMenuColumns: giftSetMegaMenuColumns,
       },
       {
           href: '/gioi-thieu',
@@ -258,7 +240,7 @@ export default function Header() {
           label: 'KIẾN THỨC',
       }
     ];
-  }, [categories]);
+  }, []);
 
 
   const handleSearch = (e: React.FormEvent) => {
