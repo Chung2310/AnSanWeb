@@ -31,22 +31,14 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     const filters: ActiveFilters = {};
     const categoryId = initialCategory.id;
 
-    const giftOption = SidebarFilter.staticFiltersData["QUÀ TẶNG"].find(o => o.value === categoryId);
-    if (giftOption) {
-        filters["QUÀ TẶNG"] = [giftOption.label];
-        return filters;
-    }
+    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG", "GIỐNG NHO", "QUÀ TẶNG"];
 
-    const categoryOption = SidebarFilter.staticFiltersData["DANH MỤC"].find(o => o.value === categoryId);
-    if (categoryOption) {
-        filters["DANH MỤC"] = [categoryOption.label];
-        return filters;
-    }
-
-    const grapeOption = SidebarFilter.staticFiltersData["GIỐNG NHO"].find(o => o.value === categoryId);
-    if (grapeOption) {
-        filters["GIỐNG NHO"] = [grapeOption.label];
-        return filters;
+    for (const key of filterKeys) {
+        const option = (SidebarFilter.staticFiltersData[key] as {label: string, value: string}[]).find(o => o.value === categoryId);
+        if (option) {
+            filters[key] = [option.label];
+            return filters;
+        }
     }
     
     return filters;
@@ -71,22 +63,22 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let filtered = [...initialProducts];
 
-    // Category filters ("DANH MỤC")
-    const categoryFilters = activeFilters["DANH MỤC"];
-    if (categoryFilters && categoryFilters.length > 0) {
-        const categoryIdsToFilter = categoryFilters.map(label => {
-            const option = (SidebarFilter.staticFiltersData["DANH MỤC"] || []).find(o => o.label === label);
-            return option?.value;
-        }).filter((value): value is string => !!value);
+    const applyTagFilter = (filterKey: keyof typeof SidebarFilter.staticFiltersData) => {
+        const activeLabels = activeFilters[filterKey];
+        if (activeLabels && activeLabels.length > 0) {
+            const idsToFilter = activeLabels.map(label => {
+                const option = (SidebarFilter.staticFiltersData[filterKey] as {label: string, value: any}[]).find(o => o.label === label);
+                return option?.value;
+            }).filter((value): value is string => !!value);
 
-        if (categoryIdsToFilter.length > 0) {
-            filtered = filtered.filter(p => 
-                p.tags?.some(tag => categoryIdsToFilter.includes(tag))
-            );
+            if (idsToFilter.length > 0) {
+                filtered = filtered.filter(p => 
+                    p.tags?.some(tag => idsToFilter.includes(tag))
+                );
+            }
         }
-    }
+    };
     
-    // Price range filtering
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
         const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
         return option?.value;
@@ -98,35 +90,12 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         );
     }
     
-    // Grape varietal filters ("GIỐNG NHO")
-    const grapeFilters = activeFilters["GIỐNG NHO"];
-    if (grapeFilters && grapeFilters.length > 0) {
-        const grapeCategoryIdsToFilter = grapeFilters.map(label => {
-            const option = (SidebarFilter.staticFiltersData["GIỐNG NHO"] || []).find(o => o.label === label);
-            return option?.value;
-        }).filter((value): value is string => !!value);
+    applyTagFilter("LOẠI RƯỢU");
+    applyTagFilter("QUỐC GIA");
+    applyTagFilter("VÙNG");
+    applyTagFilter("GIỐNG NHO");
+    applyTagFilter("QUÀ TẶNG");
 
-        if (grapeCategoryIdsToFilter.length > 0) {
-            filtered = filtered.filter(p => 
-                p.tags?.some(tag => grapeCategoryIdsToFilter.includes(tag))
-            );
-        }
-    }
-
-    // Gift Set filters ("QUÀ TẶNG")
-    const giftSetFilters = activeFilters["QUÀ TẶNG"];
-    if (giftSetFilters && giftSetFilters.length > 0) {
-        const giftSetCategoryIdsToFilter = giftSetFilters.map(label => {
-            const option = (SidebarFilter.staticFiltersData["QUÀ TẶNG"] || []).find(o => o.label === label);
-            return option?.value;
-        }).filter((value): value is string => !!value);
-
-        if (giftSetCategoryIdsToFilter.length > 0) {
-            filtered = filtered.filter(p => 
-                p.tags?.some(tag => giftSetCategoryIdsToFilter.includes(tag))
-            );
-        }
-    }
 
     return filtered;
   }, [initialProducts, activeFilters]);

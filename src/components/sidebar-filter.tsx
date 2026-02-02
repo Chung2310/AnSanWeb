@@ -26,7 +26,15 @@ const staticFiltersData = {
         { label: '2 - 3 TRIỆU', value: [2000000, 3000000] },
         { label: 'TRÊN 3 TRIỆU', value: [3000000, Infinity] },
     ],
-    "DANH MỤC": wineMegaMenuData.theoLoai.map(item => ({
+    "LOẠI RƯỢU": wineMegaMenuData.theoLoai.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
+    "QUỐC GIA": wineMegaMenuData.theoQuocGia.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
+    "VÙNG": wineMegaMenuData.theoVung.map(item => ({
         label: item.label,
         value: item.category_id,
     })),
@@ -138,11 +146,23 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
             />
             {isWineCategory && (
                 <>
-                    <FilterGroup
-                        title="DANH MỤC"
-                        options={staticFiltersData["DANH MỤC"]}
+                    <AccordionFilterGroup
+                        title="LOẠI RƯỢU"
+                        options={staticFiltersData["LOẠI RƯỢU"]}
                         onFilterChange={handleFilterClick}
-                        activeFilters={activeFilters["DANH MỤC"] || []}
+                        activeFilters={activeFilters["LOẠI RƯỢU"] || []}
+                    />
+                     <AccordionFilterGroup
+                        title="QUỐC GIA"
+                        options={staticFiltersData["QUỐC GIA"]}
+                        onFilterChange={handleFilterClick}
+                        activeFilters={activeFilters["QUỐC GIA"] || []}
+                    />
+                     <AccordionFilterGroup
+                        title="VÙNG"
+                        options={staticFiltersData["VÙNG"]}
+                        onFilterChange={handleFilterClick}
+                        activeFilters={activeFilters["VÙNG"] || []}
                     />
                     <AccordionFilterGroup
                         title="GIỐNG NHO"
