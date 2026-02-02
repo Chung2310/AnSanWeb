@@ -219,7 +219,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
   const mainCategories = useMemo(() => {
     if (!categories) return [];
-    const slugs = ['ruou-vang', 'ruou-manh', 'ly-coc-pha-le', 'bo-qua-tang'];
+    const slugs = ['ruou-vang', 'ruou-manh', 'ly-coc-pha-le', 'bo-qua-tang', 'cigar'];
     return slugs.map(slug => categories.find(c => c.slug === slug)).filter((c): c is Category => !!c);
   }, [categories]);
 
