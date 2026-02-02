@@ -1,4 +1,5 @@
 
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import { cn } from '@/lib/utils';
@@ -41,10 +42,6 @@ const mainCategoriesConfig = [
         label: "Bộ Quà Tặng", 
         slug: "bo-qua-tang", 
         href: "/danh-muc/bo-qua-tang",
-        subCategories: [
-            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-manh', label: 'Quà Tết Rượu Mạnh' },
-            { href: '/danh-muc/bo-qua-tang/qua-tet-ruou-vang', label: 'Quà Tết Rượu Vang' },
-        ]
     },
 ];
 
@@ -112,7 +109,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
 
                         const isActive = selectedCategory === cat.slug;
 
-                        if (cat.subCategories) {
+                        if ((cat as any).subCategories) {
                              return (
                                 <DropdownMenu key={cat.slug} open={openDropdown === cat.slug} onOpenChange={(isOpen) => setOpenDropdown(isOpen ? cat.slug : null)}>
                                     <div 
@@ -150,7 +147,7 @@ export default function CategoryNav({ onCategorySelect, selectedCategory }: Cate
                                             onMouseEnter={() => setOpenDropdown(cat.slug)}
                                             onMouseLeave={() => setOpenDropdown(null)}
                                         >
-                                            {cat.subCategories.map(subLink => (
+                                            {(cat as any).subCategories.map((subLink: any) => (
                                                 <DropdownMenuItem key={subLink.href} asChild>
                                                     <Link href={subLink.href}>{subLink.label}</Link>
                                                 </DropdownMenuItem>
