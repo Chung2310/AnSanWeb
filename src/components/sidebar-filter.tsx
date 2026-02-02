@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { wineMegaMenuData } from "@/lib/mega-menu-data";
+import { wineMegaMenuData, giftSetMegaMenuData } from "@/lib/mega-menu-data";
 import {
     Accordion,
     AccordionContent,
@@ -31,6 +31,10 @@ const staticFiltersData = {
         value: item.category_id,
     })),
     "GIỐNG NHO": wineMegaMenuData.theoGiongNho.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
+    "QUÀ TẶNG": giftSetMegaMenuData.quaTang.map(item => ({
         label: item.label,
         value: item.category_id,
     })),
@@ -107,9 +111,10 @@ interface SidebarFilterProps {
     products: Product[];
     onFilterChange: (activeFilters: ActiveFilters) => void;
     isWineCategory?: boolean;
+    isGiftSetCategory?: boolean;
 }
 
-export default function SidebarFilter({ products, onFilterChange, isWineCategory }: SidebarFilterProps) {
+export default function SidebarFilter({ products, onFilterChange, isWineCategory, isGiftSetCategory }: SidebarFilterProps) {
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
     // When products change (navigating to a new category), reset local filters
@@ -159,6 +164,14 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
                         activeFilters={activeFilters["GIỐNG NHO"] || []}
                     />
                 </>
+            )}
+            {isGiftSetCategory && (
+                <FilterGroup
+                    title="QUÀ TẶNG"
+                    options={staticFiltersData["QUÀ TẶNG"]}
+                    onFilterChange={handleFilterClick}
+                    activeFilters={activeFilters["QUÀ TẶNG"] || []}
+                />
             )}
         </div>
     );
