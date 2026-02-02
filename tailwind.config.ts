@@ -108,7 +108,7 @@ export default {
               'margin-right': 'auto',
               'border-radius': theme('borderRadius.lg'),
               'box-shadow': theme('boxShadow.xl'),
-              'max-width': '80%',
+              'max-width': '100%',
             },
           },
         },
