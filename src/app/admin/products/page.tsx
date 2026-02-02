@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData, spiritsMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -190,12 +190,29 @@ export default function ProductsAdminPage() {
       }
     }
   
+    const giftSetTagToGroupMap = new Map<string, string>();
+    const giftSetTagToLabelMap = new Map<string, string>();
+    for (const [groupKey, items] of Object.entries(giftSetMegaMenuData)) {
+      for (const item of items) {
+        giftSetTagToGroupMap.set(item.category_id, groupKey);
+        giftSetTagToLabelMap.set(item.category_id, item.label);
+      }
+    }
+
     const wineCategory = categories?.find(c => c.slug === 'ruou-vang');
     const wineCategoryAndDescendantIds = new Set<string>();
     if (wineCategory && categories) {
       const descendantIds = getDescendantIds(wineCategory.id, categories);
       wineCategoryAndDescendantIds.add(wineCategory.id);
       descendantIds.forEach(id => wineCategoryAndDescendantIds.add(id));
+    }
+
+    const giftSetCategory = categories?.find(c => c.slug === 'bo-qua-tang');
+    const giftSetCategoryAndDescendantIds = new Set<string>();
+    if (giftSetCategory && categories) {
+        const descendantIds = getDescendantIds(giftSetCategory.id, categories);
+        giftSetCategoryAndDescendantIds.add(giftSetCategory.id);
+        descendantIds.forEach(id => giftSetCategoryAndDescendantIds.add(id));
     }
   
     const allAttributeLabels = [...new Set(
@@ -204,6 +221,7 @@ export default function ProductsAdminPage() {
   
     const dataToExport = filteredProducts.map(product => {
       const isWineProduct = product.tags?.some(tag => wineCategoryAndDescendantIds.has(tag));
+      const isGiftSetProduct = product.tags?.some(tag => giftSetCategoryAndDescendantIds.has(tag));
       
       const generalCategories: string[] = [];
       const wineClassification = {
@@ -212,6 +230,9 @@ export default function ProductsAdminPage() {
         theoVung: [] as string[],
         theoGiongNho: [] as string[],
       };
+      const giftSetClassification = {
+        quaTang: [] as string[],
+      };
   
       product.tags?.forEach(tagId => {
         if (isWineProduct && wineTagToGroupMap.has(tagId)) {
@@ -219,6 +240,12 @@ export default function ProductsAdminPage() {
           const label = wineTagToLabelMap.get(tagId);
           if (group && label) {
             wineClassification[group].push(label);
+          }
+        } else if (isGiftSetProduct && giftSetTagToGroupMap.has(tagId)) {
+          const group = giftSetTagToGroupMap.get(tagId) as keyof typeof giftSetClassification;
+          const label = giftSetTagToLabelMap.get(tagId);
+          if (group && label) {
+            giftSetClassification[group].push(label);
           }
         } else if (categoryMap.has(tagId)) {
           generalCategories.push(categoryMap.get(tagId)!);
@@ -242,6 +269,7 @@ export default function ProductsAdminPage() {
         'Quốc gia': isWineProduct ? wineClassification.theoQuocGia.join(', ') : '',
         'Vùng': isWineProduct ? wineClassification.theoVung.join(', ') : '',
         'Giống nho': isWineProduct ? wineClassification.theoGiongNho.join(', ') : '',
+        'Loại quà tặng': isGiftSetProduct ? giftSetClassification.quaTang.join(', ') : '',
         'Mô tả ngắn': product.shortDescription,
         'URL Ảnh bìa': product.image?.url,
         'URL Ảnh chi tiết': product.detailImages?.map(img => img.url).join(', \n'),
