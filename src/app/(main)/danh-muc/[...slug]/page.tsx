@@ -18,12 +18,24 @@ export default function ProductsPage() {
 
   const categoryInfo = useMemo(() => {
     if (!categories || !slugParts || slugParts.length === 0) return null;
-    
-    // Find category by the last part of the slug path.
-    // This is simpler and more robust. The page correctly filters child products
-    // based on the found category's descendants.
-    const lastSlug = slugParts[slugParts.length - 1];
-    return categories.find(c => c.slug === lastSlug) || null;
+
+    let category: Category | undefined;
+    let parentId: string | null = null;
+
+    for (const slug of slugParts) {
+        category = categories.find(c => c.slug === slug && c.parentId === parentId);
+        if (!category) {
+            // Fallback for flat URLs if the hierarchical search fails on the first level.
+            // This handles cases where a direct slug is used without its parent path.
+            if (slugParts.length === 1) {
+              return categories.find(c => c.slug === slug) || null;
+            }
+            return null; 
+        }
+        parentId = category.id;
+    }
+
+    return category || null;
   }, [categories, slugParts]);
 
 
