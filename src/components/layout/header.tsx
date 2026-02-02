@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useCategories } from '@/hooks/use-categories';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData } from '@/lib/mega-menu-data';
 
 // Define unified data structures for navigation
@@ -158,9 +159,10 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+  const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const navLinks: NavLinkData[] = useMemo(() => {
-    const staticNavLinks: NavLinkData[] = [
+    const navLinksList: NavLinkData[] = [
       {
           href: '/collection/gia-tot',
           label: 'GIÁ TỐT',
@@ -241,8 +243,35 @@ export default function Header() {
       }
     ];
 
-    return staticNavLinks;
-  }, []);
+    const giftSetIndex = navLinksList.findIndex(link => link.label === 'BỘ QUÀ TẶNG');
+
+    if (giftSetIndex !== -1 && categories && !isLoadingCategories) {
+        const giftSetParent = categories.find(c => c.slug === 'bo-qua-tang');
+        
+        if (giftSetParent) {
+            const giftSetSubCategories = categories
+                .filter(c => c.parentId === giftSetParent.id)
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            if (giftSetSubCategories.length > 0) {
+                navLinksList[giftSetIndex].megaMenuColumns = [
+                    {
+                        title: 'Quà tặng',
+                        items: giftSetSubCategories.map(subCat => ({
+                            href: `/danh-muc/${giftSetParent.slug}/${subCat.slug}`,
+                            label: subCat.name
+                        }))
+                    }
+                ];
+            } else {
+                delete navLinksList[giftSetIndex].megaMenuColumns;
+            }
+        }
+    }
+
+
+    return navLinksList;
+  }, [categories, isLoadingCategories]);
 
 
   const handleSearch = (e: React.FormEvent) => {
