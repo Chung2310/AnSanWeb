@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import * as React from 'react';
@@ -163,7 +161,9 @@ export default function Header() {
   const navLinks: NavLinkData[] = useMemo(() => {
     const giftSetMegaMenuColumns: MenuColumn[] = [{
         title: 'Loại quà tặng',
-        items: giftSetMegaMenuData.quaTang.map(item => ({ 
+        items: [...giftSetMegaMenuData.quaTang]
+          .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
+          .map(item => ({ 
             href: `/danh-muc/bo-qua-tang/${item.slug}`, 
             label: item.label 
         }))
@@ -180,19 +180,19 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'Theo loại',
-                  items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+                  items: [...wineMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
               },
               {
                   title: 'Theo quốc gia',
-                  items: wineMegaMenuData.theoQuocGia.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+                  items: [...wineMegaMenuData.theoQuocGia].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
               },
               {
                   title: 'Theo vùng',
-                  items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+                  items: [...wineMegaMenuData.theoVung].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
               },
               {
                   title: 'Theo giống nho',
-                  items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+                  items: [...wineMegaMenuData.theoGiongNho].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
               },
           ]
       },
@@ -202,16 +202,18 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'Theo loại rượu',
-                  items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+                  items: [...spiritsMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
               },
               {
                   title: 'Thương hiệu',
-                  items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+                  items: [...spiritsMegaMenuData.thuongHieu].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
               },
               {
                   title: 'Quà tặng',
-                  items: spiritsMegaMenuData.quaTang.map(item => ({ 
-                      href: `/danh-muc/bo-qua-tang/${item.slug}`, 
+                  items: [...spiritsMegaMenuData.quaTang]
+                    .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
+                    .map(item => ({ 
+                      href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
                       label: item.label 
                   }))
               }
@@ -227,15 +229,15 @@ export default function Header() {
           megaMenuColumns: [
               {
                   title: 'LY PHA LÊ RIEDEL',
-                  items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+                  items: [...glasswareMegaMenuData.lyPhaLeRiedel].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
               },
               {
                   title: 'LY WHISKY',
-                  items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+                  items: [...glasswareMegaMenuData.lyWhisky].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
               },
               {
                   title: 'KHÁC',
-                  items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+                  items: [...glasswareMegaMenuData.khac].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
               }
           ]
       },
@@ -408,6 +410,7 @@ export default function Header() {
     </header>
   );
 }
+
 
 
 
