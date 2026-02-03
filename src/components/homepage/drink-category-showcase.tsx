@@ -25,7 +25,7 @@ const drinkCategories = [
     {
         title: 'VANG 0 ĐỘ',
         imageId: 'drink-cat-zero-degree-wine',
-        href: '/danh-muc/ruou-vang', // No specific page yet
+        href: '/danh-muc/ruou-vang/ruou-vang-0-do',
     },
     {
         title: 'WHISKY',
