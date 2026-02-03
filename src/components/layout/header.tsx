@@ -35,16 +35,6 @@ type NavLinkData = {
     megaMenuColumns?: MenuColumn[];
 };
 
-const giftSetMegaMenuColumns: MenuColumn[] = [{
-    title: 'Loại quà tặng',
-    items: [...giftSetMegaMenuData.quaTang]
-      .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
-      .map(item => ({ 
-        href: `/danh-muc/bo-qua-tang/${item.slug}`, 
-        label: item.label 
-    }))
-}];
-
 const navLinks: NavLinkData[] = [
   {
       href: '/collection/gia-tot',
@@ -56,7 +46,7 @@ const navLinks: NavLinkData[] = [
       megaMenuColumns: [
           {
               title: 'Theo loại',
-              items: [...wineMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+              items: wineMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
           },
           {
               title: 'Theo quốc gia',
@@ -86,10 +76,8 @@ const navLinks: NavLinkData[] = [
           },
           {
               title: 'Quà tặng',
-              items: [...spiritsMegaMenuData.quaTang]
-                .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
-                .map(item => ({ 
-                  href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
+              items: [...spiritsMegaMenuData.quaTang].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ 
+                  href: `/danh-muc/bo-qua-tang/${item.slug}`, 
                   label: item.label 
               }))
           }
@@ -120,7 +108,13 @@ const navLinks: NavLinkData[] = [
   { 
     href: '/danh-muc/bo-qua-tang', 
     label: 'BỘ QUÀ TẶNG',
-    megaMenuColumns: giftSetMegaMenuColumns
+    megaMenuColumns: [{
+        title: 'Loại quà tặng',
+        items: [...giftSetMegaMenuData.quaTang].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ 
+            href: `/danh-muc/bo-qua-tang/${item.slug}`, 
+            label: item.label 
+        }))
+    }]
   },
   {
       href: '/gioi-thieu',
@@ -148,7 +142,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             onMouseLeave={onMouseLeave}
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
-                isOpen ? "block" : "hidden"
+                !isOpen && "hidden"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
@@ -181,6 +175,12 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
 
   const handleOpenMenu = () => {
     if (timerRef.current) {
@@ -237,7 +237,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
         
-        {hasDropdown && (
+        {hasDropdown && isMounted && (
             <MegaMenu 
                 columns={megaMenuColumns}
                 isOpen={isMenuOpen}
@@ -406,9 +406,3 @@ export default function Header() {
     </header>
   );
 }
-
-
-
-
-
-
