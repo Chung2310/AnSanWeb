@@ -3,8 +3,8 @@ export const wineMegaMenuData = {
         { label: "Rượu vang đỏ", slug: "ruou-vang-do", category_id: "ruou-vang-do" },
         { label: "Rượu vang trắng", slug: "ruou-vang-trang", category_id: "ruou-vang-trang" },
         { label: "Rượu vang sủi", slug: "ruou-vang-sui", category_id: "ruou-vang-sui" },
-        { label: "Rượu vang 0 độ", slug: "ruou-vang-0-do", category_id: "ruou-vang-0-do" },
         { label: "Champagne", slug: "champagne", category_id: "champagne" },
+        { label: "Rượu vang 0 độ", slug: "ruou-vang-0-do", category_id: "ruou-vang-0-do" },
     ],
     theoQuocGia: [
         { label: "Vang Pháp", slug: "vang-phap", category_id: "phap" },
