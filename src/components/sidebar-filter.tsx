@@ -34,7 +34,7 @@ const staticFiltersData = {
         label: item.label,
         value: item.category_id,
     })),
-    "VÙNG": wineMegaMenuData.theoVung.map(item => ({
+    "VÙNG NỔI TIẾNG": wineMegaMenuData.theoVung.map(item => ({
         label: item.label,
         value: item.category_id,
     })),
@@ -159,10 +159,10 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
                         activeFilters={activeFilters["QUỐC GIA"] || []}
                     />
                      <AccordionFilterGroup
-                        title="VÙNG"
-                        options={staticFiltersData["VÙNG"]}
+                        title="VÙNG NỔI TIẾNG"
+                        options={staticFiltersData["VÙNG NỔI TIẾNG"]}
                         onFilterChange={handleFilterClick}
-                        activeFilters={activeFilters["VÙNG"] || []}
+                        activeFilters={activeFilters["VÙNG NỔI TIẾNG"] || []}
                     />
                     <AccordionFilterGroup
                         title="GIỐNG NHO"
