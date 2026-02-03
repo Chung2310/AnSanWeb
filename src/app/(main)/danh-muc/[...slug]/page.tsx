@@ -1,17 +1,16 @@
 
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemo, useCallback } from 'react';
-import { useParams, notFound, useSearchParams } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
-import type { ActiveFilters } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
   const params = useParams();
-  const searchParams = useSearchParams();
   const slugParts = params?.slug ? (params.slug as string[]) : [];
 
   const { products, isLoading: isLoadingProducts } = useProducts();
@@ -20,23 +19,28 @@ export default function ProductsPage() {
 
   const categoryInfo = useMemo(() => {
     if (!categories || !slugParts || slugParts.length === 0) return null;
-    
-    const lastSlug = slugParts[slugParts.length - 1];
-    
-    const category = categories.find(c => c.slug === lastSlug);
 
-    return category || null;
-  }, [categories, slugParts]);
+    let currentParentId: string | null = null;
+    let foundCategory: Category | null = null;
 
-  const queryFilters = useMemo(() => {
-    const filterGroup = searchParams.get('filter_group');
-    const filterLabel = searchParams.get('filter_label');
-
-    if (filterGroup && filterLabel) {
-        return { [filterGroup]: [filterLabel] } as ActiveFilters;
+    for (const slug of slugParts) {
+      const category = categories.find(c => {
+        const isSlugMatch = c.slug === slug;
+        const isParentMatch = currentParentId === null 
+          ? (c.parentId === null || c.parentId === undefined || c.parentId === '')
+          : c.parentId === currentParentId;
+        return isSlugMatch && isParentMatch;
+      });
+      
+      if (category) {
+        foundCategory = category;
+        currentParentId = category.id;
+      } else {
+        return null;
+      }
     }
-    return undefined;
-  }, [searchParams]);
+    return foundCategory;
+  }, [categories, slugParts]);
 
 
   const getDescendantIds = useCallback((parentId: string, allCategories: Category[] | null): string[] => {
@@ -105,7 +109,6 @@ export default function ProductsPage() {
       title={categoryInfo?.name || 'Danh mục sản phẩm'}
       categoryDescription={categoryInfo?.description}
       initialCategory={categoryInfo}
-      queryFilters={queryFilters}
     />
   );
 }
