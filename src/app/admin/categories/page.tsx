@@ -78,11 +78,21 @@ export default function CategoriesAdminPage() {
               });
             };
 
-            Object.values(wineMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-vang'));
-            Object.values(spiritsMegaMenuData).flat().forEach(item => addItemsWithParent([item], 'ruou-manh'));
+            addItemsWithParent(wineMegaMenuData.theoLoai, 'ruou-vang');
+            addItemsWithParent(wineMegaMenuData.theoQuocGia, 'ruou-vang');
+            addItemsWithParent(wineMegaMenuData.theoVung, 'ruou-vang');
+            addItemsWithParent(wineMegaMenuData.theoGiongNho, 'ruou-vang');
+
+            addItemsWithParent(spiritsMegaMenuData.theoLoai, 'ruou-manh');
+            addItemsWithParent(spiritsMegaMenuData.thuongHieu, 'ruou-manh');
+            
+            // Fix: quà tặng của rượu mạnh thuộc danh mục bộ quà tặng
+            addItemsWithParent(spiritsMegaMenuData.quaTang, 'bo-qua-tang');
+
             addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-coc-pha-le');
             addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-coc-pha-le');
             addItemsWithParent(glasswareMegaMenuData.khac, 'ly-coc-pha-le');
+            
             addItemsWithParent(giftSetMegaMenuData.quaTang, 'bo-qua-tang');
             
             const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
