@@ -35,6 +35,104 @@ type NavLinkData = {
     megaMenuColumns?: MenuColumn[];
 };
 
+const giftSetMegaMenuColumns: MenuColumn[] = [{
+    title: 'Loại quà tặng',
+    items: [...giftSetMegaMenuData.quaTang]
+      .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
+      .map(item => ({ 
+        href: `/danh-muc/bo-qua-tang/${item.slug}`, 
+        label: item.label 
+    }))
+}];
+
+const navLinks: NavLinkData[] = [
+  {
+      href: '/collection/gia-tot',
+      label: 'GIÁ TỐT',
+  },
+  {
+      href: '/danh-muc/ruou-vang',
+      label: 'RƯỢU VANG',
+      megaMenuColumns: [
+          {
+              title: 'Theo loại',
+              items: [...wineMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'Theo quốc gia',
+              items: [...wineMegaMenuData.theoQuocGia].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'Theo vùng',
+              items: [...wineMegaMenuData.theoVung].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'Theo giống nho',
+              items: [...wineMegaMenuData.theoGiongNho].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+          },
+      ]
+  },
+  {
+      href: '/danh-muc/ruou-manh',
+      label: 'RƯỢU MẠNH',
+      megaMenuColumns: [
+          {
+              title: 'Theo loại rượu',
+              items: [...spiritsMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'Thương hiệu',
+              items: [...spiritsMegaMenuData.thuongHieu].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'Quà tặng',
+              items: [...spiritsMegaMenuData.quaTang]
+                .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
+                .map(item => ({ 
+                  href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
+                  label: item.label 
+              }))
+          }
+      ]
+  },
+  {
+      href: '/danh-muc/cigar',
+      label: 'CIGAR',
+  },
+  {
+      href: '/danh-muc/ly-coc-pha-le',
+      label: 'LY - CỐC PHA LÊ',
+      megaMenuColumns: [
+          {
+              title: 'LY PHA LÊ RIEDEL',
+              items: [...glasswareMegaMenuData.lyPhaLeRiedel].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'LY WHISKY',
+              items: [...glasswareMegaMenuData.lyWhisky].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+          },
+          {
+              title: 'KHÁC',
+              items: [...glasswareMegaMenuData.khac].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+          }
+      ]
+  },
+  { 
+    href: '/danh-muc/bo-qua-tang', 
+    label: 'BỘ QUÀ TẶNG',
+    megaMenuColumns: giftSetMegaMenuColumns
+  },
+  {
+      href: '/gioi-thieu',
+      label: 'GIỚI THIỆU',
+  },
+  {
+      href: '/tin-tuc',
+      label: 'KIẾN THỨC',
+  }
+];
+
+
 const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: { 
     columns: MenuColumn[];
     isOpen: boolean;
@@ -157,108 +255,6 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-
-  const navLinks: NavLinkData[] = useMemo(() => {
-    const giftSetMegaMenuColumns: MenuColumn[] = [{
-        title: 'Loại quà tặng',
-        items: [...giftSetMegaMenuData.quaTang]
-          .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
-          .map(item => ({ 
-            href: `/danh-muc/bo-qua-tang/${item.slug}`, 
-            label: item.label 
-        }))
-    }];
-
-    const navLinksList: NavLinkData[] = [
-      {
-          href: '/collection/gia-tot',
-          label: 'GIÁ TỐT',
-      },
-      {
-          href: '/danh-muc/ruou-vang',
-          label: 'RƯỢU VANG',
-          megaMenuColumns: [
-              {
-                  title: 'Theo loại',
-                  items: [...wineMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'Theo quốc gia',
-                  items: [...wineMegaMenuData.theoQuocGia].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'Theo vùng',
-                  items: [...wineMegaMenuData.theoVung].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'Theo giống nho',
-                  items: [...wineMegaMenuData.theoGiongNho].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
-              },
-          ]
-      },
-      {
-          href: '/danh-muc/ruou-manh',
-          label: 'RƯỢU MẠNH',
-          megaMenuColumns: [
-              {
-                  title: 'Theo loại rượu',
-                  items: [...spiritsMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'Thương hiệu',
-                  items: [...spiritsMegaMenuData.thuongHieu].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'Quà tặng',
-                  items: [...spiritsMegaMenuData.quaTang]
-                    .sort((a, b) => a.label.localeCompare(b.label, 'vi'))
-                    .map(item => ({ 
-                      href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
-                      label: item.label 
-                  }))
-              }
-          ]
-      },
-      {
-          href: '/danh-muc/cigar',
-          label: 'CIGAR',
-      },
-      {
-          href: '/danh-muc/ly-coc-pha-le',
-          label: 'LY - CỐC PHA LÊ',
-          megaMenuColumns: [
-              {
-                  title: 'LY PHA LÊ RIEDEL',
-                  items: [...glasswareMegaMenuData.lyPhaLeRiedel].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'LY WHISKY',
-                  items: [...glasswareMegaMenuData.lyWhisky].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
-              },
-              {
-                  title: 'KHÁC',
-                  items: [...glasswareMegaMenuData.khac].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
-              }
-          ]
-      },
-      { 
-        href: '/danh-muc/bo-qua-tang', 
-        label: 'BỘ QUÀ TẶNG',
-        megaMenuColumns: giftSetMegaMenuColumns
-      },
-      {
-          href: '/gioi-thieu',
-          label: 'GIỚI THIỆU',
-      },
-      {
-          href: '/tin-tuc',
-          label: 'KIẾN THỨC',
-      }
-    ];
-    
-    return navLinksList;
-  }, []);
-
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -410,6 +406,7 @@ export default function Header() {
     </header>
   );
 }
+
 
 
 
