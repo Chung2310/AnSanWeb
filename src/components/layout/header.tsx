@@ -164,7 +164,7 @@ export default function Header() {
     const giftSetMegaMenuColumns: MenuColumn[] = [{
         title: 'Loại quà tặng',
         items: giftSetMegaMenuData.quaTang.map(item => ({ 
-            href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
+            href: `/danh-muc/bo-qua-tang/${item.slug}`, 
             label: item.label 
         }))
     }];
@@ -211,7 +211,7 @@ export default function Header() {
               {
                   title: 'Quà tặng',
                   items: spiritsMegaMenuData.quaTang.map(item => ({ 
-                      href: `/danh-muc/bo-qua-tang?filter_group=QUÀ TẶNG&filter_label=${encodeURIComponent(item.label)}`, 
+                      href: `/danh-muc/bo-qua-tang/${item.slug}`, 
                       label: item.label 
                   }))
               }
@@ -408,4 +408,5 @@ export default function Header() {
     </header>
   );
 }
+
 
