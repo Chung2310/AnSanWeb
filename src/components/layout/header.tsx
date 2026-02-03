@@ -86,6 +86,13 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+
   const handleOpenMenu = () => {
     if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -141,7 +148,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
         
-        {hasDropdown && (
+        {hasDropdown && isClient && (
             <MegaMenu 
                 columns={megaMenuColumns}
                 isOpen={isMenuOpen}
@@ -408,5 +415,6 @@ export default function Header() {
     </header>
   );
 }
+
 
 
