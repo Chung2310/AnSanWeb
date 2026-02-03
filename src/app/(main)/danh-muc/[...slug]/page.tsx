@@ -20,23 +20,10 @@ export default function ProductsPage() {
 
   const categoryInfo = useMemo(() => {
     if (!categories || !slugParts || slugParts.length === 0) return null;
-
-    let category: Category | undefined;
-    let parentId: string | null = null;
-
-    for (const slug of slugParts) {
-        const currentParentId = parentId;
-        const foundCategory = categories.find(c => c.slug === slug && (c.parentId || null) === currentParentId);
-        
-        if (!foundCategory) {
-            if (slugParts.length === 1) {
-              return categories.find(c => c.slug === slug) || null;
-            }
-            return null; 
-        }
-        category = foundCategory;
-        parentId = category.id;
-    }
+    
+    const lastSlug = slugParts[slugParts.length - 1];
+    
+    const category = categories.find(c => c.slug === lastSlug);
 
     return category || null;
   }, [categories, slugParts]);
