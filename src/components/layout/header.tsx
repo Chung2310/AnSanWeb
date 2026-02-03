@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import * as React from 'react';
@@ -51,8 +52,7 @@ const MegaMenu = ({ columns, isOpen, onMouseEnter, onMouseLeave, onLinkClick }: 
             onMouseLeave={onMouseLeave}
             className={cn(
                 "absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg",
-                "transition-all duration-150 ease-in-out transform",
-                isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                isOpen ? "block" : "hidden"
             )}
         >
             <div className="container mx-auto max-w-screen-2xl p-8">
@@ -85,13 +85,6 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
 
   const handleOpenMenu = () => {
     if (timerRef.current) {
@@ -148,7 +141,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
         
-        {hasDropdown && isClient && (
+        {hasDropdown && (
             <MegaMenu 
                 columns={megaMenuColumns}
                 isOpen={isMenuOpen}
@@ -415,6 +408,7 @@ export default function Header() {
     </header>
   );
 }
+
 
 
 
