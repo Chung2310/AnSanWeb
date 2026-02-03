@@ -25,7 +25,7 @@ const quizQuestions = [
     id: 3,
     key: 'question3',
     question: 'Bạn ưu tiên yếu tố nào nhất khi chọn rượu vang?',
-    answers: ['Hương vị trái cây', 'Độ đậm đà (body)', 'Đến từ vùng nổi tiếng', 'Giá cả hợp lý'],
+    answers: ['Hương vị trái cây', 'Độ đậm đà (body)', 'Vùng nổi tiếng', 'Giá cả hợp lý'],
   },
   {
     id: 4,

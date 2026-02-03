@@ -28,25 +28,25 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [currentPage, setCurrentPage] = useState(1);
   
   const getInitialFilters = useMemo(() => {
-    if (!initialCategory) return {};
+    if (!initialCategory) return queryFilters || {};
     
-    const filters: ActiveFilters = {};
+    let filters: ActiveFilters = queryFilters || {};
     const categoryId = initialCategory.id;
 
-    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG", "GIỐNG NHO", "QUÀ TẶNG"];
+    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG"];
 
     for (const key of filterKeys) {
         const option = (SidebarFilter.staticFiltersData[key] as {label: string, value: string}[]).find(o => o.value === categoryId);
         if (option) {
-            filters[key] = [option.label];
+            filters[key] = [...(filters[key] || []), option.label];
             return filters;
         }
     }
     
     return filters;
-  }, [initialCategory]);
+  }, [initialCategory, queryFilters]);
   
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(queryFilters || getInitialFilters);
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
   const isWineCategory = useMemo(() => {
     return title.toLowerCase().includes('vang') || !!initialCategory?.slug.includes('vang');
@@ -58,8 +58,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
   useEffect(() => {
     setCurrentPage(1);
-    setActiveFilters(queryFilters || getInitialFilters);
-  }, [initialProducts, getInitialFilters, queryFilters]);
+    setActiveFilters(getInitialFilters);
+  }, [initialProducts, getInitialFilters]);
 
 
   const filteredProducts = useMemo(() => {
@@ -94,7 +94,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     
     applyTagFilter("LOẠI RƯỢU");
     applyTagFilter("QUỐC GIA");
-    applyTagFilter("VÙNG");
+    applyTagFilter("VÙNG NỔI TIẾNG");
     applyTagFilter("GIỐNG NHO");
     applyTagFilter("QUÀ TẶNG");
 
