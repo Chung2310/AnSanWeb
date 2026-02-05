@@ -31,9 +31,9 @@ const itemVariants = {
 };
 
 const regions = [
-  { name: 'Old Vine Cabernet Sauvignon', href: '/san-pham/the-macallan-25-sherry-oak', prominent: true, imageId: 'featured-macallan-25' },
-  { name: 'Sgarzi Luigi Primitivo di Manduria DOC', href: '/san-pham/yamazaki-12', prominent: false, imageId: 'banner-japanese-whisky' },
-  { name: 'Enzo Vincenzo Appassimento Puglia IGT', href: '/danh-muc/ruou-manh', prominent: false, imageId: 'banner-world-whisky' },
+  { name: 'Old Vine Cabernet Sauvignon', href: '/san-pham/old-vine-cabernet-sauvignon', prominent: true, imageId: 'featured-macallan-25' },
+  { name: 'Sgarzi Luigi Primitivo di Manduria DOC', href: '/san-pham/sgarzi-luigi-primitivo-di-manduria-doc', prominent: false, imageId: 'banner-japanese-whisky' },
+  { name: 'Enzo Vincenzo Appassimento Puglia IGT', href: '/san-pham/enzo-vincenzo-appassimento-puglia-igt', prominent: false, imageId: 'banner-world-whisky' },
 ];
 
 const getImage = (id: string): ImagePlaceholder | undefined => {
@@ -45,9 +45,10 @@ export default function WhiskyRegionShowcase() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const mainControls = useAnimation();
   
-  const defaultImage = getImage('featured-macallan-25');
-  const [activeImage, setActiveImage] = useState<ImagePlaceholder | undefined>(defaultImage);
-  const [selectedRegion, setSelectedRegion] = useState('Old Vine Cabernet Sauvignon');
+  const defaultRegion = regions[0];
+  const [activeImage, setActiveImage] = useState<ImagePlaceholder | undefined>(getImage(defaultRegion.imageId));
+  const [selectedRegion, setSelectedRegion] = useState(defaultRegion.name);
+  const [activeLink, setActiveLink] = useState(defaultRegion.href);
 
   useEffect(() => {
     if (isInView) {
@@ -55,15 +56,16 @@ export default function WhiskyRegionShowcase() {
     }
   }, [isInView, mainControls]);
   
-  const handleClick = (imageId: string, regionName: string) => {
+  const handleClick = (imageId: string, regionName: string, href: string) => {
     const image = getImage(imageId);
     if (image) {
       setActiveImage(image);
       setSelectedRegion(regionName);
+      setActiveLink(href);
     }
   };
 
-  if (!defaultImage) return null;
+  if (!defaultRegion) return null;
 
   return (
     <section ref={ref} className="relative text-white py-20 bg-background overflow-hidden min-h-[600px] flex items-center">
@@ -103,7 +105,7 @@ export default function WhiskyRegionShowcase() {
             <motion.div 
               key={region.name} 
               variants={itemVariants}
-              onClick={() => handleClick(region.imageId, region.name)}
+              onClick={() => handleClick(region.imageId, region.name, region.href)}
               className={`block font-headline font-black uppercase transition-all duration-300 cursor-pointer hover:text-white hover:opacity-100 text-shadow ${
                   selectedRegion === region.name
                     ? 'text-5xl text-white'
@@ -120,7 +122,7 @@ export default function WhiskyRegionShowcase() {
             variant="outline"
             className="mt-4 rounded-none border-2 border-white bg-transparent px-8 py-6 text-xs font-bold tracking-widest text-white transition-colors hover:bg-white hover:text-black"
           >
-            <Link href="/danh-muc/ruou-vang">KHÁM PHÁ SẢN PHẨM</Link>
+            <Link href={activeLink}>KHÁM PHÁ SẢN PHẨM</Link>
           </Button>
         </motion.div>
       </motion.div>
