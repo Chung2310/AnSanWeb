@@ -416,15 +416,10 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
         // Convert prices to numbers, handle empty strings
         finalData.price = Number(data.price);
-        if (data.secondaryPrice) {
-            finalData.secondaryPrice = Number(data.secondaryPrice);
-        } else {
-            delete finalData.secondaryPrice; // Remove field if empty
-        }
         
-        if(!data.secondaryPriceDescription) {
-            delete finalData.secondaryPriceDescription;
-        }
+        // Handle secondaryPrice and its description
+        finalData.secondaryPrice = data.secondaryPrice ? Number(data.secondaryPrice) : null;
+        finalData.secondaryPriceDescription = data.secondaryPriceDescription || null;
 
         (finalData as any).updatedAt = serverTimestamp();
         

@@ -50,8 +50,8 @@ export type Product = {
   shortDescription?: string;
   price: number;
   priceDescription?: string;
-  secondaryPrice?: number;
-  secondaryPriceDescription?: string;
+  secondaryPrice?: number | null;
+  secondaryPriceDescription?: string | null;
   description: string;
   image: ImageInfo | null; // Cover Image
   detailImages?: ImageInfo[]; // Detail Page Images
