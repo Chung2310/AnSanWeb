@@ -13,7 +13,7 @@ import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Phone, MessageSquare, Award, CircleDollarSign, Users, Truck, GlassWater } from 'lucide-react';
+import { Phone, MessageSquare, Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -223,10 +223,19 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
                         <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative">
-                            {index === 0 && isBestChoice && (
-                                <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
-                                    Best Choice
-                                </div>
+                            {index === 0 && (
+                                <>
+                                    {hasDiscount ? (
+                                        <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-base font-bold uppercase text-primary-foreground shadow-lg">
+                                            <Zap className="h-5 w-5" />
+                                            <span>Giá Đặc Biệt</span>
+                                        </div>
+                                    ) : isBestChoice && (
+                                        <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
+                                            Best Choice
+                                        </div>
+                                    )}
+                                </>
                             )}
                             <Image
                               src={image.url}
