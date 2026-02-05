@@ -383,6 +383,48 @@
       "description": "PIANDIMARE Logo",
       "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263184/PIANDIMARE_logo_colori_slsyfr.png",
       "imageHint": "PIANDIMARE logo"
+    },
+    {
+      "id": "brand-cantine-sgarzi-luigi",
+      "description": "Cantine Sgarzi Luigi Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283858/1_hxe0sf.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-piandimare-alt",
+      "description": "PIANDIMARE Logo Alt",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283858/2_sn1paf.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-c-and-c",
+      "description": "C&C Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283858/3_ro7vkw.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-domaine-de-la-baume",
+      "description": "Domaine de la Baume Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283858/4_rzm8ub.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-barbanera",
+      "description": "Barbanera Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283973/Barbanera_LOGO_v7ff46.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-hechtsheimer-winzer",
+      "description": "Hechtsheimer Winzer Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283973/Hechtsheimer_Winzer_Logo_600_cthkiw.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-gcf",
+      "description": "GCF Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770283974/GCF-Client-Testimonial-Logo-800px-1_awae7d.png",
+      "imageHint": "brand logo"
     }
   ]
 }
