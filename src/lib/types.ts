@@ -58,6 +58,7 @@ export type Product = {
   isFeatured?: boolean;
   isNew?: boolean;
   bestChoice?: boolean;
+  isGoodPrice?: boolean;
   tags?: string[]; // These will be category IDs
   attributes: ProductAttribute[];
   categoryIds?: string[];

@@ -17,6 +17,7 @@
         "isFeatured": { "type": "boolean", "description": "Indicates if the wine is featured." },
         "isNew": { "type": "boolean", "description": "Indicates if the wine is a new arrival." },
         "bestChoice": { "type": "boolean", "description": "Indicates if the wine is a best choice." },
+        "isGoodPrice": { "type": "boolean", "description": "Indicates if the wine has a good price." },
         "status": { "type": "string", "enum": ["published", "draft"] },
         "tags": { "type": "array", "items": { "type": "string" }, "description": "Holds the category IDs" },
         "attributes": { 

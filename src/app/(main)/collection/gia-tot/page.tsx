@@ -31,8 +31,8 @@ export default function ProductsPage() {
     )
   }
 
-  // "Giá Tốt" products are featured products.
-  const saleProducts = products?.filter(wine => wine.isFeatured) || [];
+  // "Giá Tốt" products.
+  const saleProducts = products?.filter(wine => wine.isGoodPrice) || [];
 
   return (
     <ProductListing 
