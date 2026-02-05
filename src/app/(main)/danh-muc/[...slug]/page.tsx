@@ -1,16 +1,16 @@
-
-
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemo, useCallback } from 'react';
-import { useParams, notFound } from 'next/navigation';
+import { useParams, notFound, useSearchParams } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
+import type { ActiveFilters } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const slugParts = params?.slug ? (params.slug as string[]) : [];
   const finalSlug = slugParts.length > 0 ? slugParts[slugParts.length - 1] : '';
 
@@ -18,10 +18,19 @@ export default function ProductsPage() {
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const isLoading = isLoadingProducts || isLoadingCategories;
 
+  const queryFilters = useMemo(() => {
+    const filters: ActiveFilters = {};
+    for (const [key, value] of searchParams.entries()) {
+        if (key.startsWith('filter_')) {
+            const filterKey = key.replace('filter_', '').replace(/_/g, ' ');
+            filters[filterKey] = value.split(',');
+        }
+    }
+    return filters;
+  }, [searchParams]);
+
   const categoryInfo = useMemo(() => {
     if (!categories || !finalSlug) return null;
-    // Simplified logic: Find category by the final slug, assuming slugs are unique.
-    // This avoids complex path-walking which was causing issues.
     return categories.find(c => c.slug === finalSlug) || null;
   }, [categories, finalSlug]);
 
@@ -84,6 +93,7 @@ export default function ProductsPage() {
       title={categoryInfo?.name || 'Danh mục sản phẩm'}
       categoryDescription={categoryInfo?.description}
       initialCategory={categoryInfo}
+      queryFilters={queryFilters}
     />
   );
 }
