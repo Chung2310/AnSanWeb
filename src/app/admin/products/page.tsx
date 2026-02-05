@@ -272,6 +272,7 @@ export default function ProductsAdminPage() {
         'Giống nho': isWineProduct ? wineClassification.theoGiongNho.join(', ') : '',
         'Loại quà tặng': isGiftSetProduct ? giftSetClassification.quaTang.join(', ') : '',
         'Mô tả ngắn': product.shortDescription,
+        'Mô tả chi tiết': product.description,
         'URL Ảnh bìa': product.image?.url,
         'URL Ảnh chi tiết': product.detailImages?.map(img => img.url).join(', \n'),
         'Ngày tạo': product.createdAt?.toDate ? product.createdAt.toDate().toISOString() : '',
