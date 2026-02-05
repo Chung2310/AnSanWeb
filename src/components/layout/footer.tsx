@@ -33,7 +33,7 @@ export default function Footer() {
                 </div>
 
                 {/* Col 2: Wine Categories */}
-                <div className="space-y-4">
+                <div className="space-y-4 md:pl-8">
                     <h3 className="font-bold uppercase tracking-wider text-base">DANH MỤC RƯỢU</h3>
                     <div className="flex gap-12">
                         <div className="space-y-2">
