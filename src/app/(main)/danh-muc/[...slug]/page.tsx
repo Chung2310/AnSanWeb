@@ -20,26 +20,35 @@ export default function ProductsPage() {
   const categoryInfo = useMemo(() => {
     if (!categories || !slugParts || slugParts.length === 0) return null;
 
-    let currentParentId: string | null = null;
-    let foundCategory: Category | null = null;
+    const finalSlug = slugParts[slugParts.length - 1];
+    
+    // Find all categories that could potentially match the last part of the URL.
+    const candidateCategories = categories.filter(c => c.slug === finalSlug);
 
-    for (const slug of slugParts) {
-      const category = categories.find(c => {
-        const isSlugMatch = c.slug === slug;
-        const isParentMatch = currentParentId === null 
-          ? (c.parentId === null || c.parentId === undefined || c.parentId === '')
-          : c.parentId === currentParentId;
-        return isSlugMatch && isParentMatch;
-      });
-      
-      if (category) {
-        foundCategory = category;
-        currentParentId = category.id;
-      } else {
-        return null;
+    if (candidateCategories.length === 0) {
+      return null;
+    }
+    
+    // Create a map for quick parent lookup.
+    const categoryMap = new Map(categories.map(c => [c.id, c]));
+
+    // For each candidate, rebuild its full path and see if it matches the URL.
+    for (const candidate of candidateCategories) {
+      const path: string[] = [];
+      let current: Category | undefined = candidate;
+
+      while (current) {
+        path.unshift(current.slug);
+        current = current.parentId ? categoryMap.get(current.parentId) : undefined;
+      }
+
+      // If the reconstructed path matches the URL's slug parts, we've found our category.
+      if (JSON.stringify(path) === JSON.stringify(slugParts)) {
+        return candidate;
       }
     }
-    return foundCategory;
+
+    return null; // No category found with a matching path.
   }, [categories, slugParts]);
 
 
