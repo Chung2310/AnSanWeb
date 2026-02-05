@@ -68,14 +68,12 @@ const preprocessPrice = (val: unknown) => {
     return val;
   }
   if (typeof val === 'string') {
-    if (val.trim() === '') return undefined;
-    // Remove all dots and commas, which are used as thousand separators
+    if (val.trim() === '') return null;
     const sanitized = val.replace(/[\.\,]/g, '');
     const num = parseFloat(sanitized);
-    // Return the parsed number, or the original string if parsing fails, for Zod to catch the error
     return isNaN(num) ? val : num;
   }
-  return undefined;
+  return null;
 };
 
 
@@ -91,7 +89,7 @@ const formSchema = z.object({
   priceDescription: z.string().optional(),
   secondaryPrice: z.preprocess(
     preprocessPrice,
-    z.number({ invalid_type_error: "Giá phải là một số."}).positive('Giá phải là số dương.').nullable().optional()
+    z.number({ invalid_type_error: "Giá phải là một số."}).positive('Giá phải là số dương.').nullable()
   ),
   secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
@@ -205,7 +203,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           priceDescription: initialData.priceDescription || '',
-          secondaryPrice: initialData.secondaryPrice || undefined, // Use undefined for empty optional field
+          secondaryPrice: initialData.secondaryPrice || null,
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
@@ -217,7 +215,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           shortDescription: '',
           price: '' as any,
           priceDescription: '',
-          secondaryPrice: undefined,
+          secondaryPrice: null,
           secondaryPriceDescription: '',
           description: '',
           image: null,
@@ -426,12 +424,11 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
   const onSubmit = async (data: ProductFormValues) => {
     try {
         const { tags, ...restData } = data;
-        // Zod has already processed the prices into numbers
         const finalData: Partial<FullProduct> = { 
             ...restData,
             tags: tags || [],
             price: data.price,
-            secondaryPrice: data.secondaryPrice ?? null,
+            secondaryPrice: data.secondaryPrice,
             secondaryPriceDescription: data.secondaryPriceDescription || null,
         };
 
@@ -479,26 +476,26 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                   <CardHeader><CardTitle className="text-lg">Giá sản phẩm</CardTitle></CardHeader>
                   <CardContent className="space-y-6">
                     <FormItem>
-                      <FormLabel>Giá chính</FormLabel>
-                      <FormDescription>Giá mặc định của sản phẩm.</FormDescription>
+                      <FormLabel>Giá bán (Sale Price)</FormLabel>
+                      <FormDescription>Giá khách hàng sẽ trả. Nhập giá này thấp hơn Giá gốc để hiển thị giảm giá.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="text" inputMode="numeric" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="text" inputMode="numeric" placeholder="380000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / chai" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
                      <FormItem>
-                      <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
-                      <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
+                      <FormLabel>Giá gốc (để hiển thị giảm giá)</FormLabel>
+                      <FormDescription>Giá gốc của sản phẩm trước khi giảm. Nhập giá này cao hơn Giá bán để hiển thị giá bị gạch ngang.</FormDescription>
                       <div className="flex gap-4 mt-2">
                         <FormField control={form.control} name="secondaryPrice" render={({ field }) => (
                             <FormItem className="flex-1">
                                 <FormControl>
-                                    <Input type="text" inputMode="numeric" placeholder="8000000" {...field} value={field.value ?? ''} />
+                                    <Input type="text" inputMode="numeric" placeholder="550000" {...field} value={field.value ?? ''} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
-                        <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / chai" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
                   </CardContent>
