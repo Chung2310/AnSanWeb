@@ -30,7 +30,7 @@ const drinkCategories = [
     {
         title: 'WHISKY',
         imageId: 'drink-cat-whisky',
-        href: '/danh-muc/ruou-manh',
+        href: '/danh-muc/ruou-manh/whisky',
     },
 ];
 
