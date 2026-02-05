@@ -50,6 +50,7 @@ import { useCategories } from '@/hooks/use-categories';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
+import { Progress } from '@/components/ui/progress';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
