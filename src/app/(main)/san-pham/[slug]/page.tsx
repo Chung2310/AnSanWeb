@@ -208,6 +208,9 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return bestChoiceProductNames.includes(productName);
   }, [product.nameVN]);
 
+  const hasDiscount = product.secondaryPrice && product.secondaryPrice > product.price;
+  const discountPercentage = hasDiscount ? Math.round(((product.secondaryPrice! - product.price) / product.secondaryPrice!) * 100) : 0;
+
   return (
     <>
       <div className="bg-white text-black">
@@ -287,9 +290,19 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
                         <Separator />
                         
-                        <p className="text-4xl font-bold text-primary">
-                            {formatPrice(product.price)}
-                        </p>
+                        {hasDiscount ? (
+                            <div className="flex items-baseline gap-4">
+                                <span className="text-2xl text-muted-foreground line-through">{formatPrice(product.secondaryPrice!)}</span>
+                                <span className="text-4xl font-bold text-destructive">{formatPrice(product.price)}</span>
+                                <div className="rounded-md bg-destructive px-3 py-1 text-sm font-bold text-destructive-foreground">
+                                    -{discountPercentage}%
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-4xl font-bold text-primary">
+                                {formatPrice(product.price)}
+                            </p>
+                        )}
 
                         <Separator />
 
