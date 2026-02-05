@@ -13,10 +13,10 @@ export default function WineCard({ product }: WineCardProps) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
-  const salePrice = product.price ? parseFloat(String(product.price)) : 0;
-  const originalPrice = product.secondaryPrice ? parseFloat(String(product.secondaryPrice)) : null;
+  const salePrice = Number(product.price);
+  const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
 
-  const hasDiscount = originalPrice && salePrice && originalPrice > salePrice;
+  const hasDiscount = originalPrice !== null && isFinite(originalPrice) && isFinite(salePrice) && originalPrice > salePrice;
   const discountPercentage = hasDiscount ? Math.round(((originalPrice! - salePrice!) / originalPrice!) * 100) : 0;
 
   return (
