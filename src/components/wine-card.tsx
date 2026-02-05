@@ -24,15 +24,15 @@ export default function WineCard({ product }: WineCardProps) {
     <div className="group text-center">
       <Link href={`/san-pham/${product.slug}`} className="block">
         <div className="relative overflow-hidden">
-            {hasDiscount ? (
-                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-destructive px-3 py-1.5 text-xs font-bold uppercase text-destructive-foreground animate-flash">
-                    <Zap className="h-4 w-4" />
-                    <span>Giá đặc biệt</span>
-                </div>
-            ) : product.isGoodPrice ? (
+            {product.isGoodPrice ? (
                  <div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-destructive px-3 py-1.5 text-xs font-bold uppercase text-destructive-foreground animate-flash">
                     <Zap className="h-4 w-4" />
                     <span>Giá Tốt</span>
+                </div>
+            ) : hasDiscount ? (
+                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-destructive px-3 py-1.5 text-xs font-bold uppercase text-destructive-foreground animate-flash">
+                    <Zap className="h-4 w-4" />
+                    <span>Giá đặc biệt</span>
                 </div>
             ) : product.bestChoice && (
                 <div className="absolute top-2 left-2 z-10 rounded-sm bg-destructive px-3 py-1 text-xs font-bold uppercase text-destructive-foreground">
