@@ -39,7 +39,7 @@ import {
   doc,
   collection,
   serverTimestamp,
-  addDoc,
+  setDoc,
   updateDoc,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
@@ -99,6 +99,7 @@ const formSchema = z.object({
   isFeatured: z.boolean(),
   isNew: z.boolean(),
   isGoodPrice: z.boolean(),
+  bestChoice: z.boolean().optional(),
   attributes: z.array(productAttributeSchema).optional(),
   tags: z.array(z.string()).optional(),
 });
@@ -208,6 +209,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
           isGoodPrice: initialData.isGoodPrice || false,
+          bestChoice: initialData.bestChoice || false,
         }
       : {
           nameVN: '',
@@ -224,6 +226,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           isFeatured: false,
           isNew: true,
           isGoodPrice: false,
+          bestChoice: false,
           attributes: [],
           tags: preselectedCategoryId ? [preselectedCategoryId] : [],
         },
@@ -421,44 +424,57 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     return page ? `/admin/products?page=${page}` : '/admin/products';
   };
 
-  const onSubmit = async (data: ProductFormValues) => {
-    try {
-        const { tags, ...restData } = data;
-        const finalData: Partial<FullProduct> = { 
-            ...restData,
-            tags: tags || [],
-            price: data.price,
-            secondaryPrice: data.secondaryPrice,
-            secondaryPriceDescription: data.secondaryPriceDescription || null,
-        };
+    const onSubmit = async (data: ProductFormValues) => {
+        try {
+            // Explicitly build the data object to ensure data integrity and prevent extra fields.
+            const finalData: Omit<FullProduct, 'id' | 'createdAt' | 'updatedAt'> & { updatedAt: any, createdAt?: any, id?: string } = {
+                nameVN: data.nameVN,
+                slug: data.slug,
+                price: data.price,
+                status: data.status,
+                isFeatured: data.isFeatured,
+                isNew: data.isNew,
+                isGoodPrice: data.isGoodPrice,
+                bestChoice: data.bestChoice || false,
+                tags: data.tags || [],
+                attributes: data.attributes || [],
+                image: data.image || null,
+                detailImages: data.detailImages || [],
+                shortDescription: data.shortDescription || '',
+                description: data.description || '',
+                priceDescription: data.priceDescription || '',
+                
+                // Ensure secondaryPrice is a valid number or null.
+                secondaryPrice: data.secondaryPrice && data.secondaryPrice > 0 ? data.secondaryPrice : null,
+                secondaryPriceDescription: data.secondaryPriceDescription || null,
+                
+                updatedAt: serverTimestamp(),
+            };
 
-        (finalData as any).updatedAt = serverTimestamp();
-        
-        if (initialData) {
-            const productId = initialData.id;
-            delete (finalData as any).id;
-
-            const productRef = doc(firestore, 'products', productId);
-            await updateDoc(productRef, finalData);
-            toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
-        } else {
-            delete (finalData as any).id;
-            (finalData as any).createdAt = serverTimestamp();
-            const collectionRef = collection(firestore, 'products');
-            const newDoc = await addDoc(collectionRef, finalData as FullProduct);
-            await updateDoc(newDoc, { id: newDoc.id });
-            toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
+            if (initialData && initialData.id) {
+                // Update existing document, excluding fields that shouldn't be overwritten on update
+                const { id, createdAt, ...updateData } = finalData;
+                const productRef = doc(firestore, 'products', initialData.id);
+                await updateDoc(productRef, updateData);
+                toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
+            } else {
+                // Create new document
+                const newDocRef = doc(collection(firestore, 'products'));
+                finalData.id = newDocRef.id;
+                finalData.createdAt = serverTimestamp();
+                await setDoc(newDocRef, finalData);
+                toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
+            }
+            router.push(getRedirectUrl());
+        } catch (error) {
+            console.error("Error saving product:", error);
+            toast({
+                variant: 'destructive',
+                title: 'Đã có lỗi xảy ra',
+                description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
+            });
         }
-        router.push(getRedirectUrl());
-    } catch (error) {
-        console.error("Error saving product:", error);
-        toast({
-            variant: 'destructive',
-            title: 'Đã có lỗi xảy ra',
-            description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
-        });
-    }
-  };
+    };
   
   return (
     <Form {...form}>
@@ -624,6 +640,12 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                  <FormField control={form.control} name="isGoodPrice" render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5"><FormLabel>Giá tốt</FormLabel><FormDescription>Sản phẩm có giá tốt.</FormDescription></div>
+                      <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                    </FormItem>
+                 )} />
+                 <FormField control={form.control} name="bestChoice" render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5"><FormLabel>Lựa chọn tốt nhất</FormLabel><FormDescription>Gắn nhãn "Best Choice".</FormDescription></div>
                       <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                     </FormItem>
                  )} />
