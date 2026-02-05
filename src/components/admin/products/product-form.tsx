@@ -62,19 +62,36 @@ const imageInfoSchema = z.object({
     path: z.string().optional(),
 });
 
+// Preprocess price strings to handle thousand separators (e.g., "1.000.000")
+const preprocessPrice = (val: unknown) => {
+  if (typeof val === 'number') {
+    return val;
+  }
+  if (typeof val === 'string') {
+    if (val.trim() === '') return undefined;
+    // Remove all dots and commas, which are used as thousand separators
+    const sanitized = val.replace(/[\.\,]/g, '');
+    const num = parseFloat(sanitized);
+    // Return the parsed number, or the original string if parsing fails, for Zod to catch the error
+    return isNaN(num) ? val : num;
+  }
+  return undefined;
+};
+
+
 const formSchema = z.object({
   id: z.string().optional(),
   nameVN: z.string().min(2, { message: 'Tên phải có ít nhất 2 ký tự.' }),
   slug: z.string().min(2, { message: 'Slug phải có ít nhất 2 ký tự.' }),
   shortDescription: z.string().optional(),
   price: z.preprocess(
-    (val) => (val === "" || val === null || val === undefined ? undefined : parseFloat(String(val))),
-    z.number({ required_error: "Giá là bắt buộc."}).positive({ message: 'Giá phải là số dương.' })
+    preprocessPrice,
+    z.number({ invalid_type_error: "Giá phải là một số.", required_error: "Giá là bắt buộc."}).positive({ message: 'Giá phải là số dương.' })
   ),
   priceDescription: z.string().optional(),
   secondaryPrice: z.preprocess(
-    (val) => (val === "" || val === null || val === undefined ? undefined : parseFloat(String(val))),
-    z.number().positive('Giá phải là số dương.').optional()
+    preprocessPrice,
+    z.number({ invalid_type_error: "Giá phải là một số."}).positive('Giá phải là số dương.').nullable().optional()
   ),
   secondaryPriceDescription: z.string().optional(),
   description: z.string().optional(),
@@ -188,7 +205,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           priceDescription: initialData.priceDescription || '',
-          secondaryPrice: initialData.secondaryPrice || '',
+          secondaryPrice: initialData.secondaryPrice || undefined, // Use undefined for empty optional field
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
@@ -200,7 +217,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           shortDescription: '',
           price: '' as any,
           priceDescription: '',
-          secondaryPrice: '' as any,
+          secondaryPrice: undefined,
           secondaryPriceDescription: '',
           description: '',
           image: null,
@@ -409,17 +426,14 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
   const onSubmit = async (data: ProductFormValues) => {
     try {
         const { tags, ...restData } = data;
+        // Zod has already processed the prices into numbers
         const finalData: Partial<FullProduct> = { 
             ...restData,
-            tags: tags || [] 
+            tags: tags || [],
+            price: data.price,
+            secondaryPrice: data.secondaryPrice ?? null,
+            secondaryPriceDescription: data.secondaryPriceDescription || null,
         };
-
-        // Convert prices to numbers, handle empty strings
-        finalData.price = Number(data.price);
-        
-        // Handle secondaryPrice and its description
-        finalData.secondaryPrice = data.secondaryPrice ? Number(data.secondaryPrice) : null;
-        finalData.secondaryPriceDescription = data.secondaryPriceDescription || null;
 
         (finalData as any).updatedAt = serverTimestamp();
         
@@ -468,7 +482,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                       <FormLabel>Giá chính</FormLabel>
                       <FormDescription>Giá mặc định của sản phẩm.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="price" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="text" inputMode="numeric" placeholder="800000" {...field} /></FormControl><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="priceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
@@ -476,7 +490,14 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                       <FormLabel>Giá phụ (Tùy chọn)</FormLabel>
                       <FormDescription>Sử dụng cho các tùy chọn mua khác, ví dụ: giá mỗi hộp.</FormDescription>
                       <div className="flex gap-4 mt-2">
-                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input type="number" placeholder="8000000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="secondaryPrice" render={({ field }) => (
+                            <FormItem className="flex-1">
+                                <FormControl>
+                                    <Input type="text" inputMode="numeric" placeholder="8000000" {...field} value={field.value ?? ''} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
                         <FormField control={form.control} name="secondaryPriceDescription" render={({ field }) => (<FormItem className="flex-1"><FormControl><Input placeholder="Vd: / hộp 10 điếu" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                     </FormItem>
