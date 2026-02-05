@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -226,8 +227,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             {index === 0 && (
                                 <>
                                     {hasDiscount ? (
-                                        <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-sm bg-destructive px-4 py-2 text-base font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
-                                            <Zap className="h-5 w-5" />
+                                        <div className="absolute top-8 left-8 z-10 flex items-center gap-3 rounded-md bg-destructive px-6 py-3 text-lg font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
+                                            <Zap className="h-6 w-6" />
                                             <span>Giá Đặc Biệt</span>
                                         </div>
                                     ) : isBestChoice && (
