@@ -66,7 +66,7 @@ export function useImportProducts() {
         const allTags = [...new Set([...generalCategories, ...wineLoai, ...wineQuocGia, ...wineVung, ...wineGiongNho])];
 
         const allAttributeLabels = Object.keys(row).filter(key => 
-            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
+            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
         );
 
         const productData: any = {
@@ -74,6 +74,7 @@ export function useImportProducts() {
           slug: row['Đường dẫn (slug)'] || slugify(nameVN, { lower: true, strict: true, locale: 'vi' }),
           price: Number(price),
           isFeatured: row['Nổi bật'] === 'Có',
+          isGoodPrice: row['Giá tốt'] === 'Có',
           isNew: row['Sản phẩm mới'] === 'Có',
           bestChoice: row['Lựa chọn tốt nhất'] === 'Có',
           status: row['Trạng thái'] === 'Đã xuất bản' ? 'published' : 'draft',

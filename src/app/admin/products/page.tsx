@@ -262,6 +262,7 @@ export default function ProductsAdminPage() {
         'Mô tả giá phụ': product.secondaryPriceDescription,
         'Trạng thái': product.status === 'published' ? 'Đã xuất bản' : 'Bản nháp',
         'Nổi bật': product.isFeatured ? 'Có' : 'Không',
+        'Giá tốt': product.isGoodPrice ? 'Có' : 'Không',
         'Sản phẩm mới': product.isNew ? 'Có' : 'Không',
         'Lựa chọn tốt nhất': product.bestChoice ? 'Có' : 'Không',
         'Danh mục chung': generalCategories.join(', '),

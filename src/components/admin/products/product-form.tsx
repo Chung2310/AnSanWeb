@@ -83,6 +83,7 @@ const formSchema = z.object({
   status: z.enum(['published', 'draft']),
   isFeatured: z.boolean(),
   isNew: z.boolean(),
+  isGoodPrice: z.boolean(),
   attributes: z.array(productAttributeSchema).optional(),
   tags: z.array(z.string()).optional(),
 });
@@ -191,6 +192,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
+          isGoodPrice: initialData.isGoodPrice || false,
         }
       : {
           nameVN: '',
@@ -206,6 +208,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           status: 'published',
           isFeatured: false,
           isNew: true,
+          isGoodPrice: false,
           attributes: [],
           tags: preselectedCategoryId ? [preselectedCategoryId] : [],
         },
@@ -602,6 +605,12 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                  <FormField control={form.control} name="isNew" render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5"><FormLabel>Sản phẩm mới</FormLabel><FormDescription>Gắn nhãn "Mới".</FormDescription></div>
+                      <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                    </FormItem>
+                 )} />
+                 <FormField control={form.control} name="isGoodPrice" render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5"><FormLabel>Giá tốt</FormLabel><FormDescription>Sản phẩm có giá tốt.</FormDescription></div>
                       <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                     </FormItem>
                  )} />
