@@ -317,6 +317,72 @@
       "description": "The Lakes whisky Tet gift set",
       "imageUrl": "/images/banner/1.jpg",
       "imageHint": "whisky gift set"
+    },
+    {
+      "id": "brand-chivas-regal",
+      "description": "Chivas Regal Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263181/Chivas-Regal-Logo_bngpgu.png",
+      "imageHint": "Chivas Regal logo"
+    },
+    {
+      "id": "brand-mortlach",
+      "description": "Mortlach Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/3_al9v8i.png",
+      "imageHint": "Mortlach logo"
+    },
+    {
+      "id": "brand-royal-salute",
+      "description": "Royal Salute Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/4_yp0wu4.png",
+      "imageHint": "Royal Salute logo"
+    },
+    {
+      "id": "brand-singleton",
+      "description": "The Singleton Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/5_wksilc.png",
+      "imageHint": "The Singleton logo"
+    },
+    {
+      "id": "brand-macallan-new",
+      "description": "The Macallan Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/Macallan-Logo_j6yrno.png",
+      "imageHint": "The Macallan logo"
+    },
+    {
+      "id": "brand-ballantines-new",
+      "description": "Ballantine's Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/2_urqy3e.png",
+      "imageHint": "Ballantines logo"
+    },
+    {
+      "id": "brand-coli",
+      "description": "Coli Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263183/COLI-LOGO-2021-ESEC-fondo-trasparente_kam8wv.png",
+      "imageHint": "Coli logo"
+    },
+    {
+      "id": "brand-johnnie-walker",
+      "description": "Johnnie Walker Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263183/johnnie_walker-logo_brandlogos.net_1yk4t_cwmnsh.png",
+      "imageHint": "Johnnie Walker logo"
+    },
+    {
+      "id": "brand-ballantines-finest",
+      "description": "Ballantine's Finest Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263182/1_rwryyc.png",
+      "imageHint": "Ballantines Finest logo"
+    },
+    {
+      "id": "brand-unnamed-design",
+      "description": "Unnamed Design Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263183/Thie%CC%82%CC%81t_ke%CC%82%CC%81_chu%CC%9Ba_co%CC%81_te%CC%82n_b4uml6.png",
+      "imageHint": "brand logo"
+    },
+    {
+      "id": "brand-piandimare",
+      "description": "PIANDIMARE Logo",
+      "imageUrl": "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770263184/PIANDIMARE_logo_colori_slsyfr.png",
+      "imageHint": "PIANDIMARE logo"
     }
   ]
 }
