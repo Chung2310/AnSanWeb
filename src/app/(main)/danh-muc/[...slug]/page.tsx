@@ -36,10 +36,12 @@ export default function ProductsPage() {
     for (const candidate of candidateCategories) {
       const path: string[] = [];
       let current: Category | undefined = candidate;
+      let sanityCheck = 0; // Prevent infinite loops
 
-      while (current) {
+      while (current && sanityCheck < 10) {
         path.unshift(current.slug);
         current = current.parentId ? categoryMap.get(current.parentId) : undefined;
+        sanityCheck++;
       }
 
       // If the reconstructed path matches the URL's slug parts, we've found our category.
@@ -54,22 +56,17 @@ export default function ProductsPage() {
 
   const getDescendantIds = useCallback((parentId: string, allCategories: Category[] | null): string[] => {
     if (!allCategories) return [];
-    const descendantIds: string[] = [];
-    const queue: string[] = [parentId];
-    const visited = new Set<string>();
-
-    while (queue.length > 0) {
-      const currentId = queue.shift()!;
-      if(visited.has(currentId)) continue;
-      visited.add(currentId);
-
-      const children = allCategories.filter(cat => cat.parentId === currentId);
+    
+    const findChildren = (id: string): string[] => {
+      const children = allCategories.filter(cat => cat.parentId === id);
+      let ids: string[] = children.map(c => c.id);
       for (const child of children) {
-          descendantIds.push(child.id);
-          queue.push(child.id);
+        ids = [...ids, ...findChildren(child.id)];
       }
+      return ids;
     }
-    return descendantIds;
+
+    return findChildren(parentId);
   }, []);
 
   const filteredProducts = useMemo(() => {
