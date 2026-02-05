@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -14,14 +13,14 @@ const heroSlides = [
         imageId: 'hero-macallan',
         label: 'Master of Wine',
         title: 'Master of Wine',
-        href: '/danh-muc-san-pham',
+        href: '/search?q=Grande%20Alberone',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
     },
     {
         imageId: 'hero-sale',
         label: 'Grande Alberone',
         title: 'Grande Alberone',
-        href: '/gioi-thieu',
+        href: '/search?q=Grande%20Alberone',
         description: 'Grande Alberone – Tinh hoa vang Ý từ vùng Puglia, được Rượu vang An San độc quyền phân phối tại Việt Nam.',
     },
     {
