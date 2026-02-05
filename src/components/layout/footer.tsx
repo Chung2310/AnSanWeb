@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="bg-white text-black border-t">
         <div className="container mx-auto max-w-screen-2xl px-4 py-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-sm">
                 
                 {/* Col 1: Business Info */}
                 <div className="space-y-4">
@@ -57,19 +57,8 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-
-                {/* Col 3: Customer Support */}
-                <div className="space-y-4">
-                    <h3 className="font-bold uppercase tracking-wider text-base">HỖ TRỢ KHÁCH HÀNG</h3>
-                    <div className="space-y-2">
-                        <Link href="#" className="block text-gray-700 hover:text-primary">Chính sách bảo mật</Link>
-                        <Link href="#" className="block text-gray-700 hover:text-primary">Chính sách đổi trả</Link>
-                        <Link href="#" className="block text-gray-700 hover:text-primary">Chính sách mua hàng & thanh toán</Link>
-                        <Link href="#" className="block text-gray-700 hover:text-primary">Điều khoản & điều kiện</Link>
-                    </div>
-                </div>
                 
-                {/* Col 4: Social */}
+                {/* Col 3: Social */}
                 <div className="space-y-4">
                     <h3 className="font-bold uppercase tracking-wider text-base">KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div className="space-y-2">
