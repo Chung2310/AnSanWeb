@@ -12,51 +12,21 @@ import type { Category } from '@/lib/types';
 export default function ProductsPage() {
   const params = useParams();
   const slugParts = params?.slug ? (params.slug as string[]) : [];
+  const finalSlug = slugParts.length > 0 ? slugParts[slugParts.length - 1] : '';
 
   const { products, isLoading: isLoadingProducts } = useProducts();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const isLoading = isLoadingProducts || isLoadingCategories;
 
   const categoryInfo = useMemo(() => {
-    if (!categories || !slugParts || slugParts.length === 0) return null;
-
-    const finalSlug = slugParts[slugParts.length - 1];
-    
-    // Find all categories that could potentially match the last part of the URL.
-    const candidateCategories = categories.filter(c => c.slug === finalSlug);
-
-    if (candidateCategories.length === 0) {
-      return null;
-    }
-    
-    // Create a map for quick parent lookup.
-    const categoryMap = new Map(categories.map(c => [c.id, c]));
-
-    // For each candidate, rebuild its full path and see if it matches the URL.
-    for (const candidate of candidateCategories) {
-      const path: string[] = [];
-      let current: Category | undefined = candidate;
-      let sanityCheck = 0; // Prevent infinite loops
-
-      while (current && sanityCheck < 10) {
-        path.unshift(current.slug);
-        current = current.parentId ? categoryMap.get(current.parentId) : undefined;
-        sanityCheck++;
-      }
-
-      // If the reconstructed path matches the URL's slug parts, we've found our category.
-      if (JSON.stringify(path) === JSON.stringify(slugParts)) {
-        return candidate;
-      }
-    }
-
-    return null; // No category found with a matching path.
-  }, [categories, slugParts]);
+    if (!categories || !finalSlug) return null;
+    // Simplified logic: Find category by the final slug, assuming slugs are unique.
+    // This avoids complex path-walking which was causing issues.
+    return categories.find(c => c.slug === finalSlug) || null;
+  }, [categories, finalSlug]);
 
 
-  const getDescendantIds = useCallback((parentId: string, allCategories: Category[] | null): string[] => {
-    if (!allCategories) return [];
-    
+  const getDescendantIds = useCallback((parentId: string, allCategories: Category[]): string[] => {
     const findChildren = (id: string): string[] => {
       const children = allCategories.filter(cat => cat.parentId === id);
       let ids: string[] = children.map(c => c.id);
@@ -65,7 +35,6 @@ export default function ProductsPage() {
       }
       return ids;
     }
-
     return findChildren(parentId);
   }, []);
 
