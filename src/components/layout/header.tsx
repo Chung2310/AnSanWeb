@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Search, Clock, Phone, ChevronDown, Menu } from 'lucide-react';
+import { Search, Clock, Phone, ChevronDown, Menu, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -240,6 +240,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                 isGiaTot && 'font-bold text-chart-4 animate-flash'
             )}
         >
+          {isGiaTot && <Zap className="mr-2 h-4 w-4" />}
           {label}
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
