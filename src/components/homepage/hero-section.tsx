@@ -13,7 +13,7 @@ const heroSlides = [
         imageId: 'hero-macallan',
         label: 'Master of Wine',
         title: 'Master of Wine',
-        href: '/search?q=Grande%20Alberone',
+        href: '/danh-muc/ruou-vang',
         description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313',
     },
     {
