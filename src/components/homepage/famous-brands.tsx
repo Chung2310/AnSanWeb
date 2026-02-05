@@ -36,7 +36,7 @@ export default function FamousBrands() {
   const [count, setCount] = useState(0)
   
   const plugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
+    Autoplay({ delay: 3000, stopOnInteraction: false })
   )
 
   const ref = useRef(null);
@@ -71,6 +71,13 @@ export default function FamousBrands() {
     }
   }, [api])
 
+  const chunkSize = 5;
+  const logoChunks = [];
+  for (let i = 0; i < brandLogos.length; i += chunkSize) {
+      const chunk = brandLogos.slice(i, i + chunkSize);
+      logoChunks.push(chunk);
+  }
+
 
   return (
     <motion.section 
@@ -97,29 +104,33 @@ export default function FamousBrands() {
           }}
         >
           <CarouselContent className="-ml-4">
-            {brandLogos.map((logoId, index) => {
-              const logo = PlaceHolderImages.find(img => img.id === logoId);
-              if (!logo) return null;
-              // Skip rendering the white logo
-              if (logoId === 'brand-ichiros') return null;
-              return (
-                <CarouselItem key={index} className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/5 pl-4 flex justify-center">
-                   <div className="relative h-20 w-36">
-                    <Image
-                      src={logo.imageUrl}
-                      alt={logo.description}
-                      fill
-                      sizes="(max-width: 768px) 33vw, 20vw"
-                      className={cn(
-                        "object-contain",
-                        (logoId === 'brand-lakes' || logoId === 'brand-sgarzi-luigi') && 'mix-blend-multiply'
-                      )}
-                      data-ai-hint={logo.imageHint}
-                    />
+            {logoChunks.map((chunk, chunkIndex) => (
+                <CarouselItem key={chunkIndex} className="basis-full pl-4">
+                  <div className="flex justify-around items-center gap-4 h-20">
+                    {chunk.map((logoId) => {
+                      const logo = PlaceHolderImages.find(img => img.id === logoId);
+                      if (!logo) return null;
+                      // Skip rendering the white logo
+                      if (logoId === 'brand-ichiros') return null;
+                      return (
+                          <div key={logoId} className="relative h-20 w-36 flex-shrink-0">
+                            <Image
+                              src={logo.imageUrl}
+                              alt={logo.description}
+                              fill
+                              sizes="(max-width: 768px) 33vw, 20vw"
+                              className={cn(
+                                "object-contain",
+                                (logoId === 'brand-lakes' || logoId === 'brand-sgarzi-luigi') && 'mix-blend-multiply'
+                              )}
+                              data-ai-hint={logo.imageHint}
+                            />
+                          </div>
+                      )
+                    })}
                   </div>
                 </CarouselItem>
-              )
-            })}
+            ))}
           </CarouselContent>
           <div className="flex justify-center mt-8 space-x-2">
             {Array.from({ length: count }).map((_, index) => (
@@ -139,5 +150,3 @@ export default function FamousBrands() {
     </motion.section>
   );
 }
-
-    
