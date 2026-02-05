@@ -188,7 +188,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
           attributes: initialData.attributes || [],
           tags: initialData.tags || [],
           priceDescription: initialData.priceDescription || '',
-          secondaryPrice: initialData.secondaryPrice || undefined,
+          secondaryPrice: initialData.secondaryPrice || '',
           secondaryPriceDescription: initialData.secondaryPriceDescription || '',
           image: initialData.image ? { url: initialData.image.url, path: initialData.image.path || '' } : null,
           detailImages: initialData.detailImages || [],
