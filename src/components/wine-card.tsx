@@ -27,7 +27,7 @@ export default function WineCard({ product }: WineCardProps) {
             {product.isGoodPrice ? (
                  <div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-destructive px-3 py-1.5 text-xs font-bold uppercase text-destructive-foreground animate-flash">
                     <Zap className="h-4 w-4" />
-                    <span>Giá Tốt</span>
+                    <span>Giá Đặc biệt</span>
                 </div>
             ) : hasDiscount ? (
                 <div className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-destructive px-3 py-1.5 text-xs font-bold uppercase text-destructive-foreground animate-flash">

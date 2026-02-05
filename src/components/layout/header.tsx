@@ -218,6 +218,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
   const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
   const isMenuOpen = isOpen && hasDropdown;
   const isCurrentPage = pathname === href || (href !== '/' && pathname.startsWith(href));
+  const isGiaTot = label === 'GIÁ TỐT';
   
   return (
       <div 
@@ -235,7 +236,8 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                   : isCurrentPage
                   ? 'text-primary-foreground font-bold'
                   : 'text-primary-foreground/80',
-                !isMenuOpen && 'hover:text-primary-foreground'
+                !isMenuOpen && 'hover:text-primary-foreground',
+                isGiaTot && 'font-bold text-chart-4 animate-flash'
             )}
         >
           {label}
