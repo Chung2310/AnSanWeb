@@ -21,6 +21,13 @@ const brandLogos = [
   'brand-ballantines-finest',
   'brand-unnamed-design',
   'brand-piandimare',
+  'brand-cantine-sgarzi-luigi',
+  'brand-piandimare-alt',
+  'brand-c-and-c',
+  'brand-domaine-de-la-baume',
+  'brand-barbanera',
+  'brand-hechtsheimer-winzer',
+  'brand-gcf',
 ];
 
 export default function FamousBrands() {
@@ -132,3 +139,5 @@ export default function FamousBrands() {
     </motion.section>
   );
 }
+
+    
