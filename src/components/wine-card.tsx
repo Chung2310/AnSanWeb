@@ -13,6 +13,9 @@ export default function WineCard({ product }: WineCardProps) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
+  const hasDiscount = product.secondaryPrice && product.secondaryPrice > product.price;
+  const discountPercentage = hasDiscount ? Math.round(((product.secondaryPrice! - product.price) / product.secondaryPrice!) * 100) : 0;
+
   return (
     <div className="group text-center">
       <Link href={`/san-pham/${product.slug}`} className="block">
@@ -20,6 +23,11 @@ export default function WineCard({ product }: WineCardProps) {
             {product.bestChoice && (
                 <div className="absolute top-2 left-2 z-10 rounded-sm bg-destructive px-3 py-1 text-xs font-bold uppercase text-destructive-foreground">
                     Best Choice
+                </div>
+            )}
+            {hasDiscount && (
+                <div className="absolute top-2 right-2 z-10 rounded-md bg-destructive px-2 py-1 text-xs font-bold text-destructive-foreground">
+                    -{discountPercentage}%
                 </div>
             )}
             <Image
@@ -34,7 +42,14 @@ export default function WineCard({ product }: WineCardProps) {
             <h3 className="font-headline text-lg font-bold uppercase text-foreground transition-colors group-hover:text-primary" title={product.nameVN}>
                 {product.nameVN}
             </h3>
-            <p className="mt-2 text-lg font-bold text-primary">{formatPrice(product.price)}</p>
+            {hasDiscount ? (
+                <div className="mt-2 flex items-baseline justify-center gap-2">
+                    <span className="text-sm text-muted-foreground line-through">{formatPrice(product.secondaryPrice!)}</span>
+                    <span className="text-lg font-bold text-destructive">{formatPrice(product.price)}</span>
+                </div>
+            ) : (
+                <p className="mt-2 text-lg font-bold text-primary">{formatPrice(product.price)}</p>
+            )}
         </div>
       </Link>
     </div>
