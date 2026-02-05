@@ -226,7 +226,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             {index === 0 && (
                                 <>
                                     {hasDiscount ? (
-                                        <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-base font-bold uppercase text-primary-foreground shadow-lg">
+                                        <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-sm bg-destructive px-4 py-2 text-base font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
                                             <Zap className="h-5 w-5" />
                                             <span>Giá Đặc Biệt</span>
                                         </div>
