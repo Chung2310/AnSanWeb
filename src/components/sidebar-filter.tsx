@@ -1,10 +1,11 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from "react";
 import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { wineMegaMenuData, giftSetMegaMenuData } from "@/lib/mega-menu-data";
+import { wineMegaMenuData, giftSetMegaMenuData, spiritsMegaMenuData } from "@/lib/mega-menu-data";
 import {
     Accordion,
     AccordionContent,
@@ -43,6 +44,10 @@ const staticFiltersData = {
         value: item.category_id,
     })),
     "QUÀ TẶNG": giftSetMegaMenuData.quaTang.map(item => ({
+        label: item.label,
+        value: item.category_id,
+    })),
+    "THƯƠNG HIỆU": spiritsMegaMenuData.thuongHieu.map(item => ({
         label: item.label,
         value: item.category_id,
     })),
@@ -120,10 +125,11 @@ interface SidebarFilterProps {
     onFilterChange: (activeFilters: ActiveFilters) => void;
     isWineCategory?: boolean;
     isGiftSetCategory?: boolean;
+    isSpiritCategory?: boolean;
     activeFilters: ActiveFilters;
 }
 
-export default function SidebarFilter({ products, onFilterChange, isWineCategory, isGiftSetCategory, activeFilters }: SidebarFilterProps) {
+export default function SidebarFilter({ products, onFilterChange, isWineCategory, isGiftSetCategory, isSpiritCategory, activeFilters }: SidebarFilterProps) {
 
     const handleFilterClick = (group: string, value: string) => {
         const currentGroupFilters = activeFilters[group] || [];
@@ -178,6 +184,14 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
                     options={staticFiltersData["QUÀ TẶNG"]}
                     onFilterChange={handleFilterClick}
                     activeFilters={activeFilters["QUÀ TẶNG"] || []}
+                />
+            )}
+             {isSpiritCategory && (
+                <AccordionFilterGroup
+                    title="THƯƠNG HIỆU"
+                    options={staticFiltersData["THƯƠNG HIỆU"]}
+                    onFilterChange={handleFilterClick}
+                    activeFilters={activeFilters["THƯƠNG HIỆU"] || []}
                 />
             )}
         </div>

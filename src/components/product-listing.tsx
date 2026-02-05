@@ -33,10 +33,11 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     let filters: ActiveFilters = queryFilters || {};
     const categoryId = initialCategory.id;
 
-    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG"];
+    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG", "THƯƠNG HIỆU"];
 
     for (const key of filterKeys) {
-        const option = (SidebarFilter.staticFiltersData[key] as {label: string, value: string}[]).find(o => o.value === categoryId);
+        const options = (SidebarFilter.staticFiltersData[key] as {label: string, value: string}[]);
+        const option = options.find(o => o.value === categoryId);
         if (option) {
             filters[key] = [...(filters[key] || []), option.label];
             return filters;
@@ -54,6 +55,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
   const isGiftSetCategory = useMemo(() => {
     return title.toLowerCase().includes('quà tặng') || !!initialCategory?.slug.includes('bo-qua-tang');
+  }, [title, initialCategory]);
+
+  const isSpiritCategory = useMemo(() => {
+    return title.toLowerCase().includes('mạnh') || !!initialCategory?.slug.includes('ruou-manh');
   }, [title, initialCategory]);
 
   useEffect(() => {
@@ -97,6 +102,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     applyTagFilter("VÙNG NỔI TIẾNG");
     applyTagFilter("GIỐNG NHO");
     applyTagFilter("QUÀ TẶNG");
+    applyTagFilter("THƯƠNG HIỆU");
 
 
     return filtered;
@@ -170,6 +176,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
               onFilterChange={handleFilterChange}
               isWineCategory={isWineCategory}
               isGiftSetCategory={isGiftSetCategory}
+              isSpiritCategory={isSpiritCategory}
               activeFilters={activeFilters}
             />
           </div>
