@@ -13,8 +13,11 @@ export default function WineCard({ product }: WineCardProps) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
-  const hasDiscount = product.secondaryPrice && product.secondaryPrice > product.price;
-  const discountPercentage = hasDiscount ? Math.round(((product.secondaryPrice! - product.price) / product.secondaryPrice!) * 100) : 0;
+  const salePrice = product.price ? parseFloat(String(product.price)) : 0;
+  const originalPrice = product.secondaryPrice ? parseFloat(String(product.secondaryPrice)) : null;
+
+  const hasDiscount = originalPrice && salePrice && originalPrice > salePrice;
+  const discountPercentage = hasDiscount ? Math.round(((originalPrice! - salePrice!) / originalPrice!) * 100) : 0;
 
   return (
     <div className="group text-center">
@@ -44,11 +47,11 @@ export default function WineCard({ product }: WineCardProps) {
             </h3>
             {hasDiscount ? (
                 <div className="mt-2 flex items-baseline justify-center gap-2">
-                    <span className="text-sm text-muted-foreground line-through">{formatPrice(product.secondaryPrice!)}</span>
-                    <span className="text-lg font-bold text-destructive">{formatPrice(product.price)}</span>
+                    <span className="text-sm text-muted-foreground line-through">{formatPrice(originalPrice!)}</span>
+                    <span className="text-lg font-bold text-destructive">{formatPrice(salePrice)}</span>
                 </div>
             ) : (
-                <p className="mt-2 text-lg font-bold text-primary">{formatPrice(product.price)}</p>
+                <p className="mt-2 text-lg font-bold text-primary">{formatPrice(salePrice)}</p>
             )}
         </div>
       </Link>
