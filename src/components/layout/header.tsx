@@ -50,15 +50,20 @@ const navLinks: NavLinkData[] = [
           },
           {
               title: 'Theo quốc gia',
-              items: [...wineMegaMenuData.theoQuocGia].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+              items: wineMegaMenuData.theoQuocGia.map(item => {
+                if (item.slug === 'vang-chi-le') {
+                    return { href: `/danh-muc/ruou-vang?filter_QUỐC_GIA=Vang Chi Lê`, label: item.label };
+                }
+                return { href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label };
+              })
           },
           {
               title: 'Theo vùng',
-              items: [...wineMegaMenuData.theoVung].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+              items: wineMegaMenuData.theoVung.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
           },
           {
               title: 'Theo giống nho',
-              items: [...wineMegaMenuData.theoGiongNho].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
+              items: wineMegaMenuData.theoGiongNho.map(item => ({ href: `/danh-muc/ruou-vang/${item.slug}`, label: item.label }))
           },
       ]
   },
@@ -68,15 +73,15 @@ const navLinks: NavLinkData[] = [
       megaMenuColumns: [
           {
               title: 'Theo loại rượu',
-              items: [...spiritsMegaMenuData.theoLoai].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+              items: spiritsMegaMenuData.theoLoai.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
           },
           {
               title: 'Thương hiệu',
-              items: [...spiritsMegaMenuData.thuongHieu].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
+              items: spiritsMegaMenuData.thuongHieu.map(item => ({ href: `/danh-muc/ruou-manh/${item.slug}`, label: item.label }))
           },
           {
               title: 'Quà tặng',
-              items: [...spiritsMegaMenuData.quaTang].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ 
+              items: spiritsMegaMenuData.quaTang.map(item => ({ 
                   href: `/danh-muc/bo-qua-tang/${item.slug}`, 
                   label: item.label 
               }))
@@ -93,15 +98,15 @@ const navLinks: NavLinkData[] = [
       megaMenuColumns: [
           {
               title: 'LY PHA LÊ RIEDEL',
-              items: [...glasswareMegaMenuData.lyPhaLeRiedel].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+              items: glasswareMegaMenuData.lyPhaLeRiedel.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
           },
           {
               title: 'LY WHISKY',
-              items: [...glasswareMegaMenuData.lyWhisky].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+              items: glasswareMegaMenuData.lyWhisky.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
           },
           {
               title: 'KHÁC',
-              items: [...glasswareMegaMenuData.khac].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
+              items: glasswareMegaMenuData.khac.map(item => ({ href: `/danh-muc/ly-coc-pha-le/${item.slug}`, label: item.label }))
           }
       ]
   },
@@ -110,7 +115,7 @@ const navLinks: NavLinkData[] = [
     label: 'BỘ QUÀ TẶNG',
     megaMenuColumns: [{
         title: 'Loại quà tặng',
-        items: [...giftSetMegaMenuData.quaTang].sort((a, b) => a.label.localeCompare(b.label, 'vi')).map(item => ({ 
+        items: giftSetMegaMenuData.quaTang.map(item => ({ 
             href: `/danh-muc/bo-qua-tang/${item.slug}`, 
             label: item.label 
         }))
