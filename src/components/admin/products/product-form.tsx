@@ -426,7 +426,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
     const onSubmit = async (data: ProductFormValues) => {
         try {
-            // Explicitly build the data object to ensure data integrity and prevent extra fields.
             const finalData: Omit<FullProduct, 'id' | 'createdAt' | 'updatedAt'> & { updatedAt: any, createdAt?: any, id?: string } = {
                 nameVN: data.nameVN,
                 slug: data.slug,
@@ -443,22 +442,17 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                 shortDescription: data.shortDescription || '',
                 description: data.description || '',
                 priceDescription: data.priceDescription || '',
-                
-                // Ensure secondaryPrice is a valid number or null.
                 secondaryPrice: data.secondaryPrice && data.secondaryPrice > 0 ? data.secondaryPrice : null,
                 secondaryPriceDescription: data.secondaryPriceDescription || null,
-                
                 updatedAt: serverTimestamp(),
             };
 
-            if (initialData && initialData.id) {
-                // Update existing document, excluding fields that shouldn't be overwritten on update
-                const { id, createdAt, ...updateData } = finalData;
+            if (initialData?.id) {
                 const productRef = doc(firestore, 'products', initialData.id);
-                await updateDoc(productRef, updateData);
+                const { id, createdAt, ...updateData } = finalData;
+                await setDoc(productRef, updateData, { merge: true });
                 toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
             } else {
-                // Create new document
                 const newDocRef = doc(collection(firestore, 'products'));
                 finalData.id = newDocRef.id;
                 finalData.createdAt = serverTimestamp();
@@ -490,7 +484,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
                 <Card>
                   <CardHeader><CardTitle className="text-lg">Giá sản phẩm</CardTitle></CardHeader>
-                  <CardContent className="space-y-6">
+                   <CardContent className="space-y-6">
                     <FormItem>
                       <FormLabel>Giá bán (Sale Price)</FormLabel>
                       <FormDescription>Giá khách hàng sẽ trả. Nhập giá này thấp hơn Giá gốc để hiển thị giảm giá.</FormDescription>
