@@ -10,13 +10,17 @@ import { motion, useInView, useAnimation } from 'framer-motion';
 
 
 const brandLogos = [
-  'brand-logo-4',
-  'brand-macallan',
-  'brand-lakes',
-  'brand-springbank',
-  'brand-yamazaki',
-  'brand-glenfiddich',
-  'brand-sgarzi-luigi',
+  'brand-chivas-regal',
+  'brand-mortlach',
+  'brand-royal-salute',
+  'brand-singleton',
+  'brand-macallan-new',
+  'brand-ballantines-new',
+  'brand-coli',
+  'brand-johnnie-walker',
+  'brand-ballantines-finest',
+  'brand-unnamed-design',
+  'brand-piandimare',
 ];
 
 export default function FamousBrands() {
