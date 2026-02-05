@@ -7,6 +7,7 @@ export const wineMegaMenuData = {
         { label: "Champagne", slug: "champagne", category_id: "champagne" },
     ],
     theoQuocGia: [
+        { label: "Vang Chi Lê", slug: "vang-chi-le", category_id: "chi-le" },
         { label: "Vang Đức", slug: "vang-duc", category_id: "duc" },
         { label: "Vang Nga", slug: "vang-nga", category_id: "nga" },
         { label: "Vang Pháp", slug: "vang-phap", category_id: "phap" },

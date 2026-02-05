@@ -18,6 +18,11 @@ interface PriceCategory {
 
 const wineCategories: PriceCategory[] = [
     {
+        src: "https://images.unsplash.com/photo-1588886982633-51f7b0376326?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        title: 'Vang Chi Lê',
+        href: '/danh-muc/ruou-vang/vang-chi-le',
+    },
+    {
         src: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1768965642/Baner_r%C6%B0%E1%BB%A3u_web-06_und4dc.jpg",
         title: 'Vang Đức',
         href: '/danh-muc/ruou-vang/vang-duc',
