@@ -66,7 +66,7 @@ export function useImportProducts() {
         const allTags = [...new Set([...generalCategories, ...wineLoai, ...wineQuocGia, ...wineVung, ...wineGiongNho])];
 
         const allAttributeLabels = Object.keys(row).filter(key => 
-            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
+            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
         );
 
         const productData: any = {
@@ -85,6 +85,7 @@ export function useImportProducts() {
         // --- Handle Optional Fields ---
         if (row['Mô tả giá']) productData.priceDescription = row['Mô tả giá'];
         if (row['Mô tả ngắn']) productData.shortDescription = row['Mô tả ngắn'];
+        if (row['Mô tả chi tiết']) productData.description = row['Mô tả chi tiết'];
 
         const secondaryPrice = row['Giá phụ'];
         if (secondaryPrice != null && !isNaN(Number(secondaryPrice))) {
