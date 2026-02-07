@@ -1,13 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Phone, MessageSquare } from 'lucide-react';
+import { Home, Phone } from 'lucide-react';
 import Image from 'next/image';
 
 const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451729/Icon_of_Zalo.svg_wifges.png"
         alt="Zalo Icon"
+        width={20}
+        height={20}
+        {...props}
+    />
+);
+
+const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
+    <Image
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451995/messenger-1495274_1280_wdksfs.png"
+        alt="Messenger Icon"
         width={20}
         height={20}
         {...props}
@@ -33,7 +43,7 @@ const actions = [
   {
     label: 'Messenger',
     href: 'https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/',
-    icon: MessageSquare,
+    icon: MessengerIcon,
   },
 ];
 
