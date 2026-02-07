@@ -26,7 +26,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-body text-base text-foreground antialiased pb-32 lg:pb-0'
+          'min-h-screen bg-background font-body text-base text-foreground antialiased pb-20 lg:pb-0'
         )}
       >
         <FirebaseClientProvider>
