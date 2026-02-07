@@ -12,7 +12,7 @@ const StickyBar = () => {
             <div className="bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
                 <div className="container mx-auto max-w-screen-xl px-4">
                     <div className="flex justify-around items-center h-14">
-                        <Link href="/lien-he" className="flex items-center gap-3 text-sm font-semibold uppercase text-gray-800 hover:text-primary transition-colors">
+                        <Link href="/lien-he#map-section" className="flex items-center gap-3 text-sm font-semibold uppercase text-gray-800 hover:text-primary transition-colors">
                             <MapPin style={{ color: iconColor }} className="h-7 w-7" strokeWidth={1.5}/>
                             <span>TÌM CỬA HÀNG</span>
                         </Link>
