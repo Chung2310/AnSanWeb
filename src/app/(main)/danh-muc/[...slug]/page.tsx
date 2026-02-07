@@ -7,11 +7,12 @@ import { useParams, notFound, useSearchParams } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
 import type { ActiveFilters } from '@/components/sidebar-filter';
+import { staticFiltersData } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
   const { slug } = useParams();
   const searchParams = useSearchParams();
-  const slugParts = slug ? (slug as string[]) : [];
+  const slugParts = Array.isArray(slug) ? slug : [slug];
   const finalSlug = slugParts.length > 0 ? slugParts[slugParts.length - 1] : '';
 
   const { products, isLoading: isLoadingProducts } = useProducts();
@@ -20,10 +21,15 @@ export default function ProductsPage() {
 
   const queryFilters = useMemo(() => {
     const filters: ActiveFilters = {};
-    for (const [key, value] of searchParams.entries()) {
-        if (key.startsWith('filter_')) {
-            const filterKey = key.replace('filter_', '').replace(/_/g, ' ');
-            filters[filterKey] = value.split(',');
+    if (!searchParams) {
+        return filters;
+    }
+    for (const filterKey in staticFiltersData) {
+        const paramKey = `filter_${filterKey.replace(/ /g, '_')}`;
+        const paramValue = searchParams.get(paramKey);
+        if (paramValue) {
+            // @ts-ignore
+            filters[filterKey] = paramValue.split(',');
         }
     }
     return filters;
