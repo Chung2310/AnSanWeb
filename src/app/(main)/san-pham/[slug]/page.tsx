@@ -19,32 +19,28 @@ import Link from 'next/link';
 
 const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
     <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451729/Icon_of_Zalo.svg_wifges.png"
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png"
         alt="Zalo Icon"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
         {...props}
     />
 );
 
 const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
     <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451995/messenger-1495274_1280_wdksfs.png"
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770455033/icons8-message-50_kyenco.png"
         alt="Messenger Icon"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
         {...props}
     />
 );
 
-const HotlineIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452424/hotline_qhbxhw.png"
-        alt="Hotline Icon"
-        width={20}
-        height={20}
-        {...props}
-    />
+const HotlineIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
 );
 
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -339,15 +335,15 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <a href="tel:0933333313"><HotlineIcon className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</a>
+                                  <a href="tel:0933333313"><HotlineIcon className="mr-3 h-6 w-6"/> ĐIỆN THOẠI</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessengerIcon className="mr-3 h-5 w-5"/> MESSENGER</a>
+                                  <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessengerIcon className="mr-3 h-6 w-6"/> MESSENGER</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</a>
+                                  <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer"><ZaloIcon className="mr-3 h-6 w-6"/> ZALO</a>
                                 </Button>
-                                <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-5 w-5"/> WHATSAPP</Button>
+                                <Button variant="outline" className="justify-center text-center h-14"><WhatsAppIcon className="mr-3 h-6 w-6"/> WHATSAPP</Button>
                             </div>
                         </div>
 
