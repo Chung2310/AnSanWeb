@@ -107,14 +107,14 @@ export default function FamousBrands() {
           <CarouselContent className="-ml-4">
             {logoChunks.map((chunk, chunkIndex) => (
                 <CarouselItem key={chunkIndex} className="basis-full pl-4">
-                  <div className="flex justify-center items-center gap-4 h-20">
+                  <div className="flex justify-center items-center gap-4 h-24">
                     {chunk.map((logoId) => {
                       const logo = PlaceHolderImages.find(img => img.id === logoId);
                       if (!logo) return null;
                       // Skip rendering the white logo
                       if (logoId === 'brand-ichiros') return null;
                       return (
-                          <div key={logoId} className="relative h-20 w-28">
+                          <div key={logoId} className="relative h-24 w-36">
                             <Image
                               src={logo.imageUrl}
                               alt={logo.description}
