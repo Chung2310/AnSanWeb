@@ -29,13 +29,6 @@ const MessengerIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
-     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        <path d="M15.5 8.5c.3.3.4.7.4 1s-.1.7-.4 1c-.3.3-.7.4-1 .4h-2.5v2.5c0 .6-.4 1-1 1s-1-.4-1-1v-5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5z"></path>
-    </svg>
-);
-
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -340,7 +333,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
                                   <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer">
-                                    <ZaloIcon className="mr-3 h-6 w-6" />
+                                    <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png" alt="Zalo Icon" width={24} height={24} className="mr-3 h-6 w-6" />
                                     ZALO
                                   </a>
                                 </Button>
