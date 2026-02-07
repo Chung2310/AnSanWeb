@@ -3,6 +3,7 @@ import Header from '@/components/layout/header';
 import TetGiftPopup from '@/components/homepage/tet-gift-popup';
 import StickyBar from '@/components/layout/sticky-bar';
 import MobileActionBar from '@/components/layout/mobile-action-bar';
+import MobileBottomBar from '@/components/layout/mobile-bottom-bar';
 
 export default function MainLayout({
   children,
@@ -16,6 +17,7 @@ export default function MainLayout({
       <Footer />
       <TetGiftPopup />
       <StickyBar />
+      <MobileBottomBar />
       <MobileActionBar />
     </div>
   );
