@@ -4,7 +4,6 @@ import FamousBrands from '@/components/homepage/famous-brands';
 import WhiskyRegionShowcase from '@/components/homepage/whisky-region-showcase';
 import GiftSetsSection from '@/components/homepage/gift-sets-section';
 import HeroSection from '@/components/homepage/hero-section';
-import InfluenceSection from '@/components/homepage/influence-section';
 import PriceCategoryShowcase from '@/components/homepage/price-category-showcase';
 import Testimonials from '@/components/homepage/testimonials';
 import DrinkCategoryShowcase from '@/components/homepage/drink-category-showcase';
@@ -18,7 +17,6 @@ export default function HomePage() {
       <FamousBrands />
       <DrinkCategoryShowcase />
       <WhiskyRegionShowcase />
-      <InfluenceSection />
       <BestChoiceSection />
       <PriceCategoryShowcase />
       <GiftSetsSection />
