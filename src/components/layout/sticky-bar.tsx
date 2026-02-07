@@ -7,8 +7,8 @@ const MapPinIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452970/Pngtree_c4d_metal_stereo_positioning_address_4665341_buxsvu.png"
         alt="Tìm cửa hàng"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
         {...props}
     />
 );
@@ -17,8 +17,8 @@ const PercentIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'al
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770453385/Pngtree_physical_gold_bar_cartoon_golden_5417513_gufffb.png"
         alt="Nhận ưu đãi"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
         {...props}
     />
 );
@@ -27,8 +27,8 @@ const GiftIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770453289/Pngtree_gift_wrapping_4471687_sxulov.png"
         alt="Quà tặng doanh nghiệp"
-        width={20}
-        height={20}
+        width={24}
+        height={24}
         {...props}
     />
 );
@@ -42,7 +42,7 @@ const actions = [
   },
   {
     label: 'NHẬN ƯU ĐÃI',
-    href: '/collection/sales-10',
+    href: '/collection/gia-tot',
     icon: PercentIcon,
   },
   {
@@ -64,7 +64,7 @@ const StickyBar = () => {
                                 href={action.href}
                                 className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider hover:opacity-80 transition-opacity"
                             >
-                                <action.icon className="h-5 w-5" />
+                                <action.icon className="h-6 w-6" />
                                 <span>{action.label}</span>
                             </Link>
                         ))}
