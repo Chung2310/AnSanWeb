@@ -9,9 +9,9 @@ import type { Category } from '@/lib/types';
 import type { ActiveFilters } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
-  const params = useParams();
+  const { slug } = useParams();
   const searchParams = useSearchParams();
-  const slugParts = params?.slug ? (params.slug as string[]) : [];
+  const slugParts = slug ? (slug as string[]) : [];
   const finalSlug = slugParts.length > 0 ? slugParts[slugParts.length - 1] : '';
 
   const { products, isLoading: isLoadingProducts } = useProducts();
