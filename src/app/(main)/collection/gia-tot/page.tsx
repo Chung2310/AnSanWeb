@@ -50,9 +50,6 @@ const GiaTotProductCard = ({ product }: { product: Product }) => {
                         <span className="text-lg font-bold text-red-700">{formatPrice(salePrice)}</span>
                     )}
                 </div>
-                <Button style={{ backgroundColor: '#8B181F' }} className="w-full text-white hover:bg-[#7f1d1d] uppercase font-bold text-sm h-9">
-                    THÊM VÀO GIỎ HÀNG
-                </Button>
                 <h3 className="pt-2 text-sm font-semibold text-gray-800 h-12 flex items-center justify-center">
                     <Link href={`/san-pham/${product.slug}`} className="hover:text-primary line-clamp-2">
                         {product.nameVN}
