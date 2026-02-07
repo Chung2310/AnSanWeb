@@ -1,54 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-
-const MapPinIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452970/Pngtree_c4d_metal_stereo_positioning_address_4665341_buxsvu.png"
-        alt="Tìm cửa hàng"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
-const PercentIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770453385/Pngtree_physical_gold_bar_cartoon_golden_5417513_gufffb.png"
-        alt="Nhận ưu đãi"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
-const GiftIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770453289/Pngtree_gift_wrapping_4471687_sxulov.png"
-        alt="Quà tặng doanh nghiệp"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
+import { MapPin, BadgePercent, Gift } from 'lucide-react';
 
 
 const actions = [
   {
     label: 'TÌM CỬA HÀNG',
     href: '/lien-he#map-section',
-    icon: MapPinIcon,
+    icon: MapPin,
   },
   {
     label: 'NHẬN ƯU ĐÃI',
     href: '/collection/gia-tot',
-    icon: PercentIcon,
+    icon: BadgePercent,
   },
   {
     label: 'QUÀ TẶNG DOANH NGHIỆP',
     href: '/danh-muc/bo-qua-tang',
-    icon: GiftIcon,
+    icon: Gift,
   },
 ];
 
@@ -62,7 +32,7 @@ const StickyBar = () => {
                             <Link
                                 key={action.label}
                                 href={action.href}
-                                className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider hover:opacity-80 transition-opacity"
+                                className="flex items-center gap-3 text-sm font-bold uppercase tracking-wider hover:opacity-80 transition-opacity"
                             >
                                 <action.icon className="h-6 w-6" />
                                 <span>{action.label}</span>
