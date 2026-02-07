@@ -14,13 +14,23 @@ import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Phone, MessageSquare, Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
+import { Phone, Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451729/Icon_of_Zalo.svg_wifges.png"
         alt="Zalo Icon"
+        width={20}
+        height={20}
+        {...props}
+    />
+);
+
+const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
+    <Image
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451995/messenger-1495274_1280_wdksfs.png"
+        alt="Messenger Icon"
         width={20}
         height={20}
         {...props}
@@ -322,7 +332,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                   <a href="tel:0933333313"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessageSquare className="mr-3 h-5 w-5"/> MESSENGER</a>
+                                  <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessengerIcon className="mr-3 h-5 w-5"/> MESSENGER</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
                                   <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer"><ZaloIcon className="mr-3 h-5 w-5"/> ZALO</a>
