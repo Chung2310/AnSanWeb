@@ -22,7 +22,7 @@ const GiaTotProductCard = ({ product }: { product: Product }) => {
     return (
         <div className="bg-white rounded-lg p-4 flex flex-col text-center relative overflow-hidden group">
             {hasDiscount && (
-                <div className="absolute top-3 right-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1">
+                <div className="absolute top-3 right-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1 animate-flash">
                     <Zap className="w-3 h-3" />
                     Giá Đặc Biệt
                 </div>
