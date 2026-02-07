@@ -35,7 +35,7 @@ export default function Footer() {
                 {/* Col 2: Wine Categories */}
                 <div className="space-y-4 md:pl-16">
                     <h3 className="font-bold uppercase tracking-wider text-base">DANH MỤC RƯỢU</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="flex flex-col sm:flex-row gap-8">
                         <div className="space-y-2">
                             <h4 className="font-semibold text-gray-800">Quốc gia</h4>
                             <Link href="/danh-muc/ruou-vang/vang-chi-le" className="block text-gray-700 hover:text-primary">Chi Lê</Link>
