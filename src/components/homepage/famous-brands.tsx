@@ -7,6 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/com
 import { cn } from '@/lib/utils';
 import Autoplay from "embla-carousel-autoplay";
 import { motion, useInView, useAnimation } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 
 const brandLogos = [
@@ -42,6 +43,13 @@ export default function FamousBrands() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const mainControls = useAnimation();
+  const isMobile = useIsMobile();
+  const chunkSize = isMobile ? 3 : 5;
+  const logoChunks = [];
+  for (let i = 0; i < brandLogos.length; i += chunkSize) {
+      const chunk = brandLogos.slice(i, i + chunkSize);
+      logoChunks.push(chunk);
+  }
 
   useEffect(() => {
       if (isInView) {
@@ -55,13 +63,13 @@ export default function FamousBrands() {
     }
 
     setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedScrollSnap())
+    setCurrent(api.selectedSnap())
 
     const onSelect = (api: CarouselApi) => {
       if (!api) {
         return;
       }
-      setCurrent(api.selectedScrollSnap())
+      setCurrent(api.selectedSnap())
     }
 
     api.on("select", onSelect)
@@ -69,15 +77,7 @@ export default function FamousBrands() {
     return () => {
       api.off("select", onSelect)
     }
-  }, [api])
-
-  const chunkSize = 5;
-  const logoChunks = [];
-  for (let i = 0; i < brandLogos.length; i += chunkSize) {
-      const chunk = brandLogos.slice(i, i + chunkSize);
-      logoChunks.push(chunk);
-  }
-
+  }, [api, isMobile])
 
   return (
     <motion.section 
@@ -102,18 +102,19 @@ export default function FamousBrands() {
             align: "start",
             loop: true,
           }}
+          key={chunkSize}
         >
           <CarouselContent className="-ml-4">
             {logoChunks.map((chunk, chunkIndex) => (
                 <CarouselItem key={chunkIndex} className="basis-full pl-4">
-                  <div className="flex justify-around items-center gap-4 h-20">
+                  <div className="flex justify-center items-center gap-4 h-20">
                     {chunk.map((logoId) => {
                       const logo = PlaceHolderImages.find(img => img.id === logoId);
                       if (!logo) return null;
                       // Skip rendering the white logo
                       if (logoId === 'brand-ichiros') return null;
                       return (
-                          <div key={logoId} className="relative h-20 w-36 flex-shrink-0">
+                          <div key={logoId} className="relative h-20 w-28">
                             <Image
                               src={logo.imageUrl}
                               alt={logo.description}
