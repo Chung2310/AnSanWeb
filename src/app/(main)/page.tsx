@@ -9,6 +9,7 @@ import PriceCategoryShowcase from '@/components/homepage/price-category-showcase
 import Testimonials from '@/components/homepage/testimonials';
 import DrinkCategoryShowcase from '@/components/homepage/drink-category-showcase';
 import HomepageBlogSection from '@/components/homepage/homepage-blog-section';
+import BestChoiceSection from '@/components/homepage/best-choice-section';
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       <DrinkCategoryShowcase />
       <WhiskyRegionShowcase />
       <InfluenceSection />
+      <BestChoiceSection />
       <PriceCategoryShowcase />
       <GiftSetsSection />
       <Testimonials />
