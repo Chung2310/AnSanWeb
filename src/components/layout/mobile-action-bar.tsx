@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Phone } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import Image from 'next/image';
 
 const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
@@ -24,11 +24,21 @@ const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | '
     />
 );
 
+const HomeIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
+    <Image
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452247/Pngtree_blue_home_icon_or_button_15418766_wms0qz.png"
+        alt="Home Icon"
+        width={20}
+        height={20}
+        {...props}
+    />
+);
+
 const actions = [
   {
     label: 'Trang chủ',
     href: '/',
-    icon: Home,
+    icon: HomeIcon,
   },
   {
     label: 'Hotline',
