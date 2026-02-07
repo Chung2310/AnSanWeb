@@ -10,9 +10,10 @@ import type { ActiveFilters } from '@/components/sidebar-filter';
 import { staticFiltersData } from '@/components/sidebar-filter';
 
 export default function ProductsPage() {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = params?.slug;
   const searchParams = useSearchParams();
-  const slugParts = Array.isArray(slug) ? slug : [slug];
+  const slugParts = Array.isArray(slug) ? slug : [slug].filter(Boolean);
   const finalSlug = slugParts.length > 0 ? slugParts[slugParts.length - 1] : '';
 
   const { products, isLoading: isLoadingProducts } = useProducts();
