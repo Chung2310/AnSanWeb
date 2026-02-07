@@ -68,7 +68,7 @@ export default function Footer() {
                 </div>
             </div>
 
-            <div className="mt-12">
+            <div id="map-section" className="mt-12 scroll-mt-24">
                 <h3 className="font-bold uppercase tracking-wider text-base mb-4">BẢN ĐỒ</h3>
                 <div className="overflow-hidden rounded-lg border shadow-lg">
                     <MapEmbed />
