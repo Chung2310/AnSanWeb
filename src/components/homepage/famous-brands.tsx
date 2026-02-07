@@ -63,13 +63,13 @@ export default function FamousBrands() {
     }
 
     setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedSnap())
+    setCurrent(api.selectedScrollSnap())
 
     const onSelect = (api: CarouselApi) => {
       if (!api) {
         return;
       }
-      setCurrent(api.selectedSnap())
+      setCurrent(api.selectedScrollSnap())
     }
 
     api.on("select", onSelect)
