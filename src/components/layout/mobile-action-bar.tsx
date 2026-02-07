@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React from 'react';
+import Image from 'next/image';
 
 const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -13,13 +14,6 @@ const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 const HotlineIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>
-);
-
-const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
-     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        <path d="M15.5 8.5c.3.3.4.7.4 1s-.1.7-.4 1c-.3.3-.7.4-1 .4h-2.5v2.5c0 .6-.4 1-1 1s-1-.4-1-1v-5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5z"></path>
     </svg>
 );
 
@@ -43,7 +37,7 @@ const actions = [
   {
     label: 'Zalo',
     href: 'https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313',
-    icon: ZaloIcon,
+    icon: "https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png",
   },
   {
     label: 'Messenger',
@@ -65,7 +59,10 @@ export default function MobileActionBar() {
             className="flex flex-col items-center justify-center p-3 text-gray-700 hover:bg-gray-100 transition-colors border-t border-gray-200 first:border-t-0"
             style={{width: '80px', height: '80px'}}
           >
-            <action.icon className="h-7 w-7" />
+            {typeof action.icon === 'string' ? 
+                <Image src={action.icon} alt={action.label} width={28} height={28} className="h-7 w-7" /> :
+                <action.icon className="h-7 w-7" />
+            }
             <span className="text-xs font-medium mt-1 text-center">{action.label}</span>
           </Link>
         ))}
