@@ -1,10 +1,15 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const brandLogos = [
   'brand-chivas-regal',
@@ -28,57 +33,55 @@ const brandLogos = [
 ];
 
 const FamousBrands = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const mainControls = useAnimation();
+    const plugin = React.useRef(
+        Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+    );
 
-  useEffect(() => {
-      if (isInView) {
-          mainControls.start("visible");
-      }
-  }, [isInView, mainControls]);
-
-  return (
-    <motion.section 
-        ref={ref}
-        variants={{
-            hidden: { opacity: 0, y: 75 },
-            visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
-        animate={mainControls}
-        transition={{ duration: 1, delay: 0.3 }}
-        className="py-16 bg-white">
-      <div className="container">
-        <h2 className="text-center font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
-          Những Thương Hiệu Nổi Tiếng
-        </h2>
-        <div className="relative mt-12 w-full overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-            <div className="flex animate-marquee-slow">
-                {[...brandLogos, ...brandLogos].map((logoId, index) => {
-                    const logo = PlaceHolderImages.find(img => img.id === logoId);
-                    if (!logo || logoId === 'brand-ichiros') return null;
-                    return (
-                        <div key={`${logoId}-${index}`} className="relative h-24 w-44 flex-shrink-0 mx-8">
-                            <Image
-                                src={logo.imageUrl}
-                                alt={logo.description}
-                                fill
-                                sizes="20vw"
-                                className={cn(
-                                    "object-contain",
-                                    (logoId === 'brand-lakes' || logoId === 'brand-sgarzi-luigi') && 'mix-blend-multiply'
-                                )}
-                                data-ai-hint={logo.imageHint}
-                            />
-                        </div>
-                    );
-                })}
+    return (
+        <section className="py-16 bg-white">
+            <div className="container">
+                <h2 className="text-center font-headline text-3xl font-black uppercase" style={{ color: '#5a5a5a' }}>
+                    Những Thương Hiệu Nổi Tiếng
+                </h2>
+                <div className="relative mt-12 w-full overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+                    <Carousel
+                        plugins={[plugin.current]}
+                        opts={{
+                            align: "start",
+                            loop: true,
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent className="-ml-4">
+                            {brandLogos.map((logoId, index) => {
+                                const logo = PlaceHolderImages.find(img => img.id === logoId);
+                                if (!logo || logoId === 'brand-ichiros') return null;
+                                return (
+                                    <CarouselItem key={`${logoId}-${index}`} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6 pl-4">
+                                        <div className="p-4">
+                                            <div className="relative h-20">
+                                                <Image
+                                                    src={logo.imageUrl}
+                                                    alt={logo.description}
+                                                    fill
+                                                    sizes="20vw"
+                                                    className={cn(
+                                                        "object-contain",
+                                                        (logoId === 'brand-lakes' || logoId === 'brand-sgarzi-luigi') && 'mix-blend-multiply'
+                                                    )}
+                                                    data-ai-hint={logo.imageHint}
+                                                />
+                                            </div>
+                                        </div>
+                                    </CarouselItem>
+                                );
+                            })}
+                        </CarouselContent>
+                    </Carousel>
+                </div>
             </div>
-        </div>
-      </div>
-    </motion.section>
-  );
+        </section>
+    );
 };
 
 export default FamousBrands;
