@@ -31,9 +31,9 @@ const itemVariants = {
 };
 
 const regions = [
-  { name: 'Old Vine Cabernet Sauvignon', href: '/san-pham/old-vine-cabernet-sauvignon', prominent: true, imageId: 'featured-macallan-25' },
-  { name: 'Sgarzi Luigi Primitivo di Manduria DOC', href: '/san-pham/sgarzi-luigi-primitivo-di-manduria-doc', prominent: false, imageId: 'banner-japanese-whisky' },
-  { name: 'Enzo Vincenzo Appassimento Puglia IGT', href: '/san-pham/enzo-vincenzo-appassimento-puglia-igt', prominent: false, imageId: 'banner-world-whisky' },
+  { name: 'VANG ĐỎ CHUẨN GU', href: '/danh-muc/ruou-vang/ruou-vang-do', prominent: true, imageId: 'featured-macallan-25' },
+  { name: 'LY PHA LÊ ĐẲNG CẤP', href: '/danh-muc/ly-coc-pha-le', prominent: false, imageId: 'banner-japanese-whisky' },
+  { name: 'VANG NHẸ - THƯỞNG THỨC BAN ĐẦU', href: '/danh-muc/ruou-vang/ruou-vang-trang', prominent: false, imageId: 'banner-world-whisky' },
 ];
 
 const getImage = (id: string): ImagePlaceholder | undefined => {
