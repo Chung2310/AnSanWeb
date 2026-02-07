@@ -108,7 +108,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'flash': 'flash 1.5s infinite',
-        'marquee-slow': 'marquee-slow 80s linear infinite',
+        'marquee-slow': 'marquee-slow 40s linear infinite',
       },
       typography: (theme: any) => ({
         lg: {
