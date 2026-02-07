@@ -2,20 +2,17 @@
 
 import Link from 'next/link';
 import { Home, Phone, MessageSquare } from 'lucide-react';
+import Image from 'next/image';
 
-const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <g clipPath="url(#clip0_303_2)">
-        <path d="M2.57142 10.4C2.57142 5.2 5.2 2.57142 10.4 2.57142H13.6C18.8 2.57142 21.4286 5.2 21.4286 10.4V13.6C21.4286 18.8 18.8 21.4286 13.6 21.4286H10.4C5.2 21.4286 2.57142 18.8 2.57142 13.6V10.4Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M8.72142 12.3143C8.72142 11.0857 9.8 10.0286 11.2 10.0286H12.8C13.56 10.0286 14.1857 10.6543 14.1857 11.4143V11.4143C14.1857 12.1743 13.56 12.8 12.8 12.8H10.0571V14.1429H12.8C14.2 14.1429 15.2571 13.0857 15.2571 11.7143V11.4143C15.2571 10.0286 14.2 8.72142 12.8 8.72142H11.2C9.8 8.72142 8.72142 9.77856 8.72142 11.1428" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </g>
-      <defs>
-        <clipPath id="clip0_303_2">
-          <rect width="24" height="24" fill="white"/>
-        </clipPath>
-      </defs>
-    </svg>
-  );
+const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
+    <Image
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451729/Icon_of_Zalo.svg_wifges.png"
+        alt="Zalo Icon"
+        width={20}
+        height={20}
+        {...props}
+    />
+);
 
 const actions = [
   {
