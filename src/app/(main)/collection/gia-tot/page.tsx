@@ -125,18 +125,30 @@ export default function GiaTotPage() {
     goodPriceProducts.filter(p => p.tags?.includes('ruou-vang-trang'))
   , [goodPriceProducts]);
 
+  const sparklingWines = React.useMemo(() => 
+    goodPriceProducts.filter(p => p.tags?.includes('ruou-vang-sui') || p.tags?.includes('ruou-vang-0-do') || p.tags?.includes('champagne'))
+  , [goodPriceProducts]);
 
   if (isLoading) {
     return <PageSkeleton />
   }
 
+  const allCategorizedIds = new Set([
+    ...redWines.map(p => p.id),
+    ...whiteWines.map(p => p.id),
+    ...sparklingWines.map(p => p.id)
+  ]);
+  const otherWines = goodPriceProducts.filter(p => !allCategorizedIds.has(p.id));
+
   return (
     <section className="bg-white py-12">
       <div className="container mx-auto max-w-screen-xl px-4">
-        <ProductSection title="Tiệc BBQ Đậm Chất Không Lo Về Giá" products={redWines} />
-        <ProductSection title="Khai Tiệc Với Vang Trắng Giá Siêu Tốt" products={whiteWines} />
+        <ProductSection title="Vang Đỏ Giá Tốt" products={redWines} />
+        <ProductSection title="Vang Trắng Giá Tốt" products={whiteWines} />
+        <ProductSection title="Vang Sủi & 0 Độ Giá Tốt" products={sparklingWines} />
+        <ProductSection title="Ưu Đãi Đặc Biệt Khác" products={otherWines} />
         
-        {redWines.length === 0 && whiteWines.length === 0 && (
+        {goodPriceProducts.length === 0 && !isLoading && (
             <div className="text-center py-20 text-gray-500">
                 <p>Hiện không có sản phẩm giá tốt nào.</p>
             </div>
