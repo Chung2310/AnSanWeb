@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import type { Product, Category } from "@/lib/types";
 import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
-import SidebarFilter, { type ActiveFilters } from "./sidebar-filter";
+import SidebarFilter, { type ActiveFilters, staticFiltersData } from "./sidebar-filter";
 import { Paginator } from "./paginator";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
@@ -33,10 +33,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     let filters: ActiveFilters = queryFilters || {};
     const categoryId = initialCategory.id;
 
-    const filterKeys: (keyof typeof SidebarFilter.staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG", "THƯƠNG HIỆU"];
+    const filterKeys: (keyof typeof staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG", "THƯƠNG HIỆU"];
 
     for (const key of filterKeys) {
-        const options = (SidebarFilter.staticFiltersData[key] as {label: string, value: string}[]);
+        const options = (staticFiltersData[key] as {label: string, value: string}[]);
         const option = options.find(o => o.value === categoryId);
         if (option) {
             filters[key] = [...(filters[key] || []), option.label];
@@ -70,11 +70,11 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let filtered = [...initialProducts];
 
-    const applyTagFilter = (filterKey: keyof typeof SidebarFilter.staticFiltersData) => {
+    const applyTagFilter = (filterKey: keyof typeof staticFiltersData) => {
         const activeLabels = activeFilters[filterKey];
         if (activeLabels && activeLabels.length > 0) {
             const idsToFilter = activeLabels.map(label => {
-                const option = (SidebarFilter.staticFiltersData[filterKey] as {label: string, value: any}[]).find(o => o.label === label);
+                const option = (staticFiltersData[filterKey] as {label: string, value: any}[]).find(o => o.label === label);
                 return option?.value;
             }).filter((value): value is string => !!value);
 
@@ -87,7 +87,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     };
     
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
-        const option = (SidebarFilter.staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
+        const option = (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
         return option?.value;
     }).filter(Boolean);
 

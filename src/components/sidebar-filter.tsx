@@ -19,7 +19,7 @@ export type ActiveFilters = {
   [key: string]: string[];
 };
 
-const staticFiltersData = {
+export const staticFiltersData = {
     "KHOẢNG GIÁ": [
         { label: 'DƯỚI 5 TRĂM', value: [0, 500000] },
         { label: '5 TRĂM - 1 TRIỆU', value: [500000, 1000000] },
@@ -197,6 +197,3 @@ export default function SidebarFilter({ products, onFilterChange, isWineCategory
         </div>
     );
 }
-
-// Expose static data for parent component if needed
-SidebarFilter.staticFiltersData = staticFiltersData;
