@@ -1,78 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { Phone } from 'lucide-react';
-import Image from 'next/image';
-
-const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451729/Icon_of_Zalo.svg_wifges.png"
-        alt="Zalo Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
-const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451995/messenger-1495274_1280_wdksfs.png"
-        alt="Messenger Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
-const HomeIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452247/Pngtree_blue_home_icon_or_button_15418766_wms0qz.png"
-        alt="Home Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
+import { MapPin, Gift, Percent } from 'lucide-react';
 
 const actions = [
   {
-    label: 'Trang chủ',
-    href: '/',
-    icon: HomeIcon,
+    label: 'TÌM CỬA HÀNG',
+    href: '/lien-he#map-section',
+    icon: MapPin,
   },
   {
-    label: 'Hotline',
-    href: 'tel:0933333313',
-    icon: Phone,
+    label: 'NHẬN ƯU ĐÃI',
+    href: '/collection/sales-10',
+    icon: Percent,
   },
   {
-    label: 'Zalo',
-    href: 'https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313',
-    icon: ZaloIcon,
-  },
-  {
-    label: 'Messenger',
-    href: 'https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/',
-    icon: MessengerIcon,
+    label: 'QUÀ TẶNG DOANH NGHIỆP',
+    href: '/danh-muc/bo-qua-tang',
+    icon: Gift,
   },
 ];
 
 const StickyBar = () => {
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
-            <div className="bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] border-t">
+        <div className="fixed bottom-0 left-0 right-0 z-40">
+            <div className="bg-primary text-primary-foreground shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
                 <div className="container mx-auto max-w-screen-xl px-4">
-                    <div className="flex justify-around items-center h-16">
+                    <div className="flex justify-around items-center h-14">
                         {actions.map((action) => (
                             <Link
                                 key={action.label}
                                 href={action.href}
-                                target={action.href.startsWith('http') ? '_blank' : '_self'}
-                                rel={action.href.startsWith('http') ? 'noopener noreferrer' : ''}
-                                className="flex flex-col items-center gap-1 text-xs text-gray-600 hover:text-primary transition-colors"
+                                className="flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider hover:opacity-80 transition-opacity"
                             >
-                                <action.icon className="h-6 w-6" />
+                                <action.icon className="h-5 w-5" />
                                 <span>{action.label}</span>
                             </Link>
                         ))}

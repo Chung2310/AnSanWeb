@@ -14,7 +14,7 @@ import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Phone, Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
+import { Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
@@ -31,6 +31,16 @@ const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | '
     <Image
         src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770451995/messenger-1495274_1280_wdksfs.png"
         alt="Messenger Icon"
+        width={20}
+        height={20}
+        {...props}
+    />
+);
+
+const HotlineIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
+    <Image
+        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770452424/hotline_qhbxhw.png"
+        alt="Hotline Icon"
         width={20}
         height={20}
         {...props}
@@ -329,7 +339,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
-                                  <a href="tel:0933333313"><Phone className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</a>
+                                  <a href="tel:0933333313"><HotlineIcon className="mr-3 h-5 w-5"/> ĐIỆN THOẠI</a>
                                 </Button>
                                 <Button asChild variant="outline" className="justify-center text-center h-14">
                                   <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer"><MessengerIcon className="mr-3 h-5 w-5"/> MESSENGER</a>
