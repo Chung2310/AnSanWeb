@@ -143,10 +143,10 @@ export default function GiaTotPage() {
   return (
     <section className="bg-white py-12">
       <div className="container mx-auto max-w-screen-xl px-4">
-        <ProductSection title="Ưu Đãi Đặc Biệt Khác" products={otherWines} />
+        <ProductSection title="Giá hợp lý cho mọi khoảnh khắc trên bàn tiệc" products={otherWines} />
         <ProductSection title="Vang Đỏ Giá Tốt" products={redWines} />
         <ProductSection title="Vang Trắng Giá Tốt" products={whiteWines} />
-        <ProductSection title="Vang Sủi & 0 Độ Giá Tốt" products={sparklingWines} />
+        <ProductSection title="Vang 0 độ – Giá tốt dễ chọn, an tâm thưởng thức" products={sparklingWines} />
         
         {goodPriceProducts.length === 0 && !isLoading && (
             <div className="text-center py-20 text-gray-500">

@@ -77,7 +77,7 @@ export default function HeroSection() {
     }, [current]);
 
     return (
-        <section className="relative w-full font-body h-[calc(100vh-136px)] min-h-[700px] md:h-screen md:min-h-[700px] overflow-hidden">
+        <section className="relative w-full font-body h-[450px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
@@ -110,23 +110,24 @@ export default function HeroSection() {
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
-                                                    className="max-w-3xl"
+                                                    className="max-w-2xl"
                                                     variants={containerVariants}
                                                     initial="initial"
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.h1 variants={textItemVariants} className={cn("text-4xl lg:text-5xl font-black uppercase font-headline", 'leading-tight')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-3xl lg:text-4xl font-black uppercase font-headline", 'leading-tight')}>
                                                         {slide.title}
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-6 font-light text-lg max-w-xl whitespace-pre-line text-white/90")}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-4 text-base max-w-xl whitespace-pre-line text-white/90")}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
                                                         <Button
                                                             asChild
                                                             variant="outline"
-                                                            className="mt-8 bg-transparent rounded-none px-10 py-6 transition-all hover:scale-105 border-white text-white hover:bg-white hover:text-black"
+                                                            size="lg"
+                                                            className="mt-6 bg-transparent rounded-none transition-all hover:scale-105 border-white text-white hover:bg-white hover:text-black"
                                                         >
                                                             <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
                                                         </Button>
@@ -141,7 +142,7 @@ export default function HeroSection() {
                     })}
                 </AnimatePresence>
             </div>
-            <div className="absolute bottom-10 md:bottom-20 left-0 right-0 z-10">
+            <div className="absolute bottom-8 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
                     <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
                         {heroSlides.map((slide, index) => (
