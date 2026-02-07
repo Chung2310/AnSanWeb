@@ -1,6 +1,7 @@
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import TetGiftPopup from '@/components/homepage/tet-gift-popup';
+import StickyBar from '@/components/layout/sticky-bar';
 
 export default function MainLayout({
   children,
@@ -13,6 +14,7 @@ export default function MainLayout({
       <main className="flex-1">{children}</main>
       <Footer />
       <TetGiftPopup />
+      <StickyBar />
     </div>
   );
 }
