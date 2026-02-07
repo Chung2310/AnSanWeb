@@ -22,7 +22,7 @@ const StickyBar = () => {
                             <span>NHẬN ƯU ĐÃI</span>
                         </Link>
                         <div className="h-8 w-px bg-gray-200"></div>
-                        <Link href="/lien-he" className="flex items-center gap-3 text-sm font-semibold uppercase text-gray-800 hover:text-primary transition-colors">
+                        <Link href="/danh-muc/bo-qua-tang" className="flex items-center gap-3 text-sm font-semibold uppercase text-gray-800 hover:text-primary transition-colors">
                             <Gift style={{ color: iconColor }} className="h-7 w-7" strokeWidth={1.5} />
                             <span>QUÀ TẶNG DOANH NGHIỆP</span>
                         </Link>
