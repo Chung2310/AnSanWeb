@@ -7,7 +7,7 @@ const StickyBar = () => {
     const iconColor = "#b99d6b";
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-40">
+        <div className="fixed bottom-0 left-0 right-0 z-40 hidden lg:block">
             <div className="bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
                 <div className="container mx-auto max-w-screen-xl px-4">
                     <div className="flex justify-around items-center h-14">
