@@ -42,8 +42,8 @@ const actions = [
 
 export default function MobileActionBar() {
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
-      <div className="flex flex-col bg-primary rounded-l-lg overflow-hidden shadow-lg">
+    <div className="fixed right-4 bottom-4 z-50 hidden lg:block">
+      <div className="flex flex-col bg-primary rounded-lg overflow-hidden shadow-lg">
         {actions.map((action, index) => (
           <Link
             key={action.label}
@@ -51,9 +51,9 @@ export default function MobileActionBar() {
             target={action.href.startsWith('http') ? '_blank' : '_self'}
             rel={action.href.startsWith('http') ? 'noopener noreferrer' : ''}
             className="flex flex-col items-center justify-center p-2 text-primary-foreground hover:bg-primary/90 transition-colors border-t border-primary-foreground/20 first:border-t-0"
-            style={{width: '80px', height: '80px'}}
+            style={{width: '60px', height: '60px'}}
           >
-            <action.icon className="h-6 w-6" />
+            <action.icon className="h-5 w-5" />
             <span className="text-xs font-medium mt-1">{action.label}</span>
           </Link>
         ))}
