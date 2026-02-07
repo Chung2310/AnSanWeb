@@ -17,9 +17,9 @@ export default function HomePage() {
       <HeroSection />
       <FamousBrands />
       <DrinkCategoryShowcase />
+      <BestChoiceSection />
       <WhiskyRegionShowcase />
       <InfluenceSection />
-      <BestChoiceSection />
       <PriceCategoryShowcase />
       <GiftSetsSection />
       <Testimonials />
