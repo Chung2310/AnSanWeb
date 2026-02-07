@@ -17,43 +17,32 @@ import { Button } from '@/components/ui/button';
 import { Award, CircleDollarSign, Users, Truck, GlassWater, Zap } from 'lucide-react';
 import Link from 'next/link';
 
-const ZaloIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png"
-        alt="Zalo Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
+const ZaloIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <rect x="2" y="2" width="20" height="20" rx="4" />
+        <path d="M7 7h10l-10 10h10" />
+    </svg>
 );
 
-const MessengerIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770455033/icons8-message-50_kyenco.png"
-        alt="Messenger Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
+const MessengerIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <path d="m13 8-4 5h3l-1 4" />
+    </svg>
 );
 
-const HotlineIcon = (props: Omit<React.ComponentProps<typeof Image>, 'src' | 'alt'>) => (
-    <Image
-        src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770459880/phone-1_kmvtwq.png"
-        alt="Hotline Icon"
-        width={24}
-        height={24}
-        {...props}
-    />
-);
-
-
-const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M16.5946 13.336C16.3866 13.232 15.3466 12.712 15.1386 12.636C14.9306 12.56 14.7946 12.508 14.6586 12.716C14.5226 12.924 14.0506 13.524 13.9146 13.676C13.7786 13.828 13.6426 13.852 13.4346 13.748C12.4426 13.252 11.5946 12.78 10.9306 12.012C10.4586 11.484 10.1546 10.836 10.0186 10.556C9.88264 10.276 10.0106 10.148 10.1226 10.036C10.2266 9.93204 10.3546 9.77204 10.4826 9.64404C10.6106 9.51604 10.6586 9.41204 10.7626 9.22804C10.8666 9.04404 10.8146 8.88404 10.7386 8.73204C10.6626 8.58004 10.0346 7.10004 9.79464 6.54804C9.56264 6.00404 9.32264 6.06804 9.15464 6.06004C8.98664 6.05204 8.85064 6.05204 8.71464 6.05204C8.57864 6.05204 8.36264 6.10404 8.18264 6.31204C8.00264 6.52004 7.42664 7.06404 7.42664 8.12804C7.42664 9.19204 8.21064 10.204 8.31464 10.356C8.41864 10.508 9.75464 12.74 11.9146 13.62C13.8346 14.4 14.0746 14.348 14.4986 14.324C14.9226 14.3 15.9626 13.78 16.1426 13.204C16.3226 12.628 16.3226 12.124 16.2706 12.02C16.2186 11.916 16.1146 11.864 15.9546 11.788L15.9826 11.772C16.3866 11.956 16.7146 12.14 16.8266 12.244C17.0746 12.476 16.8026 13.44 16.5946 13.336Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 15.0932 4.41379 17.7818 6.5 19.5L5.5 21L7.5 20C9.11024 20.6599 10.5186 21 12 21Z" stroke="currentColor" strokeWidth="1.s" strokeLinecap="round" strokeLinejoin="round"/>
+const HotlineIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
   </svg>
 );
+
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    </svg>
+);
+
 
 const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
