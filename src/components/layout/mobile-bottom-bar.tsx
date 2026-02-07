@@ -69,7 +69,7 @@ const actions = [
 
 const MobileBottomBar = () => {
     return (
-        <div className="fixed bottom-14 left-0 right-0 z-40 lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
             <div className="bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] border-t">
                 <div className="container mx-auto max-w-screen-xl px-4">
                     <div className="flex justify-around items-center h-16">
