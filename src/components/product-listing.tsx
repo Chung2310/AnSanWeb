@@ -184,8 +184,14 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   };
   
   const handleToggleDescription = () => {
-    // This now only toggles the state, removing the scroll behavior to prevent jumps.
-    setIsDescriptionExpanded(prev => !prev);
+    if (isDescriptionExpanded) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        setIsDescriptionExpanded(false);
+      }, 100);
+    } else {
+      setIsDescriptionExpanded(true);
+    }
   };
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
@@ -209,7 +215,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                  {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
             
                 {isDescriptionLong && (
-                    <AnimatePresence onExitComplete={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <AnimatePresence>
                         {isDescriptionExpanded && (
                             <motion.div
                                 initial={{ height: 0, opacity: 0 }}
