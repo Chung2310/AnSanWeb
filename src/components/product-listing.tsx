@@ -184,9 +184,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   };
   
   const handleToggleDescription = () => {
-    if (isDescriptionExpanded) {
-        descriptionContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    // This now only toggles the state, removing the scroll behavior to prevent jumps.
     setIsDescriptionExpanded(prev => !prev);
   };
 
