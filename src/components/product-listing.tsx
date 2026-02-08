@@ -185,7 +185,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   
   const handleToggleDescription = () => {
     if (isDescriptionExpanded) {
-        descriptionContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     setIsDescriptionExpanded(prev => !prev);
   };
