@@ -4,6 +4,7 @@ import TetGiftPopup from '@/components/homepage/tet-gift-popup';
 import StickyBar from '@/components/layout/sticky-bar';
 import MobileActionBar from '@/components/layout/mobile-action-bar';
 import MobileBottomBar from '@/components/layout/mobile-bottom-bar';
+import ScrollToTopButton from '@/components/layout/scroll-to-top';
 
 export default function MainLayout({
   children,
@@ -17,8 +18,9 @@ export default function MainLayout({
       <Footer />
       <TetGiftPopup />
       <StickyBar />
-      <MobileBottomBar />
       <MobileActionBar />
+      <MobileBottomBar />
+      <ScrollToTopButton />
     </div>
   );
 }
