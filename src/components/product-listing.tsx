@@ -35,10 +35,20 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     }
     const firstParagraphEnd = categoryDescription.indexOf('</p>');
 
-    if (firstParagraphEnd !== -1 && categoryDescription.length > firstParagraphEnd + 4) {
+    if (firstParagraphEnd === -1) {
+        return { descriptionInitial: categoryDescription, descriptionRest: null, isDescriptionLong: false };
+    }
+    
+    const initialPart = categoryDescription.substring(0, firstParagraphEnd + 4);
+    const restPart = categoryDescription.substring(firstParagraphEnd + 4);
+
+    // Check for meaningful content in the rest of the string by removing HTML tags and trimming.
+    const hasMeaningfulRest = restPart.replace(/<[^>]*>/g, '').trim().length > 0;
+
+    if (hasMeaningfulRest) {
       return {
-        descriptionInitial: categoryDescription.substring(0, firstParagraphEnd + 4),
-        descriptionRest: categoryDescription.substring(firstParagraphEnd + 4),
+        descriptionInitial: initialPart,
+        descriptionRest: restPart,
         isDescriptionLong: true,
       };
     }
