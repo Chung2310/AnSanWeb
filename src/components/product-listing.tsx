@@ -29,6 +29,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [currentPage, setCurrentPage] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descriptionContainerRef = useRef<HTMLDivElement>(null);
+  const scrollListenerRef = useRef<(() => void) | null>(null);
 
 
   const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
@@ -96,6 +97,15 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setActiveFilters(getInitialFilters);
   }, [initialProducts, getInitialFilters]);
 
+
+    // Effect to clean up scroll listener on component unmount
+  useEffect(() => {
+    return () => {
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
+      }
+    };
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let filtered = [...initialProducts];
@@ -185,12 +195,32 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   
   const handleToggleDescription = () => {
     if (isDescriptionExpanded) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        setIsDescriptionExpanded(false);
-      }, 100);
+        if (window.scrollY === 0) {
+            setIsDescriptionExpanded(false);
+            return;
+        }
+
+        if (scrollListenerRef.current) {
+            window.removeEventListener('scroll', scrollListenerRef.current);
+        }
+        
+        const onScroll = () => {
+            // Using a small threshold to account for browser inconsistencies
+            if (window.scrollY < 5) {
+                if (scrollListenerRef.current) {
+                    window.removeEventListener('scroll', scrollListenerRef.current);
+                    scrollListenerRef.current = null;
+                }
+                setIsDescriptionExpanded(false);
+            }
+        };
+
+        scrollListenerRef.current = onScroll;
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } else {
-      setIsDescriptionExpanded(true);
+        setIsDescriptionExpanded(true);
     }
   };
 
