@@ -5,8 +5,18 @@ import type { Product } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Zap } from 'lucide-react';
 import React from 'react';
+
+const SaleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M6 13H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M9 16H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M6 19H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M24.5 2L15 14H22.5L20.5 28L32 16H24.5V2Z" fill="#FBBF24" stroke="#FDE68A" strokeWidth="1.5"/>
+        <circle cx="18" cy="15" r="9" fill="#EF4444" stroke="#F87171" strokeWidth="1.5" />
+        <text x="18" y="18.5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold" fontFamily="sans-serif">%</text>
+    </svg>
+);
 
 const formatPrice = (price: number) => {
     if (isNaN(price)) return '';
@@ -22,8 +32,8 @@ const GiaTotProductCard = ({ product }: { product: Product }) => {
     return (
         <div className="bg-white rounded-lg p-4 flex flex-col text-center relative overflow-hidden group">
             {hasDiscount && (
-                <div className="absolute top-3 right-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1 animate-flash">
-                    <Zap className="w-3 h-3" />
+                <div className="absolute top-3 left-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1 animate-flash">
+                    <SaleIcon className="w-4 h-4" />
                     Giá Đặc Biệt
                 </div>
             )}

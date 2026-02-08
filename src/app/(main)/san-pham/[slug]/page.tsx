@@ -14,8 +14,19 @@ import FaqSection from '@/components/faq-section';
 import ProductDetailDescription from '@/components/product-detail-description';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Award, CircleDollarSign, Users, Truck, GlassWater, Zap, Phone, MessageCircle, Smartphone } from 'lucide-react';
+import { Award, CircleDollarSign, Users, Truck, GlassWater, Phone, MessageCircle, Smartphone } from 'lucide-react';
 import Link from 'next/link';
+
+const SaleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M6 13H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M9 16H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M6 19H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+        <path d="M24.5 2L15 14H22.5L20.5 28L32 16H24.5V2Z" fill="#FBBF24" stroke="#FDE68A" strokeWidth="1.5"/>
+        <circle cx="18" cy="15" r="9" fill="#EF4444" stroke="#F87171" strokeWidth="1.5" />
+        <text x="18" y="18.5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold" fontFamily="sans-serif">%</text>
+    </svg>
+);
 
 const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -207,7 +218,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                 <>
                                     {hasDiscount ? (
                                         <div className="absolute top-8 left-8 z-10 flex items-center gap-3 rounded-md bg-destructive px-6 py-3 text-lg font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
-                                            <Zap className="h-6 w-6" />
+                                            <SaleIcon className="h-6 w-6" />
                                             <span>Giá Đặc Biệt</span>
                                         </div>
                                     ) : isBestChoice && (
