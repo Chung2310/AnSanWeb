@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -241,7 +242,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
                 isGiaTot && 'font-bold text-chart-4 animate-flash'
             )}
         >
-          {isGiaTot && <Image src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png" alt="Giá Tốt" width={24} height={24} className="mr-2" />}
+          {isGiaTot && <Image src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png" alt="Giá Tốt" width={28} height={28} className="mr-2" />}
           {label}
           { hasDropdown && <ChevronDown className="h-4 w-4 ml-1" /> }
         </Link>
