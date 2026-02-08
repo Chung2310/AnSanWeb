@@ -209,7 +209,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                  {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
             
                 {isDescriptionLong && (
-                    <AnimatePresence>
+                    <AnimatePresence onExitComplete={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         {isDescriptionExpanded && (
                             <motion.div
                                 initial={{ height: 0, opacity: 0 }}
