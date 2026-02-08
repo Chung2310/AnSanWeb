@@ -1,3 +1,4 @@
+
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -32,8 +33,7 @@ const GiaTotProductCard = ({ product }: { product: Product }) => {
     return (
         <div className="bg-white rounded-lg p-4 flex flex-col text-center relative overflow-hidden group">
             {hasDiscount && (
-                <div className="absolute top-3 left-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1 animate-flash">
-                    <SaleIcon className="w-4 h-4" />
+                <div className="absolute top-3 left-3 bg-red-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center animate-flash">
                     Giá Đặc Biệt
                 </div>
             )}
