@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, Suspense } from "react";
+import { useState, useMemo, useEffect, Suspense, useRef } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Product, Category } from "@/lib/types";
@@ -28,6 +28,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const descriptionContainerRef = useRef<HTMLDivElement>(null);
+
 
   const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
     if (!categoryDescription) {
@@ -42,7 +44,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     const initialPart = categoryDescription.substring(0, firstParagraphEnd + 4);
     const restPart = categoryDescription.substring(firstParagraphEnd + 4);
 
-    // Check for meaningful content in the rest of the string by removing HTML tags and trimming.
     const hasMeaningfulRest = restPart.replace(/<[^>]*>/g, '').trim().length > 0;
 
     if (hasMeaningfulRest) {
@@ -181,6 +182,13 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setCurrentPage(1);
     setActiveFilters(newActiveFilters);
   };
+  
+  const handleToggleDescription = () => {
+    if (isDescriptionExpanded) {
+        descriptionContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsDescriptionExpanded(prev => !prev);
+  };
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
@@ -198,7 +206,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
 
       {categoryDescription && (
-        <div className="container pt-12">
+        <div ref={descriptionContainerRef} className="container pt-12 scroll-mt-24">
             <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                  {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
             
@@ -222,7 +230,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                     <div className="text-center mt-4">
                         <Button
                             variant="link"
-                            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                            onClick={handleToggleDescription}
                             className="text-primary hover:text-primary/80"
                         >
                             {isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}
