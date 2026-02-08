@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect, Suspense } from "react";
@@ -9,6 +8,8 @@ import CategoryBanner, { type CategoryBannerProps } from "./category-banner";
 import CategoryNav from "./category-nav";
 import SidebarFilter, { type ActiveFilters, staticFiltersData } from "./sidebar-filter";
 import { Paginator } from "./paginator";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -26,6 +27,24 @@ interface ProductListingProps {
 function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory, queryFilters }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
+    if (!categoryDescription) {
+      return { descriptionInitial: null, descriptionRest: null, isDescriptionLong: false };
+    }
+    const firstParagraphEnd = categoryDescription.indexOf('</p>');
+
+    if (firstParagraphEnd !== -1 && categoryDescription.length > firstParagraphEnd + 4) {
+      return {
+        descriptionInitial: categoryDescription.substring(0, firstParagraphEnd + 4),
+        descriptionRest: categoryDescription.substring(firstParagraphEnd + 4),
+        isDescriptionLong: true,
+      };
+    }
+
+    return { descriptionInitial: categoryDescription, descriptionRest: null, isDescriptionLong: false };
+  }, [categoryDescription]);
   
   const getInitialFilters = useMemo(() => {
     if (!initialCategory) return queryFilters || {};
@@ -167,6 +186,43 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       )}
       
       <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
+
+      {categoryDescription && (
+        <div className="container pt-12">
+            <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
+                 {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
+            
+                {isDescriptionLong && (
+                    <AnimatePresence>
+                        {isDescriptionExpanded && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="overflow-hidden"
+                            >
+                                {descriptionRest && <div dangerouslySetInnerHTML={{ __html: descriptionRest }} />}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                )}
+
+                {isDescriptionLong && (
+                    <div className="text-center mt-4">
+                        <Button
+                            variant="link"
+                            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                            className="text-primary hover:text-primary/80"
+                        >
+                            {isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}
+                            {isDescriptionExpanded ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </div>
+      )}
       
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -219,13 +275,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
           </div>
         </div>
       </div>
-      {categoryDescription && (
-        <div className="container py-20">
-            <div className="mx-auto border-t pt-10 text-gray-700 leading-relaxed prose prose-lg max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: categoryDescription }} />
-            </div>
-        </div>
-      )}
     </div>
   );
 }
