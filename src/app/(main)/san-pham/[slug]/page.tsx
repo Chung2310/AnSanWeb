@@ -17,17 +17,6 @@ import { Button } from '@/components/ui/button';
 import { Award, CircleDollarSign, Users, Truck, GlassWater, Phone, MessageCircle, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 
-const SaleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M6 13H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M9 16H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M6 19H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M24.5 2L15 14H22.5L20.5 28L32 16H24.5V2Z" fill="#FBBF24" stroke="#FDE68A" strokeWidth="1.5"/>
-        <circle cx="18" cy="15" r="9" fill="#EF4444" stroke="#F87171" strokeWidth="1.5" />
-        <text x="18" y="18.5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold" fontFamily="sans-serif">%</text>
-    </svg>
-);
-
 const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -217,8 +206,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             {index === 0 && (
                                 <>
                                     {hasDiscount ? (
-                                        <div className="absolute top-8 left-8 z-10 flex items-center gap-3 rounded-md bg-destructive px-6 py-3 text-lg font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
-                                            <SaleIcon className="h-6 w-6" />
+                                        <div className="absolute top-8 left-8 z-10 flex items-center rounded-md bg-destructive px-6 py-3 text-lg font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
                                             <span>Giá Đặc Biệt</span>
                                         </div>
                                     ) : isBestChoice && (
