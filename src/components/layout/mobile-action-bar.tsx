@@ -34,7 +34,7 @@ const actions = [
 
 export default function MobileActionBar() {
   return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 hidden lg:block">
+    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[51] hidden lg:block">
       <div className="flex flex-col bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200">
         {actions.map((action, index) => (
           <Link
