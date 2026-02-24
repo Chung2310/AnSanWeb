@@ -77,16 +77,10 @@ const navLinks: NavLinkData[] = [
       },
       {
         title: 'Giống nho',
-        items: [
-          ...wineMegaMenuData.theoGiongNho.map((item) => ({
-            href: `/danh-muc/ruou-vang/${item.slug}`,
-            label: item.label,
-          })),
-          {
-            href: '/collection/giong-nho',
-            label: 'Xem tất cả giống nho >>',
-          },
-        ],
+        items: wineMegaMenuData.theoGiongNho.map((item) => ({
+          href: `/danh-muc/ruou-vang/${item.slug}`,
+          label: item.label,
+        })),
       },
     ],
   },
