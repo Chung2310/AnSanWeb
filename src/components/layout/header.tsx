@@ -83,7 +83,7 @@ const navLinks: NavLinkData[] = [
             label: item.label,
           })),
           {
-            href: '/danh-muc/ruou-vang',
+            href: '/collection/giong-nho',
             label: 'Xem tất cả giống nho >>',
           },
         ],
