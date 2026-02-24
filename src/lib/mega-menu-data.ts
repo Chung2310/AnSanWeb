@@ -83,8 +83,8 @@ export const glasswareMegaMenuData = {
 
 export const giftSetMegaMenuData = {
     quaTang: [
-        { label: "Quà Tết An San", slug: "qua-tet-an-san", category_id: "qua-tet-an-san" },
-        { label: "Quà Tết Rượu Mạnh", slug: "qua-tet-ruou-manh", category_id: "qua-tet-ruou-manh" },
-        { label: "Quà Tết Rượu Vang", slug: "qua-tet-ruou-vang", category_id: "qua-tet-ruou-vang" },
+        { label: "Quà Tết An San", slug: "qua-tet-an-san", category_id: "qua-tet-an-san", imageId: "gift-set-tet" },
+        { label: "Quà Tết Rượu Mạnh", slug: "qua-tet-ruou-manh", category_id: "qua-tet-ruou-manh", imageId: "lakes-gift-set" },
+        { label: "Quà Tết Rượu Vang", slug: "qua-tet-ruou-vang", category_id: "qua-tet-ruou-vang", imageId: "hero-sale" },
     ]
 };
