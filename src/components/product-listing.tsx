@@ -61,24 +61,43 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   }, [categoryDescription]);
   
   const getInitialFilters = useMemo(() => {
-    if (!initialCategory) return queryFilters || {};
+    if (!initialCategory || !allCategories) return queryFilters || {};
     
-    let filters: ActiveFilters = queryFilters || {};
-    const categoryId = initialCategory.id;
+    let filters: ActiveFilters = queryFilters ? { ...queryFilters } : {};
 
-    const filterKeys: (keyof typeof staticFiltersData)[] = ["LOẠI RƯỢU", "QUỐC GIA", "VÙNG NỔI TIẾNG", "GIỐNG NHO", "QUÀ TẶNG", "THƯƠNG HIỆU"];
+    const findGroupAndLabel = (categoryId: string): { group: string, label: string } | null => {
+        for (const group of Object.keys(staticFiltersData)) {
+            if (group === "KHOẢNG GIÁ") continue;
+            const options = staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[];
+            const found = options.find(o => o.value === categoryId);
+            if (found) {
+                return { group, label: found.label };
+            }
+        }
+        return null;
+    };
 
-    for (const key of filterKeys) {
-        const options = (staticFiltersData[key] as {label: string, value: string}[]);
-        const option = options.find(o => o.value === categoryId);
-        if (option) {
-            filters[key] = [...(filters[key] || []), option.label];
-            return filters;
+    const categoryAndParents: Category[] = [];
+    let current: Category | undefined = initialCategory;
+    while(current) {
+        categoryAndParents.push(current);
+        current = allCategories.find(c => c.id === current?.parentId);
+    }
+
+    for (const cat of categoryAndParents) {
+        const filterInfo = findGroupAndLabel(cat.id);
+        if (filterInfo) {
+            if (!filters[filterInfo.group]) {
+                filters[filterInfo.group] = [];
+            }
+            if (!filters[filterInfo.group].includes(filterInfo.label)) {
+                filters[filterInfo.group].push(filterInfo.label);
+            }
         }
     }
     
     return filters;
-  }, [initialCategory, queryFilters]);
+  }, [initialCategory, allCategories, queryFilters]);
   
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
@@ -110,68 +129,49 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   }, []);
 
   const filteredProducts = useMemo(() => {
-    let products = [...initialProducts];
+    let filtered = [...initialProducts];
 
-    // Filter by initial category from URL, if it exists
-    if (initialCategory && allCategories && allCategories.length > 0) {
-        const getDescendantIds = (parentId: string, categories: Category[]): string[] => {
-            const findChildren = (id: string): string[] => {
-              const children = categories.filter(cat => cat.parentId === id);
-              let ids: string[] = children.map(c => c.id);
-              for (const child of children) {
-                ids = [...ids, ...findChildren(child.id)];
-              }
-              return ids;
-            }
-            return findChildren(parentId);
-        };
-        const descendantIds = getDescendantIds(initialCategory.id, allCategories);
-        const allCategoryIds = new Set([initialCategory.id, ...descendantIds]);
-        
-        products = products.filter(product => 
-            product.tags?.some(tag => allCategoryIds.has(tag))
-        );
+    const activeFilterGroups = Object.keys(activeFilters).filter(
+      (group) => activeFilters[group]?.length > 0
+    );
+
+    if (activeFilterGroups.length === 0) {
+      return filtered;
     }
-    
-    let filtered = [...products];
 
-    const applyTagFilter = (filterKey: keyof typeof staticFiltersData) => {
-        const activeLabels = activeFilters[filterKey];
-        if (activeLabels && activeLabels.length > 0) {
-            const idsToFilter = activeLabels.map(label => {
-                const option = (staticFiltersData[filterKey] as {label: string, value: any}[]).find(o => o.label === label);
-                return option?.value;
-            }).filter((value): value is string => !!value);
-
-            if (idsToFilter.length > 0) {
-                filtered = filtered.filter(p => 
-                    p.tags?.some(tag => idsToFilter.includes(tag))
-                );
-            }
-        }
-    };
-    
+    // Price filter
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
-        const option = (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
-        return option?.value;
-    }).filter(Boolean);
+      const option = (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
+      return option?.value;
+    }).filter(Boolean) as [number, number][];
 
     if (priceRanges && priceRanges.length > 0) {
-        filtered = filtered.filter(p => 
-            priceRanges.some(range => range && p.price >= (range as number[])[0] && p.price < (range as number[])[1])
-        );
+      filtered = filtered.filter(p =>
+        priceRanges.some(range => p.price >= range[0] && p.price < range[1])
+      );
     }
-    
-    applyTagFilter("LOẠI RƯỢU");
-    applyTagFilter("QUỐC GIA");
-    applyTagFilter("VÙNG NỔI TIẾNG");
-    applyTagFilter("GIỐNG NHO");
-    applyTagFilter("QUÀ TẶNG");
-    applyTagFilter("THƯƠNG HIỆU");
 
+    // Tag-based filters
+    const tagFilterGroups = activeFilterGroups.filter(g => g !== "KHOẢNG GIÁ");
+    if (tagFilterGroups.length > 0) {
+      filtered = filtered.filter(p => {
+        return tagFilterGroups.every(group => {
+          const activeLabels = activeFilters[group];
+          if (!activeLabels || activeLabels.length === 0) return true;
+
+          const idsToFilter = activeLabels.map(label => {
+            const option = (staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[]).find(o => o.label === label);
+            return option?.value;
+          }).filter(Boolean) as string[];
+
+          if (idsToFilter.length === 0) return true;
+          return p.tags?.some(tag => idsToFilter.includes(tag));
+        });
+      });
+    }
 
     return filtered;
-  }, [initialProducts, activeFilters, initialCategory, allCategories]);
+  }, [initialProducts, activeFilters]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
