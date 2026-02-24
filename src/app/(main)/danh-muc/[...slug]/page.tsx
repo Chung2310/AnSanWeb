@@ -2,7 +2,7 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { useParams, notFound, useSearchParams } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
@@ -42,29 +42,6 @@ export default function ProductsPage() {
   }, [categories, finalSlug]);
 
 
-  const getDescendantIds = useCallback((parentId: string, allCategories: Category[]): string[] => {
-    const findChildren = (id: string): string[] => {
-      const children = allCategories.filter(cat => cat.parentId === id);
-      let ids: string[] = children.map(c => c.id);
-      for (const child of children) {
-        ids = [...ids, ...findChildren(child.id)];
-      }
-      return ids;
-    }
-    return findChildren(parentId);
-  }, []);
-
-  const filteredProducts = useMemo(() => {
-    if (!products || !categories || !categoryInfo) return [];
-
-    const descendantIds = getDescendantIds(categoryInfo.id, categories);
-    const allCategoryIds = new Set([categoryInfo.id, ...descendantIds]);
-
-    return products.filter(product => 
-      product.tags?.some(tag => allCategoryIds.has(tag))
-    );
-  }, [products, categories, categoryInfo, getDescendantIds]);
-
   if (!isLoading && !categoryInfo) {
       notFound();
   }
@@ -96,7 +73,7 @@ export default function ProductsPage() {
   return (
     <ProductListing
       key={categoryInfo?.id || 'all'}
-      initialProducts={filteredProducts}
+      initialProducts={products || []}
       title={categoryInfo?.name || 'Danh mục sản phẩm'}
       categoryDescription={categoryInfo?.description}
       initialCategory={categoryInfo}
