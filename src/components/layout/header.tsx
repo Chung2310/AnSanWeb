@@ -165,6 +165,8 @@ const MegaMenu = ({
   onLinkClick: () => void;
   customMegaMenu?: string;
 }) => {
+  const [showAllGrapes, setShowAllGrapes] = useState(false);
+
   if (customMegaMenu === 'gift-set') {
     // @ts-ignore
     const giftItems = giftSetMegaMenuData.quaTang;
@@ -234,31 +236,50 @@ const MegaMenu = ({
             }, minmax(0, 1fr))`,
           }}
         >
-          {columns.map((column, index) => (
-            <div
-              key={column.title || index}
-              className={cn(index > 0 && column.title && 'pl-8 border-l')}
-            >
-              {column.title && (
-                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider uppercase">
-                  {column.title}
-                </h3>
-              )}
-              <ul className="space-y-3">
-                {column.items.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="font-medium text-foreground hover:text-primary transition-colors"
-                      onClick={onLinkClick}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {columns.map((column, index) => {
+            const isGiongNhoColumn = column.title === 'Giống nho';
+            const initialItemCount = 9;
+            const itemsToShow = isGiongNhoColumn && !showAllGrapes
+              ? column.items.slice(0, initialItemCount)
+              : column.items;
+            const hasMoreItems = isGiongNhoColumn && column.items.length > initialItemCount;
+
+            return (
+              <div
+                key={column.title || index}
+                className={cn(index > 0 && column.title && 'pl-8 border-l')}
+              >
+                {column.title && (
+                  <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider uppercase">
+                    {column.title}
+                  </h3>
+                )}
+                <ul className="space-y-3">
+                  {itemsToShow.map((item) => (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        className="font-medium text-foreground hover:text-primary transition-colors"
+                        onClick={onLinkClick}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                  {hasMoreItems && (
+                     <li>
+                        <button
+                          onClick={() => setShowAllGrapes(prev => !prev)}
+                          className="font-medium text-primary hover:text-primary/80 transition-colors text-left w-full"
+                        >
+                          {showAllGrapes ? 'Thu gọn <<' : 'Xem tất cả giống nho >>'}
+                        </button>
+                      </li>
+                  )}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
