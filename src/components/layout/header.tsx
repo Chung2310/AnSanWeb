@@ -31,6 +31,7 @@ import {
   giftSetMegaMenuData,
 } from '@/lib/mega-menu-data';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 // Define unified data structures for navigation
 type MenuItem = {
@@ -47,6 +48,7 @@ type NavLinkData = {
   href: string;
   label: string;
   megaMenuColumns?: MenuColumn[];
+  customMegaMenu?: 'gift-set';
 };
 
 const navLinks: NavLinkData[] = [
@@ -163,7 +165,8 @@ const navLinks: NavLinkData[] = [
             href: `/danh-muc/bo-qua-tang/${item.slug}`,
             label: item.label,
         }]
-    }))
+    })),
+    customMegaMenu: 'gift-set',
   },
   {
     href: '/gioi-thieu',
@@ -181,14 +184,63 @@ const MegaMenu = ({
   onMouseEnter,
   onMouseLeave,
   onLinkClick,
+  customMegaMenu,
 }: {
   columns: MenuColumn[];
   isOpen: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onLinkClick: () => void;
+  customMegaMenu?: string;
 }) => {
   if (!columns || columns.length === 0) return null;
+
+  if (customMegaMenu === 'gift-set') {
+    // @ts-ignore
+    const giftItems = giftSetMegaMenuData.quaTang;
+
+    return (
+      <div
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        className={cn(
+          'absolute top-full left-0 right-0 bg-popover text-popover-foreground border-t shadow-lg',
+          !isOpen && 'hidden'
+        )}
+      >
+        <div className="container mx-auto max-w-screen-2xl p-8">
+          <div className="grid grid-cols-3 gap-8">
+            {giftItems.map((item: any) => {
+              const image = PlaceHolderImages.find(img => img.id === item.imageId);
+              return (
+                <Link
+                  key={item.slug}
+                  href={`/danh-muc/bo-qua-tang/${item.slug}`}
+                  onClick={onLinkClick}
+                  className="group block text-center"
+                >
+                  <div className="overflow-hidden rounded-lg">
+                    {image && (
+                      <Image
+                        src={image.imageUrl}
+                        alt={item.label}
+                        width={400}
+                        height={300}
+                        className="w-full object-cover aspect-[4/3] transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+                  <h3 className="mt-4 font-headline text-xl font-bold text-foreground transition-colors group-hover:text-primary">
+                    {item.label}
+                  </h3>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -209,7 +261,7 @@ const MegaMenu = ({
           }}
         >
           {columns.map((column, index) => (
-            <div key={column.title || index} className={cn(index > 0 && 'pl-8 border-l')}>
+            <div key={column.title || index} className={cn(index > 0 && column.title && 'pl-8 border-l')}>
               {column.title && (
                 <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">
                   {column.title}
@@ -236,10 +288,11 @@ const MegaMenu = ({
   );
 };
 
-const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
+const NavLink = (props: NavLinkData) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const { href, label, megaMenuColumns, customMegaMenu } = props;
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -320,6 +373,7 @@ const NavLink = ({ href, label, megaMenuColumns }: NavLinkData) => {
           onMouseEnter={handleOpenMenu}
           onMouseLeave={handleCloseMenu}
           onLinkClick={handleImmediateClose}
+          customMegaMenu={customMegaMenu}
         />
       )}
     </div>
