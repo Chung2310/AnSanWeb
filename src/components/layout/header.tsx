@@ -157,15 +157,13 @@ const navLinks: NavLinkData[] = [
   {
     href: '/danh-muc/bo-qua-tang',
     label: 'BỘ QUÀ TẶNG',
-    megaMenuColumns: [
-      {
-        title: 'Loại quà tặng',
-        items: giftSetMegaMenuData.quaTang.map((item) => ({
-          href: `/danh-muc/bo-qua-tang/${item.slug}`,
-          label: item.label,
-        })),
-      },
-    ],
+    megaMenuColumns: giftSetMegaMenuData.quaTang.map(item => ({
+        title: '',
+        items: [{
+            href: `/danh-muc/bo-qua-tang/${item.slug}`,
+            label: item.label,
+        }]
+    }))
   },
   {
     href: '/gioi-thieu',
@@ -211,10 +209,12 @@ const MegaMenu = ({
           }}
         >
           {columns.map((column, index) => (
-            <div key={column.title} className={cn(index > 0 && 'pl-8 border-l')}>
-              <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">
-                {column.title}
-              </h3>
+            <div key={column.title || index} className={cn(index > 0 && 'pl-8 border-l')}>
+              {column.title && (
+                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">
+                  {column.title}
+                </h3>
+              )}
               <ul className="space-y-3">
                 {column.items.map((item) => (
                   <li key={item.label}>
