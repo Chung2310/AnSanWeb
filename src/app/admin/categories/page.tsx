@@ -1,4 +1,5 @@
 
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Filter, PlusCircle } from 'lucide-react';
@@ -54,17 +55,18 @@ export default function CategoriesAdminPage() {
 
             const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt' | 'status' | 'image'>[] = [];
 
+            // Main Categories
             const mainCats = [
-                { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang' },
-                { id: 'ruou-manh', name: 'Rượu Mạnh', slug: 'ruou-manh' },
-                { id: 'ly-coc-pha-le', name: 'Ly - Cốc Pha Lê', slug: 'ly-coc-pha-le' },
-                { id: 'bo-qua-tang', name: 'Bộ Quà Tặng', slug: 'bo-qua-tang' },
-                { id: 'cigar', name: 'Cigar', slug: 'cigar' },
+                { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang', parentId: null },
+                { id: 'ruou-manh', name: 'Rượu Mạnh', slug: 'ruou-manh', parentId: null },
+                { id: 'ly-coc-pha-le', name: 'Ly - Cốc Pha Lê', slug: 'ly-coc-pha-le', parentId: null },
+                { id: 'bo-qua-tang', name: 'Bộ Quà Tặng', slug: 'bo-qua-tang', parentId: null },
+                { id: 'cigar', name: 'Cigar', slug: 'cigar', parentId: null },
             ];
             mainCats.forEach(cat => {
-                allCategoriesToCreate.push({ ...cat, description: '', tags: [], parentId: null });
+                allCategoriesToCreate.push({ ...cat, description: '', tags: [] });
             });
-
+            
             const addItemsWithParent = (items: { label: string; slug: string; category_id: string }[], parentId: string) => {
               items.forEach(item => {
                 allCategoriesToCreate.push({
@@ -72,28 +74,31 @@ export default function CategoriesAdminPage() {
                   name: item.label,
                   slug: item.slug,
                   description: '',
-                  tags: [],
+                  tags: [parentId],
                   parentId: parentId,
                 });
               });
             };
-
+            
+            // Add Wine sub-categories
             addItemsWithParent(wineMegaMenuData.theoLoai, 'ruou-vang');
             addItemsWithParent(wineMegaMenuData.theoQuocGia, 'ruou-vang');
             addItemsWithParent(wineMegaMenuData.theoVung, 'ruou-vang');
             addItemsWithParent(wineMegaMenuData.theoGiongNho, 'ruou-vang');
 
+            // Add Spirits sub-categories
             addItemsWithParent(spiritsMegaMenuData.theoLoai, 'ruou-manh');
             addItemsWithParent(spiritsMegaMenuData.thuongHieu, 'ruou-manh');
             
-            // Fix: quà tặng của rượu mạnh thuộc danh mục bộ quà tặng
-            addItemsWithParent(spiritsMegaMenuData.quaTang, 'bo-qua-tang');
-
+            // Add Glassware sub-categories
             addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-coc-pha-le');
             addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-coc-pha-le');
             addItemsWithParent(glasswareMegaMenuData.khac, 'ly-coc-pha-le');
             
+            // Add Gift Set sub-categories
             addItemsWithParent(giftSetMegaMenuData.quaTang, 'bo-qua-tang');
+            // Also add spirits gift sets to the gift set category
+            addItemsWithParent(spiritsMegaMenuData.quaTang, 'bo-qua-tang');
             
             const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
 

@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -61,40 +62,31 @@ const navLinks: NavLinkData[] = [
     label: 'RƯỢU VANG',
     megaMenuColumns: [
       {
-        title: 'Theo loại',
-        items: wineMegaMenuData.theoLoai.map((item) => ({
+        title: 'Theo quốc gia',
+        items: wineMegaMenuData.theoQuocGia.map((item) => ({
           href: `/danh-muc/ruou-vang/${item.slug}`,
           label: item.label,
         })),
       },
       {
-        title: 'Theo quốc gia',
-        items: wineMegaMenuData.theoQuocGia.map((item) => {
-          if (item.slug === 'vang-chi-le') {
-            return {
-              href: `/danh-muc/ruou-vang?filter_QUỐC_GIA=Vang Chi Lê`,
-              label: item.label,
-            };
-          }
-          return {
-            href: `/danh-muc/ruou-vang/${item.slug}`,
-            label: item.label,
-          };
-        }),
-      },
-      {
-        title: 'Theo vùng',
+        title: 'Vùng làm vang',
         items: wineMegaMenuData.theoVung.map((item) => ({
           href: `/danh-muc/ruou-vang/${item.slug}`,
           label: item.label,
         })),
       },
       {
-        title: 'Theo giống nho',
-        items: wineMegaMenuData.theoGiongNho.map((item) => ({
-          href: `/danh-muc/ruou-vang/${item.slug}`,
-          label: item.label,
-        })),
+        title: 'Giống nho',
+        items: [
+          ...wineMegaMenuData.theoGiongNho.map((item) => ({
+            href: `/danh-muc/ruou-vang/${item.slug}`,
+            label: item.label,
+          })),
+          {
+            href: '/danh-muc/ruou-vang',
+            label: 'Xem tất cả giống nho >>',
+          },
+        ],
       },
     ],
   },
@@ -103,7 +95,7 @@ const navLinks: NavLinkData[] = [
     label: 'RƯỢU MẠNH',
     megaMenuColumns: [
       {
-        title: 'Theo loại rượu',
+        title: 'Loại Rượu',
         items: spiritsMegaMenuData.theoLoai.map((item) => ({
           href: `/danh-muc/ruou-manh/${item.slug}`,
           label: item.label,
@@ -113,13 +105,6 @@ const navLinks: NavLinkData[] = [
         title: 'Thương hiệu',
         items: spiritsMegaMenuData.thuongHieu.map((item) => ({
           href: `/danh-muc/ruou-manh/${item.slug}`,
-          label: item.label,
-        })),
-      },
-      {
-        title: 'Quà tặng',
-        items: spiritsMegaMenuData.quaTang.map((item) => ({
-          href: `/danh-muc/bo-qua-tang/${item.slug}`,
           label: item.label,
         })),
       },
@@ -159,13 +144,6 @@ const navLinks: NavLinkData[] = [
   {
     href: '/danh-muc/bo-qua-tang',
     label: 'BỘ QUÀ TẶNG',
-    megaMenuColumns: giftSetMegaMenuData.quaTang.map(item => ({
-        title: '',
-        items: [{
-            href: `/danh-muc/bo-qua-tang/${item.slug}`,
-            label: item.label,
-        }]
-    })),
     customMegaMenu: 'gift-set',
   },
   {
@@ -186,15 +164,13 @@ const MegaMenu = ({
   onLinkClick,
   customMegaMenu,
 }: {
-  columns: MenuColumn[];
+  columns?: MenuColumn[];
   isOpen: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onLinkClick: () => void;
   customMegaMenu?: string;
 }) => {
-  if (!columns || columns.length === 0) return null;
-
   if (customMegaMenu === 'gift-set') {
     // @ts-ignore
     const giftItems = giftSetMegaMenuData.quaTang;
@@ -211,7 +187,9 @@ const MegaMenu = ({
         <div className="container mx-auto max-w-screen-2xl p-8">
           <div className="grid grid-cols-3 gap-8">
             {giftItems.map((item: any) => {
-              const image = PlaceHolderImages.find(img => img.id === item.imageId);
+              const image = PlaceHolderImages.find(
+                (img) => img.id === item.imageId
+              );
               return (
                 <Link
                   key={item.slug}
@@ -242,6 +220,8 @@ const MegaMenu = ({
     );
   }
 
+  if (!columns || columns.length === 0) return null;
+
   return (
     <div
       onMouseEnter={onMouseEnter}
@@ -261,9 +241,12 @@ const MegaMenu = ({
           }}
         >
           {columns.map((column, index) => (
-            <div key={column.title || index} className={cn(index > 0 && column.title && 'pl-8 border-l')}>
+            <div
+              key={column.title || index}
+              className={cn(index > 0 && column.title && 'pl-8 border-l')}
+            >
               {column.title && (
-                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider">
+                <h3 className="font-semibold text-sm text-muted-foreground mb-4 tracking-wider uppercase">
                   {column.title}
                 </h3>
               )}
@@ -272,7 +255,7 @@ const MegaMenu = ({
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="font-bold text-foreground hover:text-primary transition-colors"
+                      className="font-medium text-foreground hover:text-primary transition-colors"
                       onClick={onLinkClick}
                     >
                       {item.label}
@@ -327,7 +310,7 @@ const NavLink = (props: NavLinkData) => {
     };
   }, []);
 
-  const hasDropdown = !!megaMenuColumns && megaMenuColumns.length > 0;
+  const hasDropdown = (!!megaMenuColumns && megaMenuColumns.length > 0) || !!customMegaMenu;
   const isMenuOpen = isOpen && hasDropdown;
   const isCurrentPage =
     pathname === href || (href !== '/' && pathname.startsWith(href));
@@ -516,7 +499,7 @@ export default function Header() {
                             <Link
                               href={link.href}
                               onClick={() => {
-                                if (!link.megaMenuColumns) setIsSheetOpen(false);
+                                if (!link.megaMenuColumns && !link.customMegaMenu) setIsSheetOpen(false);
                               }}
                               className="flex-1 py-3 font-semibold uppercase text-gray-800"
                             >
@@ -524,7 +507,7 @@ export default function Header() {
                             </Link>
                           );
 
-                          if (link.megaMenuColumns) {
+                          if (link.megaMenuColumns || link.customMegaMenu) {
                             return (
                               <AccordionItem value={link.label} key={link.label}>
                                 <AccordionTrigger className="hover:no-underline py-0">
@@ -541,7 +524,7 @@ export default function Header() {
                                     </Link>
                                   )}
                                   <Accordion type="multiple" className="w-full">
-                                    {link.megaMenuColumns.map((column) => {
+                                    {link.megaMenuColumns?.map((column) => {
                                       if (column.items.length === 0) {
                                         return null;
                                       }
