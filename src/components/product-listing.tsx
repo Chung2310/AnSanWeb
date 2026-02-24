@@ -10,6 +10,7 @@ import SidebarFilter, { type ActiveFilters, staticFiltersData } from "./sidebar-
 import { Paginator } from "./paginator";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useCategories } from "@/hooks/use-categories";
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -30,6 +31,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descriptionContainerRef = useRef<HTMLDivElement>(null);
   const scrollListenerRef = useRef<(() => void) | null>(null);
+  const { categories: allCategories } = useCategories();
 
 
   const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
@@ -108,7 +110,30 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   }, []);
 
   const filteredProducts = useMemo(() => {
-    let filtered = [...initialProducts];
+    let products = [...initialProducts];
+
+    // Filter by initial category from URL, if it exists
+    if (initialCategory && allCategories && allCategories.length > 0) {
+        const getDescendantIds = (parentId: string, categories: Category[]): string[] => {
+            const findChildren = (id: string): string[] => {
+              const children = categories.filter(cat => cat.parentId === id);
+              let ids: string[] = children.map(c => c.id);
+              for (const child of children) {
+                ids = [...ids, ...findChildren(child.id)];
+              }
+              return ids;
+            }
+            return findChildren(parentId);
+        };
+        const descendantIds = getDescendantIds(initialCategory.id, allCategories);
+        const allCategoryIds = new Set([initialCategory.id, ...descendantIds]);
+        
+        products = products.filter(product => 
+            product.tags?.some(tag => allCategoryIds.has(tag))
+        );
+    }
+    
+    let filtered = [...products];
 
     const applyTagFilter = (filterKey: keyof typeof staticFiltersData) => {
         const activeLabels = activeFilters[filterKey];
@@ -146,7 +171,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
 
     return filtered;
-  }, [initialProducts, activeFilters]);
+  }, [initialProducts, activeFilters, initialCategory, allCategories]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
