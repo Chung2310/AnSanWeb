@@ -10,7 +10,7 @@ export const wineMegaMenuData = {
         { label: "Vang Pháp", slug: "vang-phap", category_id: "phap" },
         { label: "Vang Ý", slug: "vang-y", category_id: "y" },
         { label: "Vang Tây Ban Nha", slug: "vang-tay-ban-nha", category_id: "tay-ban-nha" },
-        { label: "Vang Chile", slug: "vang-chile", category_id: "chile" },
+        { label: "Vang Chile", slug: "vang-chi-le", category_id: "chile" },
         { label: "Vang Mỹ", slug: "vang-my", category_id: "my" },
         { label: "Vang Úc", slug: "vang-uc", category_id: "uc" },
         { label: "Vang New Zealand", slug: "vang-new-zealand", category_id: "new-zealand" },
