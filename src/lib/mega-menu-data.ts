@@ -17,6 +17,7 @@ export const wineMegaMenuData = {
         { label: "Vang Argentina", slug: "vang-argentina", category_id: "argentina" },
         { label: "Vang Bồ Đào Nha", slug: "vang-bo-dao-nha", category_id: "bo-dao-nha" },
         { label: "Vang Đức", slug: "vang-duc", category_id: "duc" },
+        { label: "Vang Nga", slug: "vang-nga", category_id: "nga" },
         { label: "Vang Nam Phi", slug: "vang-nam-phi", category_id: "nam-phi" },
     ],
     theoVung: [
