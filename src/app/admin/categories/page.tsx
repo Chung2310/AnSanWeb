@@ -1,14 +1,13 @@
 
-
 'use client';
 import { Button } from '@/components/ui/button';
-import { Filter, PlusCircle } from 'lucide-react';
+import { Filter, PlusCircle, Download, FileUp } from 'lucide-react';
 import Link from 'next/link';
 import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import type { Category } from '@/lib/types';
 import {
   Accordion,
@@ -23,6 +22,8 @@ import { collection, doc, writeBatch } from 'firebase/firestore';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
+import * as XLSX from 'xlsx';
+import { useImportCategories } from '@/hooks/use-import-categories';
 
 export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
@@ -31,6 +32,8 @@ export default function CategoriesAdminPage() {
     const firestore = useFirestore();
     const { toast } = useToast();
     const [isRestoring, setIsRestoring] = useState(false);
+    const { importCategories, isImporting: isImportingCategories } = useImportCategories();
+    const fileInputRef = useRef<HTMLInputElement>(null);
     
     const categoryMap = useMemo(() => {
       if (!categories) return new Map<string, string>();
@@ -122,6 +125,41 @@ export default function CategoriesAdminPage() {
             setIsRestoring(false);
         }
     };
+
+    const handleExport = () => {
+        if (!categories || categories.length === 0) {
+            toast({
+                variant: 'destructive',
+                title: 'Không có dữ liệu',
+                description: 'Không có danh mục nào để xuất.',
+            });
+            return;
+        }
+
+        const dataToExport = categories.map(cat => ({
+            id: cat.id,
+            name: cat.name,
+            slug: cat.slug,
+            parentId: cat.parentId || '',
+            description: cat.description || '',
+            tags: (cat.tags || []).join(','),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Categories");
+        XLSX.writeFile(workbook, "danh-muc.xlsx");
+    };
+
+    const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            await importCategories(file);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
+    };
   
     const memoizedColumns = useMemo(() => columns(categoryMap), [categoryMap]);
 
@@ -150,7 +188,26 @@ export default function CategoriesAdminPage() {
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Danh mục sản phẩm</h1>
-         <div className="flex items-center gap-4">
+         <div className="flex flex-wrap items-center gap-4">
+            <Button onClick={handleExport} variant="outline">
+              <Download className="mr-2 h-4 w-4" />
+              Xuất Excel
+            </Button>
+            <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isImportingCategories}
+            >
+                <FileUp className="mr-2 h-4 w-4" />
+                {isImportingCategories ? 'Đang nhập...' : 'Nhập Excel'}
+            </Button>
+             <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept=".xlsx, .xls, .csv"
+                onChange={handleFileSelect}
+            />
             <Button onClick={handleRestore} disabled={isRestoring} variant="outline">
                 {isRestoring ? 'Đang khôi phục...' : 'Khôi phục mặc định'}
             </Button>
