@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, Suspense, useRef } from "react";
+import { useState, useMemo, useEffect, Suspense, useRef, useCallback } from "react";
 import WineCard from "@/components/wine-card";
 import { Button } from "@/components/ui/button";
 import type { Product, Category } from "@/lib/types";
@@ -33,6 +33,22 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const scrollListenerRef = useRef<(() => void) | null>(null);
   const { categories: allCategories } = useCategories();
 
+   const getDescendantIds = useCallback((parentId: string, categories: Category[]): string[] => {
+        const ids: string[] = [];
+        const queue: string[] = [parentId];
+        const visited = new Set<string>();
+
+        while(queue.length > 0) {
+            const currentId = queue.shift()!;
+            if (!visited.has(currentId)) {
+                visited.add(currentId);
+                ids.push(currentId);
+                const children = categories.filter(c => c.parentId === currentId);
+                children.forEach(child => queue.push(child.id));
+            }
+        }
+        return ids;
+    }, []);
 
   const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
     if (!categoryDescription) {
@@ -129,14 +145,23 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   }, []);
 
   const filteredProducts = useMemo(() => {
-    let filtered = [...initialProducts];
+    let productsToFilter = [...initialProducts];
 
+    // 1. Filter by main category from URL if it exists
+    if (initialCategory && allCategories) {
+        const categoryAndDescendantIds = getDescendantIds(initialCategory.id, allCategories);
+        productsToFilter = productsToFilter.filter(p =>
+            p.tags?.some(tagId => categoryAndDescendantIds.includes(tagId))
+        );
+    }
+    
+    // 2. Apply sidebar filters on top of the category-filtered list
     const activeFilterGroups = Object.keys(activeFilters).filter(
       (group) => activeFilters[group]?.length > 0
     );
 
     if (activeFilterGroups.length === 0) {
-      return filtered;
+      return productsToFilter;
     }
 
     // Price filter
@@ -146,7 +171,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     }).filter(Boolean) as [number, number][];
 
     if (priceRanges && priceRanges.length > 0) {
-      filtered = filtered.filter(p =>
+      productsToFilter = productsToFilter.filter(p =>
         priceRanges.some(range => p.price >= range[0] && p.price < range[1])
       );
     }
@@ -154,7 +179,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     // Tag-based filters
     const tagFilterGroups = activeFilterGroups.filter(g => g !== "KHOẢNG GIÁ");
     if (tagFilterGroups.length > 0) {
-      filtered = filtered.filter(p => {
+      productsToFilter = productsToFilter.filter(p => {
         return tagFilterGroups.every(group => {
           const activeLabels = activeFilters[group];
           if (!activeLabels || activeLabels.length === 0) return true;
@@ -170,8 +195,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       });
     }
 
-    return filtered;
-  }, [initialProducts, activeFilters]);
+    return productsToFilter;
+  }, [initialProducts, initialCategory, allCategories, activeFilters, getDescendantIds]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
