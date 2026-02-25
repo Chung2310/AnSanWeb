@@ -49,7 +49,7 @@ export const wineMegaMenuData = {
         { label: "Riesling", slug: "riesling", category_id: "riesling" },
         { label: "Sangiovese", slug: "sangiovese", category_id: "sangiovese" },
         { label: "Sauvignon Blanc", slug: "sauvignon-blanc", category_id: "sauvignon-blanc" },
-        { label: "Shiraz", slug: "shiraz", category_id: "shiraz" },
+        { label: "Shiraz - Syrah", slug: "shiraz", category_id: "shiraz" },
         { label: "Tempranillo", slug: "tempranillo", category_id: "tempranillo" },
         { label: "Zinfandel", slug: "zinfandel", category_id: "zinfandel" },
     ],
