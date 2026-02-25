@@ -7,7 +7,6 @@ import { collection, doc, writeBatch, serverTimestamp } from 'firebase/firestore
 import { useToast } from '@/hooks/use-toast';
 import type { FullProduct } from '@/lib/types';
 import { useCategories } from './use-categories';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 import slugify from 'slugify';
 
 export function useImportProducts() {
@@ -30,10 +29,8 @@ export function useImportProducts() {
           throw new Error("Danh mục chưa được tải. Vui lòng thử lại.");
       }
 
-      const categoryMap = new Map(categories.map(c => [c.name.toLowerCase(), c.id]));
-      const tagLabelToIdMap = new Map<string, string>();
-      Object.values(wineMegaMenuData).flat().forEach(item => tagLabelToIdMap.set(item.label.toLowerCase(), item.category_id));
-      Object.values(spiritsMegaMenuData).flat().forEach(item => tagLabelToIdMap.set(item.label.toLowerCase(), item.category_id));
+      // Create ONE unified map from any category/tag name to its unique ID.
+      const unifiedNameToIdMap = new Map(categories.map(c => [c.name.toLowerCase(), c.id]));
 
       const batch = writeBatch(firestore);
       const productsCollection = collection(firestore, 'products');
@@ -53,20 +50,26 @@ export function useImportProducts() {
         const productId = row['ID'] ? String(row['ID']) : null;
         const productRef = productId ? doc(productsCollection, productId) : doc(productsCollection);
 
-        const tagsFromName = (columnName: string): string[] => {
-            return row[columnName]?.toString().split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => tagLabelToIdMap.get(name)).filter(Boolean) || [];
-        }
+        // 1. Collect all potential category/tag names from all relevant columns
+        const allNamesFromSheet: string[] = [];
+        const columnsToProcess = ['Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Loại quà tặng', 'Thương hiệu'];
+        columnsToProcess.forEach(colName => {
+          if (row[colName]) {
+            const names = row[colName].toString().split(',').map((s: string) => s.trim());
+            allNamesFromSheet.push(...names);
+          }
+        });
+
+        // 2. Map all collected names to their unique IDs using the single unified map.
+        const allTags = [...new Set(
+            allNamesFromSheet
+                .map(name => unifiedNameToIdMap.get(name.toLowerCase()))
+                .filter((id): id is string => !!id) // Filter out any names that didn't map to an ID
+        )];
         
-        const generalCategories: string[] = row['Danh mục chung']?.toString().split(',').map((s: string) => s.trim().toLowerCase()).map((name: string) => categoryMap.get(name)).filter(Boolean) || [];
-        const wineLoai = tagsFromName('Loại rượu');
-        const wineQuocGia = tagsFromName('Quốc gia');
-        const wineVung = tagsFromName('Vùng');
-        const wineGiongNho = tagsFromName('Giống nho');
-        
-        const allTags = [...new Set([...generalCategories, ...wineLoai, ...wineQuocGia, ...wineVung, ...wineGiongNho])];
 
         const allAttributeLabels = Object.keys(row).filter(key => 
-            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo'].includes(key)
+            !['ID', 'Tên sản phẩm', 'Đường dẫn (slug)', 'Giá', 'Mô tả giá', 'Giá phụ', 'Mô tả giá phụ', 'Trạng thái', 'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'Lựa chọn tốt nhất', 'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Vùng', 'Giống nho', 'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo', 'Loại quà tặng', 'Thương hiệu'].includes(key)
         );
 
         const productData: any = {
