@@ -77,7 +77,7 @@ export default function HeroSection() {
     }, [current]);
 
     return (
-        <section className="relative w-full font-body h-[450px] overflow-hidden">
+        <section className="relative w-full font-body h-[500px] lg:h-[450px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
                     {heroSlides.map((slide, index) => {
@@ -106,7 +106,7 @@ export default function HeroSection() {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/40" />
-                                    <div className="container relative z-10 flex h-full flex-col items-start justify-center text-left text-white lg:px-24">
+                                    <div className="container relative z-10 flex h-full flex-col lg:items-start lg:justify-center lg:text-left items-center justify-center text-center text-white px-6 lg:px-24">
                                         <AnimatePresence>
                                             {isActive && (
                                                 <motion.div
@@ -116,10 +116,10 @@ export default function HeroSection() {
                                                     animate="animate"
                                                     exit="exit"
                                                 >
-                                                    <motion.h1 variants={textItemVariants} className={cn("text-3xl lg:text-4xl font-black uppercase font-headline", 'leading-tight')}>
+                                                    <motion.h1 variants={textItemVariants} className={cn("text-2xl sm:text-3xl lg:text-4xl font-black uppercase font-headline", 'leading-tight')}>
                                                         {slide.title}
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-4 text-base max-w-xl whitespace-pre-line text-white/90")}>
+                                                    <motion.p variants={textItemVariants} className={cn("mt-4 text-sm lg:text-base max-w-xl whitespace-pre-line text-white/90")}>
                                                         {slide.description}
                                                     </motion.p>
                                                     <motion.div variants={textItemVariants}>
@@ -127,7 +127,7 @@ export default function HeroSection() {
                                                             asChild
                                                             variant="outline"
                                                             size="lg"
-                                                            className="mt-6 bg-transparent rounded-none transition-all hover:scale-105 border-white text-white hover:bg-white hover:text-black"
+                                                            className="mt-6 bg-transparent rounded-none transition-all hover:scale-105 border-white text-white hover:bg-white hover:text-black h-12 lg:h-11"
                                                         >
                                                             <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
                                                         </Button>
@@ -142,9 +142,9 @@ export default function HeroSection() {
                     })}
                 </AnimatePresence>
             </div>
-            <div className="absolute bottom-8 left-0 right-0 z-10">
+            <div className="absolute bottom-6 lg:bottom-8 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
-                    <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
+                    <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2 no-scrollbar">
                         {heroSlides.map((slide, index) => (
                             <div key={slide.label} className="flex items-center">
                                 <Button
@@ -154,12 +154,12 @@ export default function HeroSection() {
                                         "whitespace-nowrap rounded-none border border-white/80 bg-transparent px-3 py-1 h-auto font-semibold uppercase text-white/80 transition-colors duration-300 hover:bg-white/20 hover:text-white",
                                         current === index && "border-white bg-white text-black hover:bg-white hover:text-black"
                                     )}
-                                    style={{ fontSize: '19px' }}
+                                    style={{ fontSize: 'clamp(14px, 2vw, 19px)' }}
                                 >
                                     {slide.label}
                                 </Button>
                                 {index < heroSlides.length - 1 && (
-                                    <div className="w-8 h-px bg-white/50 mx-2 hidden md:block"></div>
+                                    <div className="w-4 lg:w-8 h-px bg-white/50 mx-1 lg:mx-2 hidden sm:block"></div>
                                 )}
                             </div>
                         ))}
