@@ -38,7 +38,7 @@ export default function Footer() {
                     <div className="flex flex-col sm:flex-row gap-8">
                         <div className="space-y-2">
                             <h4 className="font-semibold text-gray-800">Quốc gia</h4>
-                            <Link href="/danh-muc/ruou-vang/vang-chi-le" className="block text-gray-700 hover:text-primary">Chile</Link>
+                            <Link href="/danh-muc/ruou-vang/vang-chi-le" className="block text-gray-700 hover:text-primary">Vang Chile</Link>
                             <Link href="/danh-muc/ruou-vang/vang-tay-ban-nha" className="block text-gray-700 hover:text-primary">Tây Ban Nha</Link>
                             <Link href="/danh-muc/ruou-vang/vang-uc" className="block text-gray-700 hover:text-primary">Úc</Link>
                             <Link href="/danh-muc/ruou-vang/vang-phap" className="block text-gray-700 hover:text-primary">Pháp</Link>
