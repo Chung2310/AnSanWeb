@@ -1,4 +1,3 @@
-
 'use client';
 import { useProducts } from '@/hooks/use-products';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,17 +6,14 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
-
-const SaleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M6 13H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M9 16H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M6 19H2" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-        <path d="M24.5 2L15 14H22.5L20.5 28L32 16H24.5V2Z" fill="#FBBF24" stroke="#FDE68A" strokeWidth="1.5"/>
-        <circle cx="18" cy="15" r="9" fill="#EF4444" stroke="#F87171" strokeWidth="1.5" />
-        <text x="18" y="18.5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold" fontFamily="sans-serif">%</text>
-    </svg>
-);
+import { Maximize2 } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 
 const formatPrice = (price: number) => {
     if (isNaN(price)) return '';
@@ -39,13 +35,44 @@ const GiaTotProductCard = ({ product }: { product: Product }) => {
             )}
             
             <Link href={`/san-pham/${product.slug}`} className="block">
-                <div className="relative h-56 w-full my-4">
+                <div className="relative h-56 w-full my-4 group/image">
                     <Image
                         src={product.image?.url || '/placeholder.svg'}
                         alt={product.nameVN}
                         fill
                         className="object-contain group-hover:scale-105 transition-transform duration-300"
                     />
+                    
+                    {/* Zoom Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity bg-black/5">
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <button 
+                                    className="bg-white/90 p-3 rounded-full shadow-lg hover:bg-white transition-colors transform hover:scale-110 pointer-events-auto"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    <Maximize2 className="w-5 h-5 text-gray-700" />
+                                </button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-none bg-transparent shadow-none flex items-center justify-center">
+                                <DialogHeader className="sr-only">
+                                    <DialogTitle>Phóng to ảnh sản phẩm</DialogTitle>
+                                </DialogHeader>
+                                <div className="relative w-full h-full flex items-center justify-center bg-black/5 backdrop-blur-sm rounded-lg p-2">
+                                    <Image
+                                        src={product.image?.url || '/placeholder.svg'}
+                                        alt={product.nameVN}
+                                        width={1200}
+                                        height={1200}
+                                        className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                    />
+                                </div>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
                 </div>
             </Link>
 
