@@ -33,21 +33,26 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const scrollListenerRef = useRef<(() => void) | null>(null);
   const { categories: allCategories } = useCategories();
 
-   const getDescendantIds = useCallback((parentId: string, categories: Category[]): string[] => {
-        const ids: string[] = [];
+   const getDescendants = useCallback((parentId: string, categories: Category[]): Category[] => {
+        const results: Category[] = [];
         const queue: string[] = [parentId];
         const visited = new Set<string>();
+
+        const initialCat = categories.find(c => c.id === parentId || c.slug === parentId);
+        if (initialCat) results.push(initialCat);
 
         while(queue.length > 0) {
             const currentId = queue.shift()!;
             if (!visited.has(currentId)) {
                 visited.add(currentId);
-                ids.push(currentId);
                 const children = categories.filter(c => c.parentId === currentId);
-                children.forEach(child => queue.push(child.id));
+                children.forEach(child => {
+                    results.push(child);
+                    queue.push(child.id);
+                });
             }
         }
-        return ids;
+        return results;
     }, []);
 
   const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
@@ -76,6 +81,28 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     return { descriptionInitial: categoryDescription, descriptionRest: null, isDescriptionLong: false };
   }, [categoryDescription]);
   
+  const categoryType = useMemo(() => {
+    if (!initialCategory || !allCategories) return { isWine: false, isSpirit: false, isGiftSet: false, isGlassware: false, isCigar: false };
+    
+    const getRootId = (catId: string): string => {
+        const cat = allCategories.find(c => c.id === catId || c.slug === catId);
+        if (!cat) return catId;
+        if (!cat.parentId) return cat.id;
+        return getRootId(cat.parentId);
+    };
+
+    const rootId = getRootId(initialCategory.id);
+    return {
+        isWine: rootId === 'ruou-vang',
+        isSpirit: rootId === 'ruou-manh',
+        isGiftSet: rootId === 'bo-qua-tang',
+        isGlassware: rootId === 'ly-coc-pha-le',
+        isCigar: rootId === 'cigar'
+    };
+  }, [initialCategory, allCategories]);
+
+  const { isWine: isWineCategory, isSpirit: isSpiritCategory, isGiftSet: isGiftSetCategory } = categoryType;
+
   const getInitialFilters = useMemo(() => {
     if (!initialCategory || !allCategories) return queryFilters || {};
     
@@ -117,18 +144,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
-  const isWineCategory = useMemo(() => {
-    return title.toLowerCase().includes('vang') || !!initialCategory?.slug.includes('vang');
-  }, [title, initialCategory]);
-
-  const isGiftSetCategory = useMemo(() => {
-    return title.toLowerCase().includes('quà tặng') || !!initialCategory?.slug.includes('bo-qua-tang');
-  }, [title, initialCategory]);
-
-  const isSpiritCategory = useMemo(() => {
-    return title.toLowerCase().includes('mạnh') || !!initialCategory?.slug.includes('ruou-manh');
-  }, [title, initialCategory]);
-
   useEffect(() => {
     setCurrentPage(1);
     setActiveFilters(getInitialFilters);
@@ -147,9 +162,12 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
     // 1. Filter by category hierarchy from URL
     if (initialCategory && allCategories) {
-        const categoryAndDescendantIds = getDescendantIds(initialCategory.id, allCategories);
+        const descendants = getDescendants(initialCategory.id, allCategories);
+        const matchIds = new Set(descendants.map(d => d.id));
+        const matchSlugs = new Set(descendants.map(d => d.slug));
+
         productsToFilter = productsToFilter.filter(p =>
-            p.tags?.some(tagId => categoryAndDescendantIds.includes(tagId))
+            p.tags?.some(tag => matchIds.has(tag) || matchSlugs.has(tag))
         );
     }
     
@@ -195,7 +213,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     }
 
     return productsToFilter;
-  }, [initialProducts, initialCategory, allCategories, activeFilters, getDescendantIds]);
+  }, [initialProducts, initialCategory, allCategories, activeFilters, getDescendants]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
