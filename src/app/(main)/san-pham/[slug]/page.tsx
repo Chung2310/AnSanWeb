@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -16,6 +15,13 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbS
 import { Button } from '@/components/ui/button';
 import { Award, CircleDollarSign, Users, Truck, GlassWater, Phone, MessageCircle, Smartphone } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -203,29 +209,47 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                 <div className="lg:col-span-5">
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
-                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative border border-gray-50 shadow-sm">
-                            {index === 0 && (
-                                <>
-                                    {hasDiscount ? (
-                                        <div className="absolute top-4 left-4 z-10 flex items-center rounded-sm bg-destructive px-4 py-2 text-sm font-bold uppercase text-destructive-foreground shadow-md animate-flash">
-                                            <span>Giá Đặc Biệt</span>
-                                        </div>
-                                    ) : isBestChoice && (
-                                        <div className="absolute top-4 left-4 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md z-10">
-                                            Best Choice
-                                        </div>
+                        <Dialog key={index}>
+                            <DialogTrigger asChild>
+                                <div className="rounded-lg bg-white p-4 flex items-center justify-center relative border border-gray-50 shadow-sm cursor-zoom-in group">
+                                    {index === 0 && (
+                                        <>
+                                            {hasDiscount ? (
+                                                <div className="absolute top-4 left-4 z-10 flex items-center rounded-sm bg-destructive px-4 py-2 text-sm font-bold uppercase text-destructive-foreground shadow-md animate-flash">
+                                                    <span>Giá Đặc Biệt</span>
+                                                </div>
+                                            ) : isBestChoice && (
+                                                <div className="absolute top-4 left-4 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md z-10">
+                                                    Best Choice
+                                                </div>
+                                            )}
+                                        </>
                                     )}
-                                </>
-                            )}
-                            <Image
-                              src={image.url}
-                              alt={`${product.nameVN} - ảnh ${index + 1}`}
-                              width={800}
-                              height={800}
-                              className="w-full h-auto max-h-[600px] object-contain"
-                              priority={index === 0}
-                            />
-                        </div>
+                                    <Image
+                                      src={image.url}
+                                      alt={`${product.nameVN} - ảnh ${index + 1}`}
+                                      width={800}
+                                      height={800}
+                                      className="w-full h-auto max-h-[600px] object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                                      priority={index === 0}
+                                    />
+                                </div>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-none bg-transparent shadow-none flex items-center justify-center">
+                                <DialogHeader className="sr-only">
+                                    <DialogTitle>Phóng to ảnh sản phẩm</DialogTitle>
+                                </DialogHeader>
+                                <div className="relative w-full h-full flex items-center justify-center bg-black/5 backdrop-blur-sm rounded-lg p-2">
+                                    <Image
+                                        src={image.url}
+                                        alt={`${product.nameVN} - ảnh ${index + 1}`}
+                                        width={1200}
+                                        height={1200}
+                                        className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                    />
+                                </div>
+                            </DialogContent>
+                        </Dialog>
                         ))}
                     </div>
                 </div>
