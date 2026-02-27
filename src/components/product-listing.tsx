@@ -134,8 +134,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setActiveFilters(getInitialFilters);
   }, [initialProducts, getInitialFilters]);
 
-
-    // Effect to clean up scroll listener on component unmount
   useEffect(() => {
     return () => {
       if (scrollListenerRef.current) {
@@ -147,7 +145,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let productsToFilter = [...initialProducts];
 
-    // 1. Filter by main category from URL if it exists
+    // 1. Filter by category hierarchy from URL
     if (initialCategory && allCategories) {
         const categoryAndDescendantIds = getDescendantIds(initialCategory.id, allCategories);
         productsToFilter = productsToFilter.filter(p =>
@@ -155,7 +153,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         );
     }
     
-    // 2. Apply sidebar filters on top of the category-filtered list
+    // 2. Apply sidebar filters
     const activeFilterGroups = Object.keys(activeFilters).filter(
       (group) => activeFilters[group]?.length > 0
     );
@@ -176,7 +174,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       );
     }
 
-    // Tag-based filters
+    // Tag-based filters (Region, Grape, Brand, etc.)
     const tagFilterGroups = activeFilterGroups.filter(g => g !== "KHOẢNG GIÁ");
     if (tagFilterGroups.length > 0) {
       productsToFilter = productsToFilter.filter(p => {
@@ -185,7 +183,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
           if (!activeLabels || activeLabels.length === 0) return true;
 
           const idsToFilter = activeLabels.map(label => {
-            const option = (staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[]).find(o => o.label === label);
+            const options = staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[];
+            const option = options.find(o => o.label === label);
             return option?.value;
           }).filter(Boolean) as string[];
 
@@ -249,13 +248,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             setIsDescriptionExpanded(false);
             return;
         }
-
         if (scrollListenerRef.current) {
             window.removeEventListener('scroll', scrollListenerRef.current);
         }
-        
         const onScroll = () => {
-            // Using a small threshold to account for browser inconsistencies
             if (window.scrollY < 5) {
                 if (scrollListenerRef.current) {
                     window.removeEventListener('scroll', scrollListenerRef.current);
@@ -264,11 +260,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                 setIsDescriptionExpanded(false);
             }
         };
-
         scrollListenerRef.current = onScroll;
         window.addEventListener('scroll', onScroll, { passive: true });
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
     } else {
         setIsDescriptionExpanded(true);
     }
@@ -368,7 +362,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                 </div>
             )}
             
-            <Suspense fallback={<div className="flex justify-center mt-12">Loading pagination...</div>}>
+            <Suspense fallback={<div className="flex justify-center mt-12">Đang tải phân trang...</div>}>
                 <Paginator 
                     totalPages={totalPages} 
                     onPageChange={handlePageChange} 

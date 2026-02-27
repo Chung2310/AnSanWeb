@@ -40,7 +40,6 @@ import {
   collection,
   serverTimestamp,
   setDoc,
-  updateDoc,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import slugify from 'slugify';
@@ -62,11 +61,8 @@ const imageInfoSchema = z.object({
     path: z.string().optional(),
 });
 
-// Preprocess price strings to handle thousand separators (e.g., "1.000.000")
 const preprocessPrice = (val: unknown) => {
-  if (typeof val === 'number') {
-    return val;
-  }
+  if (typeof val === 'number') return val;
   if (typeof val === 'string') {
     if (val.trim() === '') return null;
     const sanitized = val.replace(/[\.\,]/g, '');
@@ -75,7 +71,6 @@ const preprocessPrice = (val: unknown) => {
   }
   return null;
 };
-
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -101,15 +96,10 @@ const formSchema = z.object({
   isGoodPrice: z.boolean(),
   bestChoice: z.boolean().optional(),
   attributes: z.array(productAttributeSchema).optional(),
-  tags: z.array(z.string()).optional(),
+  tags: z.array(z.string()),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
-
-interface ProductFormProps {
-  initialData?: FullProduct;
-  preselectedCategoryId?: string | null;
-}
 
 const renderCheckboxGroup = (control: Control<ProductFormValues>, title: string, items: { label: string; category_id: string }[]) => {
     if (!items || items.length === 0) return null;
@@ -136,51 +126,13 @@ const renderCheckboxGroup = (control: Control<ProductFormValues>, title: string,
                                         }}
                                     />
                                 </FormControl>
-                                <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
+                                <FormLabel className="font-normal text-sm -translate-y-0.5 cursor-pointer">{item.label}</FormLabel>
                             </FormItem>
                         )}
                     />
                 ))}
             </div>
         </div>
-    );
-};
-
-const renderWineMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Theo loại", wineMegaMenuData.theoLoai)}
-            {renderCheckboxGroup(control, "Theo quốc gia", wineMegaMenuData.theoQuocGia)}
-            {renderCheckboxGroup(control, "Theo vùng", wineMegaMenuData.theoVung)}
-            {renderCheckboxGroup(control, "Theo giống nho", wineMegaMenuData.theoGiongNho)}
-        </>
-    );
-};
-
-const renderSpiritsMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
-            {renderCheckboxGroup(control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
-        </>
-    );
-};
-
-const renderGlasswareMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Ly Pha Lê Riedel", glasswareMegaMenuData.lyPhaLeRiedel)}
-            {renderCheckboxGroup(control, "Ly Whisky", glasswareMegaMenuData.lyWhisky)}
-            {renderCheckboxGroup(control, "Loại khác", glasswareMegaMenuData.khac)}
-        </>
-    );
-};
-
-const renderGiftSetMegaMenuSelectors = (control: Control<ProductFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Loại quà tặng", giftSetMegaMenuData.quaTang)}
-        </>
     );
 };
 
@@ -237,7 +189,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     name: 'attributes',
   });
   
-  const watchedTags = form.watch('tags');
+  const watchedTags = form.watch('tags') || [];
 
   const mainCategories = useMemo(() => {
     if (!categories) return [];
@@ -246,129 +198,60 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
   }, [categories]);
 
   const currentMainCategoryId = useMemo(() => {
-    const currentTags = watchedTags || [];
-    const mainCategory = mainCategories.find(mc => currentTags.includes(mc.id));
+    const mainCategory = mainCategories.find(mc => watchedTags.includes(mc.id));
     return mainCategory?.id;
   }, [watchedTags, mainCategories]);
 
   const handleMainCategoryChange = (selectedId: string) => {
       const currentTags = form.getValues('tags') || [];
       const mainCategoryIds = mainCategories.map(mc => mc.id);
-
-      // Remove all main category IDs from current tags
       const otherTags = currentTags.filter(tag => !mainCategoryIds.includes(tag));
-
-      // Add the newly selected main category ID if it's not 'none'
       const newTags = selectedId && selectedId !== 'none' ? [...otherTags, selectedId] : otherTags;
-
       form.setValue('tags', newTags, { shouldDirty: true });
   };
 
-  const wineCategoryIds = useMemo(() => {
-    if (isLoadingCategories || !categories) {
-        return new Set<string>();
-    }
-    const wineCat = categories.find(c => c.slug === 'ruou-vang');
-    if (!wineCat) {
-        return new Set<string>();
-    }
-    
-    const allIds = new Set<string>();
-    const queue: string[] = [wineCat.id];
-    
+  const getDescendantIds = (parentId: string, allCategories: Category[]): Set<string> => {
+    const ids = new Set<string>();
+    const queue: string[] = [parentId];
     while(queue.length > 0) {
         const currentId = queue.shift()!;
-        if (!allIds.has(currentId)) {
-            allIds.add(currentId);
-            const children = categories.filter(c => c.parentId === currentId);
+        if (!ids.has(currentId)) {
+            ids.add(currentId);
+            const children = allCategories.filter(c => c.parentId === currentId);
             children.forEach(child => queue.push(child.id));
         }
     }
-    return allIds;
-  }, [categories, isLoadingCategories]);
+    return ids;
+  };
 
-  const isWineForm = useMemo(() => {
-      if (wineCategoryIds.size === 0) return false;
-      const currentTags = watchedTags || [];
-      return currentTags.some(tagId => wineCategoryIds.has(tagId));
-  }, [wineCategoryIds, watchedTags]);
+  const wineCategoryIds = useMemo(() => {
+    if (!categories) return new Set<string>();
+    const wineCat = categories.find(c => c.slug === 'ruou-vang');
+    return wineCat ? getDescendantIds(wineCat.id, categories) : new Set<string>();
+  }, [categories]);
 
   const spiritCategoryIds = useMemo(() => {
-    if (isLoadingCategories || !categories) return new Set<string>();
+    if (!categories) return new Set<string>();
     const spiritCat = categories.find(c => c.slug === 'ruou-manh');
-    if (!spiritCat) return new Set<string>();
-    
-    const allIds = new Set<string>();
-    const queue: string[] = [spiritCat.id];
-    
-    while(queue.length > 0) {
-        const currentId = queue.shift()!;
-        if (!allIds.has(currentId)) {
-            allIds.add(currentId);
-            const children = categories.filter(c => c.parentId === currentId);
-            children.forEach(child => queue.push(child.id));
-        }
-    }
-    return allIds;
-  }, [categories, isLoadingCategories]);
+    return spiritCat ? getDescendantIds(spiritCat.id, categories) : new Set<string>();
+  }, [categories]);
 
-  const isSpiritForm = useMemo(() => {
-      if (spiritCategoryIds.size === 0) return false;
-      const currentTags = watchedTags || [];
-      return currentTags.some(tagId => spiritCategoryIds.has(tagId));
-  }, [spiritCategoryIds, watchedTags]);
-
-    const glasswareCategoryIds = useMemo(() => {
-    if (isLoadingCategories || !categories) return new Set<string>();
+  const glasswareCategoryIds = useMemo(() => {
+    if (!categories) return new Set<string>();
     const glasswareCat = categories.find(c => c.slug === 'ly-coc-pha-le');
-    if (!glasswareCat) return new Set<string>();
-    
-    const allIds = new Set<string>();
-    const queue: string[] = [glasswareCat.id];
-    
-    while(queue.length > 0) {
-        const currentId = queue.shift()!;
-        if (!allIds.has(currentId)) {
-            allIds.add(currentId);
-            const children = categories.filter(c => c.parentId === currentId);
-            children.forEach(child => queue.push(child.id));
-        }
-    }
-    return allIds;
-  }, [categories, isLoadingCategories]);
-
-  const isGlasswareForm = useMemo(() => {
-      if (glasswareCategoryIds.size === 0) return false;
-      const currentTags = watchedTags || [];
-      return currentTags.some(tagId => glasswareCategoryIds.has(tagId));
-  }, [glasswareCategoryIds, watchedTags]);
-
+    return glasswareCat ? getDescendantIds(glasswareCat.id, categories) : new Set<string>();
+  }, [categories]);
 
   const giftSetCategoryIds = useMemo(() => {
-    if (isLoadingCategories || !categories) return new Set<string>();
+    if (!categories) return new Set<string>();
     const giftSetCat = categories.find(c => c.slug === 'bo-qua-tang');
-    if (!giftSetCat) return new Set<string>();
-    
-    const allIds = new Set<string>();
-    const queue: string[] = [giftSetCat.id];
-    
-    while(queue.length > 0) {
-        const currentId = queue.shift()!;
-        if (!allIds.has(currentId)) {
-            allIds.add(currentId);
-            const children = categories.filter(c => c.parentId === currentId);
-            children.forEach(child => queue.push(child.id));
-        }
-    }
-    return allIds;
-  }, [categories, isLoadingCategories]);
+    return giftSetCat ? getDescendantIds(giftSetCat.id, categories) : new Set<string>();
+  }, [categories]);
 
-  const isGiftSetForm = useMemo(() => {
-      if (giftSetCategoryIds.size === 0) return false;
-      const currentTags = watchedTags || [];
-      return currentTags.some(tagId => giftSetCategoryIds.has(tagId));
-  }, [giftSetCategoryIds, watchedTags]);
-
+  const isWineForm = watchedTags.some(tagId => wineCategoryIds.has(tagId));
+  const isSpiritForm = watchedTags.some(tagId => spiritCategoryIds.has(tagId));
+  const isGlasswareForm = watchedTags.some(tagId => glasswareCategoryIds.has(tagId));
+  const isGiftSetForm = watchedTags.some(tagId => giftSetCategoryIds.has(tagId));
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -398,9 +281,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     if (files && files.length > 0) {
       const newPreviews = Array.from(files).map(file => URL.createObjectURL(file));
       setDetailImagePreviews(prev => [...prev, ...newPreviews]);
-
       const uploadPromises = Array.from(files).map(file => startUpload(file, 'products/details'));
-      
       try {
         const uploadedImages = await Promise.all(uploadPromises);
         const currentImages = form.getValues('detailImages') || [];
@@ -424,51 +305,47 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
     return page ? `/admin/products?page=${page}` : '/admin/products';
   };
 
-    const onSubmit = async (data: ProductFormValues) => {
-        try {
-            const finalData: Omit<FullProduct, 'id' | 'createdAt' | 'updatedAt'> & { updatedAt: any, createdAt?: any, id?: string } = {
-                nameVN: data.nameVN,
-                slug: data.slug,
-                price: data.price,
-                status: data.status,
-                isFeatured: data.isFeatured,
-                isNew: data.isNew,
-                isGoodPrice: data.isGoodPrice,
-                bestChoice: data.bestChoice || false,
-                tags: data.tags || [],
-                attributes: data.attributes || [],
-                image: data.image || null,
-                detailImages: data.detailImages || [],
-                shortDescription: data.shortDescription || '',
-                description: data.description || '',
-                priceDescription: data.priceDescription || '',
-                secondaryPrice: data.secondaryPrice && data.secondaryPrice > 0 ? data.secondaryPrice : null,
-                secondaryPriceDescription: data.secondaryPriceDescription || null,
-                updatedAt: serverTimestamp(),
-            };
+  const onSubmit = async (data: ProductFormValues) => {
+    try {
+        const finalData: Omit<FullProduct, 'id' | 'createdAt' | 'updatedAt'> & { updatedAt: any, createdAt?: any, id?: string } = {
+            nameVN: data.nameVN,
+            slug: data.slug,
+            price: data.price,
+            status: data.status,
+            isFeatured: data.isFeatured,
+            isNew: data.isNew,
+            isGoodPrice: data.isGoodPrice,
+            bestChoice: data.bestChoice || false,
+            tags: data.tags || [],
+            attributes: data.attributes || [],
+            image: data.image || null,
+            detailImages: data.detailImages || [],
+            shortDescription: data.shortDescription || '',
+            description: data.description || '',
+            priceDescription: data.priceDescription || '',
+            secondaryPrice: data.secondaryPrice && data.secondaryPrice > 0 ? data.secondaryPrice : null,
+            secondaryPriceDescription: data.secondaryPriceDescription || null,
+            updatedAt: serverTimestamp(),
+        };
 
-            if (initialData?.id) {
-                const productRef = doc(firestore, 'products', initialData.id);
-                const { id, createdAt, ...updateData } = finalData;
-                await setDoc(productRef, updateData, { merge: true });
-                toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
-            } else {
-                const newDocRef = doc(collection(firestore, 'products'));
-                finalData.id = newDocRef.id;
-                finalData.createdAt = serverTimestamp();
-                await setDoc(newDocRef, finalData);
-                toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
-            }
-            router.push(getRedirectUrl());
-        } catch (error) {
-            console.error("Error saving product:", error);
-            toast({
-                variant: 'destructive',
-                title: 'Đã có lỗi xảy ra',
-                description: 'Không thể lưu sản phẩm. Vui lòng thử lại.',
-            });
+        if (initialData?.id) {
+            const productRef = doc(firestore, 'products', initialData.id);
+            const { id, createdAt, ...updateData } = finalData;
+            await setDoc(productRef, updateData, { merge: true });
+            toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
+        } else {
+            const newDocRef = doc(collection(firestore, 'products'));
+            finalData.id = newDocRef.id;
+            finalData.createdAt = serverTimestamp();
+            await setDoc(newDocRef, finalData);
+            toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
-    };
+        router.push(getRedirectUrl());
+    } catch (error) {
+        console.error("Error saving product:", error);
+        toast({ variant: 'destructive', title: 'Đã có lỗi xảy ra', description: 'Không thể lưu sản phẩm. Vui lòng thử lại.' });
+    }
+  };
   
   return (
     <Form {...form}>
@@ -602,7 +479,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                 </CardContent>
             </Card>
 
-
             <Card>
               <CardHeader><CardTitle>Trạng thái & Phân loại</CardTitle></CardHeader>
               <CardContent className="space-y-4">
@@ -669,9 +545,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                          Chọn danh mục chính cho sản phẩm.
-                      </FormDescription>
+                      <FormDescription>Chọn danh mục chính để hiển thị các tùy chọn phân loại chi tiết.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -683,12 +557,15 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
               <Card>
                 <CardHeader>
                     <CardTitle>Phân loại Rượu Vang</CardTitle>
-                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm rượu vang.</CardDescription>
+                    <CardDescription>Chọn các thuộc tính để sản phẩm xuất hiện trong Mega Menu Rượu Vang.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea className="h-72">
-                        <div className="pr-4">
-                            {renderWineMegaMenuSelectors(form.control)}
+                    <ScrollArea className="h-[500px]">
+                        <div className="pr-4 pb-6">
+                            {renderCheckboxGroup(form.control, "Theo loại", wineMegaMenuData.theoLoai)}
+                            {renderCheckboxGroup(form.control, "Theo quốc gia", wineMegaMenuData.theoQuocGia)}
+                            {renderCheckboxGroup(form.control, "Theo vùng", wineMegaMenuData.theoVung)}
+                            {renderCheckboxGroup(form.control, "Theo giống nho", wineMegaMenuData.theoGiongNho)}
                         </div>
                     </ScrollArea>
                 </CardContent>
@@ -699,12 +576,13 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
               <Card>
                 <CardHeader>
                     <CardTitle>Phân loại Rượu Mạnh</CardTitle>
-                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm rượu mạnh.</CardDescription>
+                    <CardDescription>Chọn các thuộc tính để sản phẩm xuất hiện trong Mega Menu Rượu Mạnh.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ScrollArea className="h-72">
-                        <div className="pr-4">
-                            {renderSpiritsMegaMenuSelectors(form.control)}
+                        <div className="pr-4 pb-6">
+                            {renderCheckboxGroup(form.control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
+                            {renderCheckboxGroup(form.control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
                         </div>
                     </ScrollArea>
                 </CardContent>
@@ -715,12 +593,14 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
               <Card>
                 <CardHeader>
                     <CardTitle>Phân loại Ly & Cốc</CardTitle>
-                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm.</CardDescription>
+                    <CardDescription>Chọn các thuộc tính để sản phẩm xuất hiện trong menu Ly & Cốc.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ScrollArea className="h-72">
-                        <div className="pr-4">
-                            {renderGlasswareMegaMenuSelectors(form.control)}
+                        <div className="pr-4 pb-6">
+                            {renderCheckboxGroup(form.control, "Ly Pha Lê Riedel", glasswareMegaMenuData.lyPhaLeRiedel)}
+                            {renderCheckboxGroup(form.control, "Ly Whisky", glasswareMegaMenuData.lyWhisky)}
+                            {renderCheckboxGroup(form.control, "Loại khác", glasswareMegaMenuData.khac)}
                         </div>
                     </ScrollArea>
                 </CardContent>
@@ -731,12 +611,12 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
               <Card>
                 <CardHeader>
                     <CardTitle>Phân loại Bộ Quà Tặng</CardTitle>
-                    <CardDescription>Chọn các thẻ phân loại chi tiết cho sản phẩm.</CardDescription>
+                    <CardDescription>Chọn các thuộc tính để sản phẩm xuất hiện trong menu Bộ Quà Tặng.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ScrollArea className="h-72">
-                        <div className="pr-4">
-                            {renderGiftSetMegaMenuSelectors(form.control)}
+                        <div className="pr-4 pb-6">
+                            {renderCheckboxGroup(form.control, "Loại quà tặng", giftSetMegaMenuData.quaTang)}
                         </div>
                     </ScrollArea>
                 </CardContent>
@@ -755,4 +635,9 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
       </form>
     </Form>
   );
+}
+
+interface ProductFormProps {
+  initialData?: FullProduct;
+  preselectedCategoryId?: string | null;
 }
