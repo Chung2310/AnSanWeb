@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -19,7 +20,7 @@ export default function WineCard({ product }: WineCardProps) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
-  const getAttribute = (labels: string[]): string => {
+  const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
@@ -36,7 +37,7 @@ export default function WineCard({ product }: WineCardProps) {
         }
     }
     return 'N/A';
-  };
+  }, [product.attributes, product.description]);
 
   const mainCategoryName = React.useMemo(() => {
     if (!product.tags || !categories) return 'N/A';
@@ -54,8 +55,7 @@ export default function WineCard({ product }: WineCardProps) {
   }, [product.tags, categories]);
 
   const loaiRuouValue = React.useMemo(() => {
-    const attr = getAttribute(['loại rượu', 'loại', 'type']);
-    if (attr !== 'N/A') return attr;
+    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const allTypes = [
             ...wineMegaMenuData.theoLoai.map(item => item.category_id),
@@ -67,12 +67,14 @@ export default function WineCard({ product }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-    return 'N/A';
-  }, [product.tags, categories]);
+
+    // Fallback: Attributes or Description
+    const attr = getAttribute(['loại rượu', 'loại', 'type']);
+    return attr;
+  }, [product.tags, categories, getAttribute]);
 
   const countryValue = React.useMemo(() => {
-    const countryVal = getAttribute(['quốc gia', 'country']);
-    if (countryVal !== 'N/A') return countryVal;
+    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
@@ -81,15 +83,39 @@ export default function WineCard({ product }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
+
+    // Fallback: Attributes or Description
+    const countryVal = getAttribute(['quốc gia', 'country']);
+    if (countryVal !== 'N/A') return countryVal;
+    
     const originVal = getAttribute(['xuất xứ', 'origin']);
     if (originVal !== 'N/A') {
       const parts = originVal.split(',');
       return parts[parts.length - 1].trim();
     }
     return 'N/A';
-  }, [product.tags, categories]);
+  }, [product.tags, categories, getAttribute]);
 
-  const giongNhoValue = getAttribute(['giống nho', 'nho', 'grapes']);
+  const giongNhoValue = React.useMemo(() => {
+    // Priority: Database classification (tags)
+    if (product.tags && categories) {
+        const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
+        const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
+        
+        if (matchingTags.length > 0) {
+            const names = matchingTags.map(tagId => {
+                const cat = categories.find(c => c.id === tagId);
+                return cat ? cat.name : null;
+            }).filter(Boolean);
+            
+            if (names.length > 0) return names.join(', ');
+        }
+    }
+
+    // Fallback: Attributes or Description
+    return getAttribute(['giống nho', 'nho', 'grapes']);
+  }, [product.tags, categories, getAttribute]);
+
   const nồngĐộValue = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
 
   const salePrice = Number(product.price);
@@ -142,26 +168,26 @@ export default function WineCard({ product }: WineCardProps) {
 
             <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
                 {countryValue !== 'N/A' && (
-                    <div className="flex items-center gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" width={16} height={16} className="shrink-0" />
+                    <div className="flex items-start gap-1.5">
+                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" width={16} height={16} className="shrink-0 mt-0.5" />
                         <span className="text-[11px] text-gray-600 truncate" title={countryValue}>{countryValue}</span>
                     </div>
                 )}
                 {loaiRuouValue !== 'N/A' && (
-                    <div className="flex items-center gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png" alt="Loại rượu" width={16} height={16} className="shrink-0" />
+                    <div className="flex items-start gap-1.5">
+                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png" alt="Loại rượu" width={16} height={16} className="shrink-0 mt-0.5" />
                         <span className="text-[11px] text-gray-600 truncate" title={loaiRuouValue}>{loaiRuouValue}</span>
                     </div>
                 )}
                 {giongNhoValue !== 'N/A' && (
-                    <div className="flex items-center gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" width={16} height={16} className="shrink-0" />
+                    <div className="flex items-start gap-1.5">
+                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" width={16} height={16} className="shrink-0 mt-0.5" />
                         <span className="text-[11px] text-gray-600 truncate" title={giongNhoValue}>{giongNhoValue}</span>
                     </div>
                 )}
                 {nồngĐộValue !== 'N/A' && (
-                    <div className="flex items-center gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" width={16} height={16} className="shrink-0" />
+                    <div className="flex items-start gap-1.5">
+                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" width={16} height={16} className="shrink-0 mt-0.5" />
                         <span className="text-[11px] text-gray-600 truncate" title={nồngĐộValue}>{nồngĐộValue}</span>
                     </div>
                 )}
