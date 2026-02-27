@@ -49,7 +49,7 @@ const MobileBottomBar = () => {
                     className="object-contain"
                   />
                 </div>
-                <span className="text-[10px] font-bold uppercase text-white/70 group-hover:text-white">
+                <span className="text-[9px] font-bold uppercase text-white/70 group-hover:text-white">
                   {action.label}
                 </span>
               </Link>
