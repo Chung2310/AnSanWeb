@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -21,6 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 
 const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -239,15 +241,17 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                 <DialogHeader className="sr-only">
                                     <DialogTitle>Phóng to ảnh sản phẩm</DialogTitle>
                                 </DialogHeader>
-                                <div className="relative w-full h-full flex items-center justify-center bg-black/5 backdrop-blur-sm rounded-lg p-2">
-                                    <Image
-                                        src={image.url}
-                                        alt={`${product.nameVN} - ảnh ${index + 1}`}
-                                        width={1200}
-                                        height={1200}
-                                        className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-                                    />
-                                </div>
+                                <DialogClose asChild>
+                                    <div className="relative w-full h-full flex items-center justify-center bg-black/5 backdrop-blur-sm rounded-lg p-2 cursor-zoom-out">
+                                        <Image
+                                            src={image.url}
+                                            alt={`${product.nameVN} - ảnh ${index + 1}`}
+                                            width={1200}
+                                            height={1200}
+                                            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                        />
+                                    </div>
+                                </DialogClose>
                             </DialogContent>
                         </Dialog>
                         ))}
