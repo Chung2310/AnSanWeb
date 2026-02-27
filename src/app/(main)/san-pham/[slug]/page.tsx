@@ -122,6 +122,24 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return images;
   }, [product]);
 
+  const mainCategoryName = React.useMemo(() => {
+    if (!product.tags || !categories) return 'N/A';
+    
+    const getRootParentId = (catId: string): string => {
+        const cat = categories.find(c => c.id === catId);
+        if (!cat || !cat.parentId) return catId;
+        return getRootParentId(cat.parentId);
+    };
+
+    const firstTag = product.tags[0];
+    if (!firstTag) return 'N/A';
+    
+    const rootId = getRootParentId(firstTag);
+    const rootCat = categories.find(c => c.id === rootId);
+    
+    return rootCat ? rootCat.name.toUpperCase() : 'N/A';
+  }, [product.tags, categories]);
+
   const isWineProduct = React.useMemo(() => {
     if (!product.tags || !categories) return false;
 
@@ -331,8 +349,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             />
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
-                                label="TÌNH TRẠNG"
-                                value={product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}
+                                label="PHÂN LOẠI"
+                                value={mainCategoryName}
                             />
                         </div>
 
