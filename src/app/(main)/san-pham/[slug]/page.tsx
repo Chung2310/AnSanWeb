@@ -102,13 +102,13 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
 }
 
 const InfoItem = ({ icon, label, value }: { icon: string, label: string, value: string }) => (
-  <div className="flex items-center gap-3">
-    <div className="relative w-8 h-8 shrink-0">
+  <div className="flex items-start gap-3">
+    <div className="relative w-8 h-8 shrink-0 mt-0.5">
       <Image src={icon} alt={label} fill className="object-contain" />
     </div>
     <div className="flex flex-col">
       <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{label}</span>
-      <span className="font-bold text-sm leading-tight text-gray-800 line-clamp-1" title={value}>{value}</span>
+      <span className="font-bold text-sm leading-tight text-gray-800" title={value}>{value}</span>
     </div>
   </div>
 );
@@ -336,36 +336,48 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
                         {/* Main Info Grid with Custom Icons */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
-                                label="QUỐC GIA"
-                                value={countryValue}
-                            />
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
-                                label="LOẠI RƯỢU"
-                                value={loaiRuouValue}
-                            />
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
-                                label="NỒNG ĐỘ"
-                                value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
-                            />
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
-                                label="DUNG TÍCH"
-                                value={getAttribute('dung tích', 'thể tích', 'volume')}
-                            />
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
-                                label="GIỐNG NHO"
-                                value={getAttribute('giống nho', 'nho', 'grapes')}
-                            />
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
-                                label="PHÂN LOẠI"
-                                value={mainCategoryName}
-                            />
+                            {countryValue !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
+                                    label="QUỐC GIA"
+                                    value={countryValue}
+                                />
+                            )}
+                            {loaiRuouValue !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
+                                    label="LOẠI RƯỢU"
+                                    value={loaiRuouValue}
+                                />
+                            )}
+                            {getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv') !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
+                                    label="NỒNG ĐỘ"
+                                    value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
+                                />
+                            )}
+                            {getAttribute('dung tích', 'thể tích', 'volume') !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
+                                    label="DUNG TÍCH"
+                                    value={getAttribute('dung tích', 'thể tích', 'volume')}
+                                />
+                            )}
+                            {getAttribute('giống nho', 'nho', 'grapes') !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
+                                    label="GIỐNG NHO"
+                                    value={getAttribute('giống nho', 'nho', 'grapes')}
+                                />
+                            )}
+                            {mainCategoryName !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
+                                    label="PHÂN LOẠI"
+                                    value={mainCategoryName}
+                                />
+                            )}
                         </div>
 
                         <Separator className="opacity-50" />
