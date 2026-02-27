@@ -1,12 +1,11 @@
 'use client';
 
-import { useForm, type Control } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,20 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category } from '@/lib/types';
 import slugify from 'slugify';
-import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { useCategories } from '@/hooks/use-categories';
 import RichTextEditor from '@/components/admin/blog/rich-text-editor';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useMemo } from 'react';
 
 const formSchema = z.object({
@@ -45,79 +41,6 @@ const formSchema = z.object({
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>;
-
-const renderCheckboxGroup = (control: Control<CategoryFormValues>, title: string, items: { label: string; category_id: string }[]) => {
-    if (!items || items.length === 0) return null;
-    return (
-        <div key={title}>
-            <h4 className="font-semibold text-gray-700 mb-3 mt-5 border-b pb-2">{title}</h4>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-x-6 gap-y-3">
-                {items.map(item => (
-                    <FormField
-                        key={item.category_id}
-                        control={control}
-                        name="tags"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value?.includes(item.category_id)}
-                                        onCheckedChange={(checked) => {
-                                            const currentTags = field.value || [];
-                                            const newTags = checked
-                                                ? [...currentTags, item.category_id]
-                                                : currentTags.filter(value => value !== item.category_id);
-                                            field.onChange(newTags);
-                                        }}
-                                    />
-                                </FormControl>
-                                <FormLabel className="font-normal text-sm -translate-y-0.5">{item.label}</FormLabel>
-                            </FormItem>
-                        )}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-};
-
-const renderWineMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Theo loại", wineMegaMenuData.theoLoai)}
-            {renderCheckboxGroup(control, "Theo quốc gia", wineMegaMenuData.theoQuocGia)}
-            {renderCheckboxGroup(control, "Theo vùng", wineMegaMenuData.theoVung)}
-            {renderCheckboxGroup(control, "Theo giống nho", wineMegaMenuData.theoGiongNho)}
-        </>
-    );
-};
-
-const renderSpiritsMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Theo loại rượu", spiritsMegaMenuData.theoLoai)}
-            {renderCheckboxGroup(control, "Thương hiệu", spiritsMegaMenuData.thuongHieu)}
-        </>
-    );
-};
-
-const renderGlasswareMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Ly Pha Lê Riedel", glasswareMegaMenuData.lyPhaLeRiedel)}
-            {renderCheckboxGroup(control, "Ly Whisky", glasswareMegaMenuData.lyWhisky)}
-            {renderCheckboxGroup(control, "Loại khác", glasswareMegaMenuData.khac)}
-        </>
-    );
-};
-
-const renderGiftSetMegaMenuSelectors = (control: Control<CategoryFormValues>) => {
-    return (
-        <>
-            {renderCheckboxGroup(control, "Loại quà tặng", giftSetMegaMenuData.quaTang)}
-        </>
-    );
-};
 
 interface CategoryFormProps {
   initialData?: Category;
@@ -238,8 +161,8 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-4xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 gap-8">
+            <div className="space-y-8">
                 <Card>
                 <CardHeader>
                     <CardTitle>Thông tin danh mục</CardTitle>
@@ -333,60 +256,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                     )}
                     />
                 </CardContent>
-                </Card>
-            </div>
-            <div className="lg:col-span-1 space-y-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Phân loại Rượu Vang</CardTitle>
-                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ScrollArea className="h-72">
-                            <div className="pr-4">
-                                {renderWineMegaMenuSelectors(form.control)}
-                            </div>
-                        </ScrollArea>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Phân loại Rượu Mạnh</CardTitle>
-                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ScrollArea className="h-72">
-                            <div className="pr-4">
-                                {renderSpiritsMegaMenuSelectors(form.control)}
-                            </div>
-                        </ScrollArea>
-                    </CardContent>
-                </Card>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Phân loại Ly & Cốc</CardTitle>
-                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ScrollArea className="h-72">
-                            <div className="pr-4">
-                                {renderGlasswareMegaMenuSelectors(form.control)}
-                            </div>
-                        </ScrollArea>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Phân loại Bộ Quà Tặng</CardTitle>
-                        <CardDescription>Chọn các thẻ phân loại chi tiết cho danh mục này.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ScrollArea className="h-72">
-                            <div className="pr-4">
-                                {renderGiftSetMegaMenuSelectors(form.control)}
-                            </div>
-                        </ScrollArea>
-                    </CardContent>
                 </Card>
             </div>
         </div>
