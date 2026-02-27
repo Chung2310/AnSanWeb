@@ -22,7 +22,7 @@ const ProductSection = ({ title, products }: { title: string, products: Product[
                     <span className="flex-grow border-t border-red-800/30"></span>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {products.map(product => (
                     <WineCard key={product.id} product={product} />
                 ))}
@@ -41,7 +41,7 @@ const PageSkeleton = () => (
                     <span className="flex-grow border-t border-red-800/30"></span>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="bg-white rounded-lg p-4">
                         <Skeleton className="h-56 w-full" />
