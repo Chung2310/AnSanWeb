@@ -4,14 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import React from 'react';
-import { Maximize2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 
 type WineCardProps = {
   product: Product;
@@ -58,37 +50,6 @@ export default function WineCard({ product }: WineCardProps) {
                 height={400}
                 className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
             />
-
-            {/* Zoom Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity bg-black/5">
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <button 
-                            className="bg-white/90 p-3 rounded-full shadow-lg hover:bg-white transition-colors transform hover:scale-110 pointer-events-auto"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}
-                        >
-                            <Maximize2 className="w-5 h-5 text-gray-700" />
-                        </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-none bg-transparent shadow-none flex items-center justify-center">
-                        <DialogHeader className="sr-only">
-                            <DialogTitle>Phóng to ảnh sản phẩm</DialogTitle>
-                        </DialogHeader>
-                        <div className="relative w-full h-full flex items-center justify-center bg-black/5 backdrop-blur-sm rounded-lg p-2">
-                            <Image
-                                src={product.image?.url || '/placeholder.svg'}
-                                alt={product.nameVN}
-                                width={1200}
-                                height={1200}
-                                className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-                            />
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            </div>
         </div>
         <div className="mt-4">
             <h3 className="font-headline text-lg font-bold uppercase text-foreground transition-colors group-hover:text-primary" title={product.nameVN}>
