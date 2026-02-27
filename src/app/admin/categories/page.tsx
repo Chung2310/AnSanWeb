@@ -1,4 +1,3 @@
-
 'use client';
 import { Button } from '@/components/ui/button';
 import { Filter, PlusCircle, Download, FileUp } from 'lucide-react';
@@ -58,17 +57,34 @@ export default function CategoriesAdminPage() {
 
             const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt' | 'status' | 'image'>[] = [];
 
-            // Main Categories
-            const mainCats = [
+            // 1. Root Categories
+            const rootCats = [
                 { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang', parentId: null },
                 { id: 'ruou-manh', name: 'Rượu Mạnh', slug: 'ruou-manh', parentId: null },
                 { id: 'ly-coc-pha-le', name: 'Ly - Cốc Pha Lê', slug: 'ly-coc-pha-le', parentId: null },
                 { id: 'bo-qua-tang', name: 'Bộ Quà Tặng', slug: 'bo-qua-tang', parentId: null },
                 { id: 'cigar', name: 'Cigar', slug: 'cigar', parentId: null },
             ];
-            mainCats.forEach(cat => {
-                allCategoriesToCreate.push({ ...cat, description: '', tags: [] });
-            });
+            rootCats.forEach(cat => allCategoriesToCreate.push({ ...cat, description: '', tags: [] }));
+
+            // 2. Intermediate Group Categories
+            const groupCats = [
+                // Rượu Vang groups
+                { id: 'vang-theo-loai', name: 'Theo loại rượu', slug: 'vang-theo-loai', parentId: 'ruou-vang' },
+                { id: 'vang-theo-quoc-gia', name: 'Theo quốc gia', slug: 'vang-theo-quoc-gia', parentId: 'ruou-vang' },
+                { id: 'vang-theo-vung', name: 'Vùng làm vang', slug: 'vang-theo-vung', parentId: 'ruou-vang' },
+                { id: 'vang-theo-giong-nho', name: 'Giống nho', slug: 'vang-theo-giong-nho', parentId: 'ruou-vang' },
+                // Rượu Mạnh groups
+                { id: 'manh-theo-loai', name: 'Loại Rượu', slug: 'manh-theo-loai', parentId: 'ruou-manh' },
+                { id: 'manh-thuong-hieu', name: 'Thương hiệu', slug: 'manh-thuong-hieu', parentId: 'ruou-manh' },
+                // Ly groups
+                { id: 'ly-riedel', name: 'LY PHA LÊ RIEDEL', slug: 'ly-riedel', parentId: 'ly-coc-pha-le' },
+                { id: 'ly-whisky', name: 'LY WHISKY', slug: 'ly-whisky', parentId: 'ly-coc-pha-le' },
+                { id: 'ly-khac', name: 'KHÁC', slug: 'ly-khac', parentId: 'ly-coc-pha-le' },
+                // Quà tặng groups
+                { id: 'qua-tang-loai', name: 'Loại quà tặng', slug: 'qua-tang-loai', parentId: 'bo-qua-tang' },
+            ];
+            groupCats.forEach(cat => allCategoriesToCreate.push({ ...cat, description: '', tags: [] }));
             
             const addItemsWithParent = (items: { label: string; slug: string; category_id: string }[], parentId: string) => {
               items.forEach(item => {
@@ -77,31 +93,26 @@ export default function CategoriesAdminPage() {
                   name: item.label,
                   slug: item.slug,
                   description: '',
-                  tags: [parentId],
+                  tags: [],
                   parentId: parentId,
                 });
               });
             };
             
-            // Add Wine sub-categories
-            addItemsWithParent(wineMegaMenuData.theoLoai, 'ruou-vang');
-            addItemsWithParent(wineMegaMenuData.theoQuocGia, 'ruou-vang');
-            addItemsWithParent(wineMegaMenuData.theoVung, 'ruou-vang');
-            addItemsWithParent(wineMegaMenuData.theoGiongNho, 'ruou-vang');
+            // 3. Add Leaf Categories
+            addItemsWithParent(wineMegaMenuData.theoLoai, 'vang-theo-loai');
+            addItemsWithParent(wineMegaMenuData.theoQuocGia, 'vang-theo-quoc-gia');
+            addItemsWithParent(wineMegaMenuData.theoVung, 'vang-theo-vung');
+            addItemsWithParent(wineMegaMenuData.theoGiongNho, 'vang-theo-giong-nho');
 
-            // Add Spirits sub-categories
-            addItemsWithParent(spiritsMegaMenuData.theoLoai, 'ruou-manh');
-            addItemsWithParent(spiritsMegaMenuData.thuongHieu, 'ruou-manh');
+            addItemsWithParent(spiritsMegaMenuData.theoLoai, 'manh-theo-loai');
+            addItemsWithParent(spiritsMegaMenuData.thuongHieu, 'manh-thuong-hieu');
             
-            // Add Glassware sub-categories
-            addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-coc-pha-le');
-            addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-coc-pha-le');
-            addItemsWithParent(glasswareMegaMenuData.khac, 'ly-coc-pha-le');
+            addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-riedel');
+            addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-whisky');
+            addItemsWithParent(glasswareMegaMenuData.khac, 'ly-khac');
             
-            // Add Gift Set sub-categories
-            addItemsWithParent(giftSetMegaMenuData.quaTang, 'bo-qua-tang');
-            // Also add spirits gift sets to the gift set category
-            addItemsWithParent(spiritsMegaMenuData.quaTang, 'bo-qua-tang');
+            addItemsWithParent(giftSetMegaMenuData.quaTang, 'qua-tang-loai');
             
             const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
 
@@ -112,7 +123,7 @@ export default function CategoriesAdminPage() {
 
             await batch.commit();
 
-            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục mặc định đã được khôi phục/cập nhật.` });
+            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục đã được khôi phục và đồng bộ cấu trúc mới.` });
 
         } catch (error) {
             console.error("Error restoring categories:", error);
