@@ -142,6 +142,28 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }, [product.attributes, product.description]);
 
+  const { isWine, isSpirit } = React.useMemo(() => {
+    if (!product.tags || !categories) return { isWine: false, isSpirit: false };
+    
+    const getRootParentId = (catId: string): string | null => {
+        const cat = categories.find(c => c.id === catId);
+        if (!cat) return null;
+        if (!cat.parentId) return cat.id;
+        return getRootParentId(cat.parentId);
+    };
+
+    let wine = false;
+    let spirit = false;
+
+    for (const tagId of product.tags) {
+        const rootId = getRootParentId(tagId);
+        if (rootId === 'ruou-vang') wine = true;
+        if (rootId === 'ruou-manh') spirit = true;
+    }
+
+    return { isWine: wine, isSpirit: spirit };
+  }, [product.tags, categories]);
+
   const mainCategoryName = React.useMemo(() => {
     if (!product.tags || !categories) return 'N/A';
     
@@ -221,6 +243,20 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     // Fallback: Attributes or Description
     return getAttribute('giống nho', 'nho', 'grapes');
   }, [product.tags, categories, getAttribute]);
+
+  const capacityValue = React.useMemo(() => {
+    // Only show for Wine or Spirits
+    if (!isWine && !isSpirit) return null;
+
+    const attr = getAttribute('dung tích', 'thể tích', 'volume');
+    
+    // Default to 750ml for Wine if N/A
+    if (attr === 'N/A' && isWine) {
+        return '750ml';
+    }
+    
+    return attr;
+  }, [isWine, isSpirit, getAttribute]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -380,11 +416,13 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                     value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
                                 />
                             )}
-                            <InfoItem 
-                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
-                                label="DUNG TÍCH"
-                                value={getAttribute('dung tích', 'thể tích', 'volume')}
-                            />
+                            {capacityValue && capacityValue !== 'N/A' && (
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
+                                    label="DUNG TÍCH"
+                                    value={capacityValue}
+                                />
+                            )}
                             {giongNhoValue !== 'N/A' && (
                                 <InfoItem 
                                     icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
