@@ -197,20 +197,21 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   return (
     <>
       <div className="bg-white text-black">
-        <div className="py-12 md:py-20 px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-12 max-w-screen-2xl mx-auto">
-                <div className="lg:col-span-3">
+        <div className="py-12 md:py-16 px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 max-w-screen-xl mx-auto">
+                {/* Image Section - Column 5/12 */}
+                <div className="lg:col-span-5">
                     <div className="space-y-4">
                         {allImages.map((image, index) => (
-                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative">
+                        <div key={index} className="rounded-lg bg-white p-4 flex items-center justify-center relative border border-gray-50 shadow-sm">
                             {index === 0 && (
                                 <>
                                     {hasDiscount ? (
-                                        <div className="absolute top-8 left-8 z-10 flex items-center rounded-md bg-destructive px-6 py-3 text-lg font-bold uppercase text-destructive-foreground shadow-lg animate-flash">
+                                        <div className="absolute top-4 left-4 z-10 flex items-center rounded-sm bg-destructive px-4 py-2 text-sm font-bold uppercase text-destructive-foreground shadow-md animate-flash">
                                             <span>Giá Đặc Biệt</span>
                                         </div>
                                     ) : isBestChoice && (
-                                        <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-lg z-10">
+                                        <div className="absolute top-4 left-4 bg-destructive text-destructive-foreground text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md z-10">
                                             Best Choice
                                         </div>
                                     )}
@@ -219,9 +220,9 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <Image
                               src={image.url}
                               alt={`${product.nameVN} - ảnh ${index + 1}`}
-                              width={1000}
-                              height={1000}
-                              className="w-full h-auto object-contain"
+                              width={800}
+                              height={800}
+                              className="w-full h-auto max-h-[600px] object-contain"
                               priority={index === 0}
                             />
                         </div>
@@ -229,9 +230,10 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 row-start-1 lg:row-start-auto">
+                {/* Info Section - Column 7/12 */}
+                <div className="lg:col-span-7 row-start-1 lg:row-start-auto">
                     <div className="md:sticky md:top-24 space-y-6">
-                        <Breadcrumb>
+                        <Breadcrumb className="text-xs">
                             <BreadcrumbList>
                             {breadcrumbs.map((crumb, index) => (
                                 <React.Fragment key={crumb.href}>
@@ -245,111 +247,111 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             ))}
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <BreadcrumbPage>{product.nameVN.toUpperCase()}</BreadcrumbPage>
+                                <BreadcrumbPage className="line-clamp-1">{product.nameVN.toUpperCase()}</BreadcrumbPage>
                             </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
                         
-                        <h1 className="font-headline text-5xl font-bold text-gray-800">
+                        <h1 className="font-headline text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
                             {product.nameVN}
                         </h1>
 
                         {product.shortDescription && (
-                          <p className="text-lg text-muted-foreground">{product.shortDescription}</p>
+                          <p className="text-base text-muted-foreground">{product.shortDescription}</p>
                         )}
 
-                        <Separator />
+                        <Separator className="opacity-50" />
 
-                        <div className="flex justify-between items-center text-center w-full">
-                            <div>
-                                <p className="text-xs text-muted-foreground uppercase">ĐỘ TUỔI</p>
-                                <p className="font-bold text-lg mt-1">{getAttribute('tuổi rượu', 'age')}</p>
+                        <div className="flex justify-between items-center text-center w-full gap-2">
+                            <div className="flex-1">
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">ĐỘ TUỔI</p>
+                                <p className="font-bold text-base mt-1">{getAttribute('tuổi rượu', 'age')}</p>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground uppercase">NỒNG ĐỘ</p>
-                                <p className="font-bold text-lg mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
+                            <div className="flex-1">
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">NỒNG ĐỘ</p>
+                                <p className="font-bold text-base mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground uppercase">DUNG TÍCH</p>
-                                <p className="font-bold text-lg mt-1">{getAttribute('dung tích', 'volume')}</p>
+                            <div className="flex-1">
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">DUNG TÍCH</p>
+                                <p className="font-bold text-base mt-1">{getAttribute('dung tích', 'volume')}</p>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground uppercase">TÌNH TRẠNG</p>
-                                <p className="font-bold text-lg mt-1">{product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}</p>
+                            <div className="flex-1">
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">TÌNH TRẠNG</p>
+                                <p className="font-bold text-base mt-1 text-green-700">{product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}</p>
                             </div>
                         </div>
 
-                        <Separator />
+                        <Separator className="opacity-50" />
                         
                         {hasDiscount ? (
                             <div className="flex items-baseline gap-4">
-                                <span className="text-2xl text-muted-foreground line-through">{formatPrice(originalPrice!)}</span>
-                                <span className="text-4xl font-bold text-destructive">{formatPrice(salePrice)}</span>
-                                <div className="rounded-md bg-destructive px-3 py-1 text-sm font-bold text-destructive-foreground">
+                                <span className="text-xl text-muted-foreground line-through">{formatPrice(originalPrice!)}</span>
+                                <span className="text-3xl font-bold text-destructive">{formatPrice(salePrice)}</span>
+                                <div className="rounded-sm bg-destructive px-2 py-0.5 text-xs font-bold text-destructive-foreground">
                                     -{discountPercentage}%
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-4xl font-bold text-primary">
+                            <p className="text-3xl font-bold text-primary">
                                 {formatPrice(salePrice)}
                             </p>
                         )}
 
-                        <Separator />
+                        <Separator className="opacity-50" />
 
                         <div>
-                            <h3 className="font-bold uppercase tracking-wider mb-4">Liên hệ để nhận tư vấn</h3>
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                            <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Liên hệ để nhận tư vấn</h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button asChild variant="outline" className="justify-center text-center h-12 text-xs font-bold">
                                   <a href="tel:0933333313">
-                                      <Phone className="mr-3 h-6 w-6" />
+                                      <Phone className="mr-2 h-4 w-4" />
                                       ĐIỆN THOẠI
                                   </a>
                                 </Button>
-                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                                <Button asChild variant="outline" className="justify-center text-center h-12 text-xs font-bold">
                                   <a href="https://www.facebook.com/people/R%C6%B0%E1%BB%A3u-Vang-An-San/100075802071016/" target="_blank" rel="noopener noreferrer">
-                                    <MessageCircle className="mr-3 h-6 w-6" />
+                                    <MessageCircle className="mr-2 h-4 w-4" />
                                     MESSENGER
                                   </a>
                                 </Button>
-                                <Button asChild variant="outline" className="justify-center text-center h-14">
+                                <Button asChild variant="outline" className="justify-center text-center h-12 text-xs font-bold">
                                   <a href="https://id.zalo.me/account/login?continue=http%3A%2F%2Fzalo.me%2F0933333313" target="_blank" rel="noopener noreferrer">
-                                    <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png" alt="Zalo Icon" width={24} height={24} className="mr-3 h-6 w-6" />
+                                    <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1770454912/icons8-zalo-50_qgmbxj.png" alt="Zalo Icon" width={20} height={20} className="mr-2 h-5 w-5" />
                                     ZALO
                                   </a>
                                 </Button>
-                                <Button variant="outline" className="justify-center text-center h-14"><Smartphone className="mr-3 h-6 w-6"/> WHATSAPP</Button>
+                                <Button variant="outline" className="justify-center text-center h-12 text-xs font-bold"><Smartphone className="mr-2 h-4 w-4"/> WHATSAPP</Button>
                             </div>
                         </div>
 
-                        <Separator />
+                        <Separator className="opacity-50" />
 
                         <div>
-                            <h3 className="font-bold uppercase tracking-wider mb-4">Giá độc quyền trên website</h3>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
-                                <div className="flex items-start gap-3">
-                                    <Truck className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                            <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Ưu đãi độc quyền An San</h3>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-[13px]">
+                                <div className="flex items-start gap-2">
+                                    <Truck className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
                                     <span>Giao hàng MIỄN PHÍ trong 60 phút, bán kính 5km</span>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <GlassWater className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                                    <span>UỐNG THỬ MIỄN PHÍ tại showroom Công Viên Quy Chế - P. Đông Ngàn - TP Từ Sơn - Tỉnh Bắc Ninh</span>
+                                <div className="flex items-start gap-2">
+                                    <GlassWater className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
+                                    <span>UỐNG THỬ MIỄN PHÍ tại showroom</span>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <Award className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <div className="flex items-start gap-2">
+                                    <Award className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
                                     <span>Cam kết 100% sản phẩm CHẤT LƯỢNG</span>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <CircleDollarSign className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
+                                <div className="flex items-start gap-2">
+                                    <CircleDollarSign className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
                                     <span>Cam kết giá bán CẠNH TRANH</span>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <CompensationIcon className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                                    <span>Cam kết bồi thường nếu xảy ra vấn đề trong quá trình vận chuyển</span>
+                                <div className="flex items-start gap-2">
+                                    <CompensationIcon className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
+                                    <span>Bồi thường nếu lỗi vận chuyển</span>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <Users className="h-6 w-6 mt-0.5 text-primary shrink-0"/>
-                                    <span>Nhiều chương trình sinh hoạt cộng đồng gia tăng trải nghiệm khách hàng</span>
+                                <div className="flex items-start gap-2">
+                                    <Users className="h-5 w-5 mt-0.5 text-primary shrink-0"/>
+                                    <span>Nhiều sự kiện trải nghiệm khách hàng</span>
                                 </div>
                             </div>
                         </div>
