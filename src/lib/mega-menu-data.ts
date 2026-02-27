@@ -84,11 +84,6 @@ export const spiritsMegaMenuData = {
         { label: "Glenlivet", slug: 'glenlivet', category_id: 'glenlivet' },
         { label: "Glenfarclas", slug: 'glenfarclas', category_id: 'glenfarclas' },
         { label: "Royal Salute", slug: 'royal-salute', category_id: 'royal-salute' },
-        { label: "Laphroaig", slug: 'laphroaig', category_id: 'laphroaig' },
-        { label: "Balvenie", slug: 'balvenie', category_id: 'balvenie' },
-        { label: "Lagavulin", slug: 'lagavulin', category_id: 'lagavulin' },
-        { label: "Mortlach", slug: 'mortlach', category_id: 'mortlach' },
-        { label: "Bowmore", slug: 'bowmore', category_id: 'bowmore' },
     ],
     quaTang: [
         { label: "Quà Tết Rượu Mạnh", slug: "qua-tet-ruou-manh", category_id: "qua-tet-ruou-manh" },
