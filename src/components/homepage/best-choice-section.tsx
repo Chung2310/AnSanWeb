@@ -2,57 +2,8 @@
 import { useProducts } from '@/hooks/use-products';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Product } from '@/lib/types';
-import Image from 'next/image';
-import Link from 'next/link';
+import WineCard from '@/components/wine-card';
 import React from 'react';
-
-const formatPrice = (price: number) => {
-    if (isNaN(price)) return '';
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-};
-
-const BestChoiceProductCard = ({ product }: { product: Product }) => {
-    const salePrice = Number(product.price);
-    const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
-    const hasDiscount = originalPrice !== null && isFinite(originalPrice) && isFinite(salePrice) && originalPrice > salePrice;
-
-    return (
-        <div className="bg-white rounded-lg p-4 flex flex-col text-center relative overflow-hidden group">
-            <div className="absolute top-3 right-3 bg-destructive text-white text-xs font-bold uppercase px-3 py-1.5 rounded-sm z-10 flex items-center gap-1 animate-flash">
-                Best Choice
-            </div>
-            
-            <Link href={`/san-pham/${product.slug}`} className="block">
-                <div className="relative h-56 w-full my-4">
-                    <Image
-                        src={product.image?.url || '/placeholder.svg'}
-                        alt={product.nameVN}
-                        fill
-                        className="object-contain group-hover:scale-105 transition-transform duration-300"
-                    />
-                </div>
-            </Link>
-
-            <div className="mt-auto space-y-2">
-                <div className="h-12 flex flex-col items-center justify-center">
-                    {hasDiscount ? (
-                        <>
-                            <span className="text-sm text-gray-400 line-through">{formatPrice(originalPrice!)}</span>
-                            <span className="text-lg font-bold text-red-700">{formatPrice(salePrice)}</span>
-                        </>
-                    ) : (
-                        <span className="text-lg font-bold text-red-700">{formatPrice(salePrice)}</span>
-                    )}
-                </div>
-                <h3 className="pt-2 text-sm font-semibold text-gray-800 h-12 flex items-center justify-center">
-                    <Link href={`/san-pham/${product.slug}`} className="hover:text-primary line-clamp-2">
-                        {product.nameVN}
-                    </Link>
-                </h3>
-            </div>
-        </div>
-    );
-}
 
 const ProductSectionSkeleton = () => (
      <div className="bg-[#f8f0e5] rounded-2xl p-8 md:p-12 shadow-lg">
@@ -115,11 +66,11 @@ export default function BestChoiceSection() {
                             </h2>
                             <span className="flex-grow border-t border-red-800/30"></span>
                         </div>
-                         <p className="mt-4 text-lg text-gray-600">Các dòng vang đặc biệt nhà Ansan - Hiển thị các sản phẩm best choice</p>
+                         <p className="mt-4 text-lg text-gray-600 text-center">Các dòng vang đặc biệt nhà Ansan - Hiển thị các sản phẩm best choice</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {bestChoiceProducts.map(product => (
-                            <BestChoiceProductCard key={product.id} product={product} />
+                            <WineCard key={product.id} product={product} />
                         ))}
                     </div>
                 </div>
