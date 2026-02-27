@@ -62,6 +62,13 @@ const navLinks: NavLinkData[] = [
     label: 'RƯỢU VANG',
     megaMenuColumns: [
       {
+        title: 'Theo loại rượu',
+        items: wineMegaMenuData.theoLoai.map((item) => ({
+          href: `/danh-muc/ruou-vang/${item.slug}`,
+          label: item.label,
+        })),
+      },
+      {
         title: 'Theo quốc gia',
         items: wineMegaMenuData.theoQuocGia.map((item) => ({
           href: `/danh-muc/ruou-vang/${item.slug}`,

@@ -211,6 +211,19 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return 'N/A';
   }
 
+  const getCountry = (): string => {
+    const countryVal = getAttribute('quốc gia', 'country');
+    if (countryVal !== 'N/A') return countryVal;
+
+    // Fallback to origin but try to extract the last part if it contains commas
+    const originVal = getAttribute('xuất xứ', 'origin');
+    if (originVal !== 'N/A') {
+      const parts = originVal.split(',');
+      return parts[parts.length - 1].trim();
+    }
+    return 'N/A';
+  }
+
   const isBestChoice = React.useMemo(() => {
     const bestChoiceProductNames = [
       "Old Vine Cabernet Sauvignon",
@@ -325,7 +338,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
                                 label="QUỐC GIA"
-                                value={getAttribute('quốc gia', 'xuất xứ', 'origin')}
+                                value={getCountry()}
                             />
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
