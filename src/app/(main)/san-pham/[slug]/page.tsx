@@ -169,7 +169,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
         const typeTag = product.tags.find(tagId => allTypes.includes(tagId));
         if (typeTag) {
-            const cat = categories.find(c => c.id === tagId);
+            const cat = categories.find(c => c.id === typeTag);
             if (cat) return cat.name;
         }
     }
@@ -185,7 +185,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
         if (countryTag) {
-            const cat = categories.find(c => c.id === tagId);
+            const cat = categories.find(c => c.id === countryTag);
             if (cat) return cat.name;
         }
     }
