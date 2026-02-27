@@ -83,7 +83,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         details: product.attributes || [],
         brand: findAttr("thương hiệu"),
         chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất", 'xuất xứ') || extractFromDescription(product.description, 'Xuất xứ', 'Vùng'),
+        region: findAttr("vùng sản xuất", 'xuất xứ', 'vùng') || extractFromDescription(product.description, 'Xuất xứ', 'Vùng'),
         caskType: findAttr("loại thùng"),
         tastingNote: {
             nose: extractFromDescription(product.description, 'Hương thơm', 'Mùi hương'),
@@ -99,6 +99,18 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
 
     return details;
 }
+
+const InfoItem = ({ icon, label, value }: { icon: string, label: string, value: string }) => (
+  <div className="flex items-center gap-3">
+    <div className="relative w-8 h-8 shrink-0">
+      <Image src={icon} alt={label} fill className="object-contain" />
+    </div>
+    <div className="flex flex-col">
+      <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{label}</span>
+      <span className="font-bold text-sm leading-tight text-gray-800 line-clamp-1">{value}</span>
+    </div>
+  </div>
+);
 
 function ProductDetailView({ product }: { product: FullProduct }) {
   const { categories } = useCategories();
@@ -290,23 +302,38 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
                         <Separator className="opacity-50" />
 
-                        <div className="flex justify-between items-center text-center w-full gap-2">
-                            <div className="flex-1">
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">ĐỘ TUỔI</p>
-                                <p className="font-bold text-base mt-1">{getAttribute('tuổi rượu', 'age')}</p>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">NỒNG ĐỘ</p>
-                                <p className="font-bold text-base mt-1">{getAttribute('nồng độ cồn', 'nồng độ', 'alc')}</p>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">DUNG TÍCH</p>
-                                <p className="font-bold text-base mt-1">{getAttribute('dung tích', 'volume')}</p>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">TÌNH TRẠNG</p>
-                                <p className="font-bold text-base mt-1 text-green-700">{product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}</p>
-                            </div>
+                        {/* Main Info Grid with Custom Icons */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
+                                label="QUỐC GIA"
+                                value={getAttribute('quốc gia', 'xuất xứ', 'origin')}
+                            />
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
+                                label="LOẠI RƯỢU"
+                                value={getAttribute('loại rượu', 'loại', 'type')}
+                            />
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
+                                label="NỒNG ĐỘ"
+                                value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
+                            />
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
+                                label="DUNG TÍCH"
+                                value={getAttribute('dung tích', 'thể tích', 'volume')}
+                            />
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
+                                label="GIỐNG NHO"
+                                value={getAttribute('giống nho', 'nho', 'grapes')}
+                            />
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
+                                label="TÌNH TRẠNG"
+                                value={product.status === 'published' ? 'CÒN HÀNG' : 'HẾT HÀNG'}
+                            />
                         </div>
 
                         <Separator className="opacity-50" />
