@@ -209,8 +209,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
       if (initialData && initialData.id) {
         const docRef = doc(firestore, 'categories', initialData.id);
         await updateDoc(docRef, {
-            // On edit, name and slug are not editable from the form.
-            // We only update parentId, description, and tags.
             parentId: finalData.parentId,
             description: finalData.description,
             tags: finalData.tags
