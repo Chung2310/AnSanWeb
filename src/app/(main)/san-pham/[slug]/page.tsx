@@ -16,6 +16,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbS
 import { Button } from '@/components/ui/button';
 import { Award, CircleDollarSign, Users, Truck, GlassWater, Phone, MessageCircle, Smartphone } from 'lucide-react';
 import Link from 'next/link';
+import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
 import {
   Dialog,
   DialogContent,
@@ -107,7 +108,7 @@ const InfoItem = ({ icon, label, value }: { icon: string, label: string, value: 
     </div>
     <div className="flex flex-col">
       <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{label}</span>
-      <span className="font-bold text-sm leading-tight text-gray-800 line-clamp-1">{value}</span>
+      <span className="font-bold text-sm leading-tight text-gray-800 line-clamp-1" title={value}>{value}</span>
     </div>
   </div>
 );
@@ -122,51 +123,86 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return images;
   }, [product]);
 
+  const getAttribute = React.useCallback((...labels: string[]): string => {
+    if (product.attributes) {
+      for (const label of labels) {
+        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+        if (found && found.value) return found.value;
+      }
+    }
+    if (product.description) {
+        for (const label of labels) {
+            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
+            const match = product.description.match(regex);
+            if (match && match[1]) {
+                 return match[1].trim().replace(/\.$/, '');
+            }
+        }
+    }
+    return 'N/A';
+  }, [product.attributes, product.description]);
+
   const mainCategoryName = React.useMemo(() => {
     if (!product.tags || !categories) return 'N/A';
     
-    const getRootParentId = (catId: string): string => {
+    const getRootParent = (catId: string): Category | undefined => {
         const cat = categories.find(c => c.id === catId);
-        if (!cat || !cat.parentId) return catId;
-        return getRootParentId(cat.parentId);
+        if (!cat) return undefined;
+        if (!cat.parentId) return cat;
+        return getRootParent(cat.parentId);
     };
 
-    const firstTag = product.tags[0];
-    if (!firstTag) return 'N/A';
-    
-    const rootId = getRootParentId(firstTag);
-    const rootCat = categories.find(c => c.id === rootId);
-    
-    return rootCat ? rootCat.name.toUpperCase() : 'N/A';
+    for (const tagId of product.tags) {
+        const root = getRootParent(tagId);
+        if (root) return root.name.toUpperCase();
+    }
+
+    return 'N/A';
   }, [product.tags, categories]);
 
-  const isWineProduct = React.useMemo(() => {
-    if (!product.tags || !categories) return false;
+  const loaiRuouValue = React.useMemo(() => {
+    const attr = getAttribute('loại rượu', 'loại', 'type');
+    if (attr !== 'N/A') return attr;
 
-    const getDescendantIds = (parentId: string, allCategories: Category[]): string[] => {
-        const children = allCategories.filter(cat => cat.parentId === parentId);
-        let ids = children.map(cat => cat.id);
-        children.forEach(child => {
-            ids = [...ids, ...getDescendantIds(child.id, allCategories)];
-        });
-        return ids;
-    };
+    if (product.tags && categories) {
+        const wineTypes = wineMegaMenuData.theoLoai.map(item => item.category_id);
+        const spiritTypes = spiritsMegaMenuData.theoLoai.map(item => item.category_id);
+        const allTypes = [...wineTypes, ...spiritTypes];
 
-    const wineCategory = categories.find(c => c.slug === 'ruou-vang');
-    if (!wineCategory) return false;
+        const typeTag = product.tags.find(tagId => allTypes.includes(tagId));
+        if (typeTag) {
+            const cat = categories.find(c => c.id === typeTag);
+            if (cat) return cat.name;
+        }
+    }
+    return 'N/A';
+  }, [product.tags, categories, getAttribute]);
 
-    const descendantCategoryIds = getDescendantIds(wineCategory.id, categories);
-    const allWineIds = [wineCategory.id, ...descendantCategoryIds];
-    
-    return product.tags.some(tag => allWineIds.includes(tag));
-  }, [product.tags, categories]);
+  const countryValue = React.useMemo(() => {
+    const countryVal = getAttribute('quốc gia', 'country');
+    if (countryVal !== 'N/A') return countryVal;
+
+    if (product.tags && categories) {
+        const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
+        const countryTag = product.tags.find(tagId => countries.includes(tagId));
+        if (countryTag) {
+            const cat = categories.find(c => c.id === countryTag);
+            if (cat) return cat.name;
+        }
+    }
+
+    const originVal = getAttribute('xuất xứ', 'origin');
+    if (originVal !== 'N/A') {
+      const parts = originVal.split(',');
+      return parts[parts.length - 1].trim();
+    }
+    return 'N/A';
+  }, [product.tags, categories, getAttribute]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
   
-  const getCategoryInfo = (tagId: string) => categories?.find(c => c.id === tagId);
-
   const breadcrumbs = React.useMemo(() => {
     const paths = [{ label: 'TRANG CHỦ', href: '/' }];
     if (!product.tags || !categories) return paths;
@@ -188,41 +224,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     
     return paths;
   }, [product.tags, categories]);
-  
-  const getAttribute = (...labels: string[]): string => {
-    if (product.attributes) {
-      for (const label of labels) {
-        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-        if (found && found.value) return found.value;
-      }
-    }
-    if (product.description) {
-        for (const label of labels) {
-            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
-            const match = product.description.match(regex);
-            if (match && match[1]) {
-                 return match[1].trim().replace(/\.$/, '');
-            }
-        }
-    }
-    if (labels.some(l => ['dung tích', 'volume'].includes(l.toLowerCase().trim()))) {
-      if (isWineProduct) return '750ml';
-    }
-    return 'N/A';
-  }
-
-  const getCountry = (): string => {
-    const countryVal = getAttribute('quốc gia', 'country');
-    if (countryVal !== 'N/A') return countryVal;
-
-    // Fallback to origin but try to extract the last part if it contains commas
-    const originVal = getAttribute('xuất xứ', 'origin');
-    if (originVal !== 'N/A') {
-      const parts = originVal.split(',');
-      return parts[parts.length - 1].trim();
-    }
-    return 'N/A';
-  }
 
   const isBestChoice = React.useMemo(() => {
     const bestChoiceProductNames = [
@@ -338,12 +339,12 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
                                 label="QUỐC GIA"
-                                value={getCountry()}
+                                value={countryValue}
                             />
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
                                 label="LOẠI RƯỢU"
-                                value={getAttribute('loại rượu', 'loại', 'type')}
+                                value={loaiRuouValue}
                             />
                             <InfoItem 
                                 icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
