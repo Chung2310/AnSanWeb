@@ -30,14 +30,14 @@ const actions = [
 export default function MobileActionBar() {
   return (
     <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[51] hidden lg:block">
-      <div className="flex flex-col bg-white rounded-lg overflow-hidden shadow-2xl border border-gray-100">
+      <div className="flex flex-col bg-[#4B2C2C] rounded-lg overflow-hidden shadow-2xl border border-white/10">
         {actions.map((action) => (
           <Link
             key={action.label}
             href={action.href}
             target={action.href.startsWith('http') ? '_blank' : '_self'}
             rel={action.href.startsWith('http') ? 'noopener noreferrer' : ''}
-            className="flex flex-col items-center justify-center p-3 text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 group"
+            className="flex flex-col items-center justify-center p-3 text-white/90 hover:bg-white/10 transition-colors border-t border-white/10 first:border-t-0 group"
             style={{ width: '80px', height: '80px' }}
           >
             <div className="relative h-8 w-8 transition-transform duration-300 group-hover:scale-110">
@@ -48,7 +48,7 @@ export default function MobileActionBar() {
                 className="object-contain"
               />
             </div>
-            <span className="text-[10px] font-bold uppercase mt-1.5 text-center text-gray-500 group-hover:text-primary">
+            <span className="text-[10px] font-bold uppercase mt-1.5 text-center text-white/70 group-hover:text-white">
               {action.label}
             </span>
           </Link>
