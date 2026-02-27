@@ -127,14 +127,14 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-        if (found && found.value) return found.value;
+        if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
       }
     }
     if (product.description) {
         for (const label of labels) {
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
             const match = product.description.match(regex);
-            if (match && match[1]) {
+            if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
                  return match[1].trim().replace(/\.$/, '');
             }
         }
@@ -161,9 +161,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags, categories]);
 
   const loaiRuouValue = React.useMemo(() => {
-    const attr = getAttribute('loại rượu', 'loại', 'type');
-    if (attr !== 'N/A') return attr;
-
+    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const wineTypes = wineMegaMenuData.theoLoai.map(item => item.category_id);
         const spiritTypes = spiritsMegaMenuData.theoLoai.map(item => item.category_id);
@@ -175,13 +173,14 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             if (cat) return cat.name;
         }
     }
-    return 'N/A';
+
+    // Fallback: Attributes or Description
+    const attr = getAttribute('loại rượu', 'loại', 'type');
+    return attr;
   }, [product.tags, categories, getAttribute]);
 
   const countryValue = React.useMemo(() => {
-    const countryVal = getAttribute('quốc gia', 'country');
-    if (countryVal !== 'N/A') return countryVal;
-
+    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
@@ -191,12 +190,36 @@ function ProductDetailView({ product }: { product: FullProduct }) {
         }
     }
 
+    // Fallback: Attributes or Description
+    const countryVal = getAttribute('quốc gia', 'country');
+    if (countryVal !== 'N/A') return countryVal;
+
     const originVal = getAttribute('xuất xứ', 'origin');
     if (originVal !== 'N/A') {
       const parts = originVal.split(',');
       return parts[parts.length - 1].trim();
     }
     return 'N/A';
+  }, [product.tags, categories, getAttribute]);
+
+  const giongNhoValue = React.useMemo(() => {
+    // Priority: Database classification (tags)
+    if (product.tags && categories) {
+        const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
+        const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
+        
+        if (matchingTags.length > 0) {
+            const names = matchingTags.map(tagId => {
+                const cat = categories.find(c => c.id === tagId);
+                return cat ? cat.name : null;
+            }).filter(Boolean);
+            
+            if (names.length > 0) return names.join(', ');
+        }
+    }
+
+    // Fallback: Attributes or Description
+    return getAttribute('giống nho', 'nho', 'grapes');
   }, [product.tags, categories, getAttribute]);
 
   const formatPrice = (price: number) => {
@@ -364,11 +387,11 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                     value={getAttribute('dung tích', 'thể tích', 'volume')}
                                 />
                             )}
-                            {getAttribute('giống nho', 'nho', 'grapes') !== 'N/A' && (
+                            {giongNhoValue !== 'N/A' && (
                                 <InfoItem 
                                     icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
                                     label="GIỐNG NHO"
-                                    value={getAttribute('giống nho', 'nho', 'grapes')}
+                                    value={giongNhoValue}
                                 />
                             )}
                             {mainCategoryName !== 'N/A' && (
