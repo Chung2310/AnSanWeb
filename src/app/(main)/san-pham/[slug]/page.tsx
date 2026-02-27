@@ -108,7 +108,7 @@ const InfoItem = ({ icon, label, value }: { icon: string, label: string, value: 
     </div>
     <div className="flex flex-col">
       <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{label}</span>
-      <span className="font-bold text-sm leading-tight text-gray-800" title={value}>{value}</span>
+      <span className="font-bold text-sm leading-tight text-gray-800">{value}</span>
     </div>
   </div>
 );
@@ -169,7 +169,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
         const typeTag = product.tags.find(tagId => allTypes.includes(tagId));
         if (typeTag) {
-            const cat = categories.find(c => c.id === typeTag);
+            const cat = categories.find(c => c.id === tagId);
             if (cat) return cat.name;
         }
     }
@@ -185,7 +185,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
         if (countryTag) {
-            const cat = categories.find(c => c.id === countryTag);
+            const cat = categories.find(c => c.id === tagId);
             if (cat) return cat.name;
         }
     }
@@ -380,13 +380,11 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                     value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
                                 />
                             )}
-                            {getAttribute('dung tích', 'thể tích', 'volume') !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
-                                    label="DUNG TÍCH"
-                                    value={getAttribute('dung tích', 'thể tích', 'volume')}
-                                />
-                            )}
+                            <InfoItem 
+                                icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
+                                label="DUNG TÍCH"
+                                value={getAttribute('dung tích', 'thể tích', 'volume')}
+                            />
                             {giongNhoValue !== 'N/A' && (
                                 <InfoItem 
                                     icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
