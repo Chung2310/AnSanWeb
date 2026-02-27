@@ -37,10 +37,10 @@ export default function MobileActionBar() {
             href={action.href}
             target={action.href.startsWith('http') ? '_blank' : '_self'}
             rel={action.href.startsWith('http') ? 'noopener noreferrer' : ''}
-            className="flex flex-col items-center justify-center p-2 text-white/90 hover:bg-white/10 transition-colors border-t border-white/10 first:border-t-0 group"
-            style={{ width: '70px', height: '70px' }}
+            className="flex flex-col items-center justify-center p-1 text-white/90 hover:bg-white/10 transition-colors border-t border-white/10 first:border-t-0 group"
+            style={{ width: '55px', height: '55px' }}
           >
-            <div className="relative h-7 w-7 transition-transform duration-300 group-hover:scale-110">
+            <div className="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110">
               <Image 
                 src={action.icon} 
                 alt={action.label} 
@@ -48,7 +48,7 @@ export default function MobileActionBar() {
                 className="object-contain"
               />
             </div>
-            <span className="text-[9px] font-bold uppercase mt-1 text-center text-white/70 group-hover:text-white leading-tight">
+            <span className="text-[8px] font-bold uppercase mt-1 text-center text-white/70 group-hover:text-white leading-tight">
               {action.label}
             </span>
           </Link>

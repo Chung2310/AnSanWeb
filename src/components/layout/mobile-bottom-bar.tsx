@@ -32,7 +32,7 @@ const MobileBottomBar = () => {
     <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
       <div className="bg-[#4B2C2C] shadow-[0_-2px_15px_rgba(0,0,0,0.3)] border-t border-white/10">
         <div className="container mx-auto px-4">
-          <div className="flex justify-around items-center h-16">
+          <div className="flex justify-around items-center h-14">
             {actions.map((action) => (
               <Link
                 key={action.label}
@@ -41,7 +41,7 @@ const MobileBottomBar = () => {
                 rel={action.href.startsWith('http') ? 'noopener noreferrer' : ''}
                 className="flex flex-col items-center gap-1 group"
               >
-                <div className="relative h-7 w-7 transition-transform group-active:scale-90">
+                <div className="relative h-5 w-5 transition-transform group-active:scale-90">
                   <Image 
                     src={action.icon} 
                     alt={action.label} 
@@ -49,7 +49,7 @@ const MobileBottomBar = () => {
                     className="object-contain"
                   />
                 </div>
-                <span className="text-[9px] font-bold uppercase text-white/70 group-hover:text-white">
+                <span className="text-[8px] font-bold uppercase text-white/70 group-hover:text-white">
                   {action.label}
                 </span>
               </Link>
