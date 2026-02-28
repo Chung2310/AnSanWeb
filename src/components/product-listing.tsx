@@ -30,7 +30,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [currentPage, setCurrentPage] = useState(1);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descriptionContainerRef = useRef<HTMLDivElement>(null);
-  const scrollListenerRef = useRef<(() => void) | null>(null);
   const { categories: allCategories } = useCategories();
 
    const getDescendants = useCallback((parentId: string, categories: Category[]): Category[] => {
@@ -149,14 +148,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setActiveFilters(getInitialFilters);
   }, [initialProducts, getInitialFilters]);
 
-  useEffect(() => {
-    return () => {
-      if (scrollListenerRef.current) {
-        window.removeEventListener('scroll', scrollListenerRef.current);
-      }
-    };
-  }, []);
-
   const filteredProducts = useMemo(() => {
     let productsToFilter = [...initialProducts];
 
@@ -261,29 +252,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   };
   
   const handleToggleDescription = () => {
-    if (isDescriptionExpanded) {
-        if (window.scrollY === 0) {
-            setIsDescriptionExpanded(false);
-            return;
-        }
-        if (scrollListenerRef.current) {
-            window.removeEventListener('scroll', scrollListenerRef.current);
-        }
-        const onScroll = () => {
-            if (window.scrollY < 5) {
-                if (scrollListenerRef.current) {
-                    window.removeEventListener('scroll', scrollListenerRef.current);
-                    scrollListenerRef.current = null;
-                }
-                setIsDescriptionExpanded(false);
-            }
-        };
-        scrollListenerRef.current = onScroll;
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-        setIsDescriptionExpanded(true);
-    }
+    setIsDescriptionExpanded(!isDescriptionExpanded);
   };
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
