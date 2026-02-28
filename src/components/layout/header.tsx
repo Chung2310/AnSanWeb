@@ -173,6 +173,7 @@ const MegaMenu = ({
   customMegaMenu?: string;
 }) => {
   const [showAllGrapes, setShowAllGrapes] = useState(false);
+  const [showAllRegions, setShowAllRegions] = useState(false);
 
   if (customMegaMenu === 'gift-set') {
     // @ts-ignore
@@ -245,11 +246,30 @@ const MegaMenu = ({
         >
           {columns.map((column, index) => {
             const isGiongNhoColumn = column.title === 'Giống nho';
-            const initialItemCount = 9;
-            const itemsToShow = isGiongNhoColumn && !showAllGrapes
-              ? column.items.slice(0, initialItemCount)
-              : column.items;
-            const hasMoreItems = isGiongNhoColumn && column.items.length > initialItemCount;
+            const isVungColumn = column.title === 'Vùng làm vang';
+            
+            const grapesLimit = 9;
+            const vungLimit = 10;
+            
+            let itemsToShow = column.items;
+            let hasMoreItems = false;
+            let isExpanded = false;
+            let toggleFn = () => {};
+            let labelText = '';
+
+            if (isGiongNhoColumn) {
+              hasMoreItems = column.items.length > grapesLimit;
+              isExpanded = showAllGrapes;
+              itemsToShow = !isExpanded ? column.items.slice(0, grapesLimit) : column.items;
+              labelText = isExpanded ? 'Thu gọn <<' : 'Xem tất cả giống nho >>';
+              toggleFn = () => setShowAllGrapes(prev => !prev);
+            } else if (isVungColumn) {
+              hasMoreItems = column.items.length > vungLimit;
+              isExpanded = showAllRegions;
+              itemsToShow = !isExpanded ? column.items.slice(0, vungLimit) : column.items;
+              labelText = isExpanded ? 'Thu gọn <<' : 'Xem tất cả vùng vang >>';
+              toggleFn = () => setShowAllRegions(prev => !prev);
+            }
 
             return (
               <div
@@ -276,10 +296,10 @@ const MegaMenu = ({
                   {hasMoreItems && (
                      <li>
                         <button
-                          onClick={() => setShowAllGrapes(prev => !prev)}
+                          onClick={toggleFn}
                           className="font-medium text-primary hover:text-primary/80 transition-colors text-left w-full"
                         >
-                          {showAllGrapes ? 'Thu gọn <<' : 'Xem tất cả giống nho >>'}
+                          {labelText}
                         </button>
                       </li>
                   )}
