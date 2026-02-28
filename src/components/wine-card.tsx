@@ -133,16 +133,16 @@ export default function WineCard({ product }: WineCardProps) {
       <Link href={`/san-pham/${product.slug}`} className="block flex-grow">
         <div className="relative overflow-hidden group/image rounded-md aspect-square bg-gray-50 flex items-center justify-center p-4">
             {product.isGoodPrice || hasDiscount ? (
-                 <div className="absolute top-2 left-2 z-10 rounded-sm bg-red-700 px-2 py-1 text-[10px] font-bold uppercase text-white animate-flash">
+                 <div className="absolute top-2 left-2 z-10 rounded-sm bg-primary px-2 py-1 text-[10px] font-bold uppercase text-white animate-flash">
                     Giá Đặc biệt
                 </div>
             ) : product.bestChoice && (
-                <div className="absolute top-2 left-2 z-10 rounded-sm bg-red-700 px-2 py-1 text-[10px] font-bold uppercase text-white">
+                <div className="absolute top-2 left-2 z-10 rounded-sm bg-primary px-2 py-1 text-[10px] font-bold uppercase text-white">
                     Best Choice
                 </div>
             )}
             {hasDiscount && (
-                <div className="absolute top-2 right-2 z-10 rounded-sm bg-red-700 px-2 py-1 text-[10px] font-bold text-white">
+                <div className="absolute top-2 right-2 z-10 rounded-sm bg-primary px-2 py-1 text-[10px] font-bold text-white">
                     -{discountPercentage}%
                 </div>
             )}
@@ -168,7 +168,7 @@ export default function WineCard({ product }: WineCardProps) {
                 {hasDiscount && (
                     <span className="text-xs text-gray-400 line-through">{formatPrice(originalPrice!)}</span>
                 )}
-                <span className="text-lg font-bold text-red-700">{formatPrice(salePrice)}</span>
+                <span className="text-lg font-bold text-primary">{formatPrice(salePrice)}</span>
             </div>
 
             {(isWine || isSpirit) && (
