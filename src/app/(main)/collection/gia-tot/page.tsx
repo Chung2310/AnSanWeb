@@ -3,7 +3,6 @@ import { useProducts } from '@/hooks/use-products';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Product } from '@/lib/types';
 import WineCard from '@/components/wine-card';
-import Link from 'next/link';
 import React from 'react';
 
 const ProductSection = ({ title, products }: { title: string, products: Product[] }) => {
@@ -15,11 +14,11 @@ const ProductSection = ({ title, products }: { title: string, products: Product[
         <div className="bg-[#f8f0e5] rounded-2xl p-8 md:p-12 mb-12 shadow-lg">
             <div className="text-center mb-10">
                 <div className="flex items-center justify-center">
-                    <span className="flex-grow border-t border-red-800/30"></span>
-                    <h2 className="mx-6 font-headline text-2xl md:text-3xl font-bold uppercase" style={{ color: '#7f1d1d' }}>
+                    <span className="flex-grow border-t border-primary/30"></span>
+                    <h2 className="mx-6 font-headline text-2xl md:text-3xl font-bold uppercase text-primary">
                         {title}
                     </h2>
-                    <span className="flex-grow border-t border-red-800/30"></span>
+                    <span className="flex-grow border-t border-primary/30"></span>
                 </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -36,9 +35,9 @@ const PageSkeleton = () => (
         <div className="bg-[#f8f0e5] rounded-2xl p-8 md:p-12 mb-12 shadow-lg">
              <div className="text-center mb-10">
                 <div className="flex items-center justify-center">
-                    <span className="flex-grow border-t border-red-800/30"></span>
+                    <span className="flex-grow border-t border-primary/30"></span>
                     <Skeleton className="h-10 w-2/3 md:w-1/3 mx-6" />
-                    <span className="flex-grow border-t border-red-800/30"></span>
+                    <span className="flex-grow border-t border-primary/30"></span>
                 </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

@@ -99,7 +99,7 @@ export default function GiftSetsSection() {
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
-                Quà Tết Ansan & Cigar
+                Quà Tết An San & Cigar
             </h2>
         </motion.div>
         <motion.div variants={containerVariants} className="grid grid-cols-1 gap-8 md:grid-cols-2">

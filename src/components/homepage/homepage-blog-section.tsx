@@ -103,7 +103,7 @@ export default function HomepageBlogSection() {
                         Tin Tức & Sự Kiện
                     </h2>
                     <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Cập nhật những thông tin mới nhất từ thế giới rượu và AnSan.
+                        Cập nhật những thông tin mới nhất từ thế giới rượu và An San.
                     </p>
                 </div>
                 
