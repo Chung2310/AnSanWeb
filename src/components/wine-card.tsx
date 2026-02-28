@@ -170,39 +170,39 @@ export default function WineCard({ product }: WineCardProps) {
 
             {(isWine || isSpirit) && (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
-                    {/* Order: Quốc gia, Nồng độ, Dung tích, Giống nho (2x2 Grid) */}
-                    {countryValue !== 'N/A' && (
-                        <div className="flex items-start gap-1.5">
-                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" />
-                            </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={countryValue}>{countryValue}</span>
+                    {/* Order: 1. Quốc gia, 2. Nồng độ, 3. Dung tích, 4. Giống nho (2x2 Grid) */}
+                    <div className="flex items-start gap-1.5">
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" />
                         </div>
-                    )}
-                    {nồngĐộValue !== 'N/A' && (
-                        <div className="flex items-start gap-1.5">
-                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
-                            </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={nồngĐộValue}>{nồngĐộValue}</span>
+                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={countryValue !== 'N/A' ? countryValue : ''}>
+                            {countryValue !== 'N/A' ? countryValue : 'N/A'}
+                        </span>
+                    </div>
+                    <div className="flex items-start gap-1.5">
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
                         </div>
-                    )}
-                    {capacityValue && capacityValue !== 'N/A' && (
-                        <div className="flex items-start gap-1.5">
-                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" />
-                            </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={capacityValue}>{capacityValue}</span>
+                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={nồngĐộValue !== 'N/A' ? nồngĐộValue : ''}>
+                            {nồngĐộValue !== 'N/A' ? nồngĐộValue : 'N/A'}
+                        </span>
+                    </div>
+                    <div className="flex items-start gap-1.5">
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" />
                         </div>
-                    )}
-                    {giongNhoValue !== 'N/A' && (
-                        <div className="flex items-start gap-1.5">
-                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" />
-                            </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={giongNhoValue}>{giongNhoValue}</span>
+                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={capacityValue && capacityValue !== 'N/A' ? capacityValue : ''}>
+                            {capacityValue && capacityValue !== 'N/A' ? capacityValue : 'N/A'}
+                        </span>
+                    </div>
+                    <div className="flex items-start gap-1.5">
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" />
                         </div>
-                    )}
+                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={giongNhoValue !== 'N/A' ? giongNhoValue : ''}>
+                            {giongNhoValue !== 'N/A' ? giongNhoValue : 'N/A'}
+                        </span>
+                    </div>
                 </div>
             )}
         </div>

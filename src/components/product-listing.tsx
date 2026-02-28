@@ -26,11 +26,81 @@ interface ProductListingProps {
     queryFilters?: ActiveFilters;
 }
 
+/**
+ * Isolated SEO Description component to handle its own state 
+ * and prevent parent re-renders that might cause scroll jumps.
+ */
+function CollapsibleSEODescription({ content }: { content: string }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    
+    const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
+        const firstParagraphEnd = content.indexOf('</p>');
+        if (firstParagraphEnd === -1) {
+            return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
+        }
+        
+        const initialPart = content.substring(0, firstParagraphEnd + 4);
+        const restPart = content.substring(firstParagraphEnd + 4);
+        const hasMeaningfulRest = restPart.replace(/<[^>]*>/g, '').trim().length > 0;
+
+        if (hasMeaningfulRest) {
+            return {
+                descriptionInitial: initialPart,
+                descriptionRest: restPart,
+                isDescriptionLong: true,
+            };
+        }
+        return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
+    }, [content]);
+
+    const handleToggle = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsExpanded(!isExpanded);
+    };
+
+    return (
+        <div className="container pt-12">
+            <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
+                 <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />
+            
+                {isDescriptionLong && (
+                    <AnimatePresence initial={false}>
+                        {isExpanded && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="overflow-hidden"
+                            >
+                                {descriptionRest && <div dangerouslySetInnerHTML={{ __html: descriptionRest }} />}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                )}
+
+                {isDescriptionLong && (
+                    <div className="text-center mt-4">
+                        <Button
+                            variant="link"
+                            type="button"
+                            onClick={handleToggle}
+                            className="text-primary hover:text-primary/80 no-underline hover:no-underline font-bold"
+                        >
+                            {isExpanded ? 'Thu gọn' : 'Xem thêm'}
+                            {isExpanded ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory, queryFilters }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const descriptionContainerRef = useRef<HTMLDivElement>(null);
   const { categories: allCategories } = useCategories();
 
    const getDescendants = useCallback((parentId: string, categories: Category[]): Category[] => {
@@ -54,32 +124,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         }
         return results;
     }, []);
-
-  const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
-    if (!categoryDescription) {
-      return { descriptionInitial: null, descriptionRest: null, isDescriptionLong: false };
-    }
-    const firstParagraphEnd = categoryDescription.indexOf('</p>');
-
-    if (firstParagraphEnd === -1) {
-        return { descriptionInitial: categoryDescription, descriptionRest: null, isDescriptionLong: false };
-    }
-    
-    const initialPart = categoryDescription.substring(0, firstParagraphEnd + 4);
-    const restPart = categoryDescription.substring(firstParagraphEnd + 4);
-
-    const hasMeaningfulRest = restPart.replace(/<[^>]*>/g, '').trim().length > 0;
-
-    if (hasMeaningfulRest) {
-      return {
-        descriptionInitial: initialPart,
-        descriptionRest: restPart,
-        isDescriptionLong: true,
-      };
-    }
-
-    return { descriptionInitial: categoryDescription, descriptionRest: null, isDescriptionLong: false };
-  }, [categoryDescription]);
   
   const categoryType = useMemo(() => {
     if (!initialCategory || !allCategories) return { isWine: false, isSpirit: false, isGiftSet: false, isGlassware: false, isCigar: false };
@@ -152,7 +196,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let productsToFilter = [...initialProducts];
 
-    // 1. Filter by category hierarchy from URL
     if (initialCategory && allCategories) {
         const descendants = getDescendants(initialCategory.id, allCategories);
         const matchIds = new Set(descendants.map(d => d.id));
@@ -163,7 +206,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         );
     }
     
-    // 2. Apply sidebar filters
     const activeFilterGroups = Object.keys(activeFilters).filter(
       (group) => activeFilters[group]?.length > 0
     );
@@ -172,7 +214,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       return productsToFilter;
     }
 
-    // Price filter
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
       const option = (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
       return option?.value;
@@ -184,7 +225,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       );
     }
 
-    // Tag-based filters (Region, Grape, Brand, etc.)
     const tagFilterGroups = activeFilterGroups.filter(g => g !== "KHOẢNG GIÁ");
     if (tagFilterGroups.length > 0) {
       productsToFilter = productsToFilter.filter(p => {
@@ -240,11 +280,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     );
   }, [sortedProducts, currentPage, itemsPerPage]);
 
-  // Use useCallback to prevent unnecessary re-renders of Paginator
   const handlePageChange = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
       setCurrentPage(page);
-      // Only scroll to top if the page actually changed (to avoid jumping on SEO toggle)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [totalPages, currentPage]);
@@ -254,13 +292,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setActiveFilters(newActiveFilters);
   };
   
-  const handleToggleDescription = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDescriptionExpanded(!isDescriptionExpanded);
-    // Explicitly NO scrollTo here
-  };
-
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
 
@@ -276,43 +307,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       
       <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
 
-      {categoryDescription && (
-        <div ref={descriptionContainerRef} className="container pt-12">
-            <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
-                 {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
-            
-                {isDescriptionLong && (
-                    <AnimatePresence initial={false}>
-                        {isDescriptionExpanded && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="overflow-hidden"
-                            >
-                                {descriptionRest && <div dangerouslySetInnerHTML={{ __html: descriptionRest }} />}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                )}
-
-                {isDescriptionLong && (
-                    <div className="text-center mt-4">
-                        <Button
-                            variant="link"
-                            type="button"
-                            onClick={handleToggleDescription}
-                            className="text-primary hover:text-primary/80 no-underline hover:no-underline"
-                        >
-                            {isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}
-                            {isDescriptionExpanded ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
-                        </Button>
-                    </div>
-                )}
-            </div>
-        </div>
-      )}
+      {categoryDescription && <CollapsibleSEODescription content={categoryDescription} />}
       
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
