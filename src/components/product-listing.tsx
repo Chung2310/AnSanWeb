@@ -251,7 +251,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     setActiveFilters(newActiveFilters);
   };
   
-  const handleToggleDescription = () => {
+  const handleToggleDescription = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsDescriptionExpanded(!isDescriptionExpanded);
   };
 
@@ -276,7 +278,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                  {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
             
                 {isDescriptionLong && (
-                    <AnimatePresence>
+                    <AnimatePresence initial={false}>
                         {isDescriptionExpanded && (
                             <motion.div
                                 initial={{ height: 0, opacity: 0 }}
@@ -295,8 +297,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
                     <div className="text-center mt-4">
                         <Button
                             variant="link"
+                            type="button"
                             onClick={handleToggleDescription}
-                            className="text-primary hover:text-primary/80"
+                            className="text-primary hover:text-primary/80 no-underline hover:no-underline"
                         >
                             {isDescriptionExpanded ? 'Thu gọn' : 'Xem thêm'}
                             {isDescriptionExpanded ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}

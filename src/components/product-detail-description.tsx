@@ -40,6 +40,11 @@ export default function ProductDetailDescription({ details }: { details: Product
     // Show first two paragraphs if not expanded
     const displayParagraphs = isExpanded ? allParagraphs : allParagraphs.slice(0, 2);
 
+    const handleToggle = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsExpanded(!isExpanded);
+    };
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>
@@ -117,7 +122,8 @@ export default function ProductDetailDescription({ details }: { details: Product
                     <div className="text-center mt-8">
                         <Button 
                             variant="ghost" 
-                            onClick={() => setIsExpanded(!isExpanded)}
+                            type="button"
+                            onClick={handleToggle}
                             className="font-bold text-sm tracking-widest hover:bg-transparent"
                             style={{color: '#5a5a5a'}}
                         >
