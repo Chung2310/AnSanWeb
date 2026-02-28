@@ -17,6 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useFirestore } from "@/firebase";
+import { collection, serverTimestamp } from "firebase/firestore";
+import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { summarizeContactForm } from "@/ai/flows/contact-form-ai-summary";
 
 const formSchema = z.object({
   name: z.string().min(2, "Tên phải có ít nhất 2 ký tự."),
@@ -26,6 +30,7 @@ const formSchema = z.object({
 
 export default function ContactPage() {
     const { toast } = useToast();
+    const firestore = useFirestore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -37,18 +42,34 @@ export default function ContactPage() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Here you would typically send the data to your backend
-        // For now, we'll just log it and show a toast
-        console.log("Contact form submitted:", values);
+        try {
+            // Save the message to Firestore
+            const contactsCol = collection(firestore, 'contacts');
+            addDocumentNonBlocking(contactsCol, {
+                ...values,
+                createdAt: serverTimestamp(),
+                status: 'new'
+            });
 
-        // TODO: Call GenAI flow to summarize the message `summarizeContactForm(values)`
-        // TODO: Save the message and summary to Firestore
+            // Trigger AI summary in background
+            summarizeContactForm(values).then(result => {
+                console.log("AI Insights generated:", result.summary);
+            }).catch(err => {
+                console.error("AI Insights error:", err);
+            });
 
-        toast({
-            title: "Gửi thành công!",
-            description: "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.",
-        });
-        form.reset();
+            toast({
+                title: "Gửi thành công!",
+                description: "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.",
+            });
+            form.reset();
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Đã có lỗi xảy ra",
+                description: "Không thể gửi tin nhắn lúc này. Vui lòng thử lại sau.",
+            });
+        }
     }
 
     return (
@@ -96,7 +117,7 @@ export default function ContactPage() {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="Nội dung bạn muốn trao đổi..."
-                                                className="resize-none"
+                                                className="resize-none h-32"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -104,7 +125,9 @@ export default function ContactPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">Gửi Tin Nhắn</Button>
+                            <Button type="submit" className="w-full h-12 text-base font-bold" disabled={form.formState.isSubmitting}>
+                                {form.formState.isSubmitting ? "Đang gửi..." : "Gửi Tin Nhắn"}
+                            </Button>
                         </form>
                     </Form>
                 </CardContent>

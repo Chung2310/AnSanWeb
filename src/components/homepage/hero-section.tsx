@@ -35,14 +35,14 @@ const heroSlides = [
         label: 'QUÀ TẾT',
         title: 'QUÀ TẾT',
         href: '/danh-muc/bo-qua-tang',
-        description: 'Quà Tết ANSAN – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
+        description: 'Quà Tết An San – nơi mỗi món quà không chỉ trao gửi giá trị, mà còn thể hiện sự trân trọng, tinh tế và đẳng cấp của người tặng',
     },
     {
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
         title: 'RƯỢU MẠNH',
         href: '/danh-muc/ruou-manh',
-        description: 'Những dòng rượu mạnh được ANSAN tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
+        description: 'Những dòng rượu mạnh được An San tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
     },
 ];
 
