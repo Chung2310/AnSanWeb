@@ -6,7 +6,7 @@ import Link from 'next/link';
 import type { Product, Category } from '@/lib/types';
 import React from 'react';
 import { useCategories } from '@/hooks/use-categories';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 type WineCardProps = {
   product: Product;
@@ -170,7 +170,6 @@ export default function WineCard({ product }: WineCardProps) {
 
             {(isWine || isSpirit) && (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
-                    {/* Order: 1. Quốc gia, 2. Nồng độ, 3. Dung tích, 4. Giống nho (2x2 Grid) */}
                     <div className="flex items-start gap-1.5">
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" />
