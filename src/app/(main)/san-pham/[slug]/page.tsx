@@ -106,9 +106,9 @@ const InfoItem = ({ icon, label, value }: { icon: string, label: string, value: 
     <div className="relative w-8 h-8 shrink-0 mt-0.5">
       <Image src={icon} alt={label} fill className="object-contain" />
     </div>
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-hidden">
       <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none mb-1">{label}</span>
-      <span className="font-bold text-sm leading-tight text-gray-800">{value}</span>
+      <span className="font-bold text-sm leading-tight text-gray-800 break-words">{value}</span>
     </div>
   </div>
 );
@@ -155,8 +155,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     let wine = false;
     let spirit = false;
 
-    for (const tagId of product.tags) {
-        const rootId = getRootParentId(tagId);
+    for (const typeTag of product.tags) {
+        const rootId = getRootParentId(typeTag);
         if (rootId === 'ruou-vang') wine = true;
         if (rootId === 'ruou-manh') spirit = true;
     }
@@ -344,34 +344,26 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                             <Separator className="opacity-50" />
                             {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho (2 rows x 2 columns) */}
                             <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                                {countryValue !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
-                                        label="QUỐC GIA"
-                                        value={countryValue}
-                                    />
-                                )}
-                                {getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']) !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
-                                        label="NỒNG ĐỘ"
-                                        value={getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv'])}
-                                    />
-                                )}
-                                {capacityValue && capacityValue !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
-                                        label="DUNG TÍCH"
-                                        value={capacityValue}
-                                    />
-                                )}
-                                {giongNhoValue !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
-                                        label="GIỐNG NHO"
-                                        value={giongNhoValue}
-                                    />
-                                )}
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
+                                    label="QUỐC GIA"
+                                    value={countryValue !== 'N/A' ? countryValue : 'N/A'}
+                                />
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
+                                    label="NỒNG ĐỘ"
+                                    value={getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']) !== 'N/A' ? getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']) : 'N/A'}
+                                />
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
+                                    label="DUNG TÍCH"
+                                    value={capacityValue && capacityValue !== 'N/A' ? capacityValue : 'N/A'}
+                                />
+                                <InfoItem 
+                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
+                                    label="GIỐNG NHO"
+                                    value={giongNhoValue !== 'N/A' ? giongNhoValue : 'N/A'}
+                                />
                             </div>
                           </>
                         )}
