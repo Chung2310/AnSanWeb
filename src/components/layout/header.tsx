@@ -500,21 +500,24 @@ export default function Header() {
                   </SheetTrigger>
                   <SheetContent
                     side="right"
-                    className="w-full max-w-[400px] bg-white p-0"
+                    className="w-full max-w-[400px] bg-white p-0 flex flex-col"
                   >
-                    <div className="p-6 flex flex-col h-full">
-                      <SheetHeader className="sr-only">
-                        <SheetTitle>Main Menu</SheetTitle>
-                        <SheetDescription>
-                          Main navigation links for the website.
-                        </SheetDescription>
-                      </SheetHeader>
-                      <div className="mb-6">
-                        <Link href="/" onClick={() => setIsSheetOpen(false)}>
-                          <Logo />
-                        </Link>
-                      </div>
+                    <SheetHeader className="sr-only">
+                      <SheetTitle>Main Menu</SheetTitle>
+                      <SheetDescription>
+                        Main navigation links for the website.
+                      </SheetDescription>
+                    </SheetHeader>
+                    
+                    {/* Logo Area */}
+                    <div className="p-6 pb-2">
+                      <Link href="/" onClick={() => setIsSheetOpen(false)}>
+                        <Logo />
+                      </Link>
+                    </div>
 
+                    {/* Scrollable Navigation Area */}
+                    <div className="flex-1 overflow-y-auto px-6 pb-10">
                       <form
                         onSubmit={handleSearch}
                         className="relative w-full mb-6"
@@ -535,25 +538,30 @@ export default function Header() {
                         </Button>
                       </form>
 
-                      <Accordion type="multiple" className="w-full flex-grow">
+                      <Accordion type="multiple" className="w-full">
                         {navLinks.map((link) => {
-                          const mainContent = (
-                            <Link
-                              href={link.href}
-                              onClick={() => {
-                                if (!link.megaMenuColumns && !link.customMegaMenu) setIsSheetOpen(false);
-                              }}
-                              className="flex-1 py-3 font-semibold uppercase text-gray-800"
-                            >
-                              {link.label}
-                            </Link>
-                          );
+                          const hasSubItems = !!link.megaMenuColumns || !!link.customMegaMenu;
+                          const isGiaTot = link.label === 'GIÁ TỐT';
 
-                          if (link.megaMenuColumns || link.customMegaMenu) {
+                          if (hasSubItems) {
                             return (
                               <AccordionItem value={link.label} key={link.label}>
-                                <AccordionTrigger className="hover:no-underline py-0">
-                                  {mainContent}
+                                <AccordionTrigger className="hover:no-underline py-0 pr-2">
+                                  <span className={cn(
+                                    "flex-1 py-4 font-semibold uppercase text-gray-800 text-left flex items-center",
+                                    isGiaTot && "text-chart-4 animate-flash"
+                                  )}>
+                                    {isGiaTot && (
+                                      <Image
+                                        src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
+                                        alt="Giá Tốt"
+                                        width={24}
+                                        height={24}
+                                        className="mr-2"
+                                      />
+                                    )}
+                                    {link.label}
+                                  </span>
                                 </AccordionTrigger>
                                 <AccordionContent className="pl-4 pb-0">
                                   {link.href && (
@@ -565,37 +573,50 @@ export default function Header() {
                                       Tất cả {link.label}
                                     </Link>
                                   )}
-                                  <Accordion type="multiple" className="w-full">
-                                    {link.megaMenuColumns?.map((column) => {
-                                      if (column.items.length === 0) {
-                                        return null;
-                                      }
-                                      return (
-                                        <AccordionItem
-                                          value={column.title}
-                                          key={column.title}
+                                  
+                                  {link.customMegaMenu === 'gift-set' ? (
+                                    <div className="space-y-1 py-2">
+                                      {giftSetMegaMenuData.quaTang.map((item: any) => (
+                                        <Link
+                                          key={item.slug}
+                                          href={`/danh-muc/bo-qua-tang/${item.slug}`}
+                                          onClick={() => setIsSheetOpen(false)}
+                                          className="block py-2.5 text-muted-foreground hover:text-primary font-medium"
                                         >
-                                          <AccordionTrigger className="font-semibold uppercase text-gray-800">
-                                            {column.title}
-                                          </AccordionTrigger>
-                                          <AccordionContent className="pl-4">
-                                            {column.items.map((item) => (
-                                              <Link
-                                                key={item.href}
-                                                href={item.href}
-                                                onClick={() =>
-                                                  setIsSheetOpen(false)
-                                                }
-                                                className="block py-2 text-muted-foreground hover:text-primary"
-                                              >
-                                                {item.label}
-                                              </Link>
-                                            ))}
-                                          </AccordionContent>
-                                        </AccordionItem>
-                                      );
-                                    })}
-                                  </Accordion>
+                                          {item.label}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <Accordion type="multiple" className="w-full">
+                                      {link.megaMenuColumns?.map((column) => {
+                                        if (column.items.length === 0) return null;
+                                        return (
+                                          <AccordionItem
+                                            value={column.title}
+                                            key={column.title}
+                                            className="border-none"
+                                          >
+                                            <AccordionTrigger className="font-semibold uppercase text-gray-600 py-3 text-sm">
+                                              {column.title}
+                                            </AccordionTrigger>
+                                            <AccordionContent className="pl-4 space-y-1">
+                                              {column.items.map((item) => (
+                                                <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  onClick={() => setIsSheetOpen(false)}
+                                                  className="block py-2 text-muted-foreground hover:text-primary"
+                                                >
+                                                  {item.label}
+                                                </Link>
+                                              ))}
+                                            </AccordionContent>
+                                          </AccordionItem>
+                                        );
+                                      })}
+                                    </Accordion>
+                                  )}
                                 </AccordionContent>
                               </AccordionItem>
                             );
@@ -603,7 +624,25 @@ export default function Header() {
 
                           return (
                             <div className="border-b" key={link.label}>
-                              {mainContent}
+                              <Link
+                                href={link.href}
+                                onClick={() => setIsSheetOpen(false)}
+                                className={cn(
+                                  "flex items-center py-4 font-semibold uppercase text-gray-800",
+                                  isGiaTot && "text-chart-4 animate-flash"
+                                )}
+                              >
+                                {isGiaTot && (
+                                  <Image
+                                    src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
+                                    alt="Giá Tốt"
+                                    width={24}
+                                    height={24}
+                                    className="mr-2"
+                                  />
+                                )}
+                                {link.label}
+                              </Link>
                             </div>
                           );
                         })}
