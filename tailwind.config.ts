@@ -1,4 +1,3 @@
-
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -20,6 +19,7 @@ export default {
       fontFamily: {
         body: ['"Roboto"', 'sans-serif'],
         headline: ['"Playfair Display"', 'serif'],
+        montserrat: ['"Montserrat"', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
