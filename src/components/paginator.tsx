@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -15,11 +16,17 @@ export function Paginator({ totalPages, onPageChange }: PaginatorProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const prevPageRef = useRef<number | null>(null);
     
     const currentPage = Number(searchParams.get('page')) || 1;
 
     useEffect(() => {
-        onPageChange(currentPage);
+        // Only trigger the callback if the page from URL actually changed
+        // and it's not the first render where it's already set to 1.
+        if (prevPageRef.current !== null && prevPageRef.current !== currentPage) {
+            onPageChange(currentPage);
+        }
+        prevPageRef.current = currentPage;
     }, [currentPage, onPageChange]);
 
     const createPageURL = (pageNumber: number | string) => {

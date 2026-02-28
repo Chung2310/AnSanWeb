@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -35,18 +35,15 @@ export default function ProductDetailDescription({ details }: { details: Product
         return null;
     }
     
-    // Always show all paragraphs now, but control visibility with expander
     const allParagraphs = paragraphs;
-
-    // Show first two paragraphs if not expanded
     const displayParagraphs = isExpanded ? allParagraphs : allParagraphs.slice(0, 2);
 
-    const handleToggle = (e: React.MouseEvent) => {
+    const handleToggle = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsExpanded(!isExpanded);
-        // CRITICAL: Removed any scrollTo logic to prevent page jumping to top
-    };
+        setIsExpanded(prev => !prev);
+        // Explicitly NO scrollTo here to prevent page jumping
+    }, []);
 
     return (
         <section className="py-20" style={{backgroundColor: '#fdfaf5'}}>

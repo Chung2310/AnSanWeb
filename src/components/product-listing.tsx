@@ -240,12 +240,14 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     );
   }, [sortedProducts, currentPage, itemsPerPage]);
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
+  // Use useCallback to prevent unnecessary re-renders of Paginator
+  const handlePageChange = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
       setCurrentPage(page);
+      // Only scroll to top if the page actually changed (to avoid jumping on SEO toggle)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }
+  }, [totalPages, currentPage]);
 
   const handleFilterChange = (newActiveFilters: ActiveFilters) => {
     setCurrentPage(1);
@@ -256,7 +258,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     e.preventDefault();
     e.stopPropagation();
     setIsDescriptionExpanded(!isDescriptionExpanded);
-    // CRITICAL: Removed any scrollTo logic to prevent page jumping to top
+    // Explicitly NO scrollTo here
   };
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
