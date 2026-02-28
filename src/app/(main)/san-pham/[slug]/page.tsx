@@ -391,53 +391,56 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                           <p className="text-base text-muted-foreground">{product.shortDescription}</p>
                         )}
 
-                        <Separator className="opacity-50" />
-
-                        {/* Main Info Grid with Custom Icons */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
-                            {countryValue !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
-                                    label="QUỐC GIA"
-                                    value={countryValue}
-                                />
-                            )}
-                            {loaiRuouValue !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
-                                    label="LOẠI RƯỢU"
-                                    value={loaiRuouValue}
-                                />
-                            )}
-                            {getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv') !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
-                                    label="NỒNG ĐỘ"
-                                    value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
-                                />
-                            )}
-                            {capacityValue && capacityValue !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
-                                    label="DUNG TÍCH"
-                                    value={capacityValue}
-                                />
-                            )}
-                            {giongNhoValue !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
-                                    label="GIỐNG NHO"
-                                    value={giongNhoValue}
-                                />
-                            )}
-                            {mainCategoryName !== 'N/A' && (
-                                <InfoItem 
-                                    icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
-                                    label="PHÂN LOẠI"
-                                    value={mainCategoryName}
-                                />
-                            )}
-                        </div>
+                        {(isWine || isSpirit) && (
+                          <>
+                            <Separator className="opacity-50" />
+                            {/* Main Info Grid with Custom Icons */}
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                                {countryValue !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
+                                        label="QUỐC GIA"
+                                        value={countryValue}
+                                    />
+                                )}
+                                {loaiRuouValue !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
+                                        label="LOẠI RƯỢU"
+                                        value={loaiRuouValue}
+                                    />
+                                )}
+                                {getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv') !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
+                                        label="NỒNG ĐỘ"
+                                        value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
+                                    />
+                                )}
+                                {capacityValue && capacityValue !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
+                                        label="DUNG TÍCH"
+                                        value={capacityValue}
+                                    />
+                                )}
+                                {giongNhoValue !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
+                                        label="GIỐNG NHO"
+                                        value={giongNhoValue}
+                                    />
+                                )}
+                                {mainCategoryName !== 'N/A' && (
+                                    <InfoItem 
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
+                                        label="PHÂN LOẠI"
+                                        value={mainCategoryName}
+                                    />
+                                )}
+                            </div>
+                          </>
+                        )}
 
                         <Separator className="opacity-50" />
                         
