@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,9 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
+import { X } from 'lucide-react';
 
 export default function TetGiftPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,13 +28,20 @@ export default function TetGiftPopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="p-0 max-w-xl bg-transparent shadow-none border-4 border-amber-500">
+      <DialogContent className="p-0 max-w-xl bg-transparent shadow-none border-4 border-amber-500 overflow-visible">
         <DialogHeader className="sr-only">
           <DialogTitle>Quà Tết AnSan Promotion</DialogTitle>
           <DialogDescription>
             A promotional popup for AnSan's Tet gift sets. Click to explore the gift sets.
           </DialogDescription>
         </DialogHeader>
+        
+        {/* Nút đóng (X) riêng cho banner này */}
+        <DialogClose className="absolute -top-4 -right-4 z-[60] bg-amber-500 text-white rounded-full p-1.5 shadow-xl hover:bg-amber-600 transition-all border-2 border-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+          <X className="h-5 w-5" />
+          <span className="sr-only">Đóng</span>
+        </DialogClose>
+
         <Link href="/danh-muc/bo-qua-tang" onClick={() => setIsOpen(false)}>
             <Image
                 src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1768899296/Banner_4_ds55j7.png"
