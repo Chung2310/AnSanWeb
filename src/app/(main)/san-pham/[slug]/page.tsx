@@ -164,39 +164,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return { isWine: wine, isSpirit: spirit };
   }, [product.tags, categories]);
 
-  const mainCategoryName = React.useMemo(() => {
-    if (!product.tags || !categories) return 'N/A';
-    
-    const getRootParent = (catId: string): Category | undefined => {
-        const cat = categories.find(c => c.id === catId);
-        if (!cat) return undefined;
-        if (!cat.parentId) return cat;
-        return getRootParent(cat.parentId);
-    };
-
-    for (const tagId of product.tags) {
-        const root = getRootParent(tagId);
-        if (root && root.name) return root.name.toUpperCase();
-    }
-
-    return 'N/A';
-  }, [product.tags, categories]);
-
-  const loaiRuouValue = React.useMemo(() => {
-    if (product.tags && categories) {
-        const wineTypes = wineMegaMenuData.theoLoai.map(item => item.category_id);
-        const spiritTypes = spiritsMegaMenuData.theoLoai.map(item => item.category_id);
-        const allTypes = [...wineTypes, ...spiritTypes];
-
-        const typeTag = product.tags.find(tagId => allTypes.includes(tagId));
-        if (typeTag) {
-            const cat = categories.find(c => c.id === typeTag);
-            if (cat) return cat.name;
-        }
-    }
-    return getAttribute('loại rượu', 'loại', 'type');
-  }, [product.tags, categories, getAttribute]);
-
   const countryValue = React.useMemo(() => {
     if (product.tags && categories) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
@@ -375,20 +342,13 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         {(isWine || isSpirit) && (
                           <>
                             <Separator className="opacity-50" />
-                            {/* Main Info Grid with Custom Icons */}
+                            {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
                                 {countryValue !== 'N/A' && (
                                     <InfoItem 
                                         icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
                                         label="QUỐC GIA"
                                         value={countryValue}
-                                    />
-                                )}
-                                {loaiRuouValue !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png"
-                                        label="LOẠI RƯỢU"
-                                        value={loaiRuouValue}
                                     />
                                 )}
                                 {getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv') !== 'N/A' && (
@@ -410,13 +370,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                         icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png"
                                         label="GIỐNG NHO"
                                         value={giongNhoValue}
-                                    />
-                                )}
-                                {mainCategoryName !== 'N/A' && (
-                                    <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/R%C6%B0%E1%BB%A3u_tyqr3f.png"
-                                        label="PHÂN LOẠI"
-                                        value={mainCategoryName}
                                     />
                                 )}
                             </div>
