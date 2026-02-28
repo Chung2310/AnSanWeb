@@ -123,7 +123,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     return images;
   }, [product]);
 
-  const getAttribute = React.useCallback((...labels: string[]): string => {
+  const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
@@ -173,10 +173,10 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             if (cat) return cat.name;
         }
     }
-    const countryVal = getAttribute('quốc gia', 'country');
+    const countryVal = getAttribute(['quốc gia', 'country']);
     if (countryVal !== 'N/A') return countryVal;
 
-    const originVal = getAttribute('xuất xứ', 'origin');
+    const originVal = getAttribute(['xuất xứ', 'origin']);
     if (originVal !== 'N/A') {
       const parts = originVal.split(',');
       return parts[parts.length - 1].trim();
@@ -196,12 +196,12 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             if (names.length > 0) return names.join(', ');
         }
     }
-    return getAttribute('giống nho', 'nho', 'grapes');
+    return getAttribute(['giống nho', 'nho', 'grapes']);
   }, [product.tags, categories, getAttribute]);
 
   const capacityValue = React.useMemo(() => {
     if (!isWine && !isSpirit) return null;
-    const attr = getAttribute('dung tích', 'thể tích', 'volume');
+    const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
     if (attr === 'N/A' && isWine) return '750ml';
     return attr;
   }, [isWine, isSpirit, getAttribute]);
@@ -342,8 +342,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         {(isWine || isSpirit) && (
                           <>
                             <Separator className="opacity-50" />
-                            {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                            {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho (2 rows x 2 columns) */}
+                            <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                 {countryValue !== 'N/A' && (
                                     <InfoItem 
                                         icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
@@ -351,11 +351,11 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                         value={countryValue}
                                     />
                                 )}
-                                {getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv') !== 'N/A' && (
+                                {getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']) !== 'N/A' && (
                                     <InfoItem 
                                         icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png"
                                         label="NỒNG ĐỘ"
-                                        value={getAttribute('nồng độ cồn', 'nồng độ', 'alc', 'abv')}
+                                        value={getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv'])}
                                     />
                                 )}
                                 {capacityValue && capacityValue !== 'N/A' && (
