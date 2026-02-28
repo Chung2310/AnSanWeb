@@ -68,7 +68,8 @@ export default function DrinkCategoryShowcase() {
             variants={containerVariants}
             initial="hidden"
             animate={mainControls}
-            className="py-16 bg-white"
+            className="py-16"
+            style={{ backgroundColor: '#fdfaf5' }}
         >
             <div className="container">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">

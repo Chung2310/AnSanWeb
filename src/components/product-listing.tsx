@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect, Suspense, useRef, useCallback } from "react";
@@ -32,6 +31,7 @@ interface ProductListingProps {
  */
 function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
     
     const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
         if (!content) return { descriptionInitial: '', descriptionRest: null, isDescriptionLong: false };
@@ -57,11 +57,17 @@ function CollapsibleSEODescription({ content }: { content: string }) {
     const handleToggle = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        
+        // If we are about to collapse, scroll to the top of the section first
+        if (isExpanded && containerRef.current) {
+            containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
         setIsExpanded(!isExpanded);
     };
 
     return (
-        <div className="container pt-12 seo-container">
+        <div className="container pt-12 seo-container" ref={containerRef}>
             <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                  <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />
             
