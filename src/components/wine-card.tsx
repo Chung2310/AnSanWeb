@@ -51,10 +51,12 @@ export default function WineCard({ product }: WineCardProps) {
     let wine = false;
     let spirit = false;
 
-    for (const tagId of product.tags) {
-        const rootId = getRootParentId(tagId);
-        if (rootId === 'ruou-vang') wine = true;
-        if (rootId === 'ruou-manh') spirit = true;
+    if (product.tags) {
+        for (const tagId of product.tags) {
+            const rootId = getRootParentId(tagId);
+            if (rootId === 'ruou-vang') wine = true;
+            if (rootId === 'ruou-manh') spirit = true;
+        }
     }
 
     return { isWine: wine, isSpirit: spirit };
@@ -68,9 +70,11 @@ export default function WineCard({ product }: WineCardProps) {
         if (!cat.parentId) return cat;
         return getRootParent(cat.parentId);
     };
-    for (const tagId of product.tags) {
-        const root = getRootParent(tagId);
-        if (root && root.name) return root.name.toUpperCase();
+    if (product.tags) {
+        for (const tagId of product.tags) {
+            const root = getRootParent(tagId);
+            if (root && root.name) return root.name.toUpperCase();
+        }
     }
     return 'N/A';
   }, [product.tags, categories]);
@@ -156,7 +160,7 @@ export default function WineCard({ product }: WineCardProps) {
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{mainCategoryName}</p>
             )}
             
-            <h3 className="font-montserrat text-base font-bold uppercase text-[#972133] line-clamp-2 min-h-[3rem] transition-colors group-hover:opacity-80">
+            <h3 className="font-montserrat text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[3rem] transition-colors group-hover:opacity-80">
                 {product.nameVN}
             </h3>
 
