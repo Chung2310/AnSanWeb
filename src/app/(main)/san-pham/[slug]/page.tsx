@@ -176,7 +176,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
 
     for (const tagId of product.tags) {
         const root = getRootParent(tagId);
-        if (root) return root.name.toUpperCase();
+        if (root && root.name) return root.name.toUpperCase();
     }
 
     return 'N/A';
@@ -270,7 +270,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
       const category = categories.find(c => c.id === categoryId);
       if (!category) return [];
       const parentPath = category.parentId ? getPath(category.parentId) : [];
-      return [...parentPath, { label: category.name.toUpperCase(), href: `/danh-muc/${category.slug}` }];
+      return [...parentPath, { label: (category.name || '').toUpperCase(), href: `/danh-muc/${category.slug}` }];
     };
 
     const primaryTag = product.tags[0];
