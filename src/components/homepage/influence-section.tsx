@@ -44,7 +44,8 @@ export default function InfluenceSection() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="py-20" style={{ backgroundColor: '#fdfaf5' }}>
+        className="py-20 bg-white"
+    >
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="font-headline text-3xl font-black uppercase" style={{color: '#5a5a5a'}}>
