@@ -13,7 +13,7 @@
     --popover: 240 100% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 351 64% 36%; /* New Wine Red #972133 */
+    --primary: 351 64% 36%; /* Brand Red #972133 */
     --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 96%;
@@ -42,7 +42,7 @@
 
     --sidebar-background: 240 10% 3.9%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 0 72% 55%;
+    --sidebar-primary: 351 64% 36%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 14.9%;
     --sidebar-accent-foreground: 0 0% 98%;
@@ -60,7 +60,7 @@
     --popover: 0 0% 0%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 351 64% 36%; /* New Wine Red #972133 */
+    --primary: 351 64% 36%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4% 16%;
@@ -94,7 +94,7 @@
   .text-header-nav {
     @apply text-foreground/60;
   }
-  .hover\\:text-header-nav-hover:hover {
+  .hover\:text-header-nav-hover:hover {
     @apply text-foreground;
   }
   .no-focus-border:focus-visible {

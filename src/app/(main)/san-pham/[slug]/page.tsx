@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -155,8 +154,8 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     let wine = false;
     let spirit = false;
 
-    for (const typeTag of product.tags) {
-        const rootId = getRootParentId(typeTag);
+    for (const tagId of product.tags) {
+        const rootId = getRootParentId(tagId);
         if (rootId === 'ruou-vang') wine = true;
         if (rootId === 'ruou-manh') spirit = true;
     }
