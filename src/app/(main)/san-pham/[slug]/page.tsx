@@ -183,7 +183,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags, categories]);
 
   const loaiRuouValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const wineTypes = wineMegaMenuData.theoLoai.map(item => item.category_id);
         const spiritTypes = spiritsMegaMenuData.theoLoai.map(item => item.category_id);
@@ -195,14 +194,10 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             if (cat) return cat.name;
         }
     }
-
-    // Fallback: Attributes or Description
-    const attr = getAttribute('loại rượu', 'loại', 'type');
-    return attr;
+    return getAttribute('loại rượu', 'loại', 'type');
   }, [product.tags, categories, getAttribute]);
 
   const countryValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
@@ -211,8 +206,6 @@ function ProductDetailView({ product }: { product: FullProduct }) {
             if (cat) return cat.name;
         }
     }
-
-    // Fallback: Attributes or Description
     const countryVal = getAttribute('quốc gia', 'country');
     if (countryVal !== 'N/A') return countryVal;
 
@@ -225,36 +218,24 @@ function ProductDetailView({ product }: { product: FullProduct }) {
   }, [product.tags, categories, getAttribute]);
 
   const giongNhoValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
         const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
-        
         if (matchingTags.length > 0) {
             const names = matchingTags.map(tagId => {
                 const cat = categories.find(c => c.id === tagId);
                 return cat ? cat.name : null;
             }).filter(Boolean);
-            
             if (names.length > 0) return names.join(', ');
         }
     }
-
-    // Fallback: Attributes or Description
     return getAttribute('giống nho', 'nho', 'grapes');
   }, [product.tags, categories, getAttribute]);
 
   const capacityValue = React.useMemo(() => {
-    // Only show for Wine or Spirits
     if (!isWine && !isSpirit) return null;
-
     const attr = getAttribute('dung tích', 'thể tích', 'volume');
-    
-    // Default to 750ml for Wine if N/A
-    if (attr === 'N/A' && isWine) {
-        return '750ml';
-    }
-    
+    if (attr === 'N/A' && isWine) return '750ml';
     return attr;
   }, [isWine, isSpirit, getAttribute]);
 
@@ -419,7 +400,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                                 )}
                                 {capacityValue && capacityValue !== 'N/A' && (
                                     <InfoItem 
-                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772188841/pa_dung-tich_yfclha.svg"
+                                        icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png"
                                         label="DUNG TÍCH"
                                         value={capacityValue}
                                     />
@@ -543,16 +524,13 @@ export default function ProductDetailPage() {
     return <ProductDetailPageSkeleton />;
   }
 
-  // After loading, if product is explicitly null, it means we didn't find it.
   if (product === null) {
     notFound();
   }
 
-  // If product is found, render the view.
   if (product) {
     return <ProductDetailView product={product} />;
   }
 
-  // Default to skeleton while product is undefined (initial state)
   return <ProductDetailPageSkeleton />;
 }

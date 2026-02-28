@@ -76,27 +76,7 @@ export default function WineCard({ product }: WineCardProps) {
     return 'N/A';
   }, [product.tags, categories]);
 
-  const loaiRuouValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
-    if (product.tags && categories) {
-        const allTypes = [
-            ...wineMegaMenuData.theoLoai.map(item => item.category_id),
-            ...spiritsMegaMenuData.theoLoai.map(item => item.category_id)
-        ];
-        const typeTag = product.tags.find(tagId => allTypes.includes(tagId));
-        if (typeTag) {
-            const cat = categories.find(c => c.id === typeTag);
-            if (cat) return cat.name;
-        }
-    }
-
-    // Fallback: Attributes or Description
-    const attr = getAttribute(['loại rượu', 'loại', 'type']);
-    return attr;
-  }, [product.tags, categories, getAttribute]);
-
   const countryValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countries.includes(tagId));
@@ -105,8 +85,6 @@ export default function WineCard({ product }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-
-    // Fallback: Attributes or Description
     const countryVal = getAttribute(['quốc gia', 'country']);
     if (countryVal !== 'N/A') return countryVal;
     
@@ -119,26 +97,28 @@ export default function WineCard({ product }: WineCardProps) {
   }, [product.tags, categories, getAttribute]);
 
   const giongNhoValue = React.useMemo(() => {
-    // Priority: Database classification (tags)
     if (product.tags && categories) {
         const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
         const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
-        
         if (matchingTags.length > 0) {
             const names = matchingTags.map(tagId => {
                 const cat = categories.find(c => c.id === tagId);
                 return cat ? cat.name : null;
             }).filter(Boolean);
-            
             if (names.length > 0) return names.join(', ');
         }
     }
-
-    // Fallback: Attributes or Description
     return getAttribute(['giống nho', 'nho', 'grapes']);
   }, [product.tags, categories, getAttribute]);
 
   const nồngĐộValue = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
+
+  const capacityValue = React.useMemo(() => {
+    if (!isWine && !isSpirit) return null;
+    const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
+    if (attr === 'N/A' && isWine) return '750ml';
+    return attr;
+  }, [isWine, isSpirit, getAttribute]);
 
   const salePrice = Number(product.price);
   const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
@@ -198,12 +178,20 @@ export default function WineCard({ product }: WineCardProps) {
                             <span className="text-[11px] text-gray-600 leading-tight" title={countryValue}>{countryValue}</span>
                         </div>
                     )}
-                    {loaiRuouValue !== 'N/A' && (
+                    {nồngĐộValue !== 'N/A' && (
                         <div className="flex items-start gap-1.5">
                             <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png" alt="Loại rượu" fill className="object-contain" />
+                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
                             </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={loaiRuouValue}>{loaiRuouValue}</span>
+                            <span className="text-[11px] text-gray-600 leading-tight" title={nồngĐộValue}>{nồngĐộValue}</span>
+                        </div>
+                    )}
+                    {capacityValue && capacityValue !== 'N/A' && (
+                        <div className="flex items-start gap-1.5">
+                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
+                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" />
+                            </div>
+                            <span className="text-[11px] text-gray-600 leading-tight" title={capacityValue}>{capacityValue}</span>
                         </div>
                     )}
                     {giongNhoValue !== 'N/A' && (
@@ -212,14 +200,6 @@ export default function WineCard({ product }: WineCardProps) {
                                 <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" />
                             </div>
                             <span className="text-[11px] text-gray-600 leading-tight" title={giongNhoValue}>{giongNhoValue}</span>
-                        </div>
-                    )}
-                    {nồngĐộValue !== 'N/A' && (
-                        <div className="flex items-start gap-1.5">
-                            <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                                <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
-                            </div>
-                            <span className="text-[11px] text-gray-600 leading-tight" title={nồngĐộValue}>{nồngĐộValue}</span>
                         </div>
                     )}
                 </div>
