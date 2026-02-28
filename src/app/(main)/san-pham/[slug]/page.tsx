@@ -16,7 +16,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbLink, BreadcrumbS
 import { Button } from '@/components/ui/button';
 import { Award, CircleDollarSign, Users, Truck, GlassWater, Phone, MessageCircle, Smartphone } from 'lucide-react';
 import Link from 'next/link';
-import { wineMegaMenuData, spiritsMegaMenuData } from '@/lib/mega-menu-data';
+import { wineMegaMenuData } from '@/lib/mega-menu-data';
 import {
   Dialog,
   DialogContent,

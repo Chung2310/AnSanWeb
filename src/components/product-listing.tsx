@@ -34,6 +34,7 @@ function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
     
     const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
+        if (!content) return { descriptionInitial: '', descriptionRest: null, isDescriptionLong: false };
         const firstParagraphEnd = content.indexOf('</p>');
         if (firstParagraphEnd === -1) {
             return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
