@@ -32,7 +32,6 @@ interface ProductListingProps {
  */
 function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
     
     const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
         if (!content) return { descriptionInitial: '', descriptionRest: null, isDescriptionLong: false };
@@ -58,20 +57,11 @@ function CollapsibleSEODescription({ content }: { content: string }) {
     const handleToggle = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        
-        // If we are collapsing, we check if the container top is off-screen
-        if (isExpanded && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            if (rect.top < 0) {
-                containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-        
         setIsExpanded(!isExpanded);
     };
 
     return (
-        <div className="container pt-12 seo-container" ref={containerRef}>
+        <div className="container pt-12 seo-container">
             <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                  <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />
             
@@ -333,17 +323,17 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             />
           </div>
 
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 bg-[#f8f0e5] rounded-2xl p-6 md:p-10 shadow-lg mb-12">
             <div className="flex justify-between items-center mb-6 text-sm">
-              <p>HIỂN THỊ {paginatedProducts.length > 0 ? firstItemIndex : 0}-{lastItemIndex} CỦA {sortedProducts.length} KẾT QUẢ</p>
+              <p className="font-bold text-gray-700">HIỂN THỊ {paginatedProducts.length > 0 ? firstItemIndex : 0}-{lastItemIndex} CỦA {sortedProducts.length} KẾT QUẢ</p>
               <div className="flex items-center gap-2">
-                <span className="uppercase">Sắp xếp theo</span>
+                <span className="uppercase font-semibold text-gray-500">Sắp xếp theo</span>
                 {sortingOptions.map((opt) => (
                   <Button
                       key={opt}
                       variant={activeSort === opt ? "outline" : "ghost"}
                       onClick={() => setActiveSort(opt)}
-                      className={`text-xs h-auto py-1 px-3 rounded-none ${activeSort === opt ? 'border-black' : 'border-transparent'}`}
+                      className={`text-xs h-auto py-1 px-3 rounded-none ${activeSort === opt ? 'border-black bg-white' : 'border-transparent'}`}
                   >
                       {opt}
                   </Button>
