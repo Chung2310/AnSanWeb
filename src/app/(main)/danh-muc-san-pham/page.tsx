@@ -2,8 +2,9 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Suspense } from 'react';
 
-export default function ProductsPage() {
+function AllProductsContent() {
   const { products, isLoading } = useProducts();
   const pageTitle = "Tất cả sản phẩm";
 
@@ -39,4 +40,12 @@ export default function ProductsPage() {
       itemsPerPage={12}
     />
   );
+}
+
+export default function AllProductsPage() {
+    return (
+        <Suspense fallback={<div className="container py-20 text-center">Đang tải sản phẩm...</div>}>
+            <AllProductsContent />
+        </Suspense>
+    );
 }

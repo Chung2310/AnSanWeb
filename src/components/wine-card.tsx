@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -23,7 +22,7 @@ export default function WineCard({ product }: WineCardProps) {
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
-        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+        const found = product.attributes.find(a => a.label?.toLowerCase().trim() === label.toLowerCase().trim());
         if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
       }
     }
@@ -78,8 +77,8 @@ export default function WineCard({ product }: WineCardProps) {
 
   const countryValue = React.useMemo(() => {
     if (product.tags && categories) {
-        const countries = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
-        const countryTag = product.tags.find(tagId => countries.includes(tagId));
+        const countryIds = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
+        const countryTag = product.tags.find(tagId => countryIds.includes(tagId));
         if (countryTag) {
             const cat = categories.find(c => c.id === countryTag);
             if (cat) return cat.name;
@@ -111,7 +110,7 @@ export default function WineCard({ product }: WineCardProps) {
     return getAttribute(['giống nho', 'nho', 'grapes']);
   }, [product.tags, categories, getAttribute]);
 
-  const nồngĐộValue = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
+  const alcoholContent = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
 
   const capacityValue = React.useMemo(() => {
     if (!isWine && !isSpirit) return null;
@@ -182,8 +181,8 @@ export default function WineCard({ product }: WineCardProps) {
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
                         </div>
-                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={nồngĐộValue !== 'N/A' ? nồngĐộValue : ''}>
-                            {nồngĐộValue !== 'N/A' ? nồngĐộValue : 'N/A'}
+                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={alcoholContent !== 'N/A' ? alcoholContent : ''}>
+                            {alcoholContent !== 'N/A' ? alcoholContent : 'N/A'}
                         </span>
                     </div>
                     <div className="flex items-start gap-1.5">

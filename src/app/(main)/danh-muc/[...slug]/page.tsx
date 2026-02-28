@@ -2,14 +2,13 @@
 import { useProducts } from '@/hooks/use-products';
 import ProductListing from '@/components/product-listing';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 import { useParams, notFound, useSearchParams } from 'next/navigation';
 import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
-import type { ActiveFilters } from '@/components/sidebar-filter';
-import { staticFiltersData } from '@/components/sidebar-filter';
+import { staticFiltersData, type ActiveFilters } from '@/components/sidebar-filter';
 
-export default function ProductsPage() {
+function CategoryPageContent() {
   const params = useParams();
   const slug = params?.slug;
   const searchParams = useSearchParams();
@@ -80,4 +79,16 @@ export default function ProductsPage() {
       queryFilters={queryFilters}
     />
   );
+}
+
+export default function CategoryPage() {
+    return (
+        <Suspense fallback={
+            <div className="container py-12 flex items-center justify-center min-h-[400px]">
+                <Skeleton className="h-32 w-32 rounded-full" />
+            </div>
+        }>
+            <CategoryPageContent />
+        </Suspense>
+    );
 }

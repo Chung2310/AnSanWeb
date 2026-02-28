@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -145,8 +144,9 @@ export function DataTable<TData, TValue>({
          {totalPages > 1 && (
             <div className="flex justify-center items-center gap-6 mt-4 text-lg text-muted-foreground">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
-                    <button
+                    <Button
                         key={pageNumber}
+                        variant="ghost"
                         onClick={() => handlePageChange(pageNumber)}
                         className={cn(
                             "font-headline font-bold transition-colors hover:text-foreground",
@@ -154,15 +154,16 @@ export function DataTable<TData, TValue>({
                         )}
                     >
                         {pageNumber}
-                    </button>
+                    </Button>
                 ))}
-                <button
+                <Button
+                    variant="ghost"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={!table.getCanNextPage()}
                     className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
                 >
                   <ChevronRight className="h-6 w-6" />
-                </button>
+                </Button>
             </div>
         )}
       </div>
