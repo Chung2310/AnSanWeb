@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect, Suspense, useRef, useCallback } from "react";
@@ -255,6 +256,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     e.preventDefault();
     e.stopPropagation();
     setIsDescriptionExpanded(!isDescriptionExpanded);
+    // CRITICAL: Removed any scrollTo logic to prevent page jumping to top
   };
 
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
@@ -273,7 +275,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
       <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
 
       {categoryDescription && (
-        <div ref={descriptionContainerRef} className="container pt-12 scroll-mt-24">
+        <div ref={descriptionContainerRef} className="container pt-12">
             <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                  {descriptionInitial && <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />}
             

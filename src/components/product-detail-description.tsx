@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
@@ -44,6 +45,7 @@ export default function ProductDetailDescription({ details }: { details: Product
         e.preventDefault();
         e.stopPropagation();
         setIsExpanded(!isExpanded);
+        // CRITICAL: Removed any scrollTo logic to prevent page jumping to top
     };
 
     return (
