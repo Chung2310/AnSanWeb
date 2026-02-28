@@ -28,10 +28,11 @@ interface ProductListingProps {
 
 /**
  * Isolated SEO Description component to handle its own state 
- * and prevent parent re-renders that might cause scroll jumps.
+ * and prevent jumping when collapsing long content.
  */
 function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
     
     const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
         if (!content) return { descriptionInitial: '', descriptionRest: null, isDescriptionLong: false };
@@ -57,11 +58,20 @@ function CollapsibleSEODescription({ content }: { content: string }) {
     const handleToggle = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        
+        // If we are collapsing, we check if the container top is off-screen
+        if (isExpanded && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            if (rect.top < 0) {
+                containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
         setIsExpanded(!isExpanded);
     };
 
     return (
-        <div className="container pt-12">
+        <div className="container pt-12 seo-container" ref={containerRef}>
             <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
                  <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />
             

@@ -43,7 +43,7 @@ export default function WineCard({ product }: WineCardProps) {
     if (!product.tags || !categories) return { isWine: false, isSpirit: false };
     
     const getRootParentId = (catId: string): string | null => {
-        const cat = categories.find(c => c.id === catId);
+        const cat = categories.find(c => c.id === catId || c.slug === catId);
         if (!cat) return null;
         if (!cat.parentId) return cat.id;
         return getRootParentId(cat.parentId);
@@ -64,7 +64,7 @@ export default function WineCard({ product }: WineCardProps) {
   const mainCategoryName = React.useMemo(() => {
     if (!product.tags || !categories) return 'N/A';
     const getRootParent = (catId: string): Category | undefined => {
-        const cat = categories.find(c => c.id === catId);
+        const cat = categories.find(c => c.id === catId || c.slug === catId);
         if (!cat) return undefined;
         if (!cat.parentId) return cat;
         return getRootParent(cat.parentId);

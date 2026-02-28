@@ -146,7 +146,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
     if (!product.tags || !categories) return { isWine: false, isSpirit: false };
     
     const getRootParentId = (catId: string): string | null => {
-        const cat = categories.find(c => c.id === catId);
+        const cat = categories.find(c => c.id === catId || c.slug === catId);
         if (!cat) return null;
         if (!cat.parentId) return cat.id;
         return getRootParentId(cat.parentId);
@@ -342,7 +342,7 @@ function ProductDetailView({ product }: { product: FullProduct }) {
                         {(isWine || isSpirit) && (
                           <>
                             <Separator className="opacity-50" />
-                            {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho (2 rows x 2 columns) */}
+                            {/* Main Info Grid - strictly 4 icons: Quốc gia, Nồng độ, Dung tích, Giống nho (2x2 layout) */}
                             <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                 <InfoItem 
                                     icon="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png"
