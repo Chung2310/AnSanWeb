@@ -248,7 +248,7 @@ const MegaMenu = ({
             const isGiongNhoColumn = column.title === 'Giống nho';
             const isVungColumn = column.title === 'Vùng làm vang';
             
-            const grapesLimit = 9;
+            const grapesLimit = 10;
             const vungLimit = 10;
             
             let itemsToShow = column.items;
