@@ -39,12 +39,34 @@ export default function WineCard({ product }: WineCardProps) {
     return 'N/A';
   }, [product.attributes, product.description]);
 
+  const { isWine, isSpirit } = React.useMemo(() => {
+    if (!product.tags || !categories) return { isWine: false, isSpirit: false };
+    
+    const getRootParentId = (catId: string): string | null => {
+        const cat = categories.find(c => c.id === catId);
+        if (!cat) return null;
+        if (!cat.parentId) return cat.id;
+        return getRootParentId(cat.parentId);
+    };
+
+    let wine = false;
+    let spirit = false;
+
+    for (const tagId of product.tags) {
+        const rootId = getRootParentId(tagId);
+        if (rootId === 'ruou-vang') wine = true;
+        if (rootId === 'ruou-manh') spirit = true;
+    }
+
+    return { isWine: wine, isSpirit: spirit };
+  }, [product.tags, categories]);
+
   const mainCategoryName = React.useMemo(() => {
     if (!product.tags || !categories) return 'N/A';
     const getRootParent = (catId: string): Category | undefined => {
         const cat = categories.find(c => c.id === catId);
         if (!cat) return undefined;
-        if (!cat.parentId) return cat;
+        if (!cat.parentId) return cat.id;
         return getRootParent(cat.parentId);
     };
     for (const tagId of product.tags) {
@@ -166,32 +188,34 @@ export default function WineCard({ product }: WineCardProps) {
                 <span className="text-lg font-bold text-red-700">{formatPrice(salePrice)}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
-                {countryValue !== 'N/A' && (
-                    <div className="flex items-start gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" width={16} height={16} className="shrink-0 mt-0.5" />
-                        <span className="text-[11px] text-gray-600 truncate" title={countryValue}>{countryValue}</span>
-                    </div>
-                )}
-                {loaiRuouValue !== 'N/A' && (
-                    <div className="flex items-start gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png" alt="Loại rượu" width={16} height={16} className="shrink-0 mt-0.5" />
-                        <span className="text-[11px] text-gray-600 truncate" title={loaiRuouValue}>{loaiRuouValue}</span>
-                    </div>
-                )}
-                {giongNhoValue !== 'N/A' && (
-                    <div className="flex items-start gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" width={16} height={16} className="shrink-0 mt-0.5" />
-                        <span className="text-[11px] text-gray-600 truncate" title={giongNhoValue}>{giongNhoValue}</span>
-                    </div>
-                )}
-                {nồngĐộValue !== 'N/A' && (
-                    <div className="flex items-start gap-1.5">
-                        <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" width={16} height={16} className="shrink-0 mt-0.5" />
-                        <span className="text-[11px] text-gray-600 truncate" title={nồngĐộValue}>{nồngĐộValue}</span>
-                    </div>
-                )}
-            </div>
+            {(isWine || isSpirit) && (
+                <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
+                    {countryValue !== 'N/A' && (
+                        <div className="flex items-start gap-1.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" width={16} height={16} className="shrink-0 mt-0.5" />
+                            <span className="text-[11px] text-gray-600 truncate" title={countryValue}>{countryValue}</span>
+                        </div>
+                    )}
+                    {loaiRuouValue !== 'N/A' && (
+                        <div className="flex items-start gap-1.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180057/Lo%E1%BA%A1i_r%C6%B0%E1%BB%A3u_ma76dk.png" alt="Loại rượu" width={16} height={16} className="shrink-0 mt-0.5" />
+                            <span className="text-[11px] text-gray-600 truncate" title={loaiRuouValue}>{loaiRuouValue}</span>
+                        </div>
+                    )}
+                    {giongNhoValue !== 'N/A' && (
+                        <div className="flex items-start gap-1.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" width={16} height={16} className="shrink-0 mt-0.5" />
+                            <span className="text-[11px] text-gray-600 truncate" title={giongNhoValue}>{giongNhoValue}</span>
+                        </div>
+                    )}
+                    {nồngĐộValue !== 'N/A' && (
+                        <div className="flex items-start gap-1.5">
+                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" width={16} height={16} className="shrink-0 mt-0.5" />
+                            <span className="text-[11px] text-gray-600 truncate" title={nồngĐộValue}>{nồngĐộValue}</span>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
       </Link>
     </div>
