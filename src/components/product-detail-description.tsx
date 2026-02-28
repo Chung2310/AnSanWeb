@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -21,7 +21,6 @@ const DetailSection = ({ title, content }: { title: string, content?: string | n
 export default function ProductDetailDescription({ details }: { details: ProductStructuredDetails }) {
     const { title, paragraphs, details: detailList, tastingNote, howToEnjoy, foodPairing, storage, conclusion } = details;
     const [isExpanded, setIsExpanded] = useState(false);
-    const containerRef = useRef<HTMLElement>(null);
 
     const hasContent = 
       (paragraphs && paragraphs.length > 0 && paragraphs.some(p => p.trim() !== '')) || 
@@ -42,20 +41,11 @@ export default function ProductDetailDescription({ details }: { details: Product
     const handleToggle = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        
-        // If we are collapsing, ensure the user stays at the top of this section
-        if (isExpanded && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            if (rect.top < 0) {
-                containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-        
         setIsExpanded(prev => !prev);
-    }, [isExpanded]);
+    }, []);
 
     return (
-        <section className="py-20 seo-container" style={{backgroundColor: '#fdfaf5'}} ref={containerRef}>
+        <section className="py-20 seo-container" style={{backgroundColor: '#fdfaf5'}}>
             <div className="container max-w-4xl mx-auto">
                 <h2 className="text-center font-headline text-4xl font-black uppercase mb-10" style={{color: '#5a5a5a'}}>
                     Mô Tả Chi Tiết
