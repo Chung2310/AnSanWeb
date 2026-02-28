@@ -170,6 +170,7 @@ export default function WineCard({ product }: WineCardProps) {
 
             {(isWine || isSpirit) && (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
+                    {/* Order: Quốc gia, Nồng độ, Dung tích, Giống nho */}
                     {countryValue !== 'N/A' && (
                         <div className="flex items-start gap-1.5">
                             <div className="relative w-4 h-4 shrink-0 mt-0.5">
