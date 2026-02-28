@@ -13,7 +13,7 @@
     --popover: 240 100% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 353 31% 24%; /* Wine Red */
+    --primary: 351 64% 36%; /* New Wine Red #972133 */
     --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 96%;
@@ -60,7 +60,7 @@
     --popover: 0 0% 0%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 353 31% 24%; /* Wine Red */
+    --primary: 351 64% 36%; /* New Wine Red #972133 */
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4% 16%;

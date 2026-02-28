@@ -30,7 +30,7 @@ const actions = [
 export default function MobileActionBar() {
   return (
     <div className="fixed right-6 top-[60%] -translate-y-1/2 z-[51] hidden lg:block">
-      <div className="flex flex-col bg-[#4B2C2C] rounded-lg overflow-hidden shadow-2xl border border-white/10">
+      <div className="flex flex-col bg-[#972133] rounded-lg overflow-hidden shadow-2xl border border-white/10">
         {actions.map((action) => (
           <Link
             key={action.label}
