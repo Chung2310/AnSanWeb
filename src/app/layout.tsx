@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     siteName: 'AnSan Wine & Spirit',
     images: [
       {
-        url: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png',
+        url: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
         width: 1200,
         height: 630,
         alt: 'AnSan Wine & Spirit',
@@ -36,7 +36,8 @@ export const metadata: Metadata = {
     images: ['https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
+    apple: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
   },
 };
 
