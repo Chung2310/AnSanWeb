@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Trash } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -52,8 +52,6 @@ export function DataTable<TData, TValue>({
   data,
   nameFilter,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
 
@@ -89,14 +87,9 @@ export function DataTable<TData, TValue>({
     enableRowSelection: true,
   });
 
-  const currentPage = table.getState().pagination.pageIndex + 1;
-  const totalPages = table.getPageCount();
-
-  const handlePageChange = (pageNumber: number) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      router.push(`${pathname}?page=${pageNumber}`);
-    }
-  };
+  useEffect(() => {
+    table.getColumn('name')?.setFilterValue(nameFilter);
+  }, [nameFilter, table]);
 
   const handleDeleteSelected = () => {
     const selectedRows = table.getSelectedRowModel().flatRows;
@@ -106,6 +99,17 @@ export function DataTable<TData, TValue>({
     Promise.all(promises).then(() => {
         table.resetRowSelection();
     });
+  };
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const totalPages = table.getPageCount();
+
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      router.push(`${pathname}?page=${pageNumber}`);
+    }
   };
 
   return (
