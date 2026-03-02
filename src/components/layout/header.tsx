@@ -10,7 +10,7 @@ import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../ui/input';
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -31,7 +31,6 @@ import {
   glasswareMegaMenuData,
   giftSetMegaMenuData,
 } from '@/lib/mega-menu-data';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 // Define unified data structures for navigation
@@ -409,16 +408,6 @@ export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const [hidden, setHidden] = useState(false);
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    if (latest > 150) {
-      setHidden(true);
-    } else {
-      setHidden(false);
-    }
-  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -433,228 +422,218 @@ export default function Header() {
     <header
       className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
-      <motion.div
-        variants={{
-          visible: { height: 'auto', y: 0 },
-          hidden: { height: 0, y: '-100%' },
-        }}
-        animate={hidden ? 'hidden' : 'visible'}
-        transition={{ duration: 0.35, ease: 'easeInOut' }}
-        className="overflow-hidden"
-      >
-        {/* Top Bar */}
-        <div className="bg-black text-white">
-          <div className="container flex h-10 max-w-screen-2xl items-center justify-between px-4">
-            <div className="lg:hidden"></div>
-            <div className="flex items-center gap-6 text-xs font-light ml-auto">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>T2 - CN: 9H - 22H</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-2">
-                <Phone className="h-4 w-4" />
-                <span>0933.333.313</span>
-              </div>
+      {/* Top Bar */}
+      <div className="bg-black text-white">
+        <div className="container flex h-10 max-w-screen-2xl items-center justify-between px-4">
+          <div className="lg:hidden"></div>
+          <div className="flex items-center gap-6 text-xs font-light ml-auto">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>T2 - CN: 9H - 22H</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-2">
+              <Phone className="h-4 w-4" />
+              <span>0933.333.313</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Main Header */}
-        <div className="bg-secondary text-secondary-foreground">
-          <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
-            <div className="flex-1 flex justify-start">
-              <form
-                onSubmit={handleSearch}
-                className="relative w-full max-w-xs hidden lg:block"
+      {/* Main Header */}
+      <div className="bg-secondary text-secondary-foreground">
+        <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
+          <div className="flex-1 flex justify-start">
+            <form
+              onSubmit={handleSearch}
+              className="relative w-full max-w-xs hidden lg:block"
+            >
+              <Input
+                type="text"
+                placeholder="Tìm kiếm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80"
+              />
+              <Button
+                type="submit"
+                variant="ghost"
+                className="absolute right-0 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent"
               >
-                <Input
-                  type="text"
-                  placeholder="Tìm kiếm"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-0 border-b rounded-none border-secondary-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-b-secondary-foreground pl-0 pr-8 placeholder:text-secondary-foreground/80"
-                />
-                <Button
-                  type="submit"
-                  variant="ghost"
-                  className="absolute right-0 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent"
+                <Search className="h-5 w-5 text-secondary-foreground/80" />
+              </Button>
+            </form>
+          </div>
+
+          <div className="flex-1 flex justify-center">
+            <Link href="/">
+              <Logo />
+            </Link>
+          </div>
+
+          <div className="flex-1 flex justify-end">
+            <div className="lg:hidden">
+              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-full max-w-[400px] bg-white p-0 flex flex-col"
                 >
-                  <Search className="h-5 w-5 text-secondary-foreground/80" />
-                </Button>
-              </form>
-            </div>
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Main Menu</SheetTitle>
+                    <SheetDescription>
+                      Main navigation links for the website.
+                    </SheetDescription>
+                  </SheetHeader>
+                  
+                  {/* Logo Area */}
+                  <div className="p-6 pb-2">
+                    <Link href="/" onClick={() => setIsSheetOpen(false)}>
+                      <Logo />
+                    </Link>
+                  </div>
 
-            <div className="flex-1 flex justify-center">
-              <Link href="/">
-                <Logo />
-              </Link>
-            </div>
-
-            <div className="flex-1 flex justify-end">
-              <div className="lg:hidden">
-                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Menu className="h-6 w-6" />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent
-                    side="right"
-                    className="w-full max-w-[400px] bg-white p-0 flex flex-col"
-                  >
-                    <SheetHeader className="sr-only">
-                      <SheetTitle>Main Menu</SheetTitle>
-                      <SheetDescription>
-                        Main navigation links for the website.
-                      </SheetDescription>
-                    </SheetHeader>
-                    
-                    {/* Logo Area */}
-                    <div className="p-6 pb-2">
-                      <Link href="/" onClick={() => setIsSheetOpen(false)}>
-                        <Logo />
-                      </Link>
-                    </div>
-
-                    {/* Scrollable Navigation Area */}
-                    <div className="flex-1 overflow-y-auto px-6 pb-10">
-                      <form
-                        onSubmit={handleSearch}
-                        className="relative w-full mb-6"
+                  {/* Scrollable Navigation Area */}
+                  <div className="flex-1 overflow-y-auto px-6 pb-10">
+                    <form
+                      onSubmit={handleSearch}
+                      className="relative w-full mb-6"
+                    >
+                      <Input
+                        type="text"
+                        placeholder="Tìm kiếm"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary"
+                      />
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent"
                       >
-                        <Input
-                          type="text"
-                          placeholder="Tìm kiếm"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="bg-gray-100 border-gray-300 focus:ring-primary focus:border-primary"
-                        />
-                        <Button
-                          type="submit"
-                          variant="ghost"
-                          className="absolute right-2.5 top-1/2 -translate-y-1/2 h-auto p-2 hover:bg-transparent"
-                        >
-                          <Search className="h-5 w-5 text-gray-500" />
-                        </Button>
-                      </form>
+                        <Search className="h-5 w-5 text-gray-500" />
+                      </Button>
+                    </form>
 
-                      <Accordion type="multiple" className="w-full">
-                        {navLinks.map((link) => {
-                          const hasSubItems = !!link.megaMenuColumns || !!link.customMegaMenu;
-                          const isGiaTot = link.label === 'GIÁ TỐT';
+                    <Accordion type="multiple" className="w-full">
+                      {navLinks.map((link) => {
+                        const hasSubItems = !!link.megaMenuColumns || !!link.customMegaMenu;
+                        const isGiaTot = link.label === 'GIÁ TỐT';
 
-                          if (hasSubItems) {
-                            return (
-                              <AccordionItem value={link.label} key={link.label}>
-                                <AccordionTrigger className="hover:no-underline py-0 pr-2">
-                                  <span className={cn(
-                                    "flex-1 py-4 font-semibold uppercase text-gray-800 text-left flex items-center",
-                                    isGiaTot && "text-chart-4 animate-flash"
-                                  )}>
-                                    {isGiaTot && (
-                                      <Image
-                                        src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
-                                        alt="Giá Tốt"
-                                        width={24}
-                                        height={24}
-                                        className="mr-2"
-                                      />
-                                    )}
-                                    {link.label}
-                                  </span>
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-4 pb-0">
-                                  {link.href && (
-                                    <Link
-                                      href={link.href}
-                                      onClick={() => setIsSheetOpen(false)}
-                                      className="block py-3 font-bold uppercase text-gray-700 border-b"
-                                    >
-                                      Tất cả {link.label}
-                                    </Link>
-                                  )}
-                                  
-                                  {link.customMegaMenu === 'gift-set' ? (
-                                    <div className="space-y-1 py-2">
-                                      {giftSetMegaMenuData.quaTang.map((item: any) => (
-                                        <Link
-                                          key={item.slug}
-                                          href={`/danh-muc/bo-qua-tang/${item.slug}`}
-                                          onClick={() => setIsSheetOpen(false)}
-                                          className="block py-2.5 text-muted-foreground hover:text-primary font-medium"
-                                        >
-                                          {item.label}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <Accordion type="multiple" className="w-full">
-                                      {link.megaMenuColumns?.map((column) => {
-                                        if (column.items.length === 0) return null;
-                                        return (
-                                          <AccordionItem
-                                            value={column.title}
-                                            key={column.title}
-                                            className="border-none"
-                                          >
-                                            <AccordionTrigger className="font-semibold uppercase text-gray-600 py-3 text-sm">
-                                              {column.title}
-                                            </AccordionTrigger>
-                                            <AccordionContent className="pl-4 space-y-1">
-                                              {column.items.map((item) => (
-                                                <Link
-                                                  key={item.href}
-                                                  href={item.href}
-                                                  onClick={() => setIsSheetOpen(false)}
-                                                  className="block py-2 text-muted-foreground hover:text-primary"
-                                                >
-                                                  {item.label}
-                                                </Link>
-                                              ))}
-                                            </AccordionContent>
-                                          </AccordionItem>
-                                        );
-                                      })}
-                                    </Accordion>
-                                  )}
-                                </AccordionContent>
-                              </AccordionItem>
-                            );
-                          }
-
+                        if (hasSubItems) {
                           return (
-                            <div className="border-b" key={link.label}>
-                              <Link
-                                href={link.href}
-                                onClick={() => setIsSheetOpen(false)}
-                                className={cn(
-                                  "flex items-center py-4 font-semibold uppercase text-gray-800",
+                            <AccordionItem value={link.label} key={link.label}>
+                              <AccordionTrigger className="hover:no-underline py-0 pr-2">
+                                <span className={cn(
+                                  "flex-1 py-4 font-semibold uppercase text-gray-800 text-left flex items-center",
                                   isGiaTot && "text-chart-4 animate-flash"
+                                )}>
+                                  {isGiaTot && (
+                                    <Image
+                                      src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
+                                      alt="Giá Tốt"
+                                      width={24}
+                                      height={24}
+                                      className="mr-2"
+                                    />
+                                  )}
+                                  {link.label}
+                                </span>
+                              </AccordionTrigger>
+                              <AccordionContent className="pl-4 pb-0">
+                                {link.href && (
+                                  <Link
+                                    href={link.href}
+                                    onClick={() => setIsSheetOpen(false)}
+                                    className="block py-3 font-bold uppercase text-gray-700 border-b"
+                                  >
+                                    Tất cả {link.label}
+                                  </Link>
                                 )}
-                              >
-                                {isGiaTot && (
-                                  <Image
-                                    src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
-                                    alt="Giá Tốt"
-                                    width={24}
-                                    height={24}
-                                    className="mr-2"
-                                  />
+                                
+                                {link.customMegaMenu === 'gift-set' ? (
+                                  <div className="space-y-1 py-2">
+                                    {giftSetMegaMenuData.quaTang.map((item: any) => (
+                                      <Link
+                                        key={item.slug}
+                                        href={`/danh-muc/bo-qua-tang/${item.slug}`}
+                                        onClick={() => setIsSheetOpen(false)}
+                                        className="block py-2.5 text-muted-foreground hover:text-primary font-medium"
+                                      >
+                                        {item.label}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <Accordion type="multiple" className="w-full">
+                                    {link.megaMenuColumns?.map((column) => {
+                                      if (column.items.length === 0) return null;
+                                      return (
+                                        <AccordionItem
+                                          value={column.title}
+                                          key={column.title}
+                                          className="border-none"
+                                        >
+                                          <AccordionTrigger className="font-semibold uppercase text-gray-600 py-3 text-sm">
+                                            {column.title}
+                                          </AccordionTrigger>
+                                          <AccordionContent className="pl-4 space-y-1">
+                                            {column.items.map((item) => (
+                                              <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                onClick={() => setIsSheetOpen(false)}
+                                                className="block py-2 text-muted-foreground hover:text-primary"
+                                              >
+                                                {item.label}
+                                              </Link>
+                                            ))}
+                                          </AccordionContent>
+                                        </AccordionItem>
+                                      );
+                                    })}
+                                  </Accordion>
                                 )}
-                                {link.label}
-                              </Link>
-                            </div>
+                              </AccordionContent>
+                            </AccordionItem>
                           );
-                        })}
-                      </Accordion>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
+                        }
+
+                        return (
+                          <div className="border-b" key={link.label}>
+                            <Link
+                              href={link.href}
+                              onClick={() => setIsSheetOpen(false)}
+                              className={cn(
+                                "flex items-center py-4 font-semibold uppercase text-gray-800",
+                                isGiaTot && "text-chart-4 animate-flash"
+                              )}
+                            >
+                              {isGiaTot && (
+                                <Image
+                                  src="https://res.cloudinary.com/dqhgnzmtk/image/upload/v1770563238/flash-sale_xnwrp0.png"
+                                  alt="Giá Tốt"
+                                  width={24}
+                                  height={24}
+                                  className="mr-2"
+                                />
+                              )}
+                              {link.label}
+                            </Link>
+                          </div>
+                        );
+                      })}
+                    </Accordion>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <nav className="bg-primary relative hidden lg:flex">
         <div className="container relative flex h-14 items-center justify-center gap-x-2">
