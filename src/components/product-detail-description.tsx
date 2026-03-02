@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
@@ -44,7 +45,7 @@ export default function ProductDetailDescription({ details }: { details: Product
                 const rect = sectionRef.current!.getBoundingClientRect();
                 // If the section top is above viewport, scroll back to it
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 150;
+                    const scrollTarget = window.scrollY + rect.top - 210; // Increased offset for persistent header
                     window.scrollTo({
                         top: scrollTarget,
                         behavior: 'smooth'

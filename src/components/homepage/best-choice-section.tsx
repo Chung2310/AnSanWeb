@@ -66,7 +66,7 @@ export default function BestChoiceSection() {
                             </h2>
                             <span className="flex-grow border-t border-red-800/30"></span>
                         </div>
-                         <p className="mt-4 text-lg text-gray-600 text-center">Các dòng vang đặc biệt nhà Ansan - Hiển thị các sản phẩm best choice</p>
+                         <p className="mt-4 text-lg text-Các dòng vang đặc biệt nhà Ansan-600 text-center"></p>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {bestChoiceProducts.map(product => (

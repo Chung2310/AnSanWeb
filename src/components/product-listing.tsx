@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect, Suspense, useRef, useCallback } from "react";
@@ -68,7 +69,7 @@ function CollapsibleSEODescription({ content }: { content: string }) {
                 const rect = containerRef.current!.getBoundingClientRect();
                 // If the top of the container is now significantly above the viewport, scroll it back into view
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 150; // Offset for header
+                    const scrollTarget = window.scrollY + rect.top - 210; // Increased offset for persistent header
                     window.scrollTo({
                         top: scrollTarget,
                         behavior: 'smooth'
