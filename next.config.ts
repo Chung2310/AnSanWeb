@@ -19,8 +19,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/danh-muc-san-pham/:slug*',
-        destination: '/danh-muc/:slug*',
+        source: '/danh-muc',
+        destination: '/danh-muc-san-pham',
+        permanent: true,
+      },
+      {
+        source: '/danh-muc-san-pham/:slugs*',
+        destination: '/danh-muc/:slugs*',
         permanent: true,
       },
       {

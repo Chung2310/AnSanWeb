@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Trash } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -52,13 +52,23 @@ export function DataTable<TData, TValue>({
   data,
   nameFilter,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
 
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const { deleteCategory, isDeleting } = useDeleteCategory();
+
+  const pagination = useMemo(() => ({
+    pageIndex: Math.max(0, parseInt(page, 10) - 1),
+    pageSize: 15,
+  }), [page]);
+
+  const columnFilters = useMemo(() => {
+    return nameFilter ? [{ id: 'name', value: nameFilter }] : [];
+  }, [nameFilter]);
 
   const table = useReactTable({
     data,
@@ -67,29 +77,16 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      pagination: {
-        pageIndex: parseInt(page, 10) - 1,
-        pageSize: 15,
-      },
+      pagination,
       rowSelection,
-    },
-    initialState: {
-      pagination: {
-        pageSize: 15,
-      },
     },
     enableRowSelection: true,
   });
-
-  useEffect(() => {
-    table.getColumn('name')?.setFilterValue(nameFilter);
-  }, [nameFilter, table]);
 
   const handleDeleteSelected = () => {
     const selectedRows = table.getSelectedRowModel().flatRows;
@@ -101,8 +98,6 @@ export function DataTable<TData, TValue>({
     });
   };
 
-  const router = useRouter();
-  const pathname = usePathname();
   const currentPage = table.getState().pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
 
@@ -188,26 +183,30 @@ export function DataTable<TData, TValue>({
       </Table>
        <div className="flex items-center justify-end space-x-2 p-4">
          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-6 mt-4 text-lg text-muted-foreground">
+            <div className="flex justify-center items-center gap-2 mt-4">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
-                    <button
+                    <Button
                         key={pageNumber}
+                        variant={currentPage === pageNumber ? "outline" : "ghost"}
+                        size="sm"
                         onClick={() => handlePageChange(pageNumber)}
                         className={cn(
-                            "font-headline font-bold transition-colors hover:text-foreground px-3 py-1",
-                            currentPage === pageNumber ? "text-foreground underline underline-offset-4" : ""
+                            "font-headline font-bold transition-colors",
+                            currentPage === pageNumber ? "text-primary border-primary" : "text-muted-foreground"
                         )}
                     >
                         {pageNumber}
-                    </button>
+                    </Button>
                 ))}
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={!table.getCanNextPage()}
                     className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed ml-2"
                 >
                   <ChevronRight className="h-6 w-6" />
-                </button>
+                </Button>
             </div>
         )}
       </div>

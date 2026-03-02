@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -28,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useDeleteBlogPost } from '@/hooks/use-delete-blog-post';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const ActionsCell = ({ row }: { row: { original: BlogPost } }) => {
@@ -146,13 +145,16 @@ export const columns: ColumnDef<BlogPost>[] = [
     cell: ({ row }) => {
       const { createdAt } = row.original;
       if (!createdAt) return 'N/A';
-      // Firestore Timestamps have a toDate method, but other date objects/strings might not.
       const date = typeof createdAt.toDate === 'function' ? createdAt.toDate() : new Date(createdAt);
       return date.toLocaleDateString('vi-VN');
     }
   },
   {
     id: 'actions',
-    cell: ActionsCell,
+    cell: (props) => (
+        <Suspense fallback={<span>...</span>}>
+            <ActionsCell {...props} />
+        </Suspense>
+    ),
   },
 ];

@@ -59,15 +59,14 @@ function CollapsibleSEODescription({ content }: { content: string }) {
 
         if (!isExpanded && containerRef.current) {
             const timer = setTimeout(() => {
-                const rect = containerRef.current!.getBoundingClientRect();
-                // Persistent Header height is approx 210px
-                if (rect.top < 0) {
+                const rect = containerRef.current?.getBoundingClientRect();
+                if (rect && rect.top < 0) {
                     window.scrollTo({
                         top: window.scrollY + rect.top - 210,
                         behavior: 'smooth'
                     });
                 }
-            }, 50);
+            }, 100);
             return () => clearTimeout(timer);
         }
     }, [isExpanded]);
@@ -119,21 +118,21 @@ function CollapsibleSEODescription({ content }: { content: string }) {
 function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory, queryFilters }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const [currentPage, setCurrentPage] = useState(1);
-  const { categories: allCategories } = useCategories();
+  const { categories } = useCategories();
 
-   const getDescendants = useCallback((parentId: string, categories: Category[]): Category[] => {
+   const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {
         const results: Category[] = [];
         const queue: string[] = [parentId];
         const visited = new Set<string>();
 
-        const initialCat = categories.find(c => c.id === parentId || c.slug === parentId);
+        const initialCat = allCats.find(c => c.id === parentId || c.slug === parentId);
         if (initialCat) results.push(initialCat);
 
         while(queue.length > 0) {
             const currentId = queue.shift()!;
             if (!visited.has(currentId)) {
                 visited.add(currentId);
-                const children = categories.filter(c => c.parentId === currentId);
+                const children = allCats.filter(c => c.parentId === currentId);
                 children.forEach(child => {
                     results.push(child);
                     queue.push(child.id);
@@ -144,10 +143,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     }, []);
   
   const categoryType = useMemo(() => {
-    if (!initialCategory || !allCategories) return { isWine: false, isSpirit: false, isGiftSet: false, isGlassware: false, isCigar: false };
+    if (!initialCategory || !categories) return { isWine: false, isSpirit: false, isGiftSet: false, isGlassware: false, isCigar: false };
     
     const getRootId = (catId: string): string => {
-        const cat = allCategories.find(c => c.id === catId || c.slug === catId);
+        const cat = categories.find(c => c.id === catId || c.slug === catId);
         if (!cat) return catId;
         if (!cat.parentId) return cat.id;
         return getRootId(cat.parentId);
@@ -161,12 +160,12 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         isGlassware: rootId === 'ly-coc-pha-le',
         isCigar: rootId === 'cigar'
     };
-  }, [initialCategory, allCategories]);
+  }, [initialCategory, categories]);
 
   const { isWine: isWineCategory, isSpirit: isSpiritCategory, isGiftSet: isGiftSetCategory } = categoryType;
 
   const getInitialFilters = useMemo(() => {
-    if (!initialCategory || !allCategories) return queryFilters || {};
+    if (!initialCategory || !categories) return queryFilters || {};
     
     let filters: ActiveFilters = queryFilters ? { ...queryFilters } : {};
 
@@ -182,27 +181,20 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         return null;
     };
 
-    const categoryAndParents: Category[] = [];
     let current: Category | undefined = initialCategory;
     while(current) {
-        categoryAndParents.push(current);
-        current = allCategories.find(c => c.id === current?.parentId);
-    }
-
-    for (const cat of categoryAndParents) {
-        const filterInfo = findGroupAndLabel(cat.id);
+        const filterInfo = findGroupAndLabel(current.id);
         if (filterInfo) {
-            if (!filters[filterInfo.group]) {
-                filters[filterInfo.group] = [];
-            }
+            if (!filters[filterInfo.group]) filters[filterInfo.group] = [];
             if (!filters[filterInfo.group].includes(filterInfo.label)) {
                 filters[filterInfo.group].push(filterInfo.label);
             }
         }
+        current = categories.find(c => c.id === current?.parentId);
     }
     
     return filters;
-  }, [initialCategory, allCategories, queryFilters]);
+  }, [initialCategory, categories, queryFilters]);
   
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
@@ -214,8 +206,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const filteredProducts = useMemo(() => {
     let productsToFilter = [...initialProducts];
 
-    if (initialCategory && allCategories) {
-        const descendants = getDescendants(initialCategory.id, allCategories);
+    if (initialCategory && categories) {
+        const descendants = getDescendants(initialCategory.id, categories);
         const matchIds = new Set(descendants.map(d => d.id));
         const matchSlugs = new Set(descendants.map(d => d.slug));
 
@@ -263,7 +255,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     }
 
     return productsToFilter;
-  }, [initialProducts, initialCategory, allCategories, activeFilters, getDescendants]);
+  }, [initialProducts, initialCategory, categories, activeFilters, getDescendants]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
@@ -360,7 +352,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             {paginatedProducts.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {paginatedProducts.map((product) => (
-                        <WineCard key={product.id} product={product} />
+                        <WineCard key={product.id} product={product} categories={categories} />
                     ))}
                 </div>
             ) : (

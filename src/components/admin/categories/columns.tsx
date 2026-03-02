@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -27,7 +26,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useDeleteCategory } from '@/hooks/use-delete-category';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const ActionsCell = ({ row }: { row: { original: Category } }) => {
@@ -130,6 +129,10 @@ export const columns = (categoryMap: Map<string, string>): ColumnDef<Category>[]
   },
   {
     id: 'actions',
-    cell: ActionsCell,
+    cell: (props) => (
+        <Suspense fallback={<span>...</span>}>
+            <ActionsCell {...props} />
+        </Suspense>
+    ),
   },
 ];
