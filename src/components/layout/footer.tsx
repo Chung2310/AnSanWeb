@@ -24,11 +24,11 @@ export default function Footer() {
                             rel="noopener noreferrer"
                             className="hover:text-primary transition-colors"
                           >
-                            Đường Trần Phú, Phường Đình Bảng, thành phố Từ Sơn, Bắc Ninh
+                            4X97+GFJ Vườn Hoa, Ngõ Quy Chế, TX. Từ Sơn, Từ Sơn, Bắc Ninh, Vietnam
                           </a>
                         </p>
-                        <p><span className='font-semibold'>Hotline:</span> 0933.333.313</p>
-                        <p><span className='font-semibold'>Email:</span> ruouvangansan@gmail.com</p>
+                        <p><span className='font-semibold'>Hotline:</span> <a href="tel:0933333313" className="hover:text-primary transition-colors">0933.333.313</a></p>
+                        <p><span className='font-semibold'>Email:</span> <a href="mailto:ruouvangansan@gmail.com" className="hover:text-primary transition-colors">ruouvangansan@gmail.com</a></p>
                     </div>
                 </div>
 

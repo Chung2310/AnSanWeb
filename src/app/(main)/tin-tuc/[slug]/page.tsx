@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { initializeFirebase } from "@/firebase";
+import { initializeFirebase } from "@/firebase/init";
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import type { BlogPost } from "@/lib/types";
 import PostDetailView from "./post-detail-view";
