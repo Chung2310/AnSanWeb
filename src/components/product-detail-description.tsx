@@ -41,7 +41,7 @@ export default function ProductDetailDescription({ details }: { details: Product
         if (!isExpanded && sectionRef.current) {
             const timer = setTimeout(() => {
                 const rect = sectionRef.current!.getBoundingClientRect();
-                // Offset for persistent header (approx 210px)
+                // Persistent Header height is approx 210px
                 if (rect.top < 0) {
                     window.scrollTo({
                         top: window.scrollY + rect.top - 210,

@@ -6,15 +6,15 @@ import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: {
-    default: 'World Class Whisky & Spirit | AnSan',
-    template: '%s | AnSan',
+    default: 'AnSan Wine & Spirit | Rượu Vang & Rượu Mạnh Nhập Khẩu Chính Hãng',
+    template: '%s | AnSan Wine & Spirit',
   },
-  description: 'Trải qua hành trình 10 năm học, hiểu và “ngấm” Whisky, chúng tôi tin rằng đây không chỉ là một thứ đồ uống thông thường. Nơi đây chứa đựng lịch sử, là kiến thức, nghệ thuật và đôi khi là trải nghiệm của cả một đời người.',
-  keywords: ['rượu vang', 'whisky', 'rượu mạnh', 'cigar', 'quà tặng tết', 'ansan'],
+  description: 'AnSan Wine & Spirit - Đơn vị nhập khẩu và phân phối rượu vang, rượu mạnh, whisky chính hãng hàng đầu. Cam kết chất lượng, giá tốt nhất, giao hàng nhanh chóng.',
+  keywords: ['rượu vang', 'whisky', 'rượu mạnh', 'cigar', 'quà tặng tết', 'ansan', 'rượu vang nhập khẩu'],
   authors: [{ name: 'AnSan' }],
   openGraph: {
-    title: 'World Class Whisky & Spirit | AnSan',
-    description: 'Trải qua hành trình 10 năm học, hiểu và “ngấm” Whisky, chúng tôi tin rằng đây không chỉ là một thứ đồ uống thông thường.',
+    title: 'AnSan Wine & Spirit | Rượu Vang & Rượu Mạnh Nhập Khẩu Chính Hãng',
+    description: 'Khám phá bộ sưu tập rượu vang và rượu mạnh đẳng cấp tại AnSan. Cam kết hàng chính hãng, tư vấn chuyên sâu.',
     url: 'https://ruouvangansan.vn',
     siteName: 'AnSan Wine & Spirit',
     images: [
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
         url: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png',
         width: 1200,
         height: 630,
-        alt: 'AnSan - World Class Whisky & Spirit',
+        alt: 'AnSan Wine & Spirit',
       },
     ],
     locale: 'vi_VN',
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'World Class Whisky & Spirit | AnSan',
-    description: 'Trải qua hành trình 10 năm học, hiểu và “ngấm” Whisky, chúng tôi tin rằng đây không chỉ là một thứ đồ uống thông thường.',
+    title: 'AnSan Wine & Spirit | Rượu Vang & Rượu Mạnh Nhập Khẩu Chính Hãng',
+    description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam.',
     images: ['https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png'],
   },
   icons: {
