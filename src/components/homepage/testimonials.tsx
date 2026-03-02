@@ -1,4 +1,3 @@
-
 'use client';
 
 import { sampleTestimonials } from '@/lib/placeholder-data';
@@ -36,7 +35,7 @@ export default function Testimonials() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="py-12 md:py-20 bg-secondary">
+        className="py-12 md:py-20 bg-white">
       <div className="container">
         <div className="text-center mb-10">
           <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
@@ -58,7 +57,7 @@ export default function Testimonials() {
             {sampleTestimonials.map((testimonial) => (
               <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-1 h-full">
-                  <Card className="h-full flex flex-col">
+                  <Card className="h-full flex flex-col bg-[#f8f0e5] border-none">
                     <CardContent className="p-6 flex-grow flex flex-col justify-between">
                       <blockquote className="text-muted-foreground italic">
                         “{testimonial.quote}”

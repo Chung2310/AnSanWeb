@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -114,8 +113,7 @@ export default function PriceCategoryShowcase() {
       initial="hidden"
       animate={mainControls}
       transition={{ duration: 1, delay: 0.4 }}
-      className="py-12" 
-      style={{ backgroundColor: '#fdfaf5' }}
+      className="py-12 bg-white"
     >
       <div className="container mx-auto max-w-screen-xl">
         <div className="mb-12">

@@ -42,9 +42,10 @@ export default function ProductDetailDescription({ details }: { details: Product
         e.preventDefault();
         e.stopPropagation();
         
-        // If we are about to collapse, scroll to the top of the section
+        // If we are about to collapse, scroll to the top of the section to prevent jumping
         if (isExpanded && sectionRef.current) {
-            sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const top = sectionRef.current.getBoundingClientRect().top + window.scrollY - 150;
+            window.scrollTo({ top, behavior: 'smooth' });
         }
         
         setIsExpanded(prev => !prev);
@@ -121,13 +122,12 @@ export default function ProductDetailDescription({ details }: { details: Product
                 {allParagraphs.length > 2 && (
                     <div className="text-center mt-8">
                         <Button 
-                            variant="ghost" 
+                            variant="link" 
                             type="button"
                             onClick={handleToggle}
-                            className="font-bold text-sm tracking-widest hover:bg-transparent"
-                            style={{color: '#5a5a5a'}}
+                            className="text-primary hover:text-primary/80 no-underline hover:no-underline font-bold"
                         >
-                            {isExpanded ? 'THU GỌN' : 'XEM THÊM'}
+                            {isExpanded ? 'Thu gọn' : 'Xem thêm'}
                             {isExpanded ? <ChevronUp className="w-5 h-5 ml-2" /> : <ChevronDown className="w-5 h-5 ml-2" />}
                         </Button>
                     </div>

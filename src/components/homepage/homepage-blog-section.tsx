@@ -20,10 +20,10 @@ import Autoplay from "embla-carousel-autoplay";
 const BlogCard = ({ post }: { post: BlogPost }) => {
     return (
         <Link href={`/tin-tuc/${post.slug}`} className="group block h-full">
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full bg-white rounded-lg p-4 transition-shadow hover:shadow-md">
                 <div className="relative">
                     {post.image && (
-                        <div className="aspect-[4/3] overflow-hidden">
+                        <div className="aspect-[4/3] overflow-hidden rounded-sm">
                             <Image
                                 src={post.image.url}
                                 alt={post.title}
@@ -56,7 +56,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
 
 
 const BlogCardSkeleton = () => (
-    <div className="space-y-4">
+    <div className="space-y-4 bg-white p-4 rounded-lg">
         <Skeleton className="aspect-[4/3] w-full" />
         <Skeleton className="h-4 w-1/3" />
         <Skeleton className="h-6 w-full" />
@@ -95,7 +95,7 @@ export default function HomepageBlogSection() {
             variants={containerVariants}
             initial="hidden"
             animate={mainControls}
-            className="py-12 md:py-20 bg-white"
+            className="py-12 md:py-20 bg-[#f8f0e5]"
         >
             <div className="container">
                 <div className="text-center mb-10">
@@ -136,7 +136,7 @@ export default function HomepageBlogSection() {
 
 
                 <div className="text-center mt-12">
-                    <Button asChild size="lg" variant="outline">
+                    <Button asChild size="lg" variant="outline" className="bg-white">
                         <Link href="/tin-tuc">Xem tất cả bài viết</Link>
                     </Button>
                 </div>
