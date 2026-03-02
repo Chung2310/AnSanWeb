@@ -54,16 +54,23 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
     }, [content]);
 
+    // Robust fix for jumping when collapsing
+    useEffect(() => {
+        if (!isExpanded && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            // If the top of the container is now significantly above the viewport, scroll it back into view
+            if (rect.top < -50) {
+                const scrollTarget = window.scrollY + rect.top - 150;
+                window.scrollTo({
+                    top: scrollTarget,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [isExpanded]);
+
     const handleToggle = (e: React.MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation();
-        
-        // If we are about to collapse, scroll to the top of the section first to prevent jumping to bottom
-        if (isExpanded && containerRef.current) {
-            const top = containerRef.current.getBoundingClientRect().top + window.scrollY - 150;
-            window.scrollTo({ top, behavior: 'smooth' });
-        }
-        
         setIsExpanded(!isExpanded);
     };
 
