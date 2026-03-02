@@ -60,7 +60,7 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         if (!isExpanded && containerRef.current) {
             const timer = setTimeout(() => {
                 const rect = containerRef.current!.getBoundingClientRect();
-                // Persistent Header height is approx 210px
+                // Persistent Header height is approx 210px (top bar + main header + nav)
                 if (rect.top < 0) {
                     window.scrollTo({
                         top: window.scrollY + rect.top - 210,

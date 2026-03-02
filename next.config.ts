@@ -56,14 +56,14 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
-      // Using safer path-to-regexp syntax for catch-all redirects in Next.js 15
+      // Using regex patterns for sitemap redirects to avoid path-to-regexp limitations in Next.js 15
       {
-        source: '/wp-sitemap:path*',
+        source: '/:path(wp-sitemap.*)',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:path*',
+        source: '/:path(sitemap.*)',
         destination: '/sitemap.xml',
         permanent: false,
       }
