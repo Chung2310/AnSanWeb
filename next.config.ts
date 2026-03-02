@@ -56,16 +56,16 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
-      // Fixed syntax for sitemap redirects using proper regex patterns to avoid startup errors
+      // Fixed syntax for sitemap redirects using proper path patterns to avoid startup errors
       {
-        source: '/:path(wp-sitemap.*)',
+        source: '/wp-sitemap:path*',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/:path(sitemap.*\\.xml)',
+        source: '/sitemap:path*',
         destination: '/sitemap.xml',
-        permanent: true,
+        permanent: false,
       }
     ]
   },
