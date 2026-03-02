@@ -190,7 +190,7 @@ export function DataTable<TData, TValue>({
                         key={pageNumber}
                         onClick={() => handlePageChange(pageNumber)}
                         className={cn(
-                            "font-headline font-bold transition-colors hover:text-foreground",
+                            "font-headline font-bold transition-colors hover:text-foreground px-3 py-1",
                             currentPage === pageNumber ? "text-foreground underline underline-offset-4" : ""
                         )}
                     >
@@ -200,7 +200,7 @@ export function DataTable<TData, TValue>({
                 <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={!table.getCanNextPage()}
-                    className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed"
+                    className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed ml-2"
                 >
                   <ChevronRight className="h-6 w-6" />
                 </button>
