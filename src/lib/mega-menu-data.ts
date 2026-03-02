@@ -77,7 +77,7 @@ export const spiritsMegaMenuData = {
         { label: "Macallan", slug: 'macallan', category_id: 'macallan' },
         { label: "Chivas", slug: 'chivas', category_id: 'chivas' },
         { label: "Johnnie Walker", slug: 'johnnie-walker', category_id: 'johnnie-walker' },
-        { label: "Ballantine's", slug: 'ballantines', category_id: 'ballantines' },
+        { label: "Ballantine's", slug: 'ballantines-finest', category_id: 'ballantines-finest' },
         { label: "Hibiki", slug: 'hibiki', category_id: 'hibiki' },
         { label: "Singleton", slug: 'singleton', category_id: 'singleton' },
         { label: "Glenfiddich", slug: 'glenfiddich', category_id: 'glenfiddich' },
