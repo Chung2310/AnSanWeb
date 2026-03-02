@@ -21,6 +21,7 @@ export default function ProductDetailDescription({ details }: { details: Product
     const { title, paragraphs, details: detailList, tastingNote, howToEnjoy, foodPairing, storage, conclusion } = details;
     const [isExpanded, setIsExpanded] = useState(false);
     const sectionRef = useRef<HTMLElement>(null);
+    const isFirstRun = useRef(true);
 
     const hasContent = 
       (paragraphs && paragraphs.length > 0 && paragraphs.some(p => p.trim() !== '')) || 
@@ -31,18 +32,25 @@ export default function ProductDetailDescription({ details }: { details: Product
       storage || 
       conclusion;
 
-    // Correct scroll position after collapsing
+    // Improved fix for jump scroll after collapsing
     useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
         if (!isExpanded && sectionRef.current) {
-            const rect = sectionRef.current.getBoundingClientRect();
-            // If the section top is above viewport, scroll back to it
-            if (rect.top < -50) {
-                const scrollTarget = window.scrollY + rect.top - 150;
-                window.scrollTo({
-                    top: scrollTarget,
-                    behavior: 'smooth'
-                });
-            }
+            setTimeout(() => {
+                const rect = sectionRef.current!.getBoundingClientRect();
+                // If the section top is above viewport, scroll back to it
+                if (rect.top < 0) {
+                    const scrollTarget = window.scrollY + rect.top - 150;
+                    window.scrollTo({
+                        top: scrollTarget,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
         }
     }, [isExpanded]);
 

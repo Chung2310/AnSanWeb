@@ -10,7 +10,7 @@ import { useAuthStore } from '@/stores/auth-store';
 const navLinks = [
   { href: '/admin', label: 'Dashboard', icon: Home },
   { href: '/admin/products', label: 'Sản phẩm', icon: Package },
-  { href: '/admin/categories', label: 'Danh mục', icon: Tags },
+  { href: '/admin/categories', label: 'Content Seo', icon: Tags },
   { href: '/admin/blog', label: 'Bài viết', icon: FileText },
 ];
 

@@ -40,9 +40,9 @@ const heroSlides = [
     {
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
-        title: 'Những dòng rượu mạnh được An san tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
+        title: 'Những dòng rượu mạnh được An San tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
         href: '/danh-muc/ruou-manh',
-        description: 'Những dòng rượu mạnh được An San tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
+        description: '',
     },
 ];
 
