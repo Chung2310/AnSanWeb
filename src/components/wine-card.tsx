@@ -4,20 +4,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product, Category } from '@/lib/types';
 import React from 'react';
-import { useCategories } from '@/hooks/use-categories';
 import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 type WineCardProps = {
   product: Product;
+  categories: Category[] | null;
 };
 
-export default function WineCard({ product }: WineCardProps) {
-  const { categories } = useCategories();
-
+export default function WineCard({ product, categories }: WineCardProps) {
   const formatPrice = (price: number) => {
     if (isNaN(price)) return '';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
+
+  const categoryMap = React.useMemo(() => {
+    if (!categories) return new Map<string, Category>();
+    return new Map(categories.map(c => [c.id, c]));
+  }, [categories]);
 
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
@@ -38,53 +41,40 @@ export default function WineCard({ product }: WineCardProps) {
     return 'N/A';
   }, [product.attributes, product.description]);
 
-  const { isWine, isSpirit } = React.useMemo(() => {
-    if (!product.tags || !categories) return { isWine: false, isSpirit: false };
+  const { isWine, isSpirit, mainCategoryName } = React.useMemo(() => {
+    if (!product.tags || !categories || categories.length === 0) {
+        return { isWine: false, isSpirit: false, mainCategoryName: 'N/A' };
+    }
     
-    const getRootParentId = (catId: string): string | null => {
-        const cat = categories.find(c => c.id === catId || c.slug === catId);
+    const getRootParent = (catId: string): Category | null => {
+        const cat = categoryMap.get(catId);
         if (!cat) return null;
-        if (!cat.parentId) return cat.id;
-        return getRootParentId(cat.parentId);
+        if (!cat.parentId) return cat;
+        return getRootParent(cat.parentId);
     };
 
     let wine = false;
     let spirit = false;
+    let mName = 'N/A';
 
-    if (product.tags) {
-        for (const tagId of product.tags) {
-            const rootId = getRootParentId(tagId);
-            if (rootId === 'ruou-vang') wine = true;
-            if (rootId === 'ruou-manh') spirit = true;
+    for (const tagId of product.tags) {
+        const root = getRootParent(tagId);
+        if (root) {
+            if (root.id === 'ruou-vang' || root.slug === 'ruou-vang') wine = true;
+            if (root.id === 'ruou-manh' || root.slug === 'ruou-manh') spirit = true;
+            if (root.name) mName = root.name.toUpperCase();
         }
     }
 
-    return { isWine: wine, isSpirit: spirit };
-  }, [product.tags, categories]);
-
-  const mainCategoryName = React.useMemo(() => {
-    if (!product.tags || !categories) return 'N/A';
-    const getRootParent = (catId: string): Category | undefined => {
-        const cat = categories.find(c => c.id === catId || c.slug === catId);
-        if (!cat) return undefined;
-        if (!cat.parentId) return cat;
-        return getRootParent(cat.parentId);
-    };
-    if (product.tags) {
-        for (const tagId of product.tags) {
-            const root = getRootParent(tagId);
-            if (root && root.name) return root.name.toUpperCase();
-        }
-    }
-    return 'N/A';
-  }, [product.tags, categories]);
+    return { isWine: wine, isSpirit: spirit, mainCategoryName: mName };
+  }, [product.tags, categories, categoryMap]);
 
   const countryValue = React.useMemo(() => {
     if (product.tags && categories) {
         const countryIds = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countryIds.includes(tagId));
         if (countryTag) {
-            const cat = categories.find(c => c.id === countryTag);
+            const cat = categoryMap.get(countryTag);
             if (cat) return cat.name;
         }
     }
@@ -97,7 +87,7 @@ export default function WineCard({ product }: WineCardProps) {
       return parts[parts.length - 1].trim();
     }
     return 'N/A';
-  }, [product.tags, categories, getAttribute]);
+  }, [product.tags, categories, categoryMap, getAttribute]);
 
   const giongNhoValue = React.useMemo(() => {
     if (product.tags && categories) {
@@ -105,14 +95,14 @@ export default function WineCard({ product }: WineCardProps) {
         const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
         if (matchingTags.length > 0) {
             const names = matchingTags.map(tagId => {
-                const cat = categories.find(c => c.id === tagId);
+                const cat = categoryMap.get(tagId);
                 return cat ? cat.name : null;
             }).filter(Boolean);
             if (names.length > 0) return names.join(', ');
         }
     }
     return getAttribute(['giống nho', 'nho', 'grapes']);
-  }, [product.tags, categories, getAttribute]);
+  }, [product.tags, categories, categoryMap, getAttribute]);
 
   const alcoholContent = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
 

@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
@@ -6,7 +5,7 @@ import type { Product } from '@/lib/types';
 import { Checkbox } from '@/components/ui/checkbox';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { Pencil, Trash } from 'lucide-react';
 import Link from 'next/link';
 import {
   AlertDialog,
@@ -21,11 +20,55 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useDeleteProduct } from '@/hooks/use-delete-product';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 const formatPrice = (price: number) => {
     if (isNaN(price)) return '';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 };
+
+function ActionsCell({ product }: { product: Product }) {
+    const { deleteProduct, isDeleting } = useDeleteProduct();
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') ?? '1';
+
+    return (
+        <div className="flex items-center space-x-2">
+          <Button variant="outline" size="icon" asChild>
+            <Link href={`/admin/products/${product.id}/edit?page=${page}`}>
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Chỉnh sửa</span>
+            </Link>
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="icon">
+                <Trash className="h-4 w-4" />
+                <span className="sr-only">Xóa</span>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả hình ảnh liên quan khỏi máy chủ.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => deleteProduct(product as any)}
+                  disabled={isDeleting}
+                  className="bg-destructive hover:bg-destructive/90"
+                >
+                  {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+    );
+}
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -90,7 +133,6 @@ export const columns: ColumnDef<Product>[] = [
      cell: ({ row }) => {
         const { createdAt } = row.original;
         if (!createdAt) return 'N/A';
-        // Firestore Timestamps have a toDate method, but other date objects/strings might not.
         const date = typeof createdAt.toDate === 'function' ? createdAt.toDate() : new Date(createdAt);
         return date.toLocaleDateString('vi-VN');
     }
@@ -98,48 +140,10 @@ export const columns: ColumnDef<Product>[] = [
   {
     id: 'actions',
     header: 'Hành động',
-    cell: function Cell({ row }) {
-      const product = row.original;
-      const { deleteProduct, isDeleting } = useDeleteProduct();
-      const searchParams = useSearchParams();
-      const page = searchParams.get('page') ?? '1';
-
-      return (
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="icon" asChild>
-            <Link href={`/admin/products/${product.id}/edit?page=${page}`}>
-              <Pencil className="h-4 w-4" />
-              <span className="sr-only">Chỉnh sửa</span>
-            </Link>
-          </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="icon">
-                <Trash className="h-4 w-4" />
-                <span className="sr-only">Xóa</span>
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Hành động này không thể được hoàn tác. Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả hình ảnh liên quan khỏi máy chủ.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Hủy</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => deleteProduct(product)}
-                  disabled={isDeleting}
-                  className="bg-destructive hover:bg-destructive/90"
-                >
-                  {isDeleting ? 'Đang xóa...' : 'Xóa vĩnh viễn'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+        <Suspense fallback={<span>...</span>}>
+            <ActionsCell product={row.original} />
+        </Suspense>
+    ),
   },
 ];

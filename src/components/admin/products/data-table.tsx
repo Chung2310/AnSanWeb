@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       pagination,
     },
-    manualPagination: false, // Client side pagination using internal state synced with URL
+    manualPagination: false, 
   });
   
   const currentPage = table.getState().pagination.pageIndex + 1;
