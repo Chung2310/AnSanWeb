@@ -41,8 +41,7 @@ export default function ProductDetailDescription({ details }: { details: Product
         if (!isExpanded && sectionRef.current) {
             const timer = setTimeout(() => {
                 const rect = sectionRef.current!.getBoundingClientRect();
-                // Offset for persistent header (Top Bar ~40px + Logo Bar ~96px + Nav ~56px = ~192px)
-                // Using 210px as a safe margin to ensure title is not hidden
+                // Offset for persistent header
                 if (rect.top < 0) {
                     window.scrollTo({
                         top: window.scrollY + rect.top - 210,
