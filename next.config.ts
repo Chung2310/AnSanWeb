@@ -56,16 +56,16 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
-      // Fixed sitemap redirects for Next.js 15 compatibility
+      // Fixed sitemap redirects for Next.js 15 compatibility to avoid TypeError
       {
-        source: '/wp-sitemap:path*',
+        source: '/wp-sitemap.xml',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:path*',
+        source: '/sitemap-index.xml',
         destination: '/sitemap.xml',
-        permanent: false,
+        permanent: true,
       }
     ]
   },
