@@ -37,11 +37,6 @@ const nextConfig: NextConfig = {
         source: '/wp-sitemap.xml',
         destination: '/sitemap.xml',
         permanent: true,
-      },
-      {
-        source: '/sitemap-index.xml',
-        destination: '/sitemap.xml',
-        permanent: true,
       }
     ]
   },

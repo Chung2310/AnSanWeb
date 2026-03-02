@@ -7,14 +7,14 @@ import { FirebaseClientProvider } from '@/firebase';
 export const metadata: Metadata = {
   metadataBase: new URL('https://ruouvangansan.vn'),
   title: {
-    default: 'World Class Whisky & Spirit | AnSan',
+    default: 'AnSan Wine & Spirit | World Class Whisky & Spirit',
     template: '%s | AnSan',
   },
   description: 'Trải qua hành trình 10 năm học, hiểu và “ngắm” Whisky, chúng tôi tin rằng đây không chỉ là một thứ đồ uống thông thường. Nơi đây chứa đựng lịch sử, là kiến thức, nghệ thuật và đôi khi là trải nghiệm cảm xúc cá nhân sâu sắc.',
   keywords: ['rượu vang', 'whisky', 'rượu mạnh', 'cigar', 'quà tặng tết', 'ansan', 'rượu vang nhập khẩu'],
   authors: [{ name: 'AnSan' }],
   openGraph: {
-    title: 'World Class Whisky & Spirit | AnSan',
+    title: 'AnSan Wine & Spirit | World Class Whisky & Spirit',
     description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam. Nơi đây chứa đựng lịch sử, kiến thức và nghệ thuật thưởng thức.',
     url: 'https://ruouvangansan.vn',
     siteName: 'AnSan Wine & Spirit',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'World Class Whisky & Spirit | AnSan',
+    title: 'AnSan Wine & Spirit | World Class Whisky & Spirit',
     description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam.',
     images: ['https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/Gemini_Generated_Image_9ygro89ygro89ygr.png?alt=media&token=90e16f08-f69c-4cd3-8703-88e7b694261b'],
   },
