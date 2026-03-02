@@ -1,4 +1,4 @@
-import { initializeFirebase } from '@/firebase';
+import { initializeFirebase } from '@/firebase/init';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import type { Category } from '@/lib/types';
 import CategoryPageContent from './category-page-content';
@@ -29,13 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!category) return {};
 
+  const description = category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`;
+
   return {
     title: category.name,
-    description: category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`,
+    description: description,
     openGraph: {
       title: `${category.name} | AnSan`,
-      description: category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`,
+      description: description,
       url: `https://ruouvangansan.vn/danh-muc/${slug.join('/')}`,
+      images: category.image ? [{ url: category.image.url }] : [],
     },
   };
 }
