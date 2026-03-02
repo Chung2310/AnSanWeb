@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -21,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
@@ -68,14 +69,6 @@ export function DataTable<TData, TValue>({
       },
     },
   });
-
-  useEffect(() => {
-    const currentPageFromUrl = parseInt(page, 10);
-    const tablePageIndex = table.getState().pagination.pageIndex + 1;
-    if (currentPageFromUrl !== tablePageIndex) {
-       table.setPageIndex(currentPageFromUrl - 1);
-    }
-  }, [page, table]);
 
   const currentPage = table.getState().pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
