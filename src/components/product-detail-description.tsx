@@ -43,9 +43,8 @@ export default function ProductDetailDescription({ details }: { details: Product
         if (!isExpanded && sectionRef.current) {
             setTimeout(() => {
                 const rect = sectionRef.current!.getBoundingClientRect();
-                // If the section top is above viewport, scroll back to it
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 210; // Increased offset for persistent header
+                    const scrollTarget = window.scrollY + rect.top - 210;
                     window.scrollTo({
                         top: scrollTarget,
                         behavior: 'smooth'

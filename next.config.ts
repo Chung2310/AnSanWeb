@@ -51,6 +51,16 @@ const nextConfig: NextConfig = {
         source: '/sam-panh-sam-panh-nga-sam-panh-nga-trang-sam-panh-nga-do',
         destination: '/danh-muc/ruou-vang/ruou-vang-sui',
         permanent: true,
+      },
+      {
+        source: '/wp-shop.php',
+        destination: '/danh-muc-san-pham',
+        permanent: true,
+      },
+      {
+        source: '/wp-sitemap.xml',
+        destination: '/sitemap.xml',
+        permanent: true,
       }
     ]
   },

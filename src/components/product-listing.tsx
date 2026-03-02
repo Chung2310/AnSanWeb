@@ -56,7 +56,7 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
     }, [content]);
 
-    // Enhanced fix for jumping when collapsing
+    // Fix for jumping when collapsing
     useEffect(() => {
         if (isFirstRun.current) {
             isFirstRun.current = false;
@@ -64,12 +64,10 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         }
 
         if (!isExpanded && containerRef.current) {
-            // Small delay to allow the layout to calculate new height after animation/state change
             setTimeout(() => {
                 const rect = containerRef.current!.getBoundingClientRect();
-                // If the top of the container is now significantly above the viewport, scroll it back into view
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 210; // Increased offset for persistent header
+                    const scrollTarget = window.scrollY + rect.top - 210;
                     window.scrollTo({
                         top: scrollTarget,
                         behavior: 'smooth'
@@ -259,7 +257,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
           const idsToFilter = activeLabels.map(label => {
             const options = staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[];
-            const option = options.find(o => o.label === label);
+            const option = options.find(o => o.value === label);
             return option?.value;
           }).filter(Boolean) as string[];
 
