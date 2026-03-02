@@ -23,7 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Trash } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -89,19 +89,6 @@ export function DataTable<TData, TValue>({
     },
     enableRowSelection: true,
   });
-
-  useEffect(() => {
-    table.getColumn('name')?.setFilterValue(nameFilter);
-  }, [nameFilter, table]);
-
-  useEffect(() => {
-    const currentPageFromUrl = parseInt(page, 10);
-    const tablePageIndex = table.getState().pagination.pageIndex + 1;
-    if (currentPageFromUrl !== tablePageIndex) {
-       table.setPageIndex(currentPageFromUrl - 1);
-    }
-  }, [page, table]);
-
 
   const currentPage = table.getState().pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
