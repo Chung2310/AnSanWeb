@@ -1,88 +1,60 @@
-'use client'
-
-import { useParams, notFound } from "next/navigation";
-import Image from "next/image";
-import { User, Calendar } from "lucide-react";
-import PostSidebar from "@/components/post-sidebar";
+import { notFound } from "next/navigation";
+import { initializeFirebase } from "@/firebase";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import type { BlogPost } from "@/lib/types";
-import Lottie from 'lottie-react';
-import loadingAnimation from '@/components/loading.json';
-import { useBlogPostBySlug } from "@/hooks/use-blog-post-by-slug";
+import PostDetailView from "./post-detail-view";
+import type { Metadata, ResolvingMetadata } from 'next';
 
-const PostPageSkeleton = () => (
-    <div className="flex h-screen w-full items-center justify-center bg-white">
-        <Lottie animationData={loadingAnimation} className="h-32 w-32" />
-    </div>
-);
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-function PostDetailView({ post }: { post: BlogPost }) {
-    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
-
-    return (
-        <div className="bg-white text-black py-16">
-            <div className="container max-w-screen-xl">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-
-                    {/* Main Content */}
-                    <div className="lg:col-span-8">
-                        <div className="flex flex-wrap items-center space-x-6 text-xs font-bold uppercase tracking-widest mb-6" style={{color: '#8a7d6a'}}>
-                            <div className="flex items-center gap-2">
-                               <User className="h-4 w-4" />
-                               <span>BY {post.author || 'AnSan'}</span>
-                            </div>
-                             {postDate && (
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="h-4 w-4" />
-                                    <span>{postDate}</span>
-                                </div>
-                            )}
-                            {post.categories && post.categories.length > 0 && (
-                                <div className="flex items-center gap-2">
-                                    <span>{post.categories.join(' / ')}</span>
-                                </div>
-                            )}
-                        </div>
-                        
-                        <h1 className="font-headline text-4xl font-black uppercase text-neutral-700 mb-4">
-                            {post.title}
-                        </h1>
-
-                        <p className="text-lg text-muted-foreground italic mb-8">{post.excerpt}</p>
-                        
-                        {post.content && (
-                            <article 
-                                className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700" 
-                                style={{color: '#5a5a5a'}}
-                                dangerouslySetInnerHTML={{ __html: post.content }}
-                            >
-                            </article>
-                        )}
-                    </div>
-
-                    {/* Sidebar */}
-                    <div className="lg:col-span-4">
-                        <PostSidebar currentPostId={post.id} />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+async function getPost(slug: string) {
+  const { firestore } = initializeFirebase();
+  const blogPostsCol = collection(firestore, 'blogPosts');
+  const q = query(blogPostsCol, where('slug', '==', slug), limit(1));
+  const snapshot = await getDocs(q);
+  
+  if (snapshot.empty) return null;
+  return { ...snapshot.docs[0].data(), id: snapshot.docs[0].id } as BlogPost;
 }
 
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = (await params).slug;
+  const post = await getPost(slug);
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const { post, isLoading, error } = useBlogPostBySlug(slug);
+  if (!post) return {};
 
-  if (isLoading) {
-    return <PostPageSkeleton />;
-  }
+  const previousImages = (await parent).openGraph?.images || [];
 
-  if (error || !post) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error(`Post not found or error for slug: ${slug}`, error);
-    }
+  return {
+    title: post.title,
+    description: post.excerpt || post.content?.substring(0, 160).replace(/<[^>]*>/g, ''),
+    openGraph: {
+      title: `${post.title} | AnSan`,
+      description: post.excerpt || post.content?.substring(0, 160).replace(/<[^>]*>/g, ''),
+      url: `https://ruouvangansan.vn/tin-tuc/${slug}`,
+      images: post.image ? [post.image.url, ...previousImages] : previousImages,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${post.title} | AnSan`,
+      description: post.excerpt || post.content?.substring(0, 160).replace(/<[^>]*>/g, ''),
+      images: post.image ? [post.image.url] : [],
+    },
+  };
+}
+
+export default async function BlogPostPage({ params }: Props) {
+  const slug = (await params).slug;
+  const post = await getPost(slug);
+
+  if (!post) {
     notFound();
   }
 
