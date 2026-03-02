@@ -58,12 +58,12 @@ const nextConfig: NextConfig = {
       },
       // Fixed syntax for sitemap redirects using proper path patterns to avoid startup errors
       {
-        source: '/wp-sitemap:path*',
+        source: '/:path(wp-sitemap.*)',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:path*',
+        source: '/:path(sitemap.*)',
         destination: '/sitemap.xml',
         permanent: false,
       }
