@@ -427,10 +427,10 @@ export default function Header() {
               <Clock className="h-4 w-4" />
               <span>T2 - CN: 9H - 22H</span>
             </div>
-            <div className="hidden sm:flex items-center gap-2">
+            <a href="tel:0933333313" className="hidden sm:flex items-center gap-2 hover:text-primary transition-colors">
               <Phone className="h-4 w-4" />
               <span>0933.333.313</span>
-            </div>
+            </a>
           </div>
         </div>
       </div>
