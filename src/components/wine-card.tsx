@@ -160,7 +160,7 @@ export default function WineCard({ product }: WineCardProps) {
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{mainCategoryName}</p>
             )}
             
-            <h3 className="font-montserrat text-base font-bold uppercase text-primary line-clamp-2 min-h-[3rem] transition-colors group-hover:opacity-80">
+            <h3 className="font-montserrat text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[3rem] transition-colors group-hover:opacity-80">
                 {product.nameVN}
             </h3>
 
