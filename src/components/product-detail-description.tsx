@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
 import { Button } from "./ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -31,6 +31,21 @@ export default function ProductDetailDescription({ details }: { details: Product
       storage || 
       conclusion;
 
+    // Correct scroll position after collapsing
+    useEffect(() => {
+        if (!isExpanded && sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            // If the section top is above viewport, scroll back to it
+            if (rect.top < -50) {
+                const scrollTarget = window.scrollY + rect.top - 150;
+                window.scrollTo({
+                    top: scrollTarget,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [isExpanded]);
+
     if (!hasContent) {
         return null;
     }
@@ -40,16 +55,8 @@ export default function ProductDetailDescription({ details }: { details: Product
 
     const handleToggle = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation();
-        
-        // If we are about to collapse, scroll to the top of the section to prevent jumping
-        if (isExpanded && sectionRef.current) {
-            const top = sectionRef.current.getBoundingClientRect().top + window.scrollY - 150;
-            window.scrollTo({ top, behavior: 'smooth' });
-        }
-        
         setIsExpanded(prev => !prev);
-    }, [isExpanded]);
+    }, []);
 
     return (
         <section className="py-20 seo-container" ref={sectionRef} style={{backgroundColor: '#fdfaf5'}}>
