@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Package, FileText, LogOut, Tags } from 'lucide-react';
+import { Home, Package, FileText, LogOut, Tags, Link2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from '../logo';
 import { useAuthStore } from '@/stores/auth-store';
@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/admin/products', label: 'Sản phẩm', icon: Package },
   { href: '/admin/categories', label: 'Content Seo', icon: Tags },
   { href: '/admin/blog', label: 'Bài viết', icon: FileText },
+  { href: '/admin/urls', label: 'Tất cả đường dẫn', icon: Link2 },
 ];
 
 export default function Sidebar() {
@@ -34,7 +35,7 @@ export default function Sidebar() {
         </div>
         <nav className="flex-1 space-y-2 p-4">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+            const isActive = pathname === link.href || (link.href !== '/admin' && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
