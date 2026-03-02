@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'AnSan' }],
   openGraph: {
     title: 'World Class Whisky & Spirit | AnSan',
-    description: 'Trải qua hành trình 10 năm học, hiểu và “ngắm” Whisky, chúng tôi tin rằng đây không chỉ là một thứ đồ uống thông thường.',
+    description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam. Nơi đây chứa đựng lịch sử, kiến thức và nghệ thuật thưởng thức.',
     url: 'https://ruouvangansan.vn',
     siteName: 'AnSan Wine & Spirit',
     images: [
       {
-        url: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
+        url: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/Gemini_Generated_Image_9ygro89ygro89ygr.png?alt=media&token=90e16f08-f69c-4cd3-8703-88e7b694261b',
         width: 1200,
         height: 630,
         alt: 'AnSan Wine & Spirit',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'World Class Whisky & Spirit | AnSan',
     description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam.',
-    images: ['https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png'],
+    images: ['https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/Gemini_Generated_Image_9ygro89ygro89ygr.png?alt=media&token=90e16f08-f69c-4cd3-8703-88e7b694261b'],
   },
   icons: {
     icon: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
