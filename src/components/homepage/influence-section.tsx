@@ -44,7 +44,7 @@ export default function InfluenceSection() {
         variants={containerVariants}
         initial="hidden"
         animate={mainControls}
-        className="py-20 bg-white"
+        className="py-20 bg-[#f8f0e5]"
     >
       <div className="container mx-auto max-w-screen-xl">
         <motion.div variants={itemVariants} className="text-center mb-12">

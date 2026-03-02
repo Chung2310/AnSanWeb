@@ -58,9 +58,10 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         e.preventDefault();
         e.stopPropagation();
         
-        // If we are about to collapse, scroll to the top of the section first
+        // If we are about to collapse, scroll to the top of the section first to prevent jumping to bottom
         if (isExpanded && containerRef.current) {
-            containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const top = containerRef.current.getBoundingClientRect().top + window.scrollY - 150;
+            window.scrollTo({ top, behavior: 'smooth' });
         }
         
         setIsExpanded(!isExpanded);
