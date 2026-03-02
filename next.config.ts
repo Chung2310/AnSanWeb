@@ -58,12 +58,12 @@ const nextConfig: NextConfig = {
       },
       // Fixed sitemap redirects for Next.js 15 compatibility
       {
-        source: '/wp-sitemap:suffix*',
+        source: '/:path(wp-sitemap.*)',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:suffix*',
+        source: '/:path(sitemap.*)',
         destination: '/sitemap.xml',
         permanent: false,
       }

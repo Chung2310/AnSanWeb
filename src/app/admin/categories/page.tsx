@@ -18,7 +18,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useFirestore } from '@/firebase/provider';
 import { collection, doc, writeBatch } from 'firebase/firestore';
-import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import * as XLSX from 'xlsx';
@@ -28,9 +27,7 @@ export default function CategoriesAdminPage() {
     const { categories, isLoading } = useCategories();
     const [filter, setFilter] = useState('all'); // 'all' or 'parents'
     const [nameFilter, setNameFilter] = useState('');
-    const firestore = useFirestore();
     const { toast } = useToast();
-    const [isRestoring, setIsRestoring] = useState(false);
     const { importCategories, isImporting: isImportingCategories } = useImportCategories();
     const fileInputRef = useRef<HTMLInputElement>(null);
     
@@ -46,96 +43,6 @@ export default function CategoriesAdminPage() {
         }
         return categories;
     }, [categories, filter]);
-
-    const handleRestore = async () => {
-        setIsRestoring(true);
-        toast({ title: 'Đang khôi phục danh mục...' });
-
-        try {
-            const batch = writeBatch(firestore);
-            const categoriesCol = collection(firestore, 'categories');
-
-            const allCategoriesToCreate: Omit<Category, 'createdAt' | 'updatedAt' | 'status' | 'image'>[] = [];
-
-            // 1. Root Categories
-            const rootCats = [
-                { id: 'ruou-vang', name: 'Rượu Vang', slug: 'ruou-vang', parentId: null },
-                { id: 'ruou-manh', name: 'Rượu Mạnh', slug: 'ruou-manh', parentId: null },
-                { id: 'ly-coc-pha-le', name: 'Ly - Cốc Pha Lê', slug: 'ly-coc-pha-le', parentId: null },
-                { id: 'bo-qua-tang', name: 'Bộ Quà Tặng', slug: 'bo-qua-tang', parentId: null },
-                { id: 'cigar', name: 'Cigar', slug: 'cigar', parentId: null },
-            ];
-            rootCats.forEach(cat => allCategoriesToCreate.push({ ...cat, description: '', tags: [] }));
-
-            // 2. Intermediate Group Categories
-            const groupCats = [
-                // Rượu Vang groups
-                { id: 'vang-theo-loai', name: 'Theo loại rượu', slug: 'vang-theo-loai', parentId: 'ruou-vang' },
-                { id: 'vang-theo-quoc-gia', name: 'Theo quốc gia', slug: 'vang-theo-quoc-gia', parentId: 'ruou-vang' },
-                { id: 'vang-theo-vung', name: 'Vùng làm vang', slug: 'vang-theo-vung', parentId: 'ruou-vang' },
-                { id: 'vang-theo-giong-nho', name: 'Giống nho', slug: 'vang-theo-giong-nho', parentId: 'ruou-vang' },
-                // Rượu Mạnh groups
-                { id: 'manh-theo-loai', name: 'Loại Rượu', slug: 'manh-theo-loai', parentId: 'ruou-manh' },
-                { id: 'manh-thuong-hieu', name: 'Thương hiệu', slug: 'manh-thuong-hieu', parentId: 'ruou-manh' },
-                // Ly groups
-                { id: 'ly-riedel', name: 'LY PHA LÊ RIEDEL', slug: 'ly-riedel', parentId: 'ly-coc-pha-le' },
-                { id: 'ly-whisky', name: 'LY WHISKY', slug: 'ly-whisky', parentId: 'ly-coc-pha-le' },
-                { id: 'ly-khac', name: 'KHÁC', slug: 'ly-khac', parentId: 'ly-coc-pha-le' },
-                // Quà tặng groups
-                { id: 'qua-tang-loai', name: 'Loại quà tặng', slug: 'qua-tang-loai', parentId: 'bo-qua-tang' },
-            ];
-            groupCats.forEach(cat => allCategoriesToCreate.push({ ...cat, description: '', tags: [] }));
-            
-            const addItemsWithParent = (items: { label: string; slug: string; category_id: string }[], parentId: string) => {
-              items.forEach(item => {
-                allCategoriesToCreate.push({
-                  id: item.category_id,
-                  name: item.label,
-                  slug: item.slug,
-                  description: '',
-                  tags: [],
-                  parentId: parentId,
-                });
-              });
-            };
-            
-            // 3. Add Leaf Categories
-            addItemsWithParent(wineMegaMenuData.theoLoai, 'vang-theo-loai');
-            addItemsWithParent(wineMegaMenuData.theoQuocGia, 'vang-theo-quoc-gia');
-            addItemsWithParent(wineMegaMenuData.theoVung, 'vang-theo-vung');
-            addItemsWithParent(wineMegaMenuData.theoGiongNho, 'vang-theo-giong-nho');
-
-            addItemsWithParent(spiritsMegaMenuData.theoLoai, 'manh-theo-loai');
-            addItemsWithParent(spiritsMegaMenuData.thuongHieu, 'manh-thuong-hieu');
-            
-            addItemsWithParent(glasswareMegaMenuData.lyPhaLeRiedel, 'ly-riedel');
-            addItemsWithParent(glasswareMegaMenuData.lyWhisky, 'ly-whisky');
-            addItemsWithParent(glasswareMegaMenuData.khac, 'ly-khac');
-            
-            addItemsWithParent(giftSetMegaMenuData.quaTang, 'qua-tang-loai');
-            
-            const uniqueCategories = Array.from(new Map(allCategoriesToCreate.map(item => [item.id, item])).values());
-
-            uniqueCategories.forEach(category => {
-                const docRef = doc(categoriesCol, category.id);
-                batch.set(docRef, { ...category, description: category.description || '' }, { merge: true });
-            });
-
-            await batch.commit();
-
-            toast({ title: 'Thành công!', description: `${uniqueCategories.length} danh mục đã được khôi phục và đồng bộ cấu trúc mới.` });
-
-        } catch (error) {
-            console.error("Error restoring categories:", error);
-            toast({
-                variant: 'destructive',
-                title: 'Lỗi',
-                description: 'Không thể khôi phục danh mục.',
-            });
-        } finally {
-            setIsRestoring(false);
-        }
-    };
 
     const handleExport = () => {
         if (!categories || categories.length === 0) {
