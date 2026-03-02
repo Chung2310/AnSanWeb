@@ -53,7 +53,6 @@ export default function InfluenceSection() {
             </h2>
         </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column */}
           <motion.div variants={itemVariants}>
                <Carousel
                   plugins={[plugin.current]}
@@ -79,7 +78,6 @@ export default function InfluenceSection() {
                   </CarouselContent>
                 </Carousel>
           </motion.div>
-          {/* Right Column */}
           <motion.div 
             variants={containerVariants}
             className="flex flex-col justify-center text-gray-700 h-full"
