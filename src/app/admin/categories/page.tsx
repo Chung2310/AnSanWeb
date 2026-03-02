@@ -198,7 +198,7 @@ export default function CategoriesAdminPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Danh mục sản phẩm</h1>
+        <h1 className="text-3xl font-bold">Content Seo</h1>
          <div className="flex flex-wrap items-center gap-4">
             <Button onClick={handleExport} variant="outline">
               <Download className="mr-2 h-4 w-4" />
@@ -225,7 +225,7 @@ export default function CategoriesAdminPage() {
             <Button asChild>
             <Link href="/admin/categories/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Thêm danh mục mới
+                Thêm mới
             </Link>
             </Button>
         </div>

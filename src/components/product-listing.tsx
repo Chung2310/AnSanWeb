@@ -32,6 +32,7 @@ interface ProductListingProps {
 function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const isFirstRun = useRef(true);
     
     const { descriptionInitial, descriptionRest, isDescriptionLong } = useMemo(() => {
         if (!content) return { descriptionInitial: '', descriptionRest: null, isDescriptionLong: false };
@@ -54,18 +55,26 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
     }, [content]);
 
-    // Robust fix for jumping when collapsing
+    // Enhanced fix for jumping when collapsing
     useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
         if (!isExpanded && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            // If the top of the container is now significantly above the viewport, scroll it back into view
-            if (rect.top < -50) {
-                const scrollTarget = window.scrollY + rect.top - 150;
-                window.scrollTo({
-                    top: scrollTarget,
-                    behavior: 'smooth'
-                });
-            }
+            // Small delay to allow the layout to calculate new height after animation/state change
+            setTimeout(() => {
+                const rect = containerRef.current!.getBoundingClientRect();
+                // If the top of the container is now significantly above the viewport, scroll it back into view
+                if (rect.top < 0) {
+                    const scrollTarget = window.scrollY + rect.top - 150; // Offset for header
+                    window.scrollTo({
+                        top: scrollTarget,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
         }
     }, [isExpanded]);
 
