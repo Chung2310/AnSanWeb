@@ -219,9 +219,6 @@ export default function CategoriesAdminPage() {
                 accept=".xlsx, .xls, .csv"
                 onChange={handleFileSelect}
             />
-            <Button onClick={handleRestore} disabled={isRestoring} variant="outline">
-                {isRestoring ? 'Đang khôi phục...' : 'Khôi phục mặc định'}
-            </Button>
             <Button asChild>
             <Link href="/admin/categories/new">
                 <PlusCircle className="mr-2 h-4 w-4" />

@@ -37,8 +37,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/danh-muc-san-pham/:path*',
-        destination: '/danh-muc/:path*',
+        source: '/danh-muc-san-pham/:slug*',
+        destination: '/danh-muc/:slug*',
         permanent: true,
       },
       {
@@ -56,14 +56,14 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
-      // Using regex patterns for sitemap redirects to avoid path-to-regexp limitations in Next.js 15
+      // Fixed sitemap redirects for Next.js 15 compatibility
       {
-        source: '/:path(wp-sitemap.*)',
+        source: '/wp-sitemap:suffix*',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/:path(sitemap.*)',
+        source: '/sitemap:suffix*',
         destination: '/sitemap.xml',
         permanent: false,
       }
