@@ -1,0 +1,59 @@
+'use client'
+
+import { User, Calendar } from "lucide-react";
+import PostSidebar from "@/components/post-sidebar";
+import type { BlogPost } from "@/lib/types";
+
+export default function PostDetailView({ post }: { post: BlogPost }) {
+    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('vi-VN') : null;
+
+    return (
+        <div className="bg-white text-black py-16">
+            <div className="container max-w-screen-xl">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+                    {/* Main Content */}
+                    <div className="lg:col-span-8">
+                        <div className="flex flex-wrap items-center space-x-6 text-xs font-bold uppercase tracking-widest mb-6" style={{color: '#8a7d6a'}}>
+                            <div className="flex items-center gap-2">
+                               <User className="h-4 w-4" />
+                               <span>BY {post.author || 'AnSan'}</span>
+                            </div>
+                             {postDate && (
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="h-4 w-4" />
+                                    <span>{postDate}</span>
+                                </div>
+                            )}
+                            {post.categories && post.categories.length > 0 && (
+                                <div className="flex items-center gap-2">
+                                    <span>{post.categories.join(' / ')}</span>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <h1 className="font-headline text-4xl font-black uppercase text-neutral-700 mb-4">
+                            {post.title}
+                        </h1>
+
+                        <p className="text-lg text-muted-foreground italic mb-8">{post.excerpt}</p>
+                        
+                        {post.content && (
+                            <article 
+                                className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700" 
+                                style={{color: '#5a5a5a'}}
+                                dangerouslySetInnerHTML={{ __html: post.content }}
+                            >
+                            </article>
+                        )}
+                    </div>
+
+                    {/* Sidebar */}
+                    <div className="lg:col-span-4">
+                        <PostSidebar currentPostId={post.id} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
