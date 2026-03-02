@@ -56,13 +56,14 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
+      // Fixed syntax for sitemap redirects to avoid "Can not repeat suffix" error
       {
-        source: '/wp-sitemap:suffix*',
+        source: '/:path(wp-sitemap.*)',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:suffix*',
+        source: '/:path(sitemap.*)',
         destination: '/sitemap.xml',
         permanent: true,
       }
