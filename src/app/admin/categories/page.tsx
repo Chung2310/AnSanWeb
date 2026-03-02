@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Filter, PlusCircle, Download, FileUp, X } from 'lucide-react';
-import Link from 'next/link';
+import { Filter, Download, FileUp, X } from 'lucide-react';
 import { DataTable } from '@/components/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -150,12 +149,6 @@ export default function CategoriesAdminPage() {
                         accept=".xlsx, .xls, .csv"
                         onChange={handleFileSelect}
                     />
-                    <Button asChild size="sm">
-                        <Link href="/admin/categories/new">
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Thêm mới
-                        </Link>
-                    </Button>
                 </div>
             </div>
 
