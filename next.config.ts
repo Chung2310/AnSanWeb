@@ -56,14 +56,14 @@ const nextConfig: NextConfig = {
         destination: '/danh-muc-san-pham',
         permanent: true,
       },
-      // Fixed syntax for sitemap redirects using proper path patterns to avoid startup errors
+      // Safely redirect sitemaps without complex regex that breaks in Next.js 15
       {
-        source: '/:path(wp-sitemap.*)',
+        source: '/wp-sitemap:path*',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/:path(sitemap.*)',
+        source: '/sitemap:path*',
         destination: '/sitemap.xml',
         permanent: false,
       }
