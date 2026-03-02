@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect, Suspense, useRef, useCallback } from "react";
@@ -26,10 +25,6 @@ interface ProductListingProps {
     queryFilters?: ActiveFilters;
 }
 
-/**
- * Isolated SEO Description component to handle its own state 
- * and prevent jumping when collapsing long content.
- */
 function CollapsibleSEODescription({ content }: { content: string }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -56,7 +51,6 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         return { descriptionInitial: content, descriptionRest: null, isDescriptionLong: false };
     }, [content]);
 
-    // Fix for jumping when collapsing
     useEffect(() => {
         if (isFirstRun.current) {
             isFirstRun.current = false;
@@ -64,16 +58,16 @@ function CollapsibleSEODescription({ content }: { content: string }) {
         }
 
         if (!isExpanded && containerRef.current) {
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 const rect = containerRef.current!.getBoundingClientRect();
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 210;
                     window.scrollTo({
-                        top: scrollTarget,
+                        top: window.scrollY + rect.top - 210,
                         behavior: 'smooth'
                     });
                 }
-            }, 100);
+            }, 50);
+            return () => clearTimeout(timer);
         }
     }, [isExpanded]);
 

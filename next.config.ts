@@ -1,4 +1,3 @@
-
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -58,7 +57,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/wp-sitemap.xml',
+        source: '/wp-sitemap:path*',
+        destination: '/sitemap.xml',
+        permanent: true,
+      },
+      {
+        source: '/sitemap:path*.xml',
         destination: '/sitemap.xml',
         permanent: true,
       }

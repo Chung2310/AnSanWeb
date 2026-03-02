@@ -8,6 +8,8 @@ import { useCategories } from '@/hooks/use-categories';
 import type { Category } from '@/lib/types';
 import { staticFiltersData, type ActiveFilters } from '@/components/sidebar-filter';
 
+export const dynamic = 'force-dynamic';
+
 function CategoryPageContent() {
   const params = useParams();
   const slug = params?.slug;

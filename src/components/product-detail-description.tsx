@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
@@ -33,7 +32,6 @@ export default function ProductDetailDescription({ details }: { details: Product
       storage || 
       conclusion;
 
-    // Improved fix for jump scroll after collapsing
     useEffect(() => {
         if (isFirstRun.current) {
             isFirstRun.current = false;
@@ -41,16 +39,16 @@ export default function ProductDetailDescription({ details }: { details: Product
         }
 
         if (!isExpanded && sectionRef.current) {
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 const rect = sectionRef.current!.getBoundingClientRect();
                 if (rect.top < 0) {
-                    const scrollTarget = window.scrollY + rect.top - 210;
                     window.scrollTo({
-                        top: scrollTarget,
+                        top: window.scrollY + rect.top - 210,
                         behavior: 'smooth'
                     });
                 }
-            }, 100);
+            }, 50);
+            return () => clearTimeout(timer);
         }
     }, [isExpanded]);
 
