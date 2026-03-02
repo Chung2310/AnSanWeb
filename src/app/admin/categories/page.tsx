@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Filter, Download, FileUp, X } from 'lucide-react';
-import { DataTable } from '@/components/admin/categories/data-table';
+import { DataTable } from '@/app/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
