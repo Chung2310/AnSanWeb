@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -33,7 +32,6 @@ import {
 } from '@/lib/mega-menu-data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
-// Define unified data structures for navigation
 type MenuItem = {
   href: string;
   label: string;
@@ -175,7 +173,6 @@ const MegaMenu = ({
   const [showAllRegions, setShowAllRegions] = useState(false);
 
   if (customMegaMenu === 'gift-set') {
-    // @ts-ignore
     const giftItems = giftSetMegaMenuData.quaTang;
 
     return (
@@ -422,7 +419,6 @@ export default function Header() {
     <header
       className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
-      {/* Top Bar */}
       <div className="bg-black text-white">
         <div className="container flex h-10 max-w-screen-2xl items-center justify-between px-4">
           <div className="lg:hidden"></div>
@@ -439,7 +435,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Main Header */}
       <div className="bg-secondary text-secondary-foreground">
         <div className="container flex h-24 max-w-screen-2xl items-center justify-between px-4">
           <div className="flex-1 flex justify-start">
@@ -489,14 +484,12 @@ export default function Header() {
                     </SheetDescription>
                   </SheetHeader>
                   
-                  {/* Logo Area */}
                   <div className="p-6 pb-2">
                     <Link href="/" onClick={() => setIsSheetOpen(false)}>
                       <Logo />
                     </Link>
                   </div>
 
-                  {/* Scrollable Navigation Area */}
                   <div className="flex-1 overflow-y-auto px-6 pb-10">
                     <form
                       onSubmit={handleSearch}

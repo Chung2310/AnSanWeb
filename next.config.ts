@@ -57,12 +57,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/wp-sitemap:path*',
+        source: '/wp-sitemap:suffix*',
         destination: '/sitemap.xml',
         permanent: true,
       },
       {
-        source: '/sitemap:path*.xml',
+        source: '/sitemap:suffix*',
         destination: '/sitemap.xml',
         permanent: true,
       }

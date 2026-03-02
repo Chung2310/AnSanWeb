@@ -40,9 +40,9 @@ const heroSlides = [
     {
         imageId: 'hero-wine',
         label: 'RƯỢU MẠNH',
-        title: 'RƯỢU MẠNH',
+        title: 'Những dòng rượu mạnh được An San tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
         href: '/danh-muc/ruou-manh',
-        description: 'Những dòng rượu mạnh được An San tuyển chọn – dành cho khoảnh khắc nâng ly của người bản lĩnh, hiểu giá trị và trân trọng đẳng cấp',
+        description: '',
     },
 ];
 
@@ -119,9 +119,11 @@ export default function HeroSection() {
                                                     <motion.h1 variants={textItemVariants} className={cn("text-xl sm:text-2xl lg:text-3xl font-black uppercase font-headline", 'leading-tight')}>
                                                         {slide.title}
                                                     </motion.h1>
-                                                    <motion.p variants={textItemVariants} className={cn("mt-4 text-sm lg:text-base max-w-xl whitespace-pre-line text-white/90")}>
-                                                        {slide.description}
-                                                    </motion.p>
+                                                    {slide.description && (
+                                                        <motion.p variants={textItemVariants} className={cn("mt-4 text-sm lg:text-base max-w-xl whitespace-pre-line text-white/90")}>
+                                                            {slide.description}
+                                                        </motion.p>
+                                                    )}
                                                     <motion.div variants={textItemVariants}>
                                                         <Button
                                                             asChild
