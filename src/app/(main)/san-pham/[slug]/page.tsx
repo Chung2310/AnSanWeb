@@ -20,7 +20,10 @@ async function getProduct(slug: string) {
   const snapshot = await getDocs(q);
   
   if (snapshot.empty) return null;
-  return { ...snapshot.docs[0].data(), id: snapshot.docs[0].id } as FullProduct;
+  const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
+  
+  // Sanitize data for Client Component (Serialization fix)
+  return JSON.parse(JSON.stringify(data)) as FullProduct;
 }
 
 export async function generateMetadata(

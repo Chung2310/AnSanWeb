@@ -1,5 +1,6 @@
 'use client';
 import { useProducts } from '@/hooks/use-products';
+import { useCategories } from '@/hooks/use-categories';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Product } from '@/lib/types';
 import WineCard from '@/components/wine-card';
@@ -28,7 +29,8 @@ const ProductSectionSkeleton = () => (
 );
 
 export default function BestChoiceSection() {
-    const { products, isLoading } = useProducts();
+    const { products, isLoading: isLoadingProducts } = useProducts();
+    const { categories, isLoading: isLoadingCategories } = useCategories();
     
     const bestChoiceProducts = React.useMemo(() => {
         if (!products) return [];
@@ -45,6 +47,8 @@ export default function BestChoiceSection() {
 
         return products.filter(p => bestChoiceProductNames.includes(p.nameVN.replace(/\u200B/g, '').trim()));
     }, [products]);
+
+    const isLoading = isLoadingProducts || isLoadingCategories;
 
     if (isLoading) {
         return <div className="bg-white py-12"><div className="container"><ProductSectionSkeleton /></div></div>
@@ -66,11 +70,10 @@ export default function BestChoiceSection() {
                             </h2>
                             <span className="flex-grow border-t border-red-800/30"></span>
                         </div>
-                         <p className="mt-4 text-lg text-Các dòng vang đặc biệt nhà Ansan-600 text-center"></p>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {bestChoiceProducts.map(product => (
-                            <WineCard key={product.id} product={product} />
+                            <WineCard key={product.id} product={product} categories={categories} />
                         ))}
                     </div>
                 </div>

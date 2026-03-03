@@ -25,25 +25,32 @@ export default function WineCard({ product, categories }: WineCardProps) {
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
-        const found = product.attributes.find(a => a.label?.toLowerCase().trim() === label.toLowerCase().trim());
+        const normalizedLabel = label.toLowerCase().trim();
+        const found = product.attributes.find(a => a.label?.toLowerCase().trim() === normalizedLabel);
         if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
       }
     }
+    
+    // Fallback search in description if attributes fail
     if (product.description) {
+        const text = product.description.toLowerCase();
         for (const label of labels) {
-            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
-            const match = product.description.match(regex);
-            if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
-                 return match[1].trim().replace(/\.$/, '');
+            const index = text.indexOf(label.toLowerCase());
+            if (index !== -1) {
+                const afterLabel = product.description.substring(index + label.length).trim();
+                const match = afterLabel.match(/^[:\s]*([^•\n]+)/);
+                if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
+                    return match[1].trim().replace(/\.$/, '');
+                }
             }
         }
     }
-    return 'N/A';
+    return 'Đang cập nhật';
   }, [product.attributes, product.description]);
 
   const { isWine, isSpirit, mainCategoryName } = React.useMemo(() => {
     if (!product.tags || !categories || categories.length === 0) {
-        return { isWine: false, isSpirit: false, mainCategoryName: 'N/A' };
+        return { isWine: false, isSpirit: false, mainCategoryName: '' };
     }
     
     const getRootParent = (catId: string): Category | null => {
@@ -55,7 +62,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
 
     let wine = false;
     let spirit = false;
-    let mName = 'N/A';
+    let mName = '';
 
     for (const tagId of product.tags) {
         const root = getRootParent(tagId);
@@ -78,15 +85,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-    const countryVal = getAttribute(['quốc gia', 'country']);
-    if (countryVal !== 'N/A') return countryVal;
-    
-    const originVal = getAttribute(['xuất xứ', 'origin']);
-    if (originVal !== 'N/A') {
-      const parts = originVal.split(',');
-      return parts[parts.length - 1].trim();
-    }
-    return 'N/A';
+    const val = getAttribute(['quốc gia', 'country', 'xuất xứ', 'vùng']);
+    return val !== 'Đang cập nhật' ? val : 'Đang cập nhật';
   }, [product.tags, categories, categoryMap, getAttribute]);
 
   const giongNhoValue = React.useMemo(() => {
@@ -104,14 +104,15 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return getAttribute(['giống nho', 'nho', 'grapes']);
   }, [product.tags, categories, categoryMap, getAttribute]);
 
-  const alcoholContent = getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv']);
+  const alcoholContent = React.useMemo(() => 
+    getAttribute(['nồng độ cồn', 'nồng độ', 'alc', 'abv'])
+  , [getAttribute]);
 
   const capacityValue = React.useMemo(() => {
-    if (!isWine && !isSpirit) return null;
     const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
-    if (attr === 'N/A' && isWine) return '750ml';
+    if (attr === 'Đang cập nhật' && isWine) return '750ml';
     return attr;
-  }, [isWine, isSpirit, getAttribute]);
+  }, [isWine, getAttribute]);
 
   const salePrice = Number(product.price);
   const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
@@ -122,7 +123,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
     <div className="group text-left bg-white rounded-lg p-2 transition-shadow hover:shadow-md h-full flex flex-col">
       <Link href={`/san-pham/${product.slug}`} className="block flex-grow">
         <div className="relative overflow-hidden group/image rounded-md aspect-square bg-gray-50 flex items-center justify-center p-4">
-            {product.isGoodPrice || hasDiscount ? (
+            {(product.isGoodPrice || hasDiscount) ? (
                  <div className="absolute top-2 left-2 z-10 rounded-sm bg-primary px-2 py-1 text-[10px] font-bold uppercase text-white animate-flash">
                     Giá Đặc biệt
                 </div>
@@ -136,21 +137,25 @@ export default function WineCard({ product, categories }: WineCardProps) {
                     -{discountPercentage}%
                 </div>
             )}
-            <Image
-                src={product.image?.url || '/placeholder.svg'}
-                alt={product.nameVN}
-                width={300}
-                height={300}
-                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-            />
+            <div className="relative w-full h-full">
+                <Image
+                    src={product.image?.url || 'https://picsum.photos/seed/wine/400/400'}
+                    alt={product.nameVN}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                    className="object-contain transition-transform duration-500 group-hover:scale-105"
+                    quality={60}
+                    loading="lazy"
+                />
+            </div>
         </div>
         
         <div className="mt-4 px-1 space-y-2">
-            {mainCategoryName !== 'N/A' && (
+            {mainCategoryName && (
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{mainCategoryName}</p>
             )}
             
-            <h3 className="font-montserrat text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[3rem] transition-colors group-hover:opacity-80">
+            <h3 className="font-montserrat text-sm md:text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[2.5rem] md:min-h-[3rem] transition-colors group-hover:opacity-80">
                 {product.nameVN}
             </h3>
 
@@ -158,7 +163,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
                 {hasDiscount && (
                     <span className="text-xs text-gray-400 line-through">{formatPrice(originalPrice!)}</span>
                 )}
-                <span className="text-lg font-bold text-primary">{formatPrice(salePrice)}</span>
+                <span className="text-base md:text-lg font-bold text-primary">{formatPrice(salePrice)}</span>
             </div>
 
             {(isWine || isSpirit) && (
@@ -167,32 +172,32 @@ export default function WineCard({ product, categories }: WineCardProps) {
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" />
                         </div>
-                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={countryValue !== 'N/A' ? countryValue : ''}>
-                            {countryValue !== 'N/A' ? countryValue : 'N/A'}
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={countryValue}>
+                            {countryValue}
                         </span>
                     </div>
                     <div className="flex items-start gap-1.5">
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
                         </div>
-                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={alcoholContent !== 'N/A' ? alcoholContent : ''}>
-                            {alcoholContent !== 'N/A' ? alcoholContent : 'N/A'}
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={alcoholContent}>
+                            {alcoholContent}
                         </span>
                     </div>
                     <div className="flex items-start gap-1.5">
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" />
                         </div>
-                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={capacityValue && capacityValue !== 'N/A' ? capacityValue : ''}>
-                            {capacityValue && capacityValue !== 'N/A' ? capacityValue : 'N/A'}
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={capacityValue}>
+                            {capacityValue}
                         </span>
                     </div>
                     <div className="flex items-start gap-1.5">
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
                             <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" />
                         </div>
-                        <span className="text-[11px] text-gray-600 leading-tight line-clamp-1" title={giongNhoValue !== 'N/A' ? giongNhoValue : ''}>
-                            {giongNhoValue !== 'N/A' ? giongNhoValue : 'N/A'}
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={giongNhoValue}>
+                            {giongNhoValue}
                         </span>
                     </div>
                 </div>
