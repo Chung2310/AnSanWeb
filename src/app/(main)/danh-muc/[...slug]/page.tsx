@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 
 type Props = {
   params: Promise<{ slug: string[] }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 async function getCategory(slugParts: string[]) {
@@ -20,20 +21,28 @@ async function getCategory(slugParts: string[]) {
   const snapshot = await getDocs(q);
   
   if (snapshot.empty) return null;
-  return { ...snapshot.docs[0].data(), id: snapshot.docs[0].id } as Category;
+  const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
+  
+  // Sanitize data for Client Component (Serialization fix for Firebase Timestamps)
+  return JSON.parse(JSON.stringify(data)) as Category;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const slug = (await params).slug;
+  const sParams = await searchParams;
   const category = await getCategory(slug);
 
   if (!category) return {};
 
   const description = category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`;
 
+  // Kiểm tra nếu có bộ lọc thì yêu cầu bot không index để tránh timeout server
+  const hasFilters = Object.keys(sParams).some(key => key.startsWith('filter_'));
+
   return {
     title: category.name,
     description: description,
+    robots: hasFilters ? 'noindex, nofollow' : 'index, follow',
     openGraph: {
       title: `${category.name} | AnSan`,
       description: description,
@@ -43,8 +52,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
     const slug = (await params).slug;
+    const sParams = await searchParams;
+
+    // Bảo vệ server: Nếu có quá nhiều bộ lọc phức tạp (giả lập tấn công hoặc bot lỗi), giới hạn xử lý
+    const filterCount = Object.keys(sParams).filter(k => k.startsWith('filter_')).length;
+    if (filterCount > 8) {
+        return <div className="container py-20 text-center">Vui lòng sử dụng ít bộ lọc hơn để có kết quả chính xác nhất.</div>;
+    }
+
     return (
         <Suspense fallback={
             <div className="container py-12 flex items-center justify-center min-h-[400px]">

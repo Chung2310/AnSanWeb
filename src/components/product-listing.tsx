@@ -121,7 +121,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const { categories } = useCategories();
   const searchParams = useSearchParams();
   
-  // Use page from URL as the source of truth for pagination
+  // Nguồn sự thật duy nhất cho phân trang là URL để tránh lỗi Page 2 hiện sản phẩm Page 1
   const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {

@@ -5,7 +5,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/login'],
+      disallow: [
+        '/admin/', 
+        '/login',
+        '/*?*filter_', // Chặn bot crawl các bộ lọc phức tạp gây nặng server
+        '/*?*q=',      // Chặn crawl kết quả tìm kiếm
+        '/*?*page=',   // Hạn chế bot crawl sâu vào các trang phân trang
+      ],
     },
     sitemap: 'https://ruouvangansan.vn/sitemap.xml',
   }
