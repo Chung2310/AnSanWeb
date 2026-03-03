@@ -22,7 +22,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
-  // Tối ưu hóa hiệu năng: Sử dụng logic tìm kiếm thông minh từ attributes và tags
+  // Tối ưu hóa hiệu năng: Logic trích xuất dữ liệu thông minh từ attributes và description
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
@@ -31,8 +31,19 @@ export default function WineCard({ product, categories }: WineCardProps) {
         if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
       }
     }
-    return 'Đang cập nhật';
-  }, [product.attributes]);
+    
+    // Quét thêm trong mô tả sản phẩm nếu không tìm thấy trong thuộc tính (giống logic trang chi tiết)
+    if (product.description) {
+        for (const label of labels) {
+            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
+            const match = product.description.match(regex);
+            if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
+                 return match[1].trim().replace(/\.$/, '');
+            }
+        }
+    }
+    return 'N/A';
+  }, [product.attributes, product.description]);
 
   const cardInfo = React.useMemo(() => {
     if (!product.tags || !categories || categories.length === 0) {
@@ -71,7 +82,16 @@ export default function WineCard({ product, categories }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-    return getAttribute(['quốc gia', 'country', 'xuất xứ']);
+    
+    const countryVal = getAttribute(['quốc gia', 'country']);
+    if (countryVal !== 'N/A') return countryVal;
+
+    const originVal = getAttribute(['xuất xứ', 'origin']);
+    if (originVal !== 'N/A') {
+      const parts = originVal.split(',');
+      return parts[parts.length - 1].trim();
+    }
+    return 'N/A';
   }, [product.tags, categories, categoryMap, getAttribute]);
 
   const alcoholContent = React.useMemo(() => 
@@ -80,7 +100,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
 
   const capacityValue = React.useMemo(() => {
     const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
-    if (attr === 'Đang cập nhật' && cardInfo.isWine) return '750ml';
+    if (attr === 'N/A' && cardInfo.isWine) return '750ml';
     return attr;
   }, [cardInfo.isWine, getAttribute]);
 
@@ -127,7 +147,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
                     height={400}
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60} // Tối ưu RAM cho iOS: Hạ chất lượng ảnh nén
+                    quality={60}
                     loading="lazy"
                 />
             </div>
