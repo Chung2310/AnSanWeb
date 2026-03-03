@@ -121,7 +121,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const { categories } = useCategories();
   const searchParams = useSearchParams();
   
-  // Nguồn sự thật cho số trang là từ URL
+  // FIX PHÂN TRANG: Lấy số trang trực tiếp từ URL
   const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {
@@ -287,7 +287,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
 
   const paginatedProducts = useMemo(() => {
-    // Luôn tính toán dựa trên URL page
+    // FIX PHÂN TRANG: Luôn tính toán dựa trên số trang từ URL
     return sortedProducts.slice(
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage
