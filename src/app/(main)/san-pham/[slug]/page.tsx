@@ -65,5 +65,6 @@ export default async function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
+  // Chuyền dữ liệu đã được làm sạch (serialized) để tránh lỗi "Only plain objects can be passed"
   return <ProductDetailView product={product} />;
 }
