@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,6 +15,7 @@ export function Paginator({ totalPages, onPageChange }: PaginatorProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     
+    // FIX PHÂN TRANG: Luôn sử dụng URL làm nguồn dữ liệu chính
     const currentPage = Number(searchParams.get('page')) || 1;
 
     const handlePageClick = (pageNumber: number) => {

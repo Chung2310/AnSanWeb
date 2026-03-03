@@ -22,9 +22,9 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
-  // Logic đồng bộ với ProductDetailView: Trích xuất thông tin từ thuộc tính hoặc mô tả
+  // Logic trích xuất thông tin thông minh, đồng bộ với ProductDetailView
   const getAttribute = React.useCallback((labels: string[]): string => {
-    // 1. Tìm trong mảng attributes (Ưu tiên)
+    // 1. Ưu tiên tìm trong mảng attributes đã nhập
     if (product.attributes) {
       for (const label of labels) {
         const normalizedLabel = label.toLowerCase().trim();
@@ -33,16 +33,16 @@ export default function WineCard({ product, categories }: WineCardProps) {
       }
     }
     
-    // 2. Nếu không có trong attributes, tìm trong mô tả (Dùng Regex an toàn với Memoize)
+    // 2. Tự động quét trong mô tả nếu không có trong thuộc tính (Dùng Regex an toàn)
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
-        const text = fullText.replace(/<[^>]*>/g, ' '); // Loại bỏ HTML tags
+        const text = fullText.replace(/<[^>]*>/g, ' '); // Loại bỏ HTML
         for (const label of labels) {
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
             const match = text.match(regex);
             if (match && match[1]) {
-                const val = match[1].trim().split('.')[0].trim(); // Lấy câu đầu tiên
-                if (val && val.toLowerCase() !== 'n/a') return val;
+                const val = match[1].trim().split('.')[0].trim(); // Lấy câu đầu tiên cho gọn
+                if (val && val.toLowerCase() !== 'n/a' && val.length < 50) return val;
             }
         }
     }

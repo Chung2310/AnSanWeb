@@ -36,8 +36,11 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
   const description = category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`;
 
-  // Bảo vệ server: Nếu có tham số lọc, yêu cầu bot không index (Chống Crawler Trap)
-  const hasFilters = Object.keys(sParams).some(key => key.startsWith('filter_') || key === 'loai-vang' || key === 'nong-do' || key === 'quoc-gia');
+  // CHẶN BOT SEO: Nếu có bất kỳ tham số lọc nào, yêu cầu bot không index (Crawler Trap protection)
+  const hasFilters = Object.keys(sParams).some(key => 
+    key.startsWith('filter_') || 
+    ['loai-vang', 'nong-do', 'quoc-gia', 'giong-nho', 'gia', 'page'].includes(key)
+  );
 
   return {
     title: category.name,
@@ -56,10 +59,18 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const slug = (await params).slug;
     const sParams = await searchParams;
 
-    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh sập SQL/NoSQL
-    const filterCount = Object.keys(sParams).filter(k => k.startsWith('filter_') || k === 'nong-do' || k === 'quoc-gia').length;
+    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh quá tải
+    const filterCount = Object.keys(sParams).filter(k => 
+        k.startsWith('filter_') || ['nong-do', 'quoc-gia', 'loai-vang', 'giong-nho'].includes(k)
+    ).length;
+    
     if (filterCount > 5) {
-        return <div className="container py-20 text-center">Vui lòng sử dụng ít bộ lọc hơn để có kết quả chính xác nhất.</div>;
+        return (
+            <div className="container py-20 text-center">
+                <h2 className="text-xl font-bold text-primary">Yêu cầu quá phức tạp</h2>
+                <p className="mt-4 text-muted-foreground">Vui lòng sử dụng ít bộ lọc hơn để có kết quả chính xác nhất.</p>
+            </div>
+        );
     }
 
     return (

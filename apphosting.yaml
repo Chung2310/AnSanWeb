@@ -2,7 +2,7 @@
 # https://firebase.google.com/docs/app-hosting/configure
 
 runConfig:
-  # Tăng số lượng instance và cấu hình phần cứng để tránh lỗi 500 (Timeout) và cải thiện hiệu năng
+  # Tăng tài nguyên để xử lý các bộ lọc nặng và ngăn chặn lỗi 500
   minInstances: 2
   maxInstances: 10
   concurrency: 80
