@@ -8,9 +8,9 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/admin/', 
         '/login',
-        '/*?*filter_', // Chặn bot crawl các bộ lọc phức tạp gây nặng server
+        '/*?*filter_', // Chặn bot crawl các bộ lọc phức tạp gây nặng server (Crawler Trap)
         '/*?*q=',      // Chặn crawl kết quả tìm kiếm
-        '/*?*page=',   // Hạn chế bot crawl sâu vào các trang phân trang
+        '/*?*page=',   // Hạn chế bot crawl sâu vào các trang phân trang gây tốn tài nguyên
       ],
     },
     sitemap: 'https://ruouvangansan.vn/sitemap.xml',
