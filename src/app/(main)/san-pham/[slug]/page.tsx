@@ -23,6 +23,7 @@ async function getProduct(slug: string) {
   const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
   
   // Sanitize data for Client Component (Serialization fix for Firebase Timestamps)
+  // Ensures only plain objects are passed down
   return JSON.parse(JSON.stringify(data)) as FullProduct;
 }
 
