@@ -22,8 +22,6 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
-  // Tối ưu hóa hiệu năng: Logic trích xuất dữ liệu thông minh từ attributes và description
-  // Gỡ bỏ RegExp nặng nề, thay bằng logic so khớp chuỗi đơn giản để tránh quá tải CPU trên iPhone
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
@@ -33,20 +31,24 @@ export default function WineCard({ product, categories }: WineCardProps) {
       }
     }
     
-    // Nếu không tìm thấy trong thuộc tính, kiểm tra mô tả ngắn (thay vì quét toàn bộ HTML dài dằng dặc)
-    if (product.shortDescription) {
-        const desc = product.shortDescription.toLowerCase();
+    // Check descriptions if attributes are missing
+    const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
+    if (fullText.trim()) {
+        const text = fullText.toLowerCase();
         for (const label of labels) {
-            const index = desc.indexOf(label.toLowerCase());
+            const index = text.indexOf(label.toLowerCase());
             if (index !== -1) {
-                const sub = product.shortDescription.substring(index + label.length);
-                const match = sub.split('\n')[0].replace(':', '').trim();
-                if (match && match.toLowerCase() !== 'n/a') return match;
+                const sub = fullText.substring(index + label.length);
+                const afterColon = sub.split('\n')[0].split(':')[1];
+                if (afterColon) {
+                    const match = afterColon.trim().split(/[•\n]/)[0].trim();
+                    if (match && match.toLowerCase() !== 'n/a') return match;
+                }
             }
         }
     }
     return 'N/A';
-  }, [product.attributes, product.shortDescription]);
+  }, [product.attributes, product.shortDescription, product.description]);
 
   const cardInfo = React.useMemo(() => {
     if (!product.tags || !categories || categories.length === 0) {
@@ -141,11 +143,11 @@ export default function WineCard({ product, categories }: WineCardProps) {
                 <Image
                     src={product.image?.url || 'https://picsum.photos/seed/wine/400/400'}
                     alt={product.nameVN}
-                    width={300} // Ép kích thước render nhỏ lại để tiết kiệm RAM trên iPhone
+                    width={300}
                     height={300}
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60} // Hạ chất lượng xuống 60% để tránh crash tab Safari
+                    quality={60}
                     loading="lazy"
                 />
             </div>
