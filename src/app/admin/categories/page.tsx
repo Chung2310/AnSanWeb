@@ -5,7 +5,7 @@ import { DataTable } from '@/app/admin/categories/data-table';
 import { columns } from '@/components/admin/categories/columns';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCategories } from '@/hooks/use-categories';
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, Suspense } from 'react';
 import type { Category } from '@/lib/types';
 import {
   Accordion,
@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import * as XLSX from 'xlsx';
 import { useImportCategories } from '@/hooks/use-import-categories';
 
-export default function CategoriesAdminPage() {
+function CategoriesAdminContent() {
     const { categories, isLoading } = useCategories();
     const [viewFilter, setViewFilter] = useState('all'); // 'all' or 'parents'
     const [rootFilter, setRootFilter] = useState('all'); // id of root category or 'all'
@@ -238,5 +238,13 @@ export default function CategoriesAdminPage() {
             
             <DataTable columns={memoizedColumns} data={filteredCategories} />
         </div>
+    );
+}
+
+export default function CategoriesAdminPage() {
+    return (
+        <Suspense fallback={<div>Đang tải...</div>}>
+            <CategoriesAdminContent />
+        </Suspense>
     );
 }

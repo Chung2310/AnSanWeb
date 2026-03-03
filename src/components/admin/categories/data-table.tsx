@@ -55,16 +55,16 @@ export function DataTable<TData, TValue>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
+  const pageFromUrl = Number(searchParams.get('page')) || 1;
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const { deleteCategory, isDeleting } = useDeleteCategory();
 
   const pagination = useMemo(() => ({
-    pageIndex: Math.max(0, parseInt(page, 10) - 1),
+    pageIndex: Math.max(0, pageFromUrl - 1),
     pageSize: 15,
-  }), [page]);
+  }), [pageFromUrl]);
 
   const columnFilters = useMemo(() => {
     return nameFilter ? [{ id: 'name', value: nameFilter }] : [];
@@ -86,6 +86,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
     enableRowSelection: true,
+    manualPagination: false,
   });
 
   const handleDeleteSelected = () => {
@@ -98,12 +99,13 @@ export function DataTable<TData, TValue>({
     });
   };
 
-  const currentPage = table.getState().pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
-      router.push(`${pathname}?page=${pageNumber}`);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', pageNumber.toString());
+      router.push(`${pathname}?${params.toString()}`);
     }
   };
 
@@ -187,12 +189,12 @@ export function DataTable<TData, TValue>({
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
                     <Button
                         key={pageNumber}
-                        variant={currentPage === pageNumber ? "outline" : "ghost"}
+                        variant={pageFromUrl === pageNumber ? "outline" : "ghost"}
                         size="sm"
                         onClick={() => handlePageChange(pageNumber)}
                         className={cn(
                             "font-headline font-bold transition-colors",
-                            currentPage === pageNumber ? "text-primary border-primary" : "text-muted-foreground"
+                            pageFromUrl === pageNumber ? "text-primary border-primary" : "text-muted-foreground"
                         )}
                     >
                         {pageNumber}
@@ -201,7 +203,7 @@ export function DataTable<TData, TValue>({
                 <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handlePageChange(currentPage + 1)}
+                    onClick={() => handlePageChange(pageFromUrl + 1)}
                     disabled={!table.getCanNextPage()}
                     className="transition-colors hover:text-foreground disabled:text-muted-foreground/50 disabled:cursor-not-allowed ml-2"
                 >

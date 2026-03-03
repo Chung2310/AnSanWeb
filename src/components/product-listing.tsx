@@ -11,6 +11,7 @@ import { Paginator } from "./paginator";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useCategories } from "@/hooks/use-categories";
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -117,8 +118,9 @@ function CollapsibleSEODescription({ content }: { content: string }) {
 
 function ProductListingContent({ initialProducts, title, bannerData, itemsPerPage = 12, categoryDescription, initialCategory, queryFilters }: ProductListingProps) {
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
-  const [currentPage, setCurrentPage] = useState(1);
   const { categories } = useCategories();
+  const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {
         const results: Category[] = [];
@@ -199,7 +201,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>(getInitialFilters);
 
   useEffect(() => {
-    setCurrentPage(1);
     setActiveFilters(getInitialFilters);
   }, [initialProducts, getInitialFilters]);
 
@@ -290,15 +291,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
     );
   }, [sortedProducts, currentPage, itemsPerPage]);
 
-  const handlePageChange = useCallback((page: number) => {
-    if (page >= 1 && page <= totalPages && page !== currentPage) {
-      setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [totalPages, currentPage]);
-
   const handleFilterChange = (newActiveFilters: ActiveFilters) => {
-    setCurrentPage(1);
     setActiveFilters(newActiveFilters);
   };
   
@@ -364,7 +357,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             <Suspense fallback={<div className="flex justify-center mt-12">Đang tải phân trang...</div>}>
                 <Paginator 
                     totalPages={totalPages} 
-                    onPageChange={handlePageChange} 
+                    onPageChange={() => {}} 
                 />
             </Suspense>
           </div>
@@ -376,5 +369,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
 
 export default function ProductListing(props: ProductListingProps) {
-    return <ProductListingContent {...props} />;
+    return (
+        <Suspense fallback={<div className="container py-20 text-center">Đang tải sản phẩm...</div>}>
+            <ProductListingContent {...props} />
+        </Suspense>
+    );
 }
