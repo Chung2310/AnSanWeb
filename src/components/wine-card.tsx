@@ -31,24 +31,19 @@ export default function WineCard({ product, categories }: WineCardProps) {
       }
     }
     
-    // Fallback search in description if attributes fail
+    // Static fallback if description exists
     if (product.description) {
-        const text = product.description.toLowerCase();
+        const desc = product.description.toLowerCase();
         for (const label of labels) {
-            const index = text.indexOf(label.toLowerCase());
-            if (index !== -1) {
-                const afterLabel = product.description.substring(index + label.length).trim();
-                const match = afterLabel.match(/^[:\s]*([^•\n]+)/);
-                if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
-                    return match[1].trim().replace(/\.$/, '');
-                }
+            if (desc.includes(label.toLowerCase())) {
+                return 'Xem chi tiết';
             }
         }
     }
     return 'Đang cập nhật';
   }, [product.attributes, product.description]);
 
-  const { isWine, isSpirit, mainCategoryName } = React.useMemo(() => {
+  const cardInfo = React.useMemo(() => {
     if (!product.tags || !categories || categories.length === 0) {
         return { isWine: false, isSpirit: false, mainCategoryName: '' };
     }
@@ -85,7 +80,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-    const val = getAttribute(['quốc gia', 'country', 'xuất xứ', 'vùng']);
+    const val = getAttribute(['quốc gia', 'country', 'xuất xứ']);
     return val !== 'Đang cập nhật' ? val : 'Đang cập nhật';
   }, [product.tags, categories, categoryMap, getAttribute]);
 
@@ -110,9 +105,9 @@ export default function WineCard({ product, categories }: WineCardProps) {
 
   const capacityValue = React.useMemo(() => {
     const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
-    if (attr === 'Đang cập nhật' && isWine) return '750ml';
+    if (attr === 'Đang cập nhật' && cardInfo.isWine) return '750ml';
     return attr;
-  }, [isWine, getAttribute]);
+  }, [cardInfo.isWine, getAttribute]);
 
   const salePrice = Number(product.price);
   const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
@@ -151,8 +146,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
         </div>
         
         <div className="mt-4 px-1 space-y-2">
-            {mainCategoryName && (
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{mainCategoryName}</p>
+            {cardInfo.mainCategoryName && (
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{cardInfo.mainCategoryName}</p>
             )}
             
             <h3 className="font-montserrat text-sm md:text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[2.5rem] md:min-h-[3rem] transition-colors group-hover:opacity-80">
@@ -166,7 +161,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
                 <span className="text-base md:text-lg font-bold text-primary">{formatPrice(salePrice)}</span>
             </div>
 
-            {(isWine || isSpirit) && (
+            {(cardInfo.isWine || cardInfo.isSpirit) && (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
                     <div className="flex items-start gap-1.5">
                         <div className="relative w-4 h-4 shrink-0 mt-0.5">
