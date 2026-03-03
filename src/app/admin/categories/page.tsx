@@ -149,6 +149,7 @@ function CategoriesAdminContent() {
                         accept=".xlsx, .xls, .csv"
                         onChange={handleFileSelect}
                     />
+                    {/* Nút thêm mới bị ẩn theo yêu cầu */}
                 </div>
             </div>
 

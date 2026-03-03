@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -9,35 +8,22 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginatorProps {
     totalPages: number;
-    onPageChange: (page: number) => void;
+    onPageChange?: (page: number) => void;
 }
 
 export function Paginator({ totalPages, onPageChange }: PaginatorProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const prevPageRef = useRef<number | null>(null);
     
     const currentPage = Number(searchParams.get('page')) || 1;
 
-    useEffect(() => {
-        // Only trigger the callback if the page from URL actually changed
-        // and it's not the first render where it's already set to 1.
-        if (prevPageRef.current !== null && prevPageRef.current !== currentPage) {
-            onPageChange(currentPage);
-        }
-        prevPageRef.current = currentPage;
-    }, [currentPage, onPageChange]);
-
-    const createPageURL = (pageNumber: number | string) => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('page', pageNumber.toString());
-        return `${pathname}?${params.toString()}`;
-    };
-
     const handlePageClick = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
-            router.push(createPageURL(pageNumber));
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('page', pageNumber.toString());
+            router.push(`${pathname}?${params.toString()}`);
+            if (onPageChange) onPageChange(pageNumber);
         }
     };
 
@@ -54,16 +40,23 @@ export function Paginator({ totalPages, onPageChange }: PaginatorProps) {
         >
           <ChevronLeft className="h-6 w-6" />
         </Button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-          <Button
-            key={page}
-            variant={currentPage === page ? 'outline' : 'ghost'}
-            onClick={() => handlePageClick(page)}
-            className={cn('h-auto px-4 py-2 font-headline font-bold transition-colors hover:text-foreground', currentPage === page ? 'text-foreground underline underline-offset-4' : 'text-muted-foreground')}
-          >
-            {page}
-          </Button>
-        ))}
+        
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-[250px] sm:max-w-none">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <Button
+                key={page}
+                variant={currentPage === page ? 'outline' : 'ghost'}
+                onClick={() => handlePageClick(page)}
+                className={cn(
+                    'h-auto px-4 py-2 font-headline font-bold transition-colors hover:text-foreground', 
+                    currentPage === page ? 'text-foreground underline underline-offset-4 border-black' : 'text-muted-foreground'
+                )}
+            >
+                {page}
+            </Button>
+            ))}
+        </div>
+
         <Button
           variant="ghost"
           size="icon"

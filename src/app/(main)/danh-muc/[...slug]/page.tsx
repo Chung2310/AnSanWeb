@@ -23,7 +23,7 @@ async function getCategory(slugParts: string[]) {
   if (snapshot.empty) return null;
   const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
   
-  // Sanitize data for Client Component (Serialization fix for Firebase Timestamps)
+  // Serialization fix: Chuyển đổi Firestore Timestamps sang dạng Plain Object cho Next.js 15
   return JSON.parse(JSON.stringify(data)) as Category;
 }
 
@@ -36,7 +36,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
   const description = category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`;
 
-  // Kiểm tra nếu có bộ lọc thì yêu cầu bot không index để tránh timeout server
+  // Bảo vệ server: Nếu có tham số lọc, yêu cầu bot không index (Chống Crawler Trap)
   const hasFilters = Object.keys(sParams).some(key => key.startsWith('filter_'));
 
   return {
@@ -56,9 +56,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const slug = (await params).slug;
     const sParams = await searchParams;
 
-    // Bảo vệ server: Nếu có quá nhiều bộ lọc phức tạp (giả lập tấn công hoặc bot lỗi), giới hạn xử lý
+    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh sập SQL/NoSQL
     const filterCount = Object.keys(sParams).filter(k => k.startsWith('filter_')).length;
-    if (filterCount > 8) {
+    if (filterCount > 6) {
         return <div className="container py-20 text-center">Vui lòng sử dụng ít bộ lọc hơn để có kết quả chính xác nhất.</div>;
     }
 

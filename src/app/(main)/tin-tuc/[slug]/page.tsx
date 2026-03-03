@@ -19,7 +19,7 @@ async function getPost(slug: string) {
   if (snapshot.empty) return null;
   const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
   
-  // Sanitize data for Client Component (Serialization fix for Firebase Timestamps)
+  // Serialization fix: Chuyển đổi Firestore Timestamps sang Plain Object cho Next.js 15
   return JSON.parse(JSON.stringify(data)) as BlogPost;
 }
 

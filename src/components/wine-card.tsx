@@ -22,28 +22,27 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
+  // Logic đồng bộ với ProductDetailView: Trích xuất thông tin từ thuộc tính hoặc mô tả
   const getAttribute = React.useCallback((labels: string[]): string => {
+    // 1. Tìm trong mảng attributes (Ưu tiên)
     if (product.attributes) {
       for (const label of labels) {
         const normalizedLabel = label.toLowerCase().trim();
         const found = product.attributes.find(a => a.label?.toLowerCase().trim() === normalizedLabel);
-        if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
+        if (found && found.value && found.value.toLowerCase() !== 'n/a' && found.value !== 'Đang cập nhật') return found.value;
       }
     }
     
-    // Check descriptions if attributes are missing
+    // 2. Nếu không có trong attributes, tìm trong mô tả (Dùng Regex an toàn với Memoize)
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
-        const text = fullText.toLowerCase();
+        const text = fullText.replace(/<[^>]*>/g, ' '); // Loại bỏ HTML tags
         for (const label of labels) {
-            const index = text.indexOf(label.toLowerCase());
-            if (index !== -1) {
-                const sub = fullText.substring(index + label.length);
-                const afterColon = sub.split('\n')[0].split(':')[1];
-                if (afterColon) {
-                    const match = afterColon.trim().split(/[•\n]/)[0].trim();
-                    if (match && match.toLowerCase() !== 'n/a') return match;
-                }
+            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
+            const match = text.match(regex);
+            if (match && match[1]) {
+                const val = match[1].trim().split('.')[0].trim(); // Lấy câu đầu tiên
+                if (val && val.toLowerCase() !== 'n/a') return val;
             }
         }
     }
@@ -143,11 +142,12 @@ export default function WineCard({ product, categories }: WineCardProps) {
                 <Image
                     src={product.image?.url || 'https://picsum.photos/seed/wine/400/400'}
                     alt={product.nameVN}
-                    width={300}
-                    height={300}
+                    width={350}
+                    height={350}
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60}
+                    quality={60} // Tối ưu RAM cho iPhone
+                    priority={false}
                     loading="lazy"
                 />
             </div>
