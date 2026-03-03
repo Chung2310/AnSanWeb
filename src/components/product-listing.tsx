@@ -11,7 +11,7 @@ import { Paginator } from "./paginator";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useCategories } from "@/hooks/use-categories";
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const sortingOptions = ["MẶC ĐỊNH", "MỚI NHẤT", "GIÁ TĂNG DẦN", "GIÁ GIẢM DẦN"] as const;
 type SortingOption = typeof sortingOptions[number];
@@ -120,6 +120,8 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const [activeSort, setActiveSort] = useState<SortingOption>("MẶC ĐỊNH");
   const { categories } = useCategories();
   const searchParams = useSearchParams();
+  
+  // Use page from URL as the source of truth for pagination
   const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {
@@ -357,7 +359,9 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             <Suspense fallback={<div className="flex justify-center mt-12">Đang tải phân trang...</div>}>
                 <Paginator 
                     totalPages={totalPages} 
-                    onPageChange={() => {}} 
+                    onPageChange={() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }} 
                 />
             </Suspense>
           </div>
