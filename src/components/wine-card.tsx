@@ -13,7 +13,7 @@ type WineCardProps = {
 
 export default function WineCard({ product, categories }: WineCardProps) {
   const formatPrice = (price: number) => {
-    if (isNaN(price)) return '';
+    if (price === 0 || isNaN(price)) return 'Liên hệ';
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
@@ -22,6 +22,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
+  // Tối ưu hóa hiệu năng: Sử dụng logic tìm kiếm thông minh từ attributes và tags
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
@@ -30,18 +31,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
         if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
       }
     }
-    
-    // Static fallback if description exists
-    if (product.description) {
-        const desc = product.description.toLowerCase();
-        for (const label of labels) {
-            if (desc.includes(label.toLowerCase())) {
-                return 'Xem chi tiết';
-            }
-        }
-    }
     return 'Đang cập nhật';
-  }, [product.attributes, product.description]);
+  }, [product.attributes]);
 
   const cardInfo = React.useMemo(() => {
     if (!product.tags || !categories || categories.length === 0) {
@@ -62,8 +53,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
     for (const tagId of product.tags) {
         const root = getRootParent(tagId);
         if (root) {
-            if (root.id === 'ruou-vang' || root.slug === 'ruou-vang') wine = true;
-            if (root.id === 'ruou-manh' || root.slug === 'ruou-manh') spirit = true;
+            if (root.slug === 'ruou-vang') wine = true;
+            if (root.slug === 'ruou-manh') spirit = true;
             if (root.name) mName = root.name.toUpperCase();
         }
     }
@@ -80,23 +71,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
             if (cat) return cat.name;
         }
     }
-    const val = getAttribute(['quốc gia', 'country', 'xuất xứ']);
-    return val !== 'Đang cập nhật' ? val : 'Đang cập nhật';
-  }, [product.tags, categories, categoryMap, getAttribute]);
-
-  const giongNhoValue = React.useMemo(() => {
-    if (product.tags && categories) {
-        const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
-        const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
-        if (matchingTags.length > 0) {
-            const names = matchingTags.map(tagId => {
-                const cat = categoryMap.get(tagId);
-                return cat ? cat.name : null;
-            }).filter(Boolean);
-            if (names.length > 0) return names.join(', ');
-        }
-    }
-    return getAttribute(['giống nho', 'nho', 'grapes']);
+    return getAttribute(['quốc gia', 'country', 'xuất xứ']);
   }, [product.tags, categories, categoryMap, getAttribute]);
 
   const alcoholContent = React.useMemo(() => 
@@ -108,6 +83,18 @@ export default function WineCard({ product, categories }: WineCardProps) {
     if (attr === 'Đang cập nhật' && cardInfo.isWine) return '750ml';
     return attr;
   }, [cardInfo.isWine, getAttribute]);
+
+  const giongNhoValue = React.useMemo(() => {
+    if (product.tags && categories) {
+        const grapeIds = wineMegaMenuData.theoGiongNho.map(item => item.category_id);
+        const matchingTags = product.tags.filter(tagId => grapeIds.includes(tagId));
+        if (matchingTags.length > 0) {
+            const names = matchingTags.map(tagId => categoryMap.get(tagId)?.name).filter(Boolean);
+            if (names.length > 0) return names.join(', ');
+        }
+    }
+    return getAttribute(['giống nho', 'nho', 'grapes']);
+  }, [product.tags, categories, categoryMap, getAttribute]);
 
   const salePrice = Number(product.price);
   const originalPrice = product.secondaryPrice ? Number(product.secondaryPrice) : null;
@@ -136,10 +123,11 @@ export default function WineCard({ product, categories }: WineCardProps) {
                 <Image
                     src={product.image?.url || 'https://picsum.photos/seed/wine/400/400'}
                     alt={product.nameVN}
-                    fill
+                    width={400}
+                    height={400}
                     sizes="(max-width: 768px) 50vw, 33vw"
-                    className="object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60}
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    quality={60} // Tối ưu RAM cho iOS: Hạ chất lượng ảnh nén
                     loading="lazy"
                 />
             </div>
