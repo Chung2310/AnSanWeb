@@ -15,14 +15,14 @@ export function Paginator({ totalPages, onPageChange }: PaginatorProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     
-    // FIX PHÂN TRANG: Luôn sử dụng URL làm nguồn dữ liệu chính
+    // NGUỒN SỰ THẬT DUY NHẤT: Lấy trang hiện tại từ URL
     const currentPage = Number(searchParams.get('page')) || 1;
 
     const handlePageClick = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             const params = new URLSearchParams(searchParams.toString());
             params.set('page', pageNumber.toString());
-            router.push(`${pathname}?${params.toString()}`);
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
             if (onPageChange) onPageChange(pageNumber);
         }
     };

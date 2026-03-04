@@ -10,15 +10,15 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/admin/', 
         '/login',
-        '/*?*filter_',   // Chặn tất cả URL chứa filter
-        '/*?*q=',        // Chặn trang tìm kiếm
-        '/*?*page=',     // Chặn crawl sâu vào phân trang
-        '/*?*loai-vang=',
+        '/*?*filter_',   // Chặn tham số lọc mới
+        '/*?*q=',        // Chặn tìm kiếm
+        '/*?*page=',     // Chặn crawl sâu phân trang
+        '/*?*loai-vang=', // Chặn các tham số lọc cũ
         '/*?*nong-do=',
         '/*?*quoc-gia=',
         '/*?*giong-nho=',
         '/*?*gia=',
-        '/*?_rsc=',      // Chặn các request nội bộ của Next.js
+        '/*?_rsc=',      // Chặn request nội bộ Next.js
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
