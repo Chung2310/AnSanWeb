@@ -23,7 +23,6 @@ async function getCategory(slugParts: string[]) {
   if (snapshot.empty) return null;
   const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
   
-  // Serialization fix: Chuyển đổi Firestore Timestamps sang dạng Plain Object cho Next.js 15
   return JSON.parse(JSON.stringify(data)) as Category;
 }
 
@@ -36,7 +35,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
   const description = category.description?.substring(0, 160).replace(/<[^>]*>/g, '') || `Bộ sưu tập ${category.name} tại AnSan Wine & Spirit.`;
 
-  // CHẶN BOT SEO: Nếu có bất kỳ tham số lọc nào, yêu cầu bot không index (Crawler Trap protection)
+  // Prevent bot index for filtered URLs
   const hasFilters = Object.keys(sParams).some(key => 
     key.startsWith('filter_') || 
     ['loai-vang', 'nong-do', 'quoc-gia', 'giong-nho', 'gia', 'page'].includes(key)
@@ -59,7 +58,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const slug = (await params).slug;
     const sParams = await searchParams;
 
-    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh quá tải (Chống lỗi 500)
     const filterCount = Object.keys(sParams).filter(k => 
         k.startsWith('filter_') || ['nong-do', 'quoc-gia', 'loai-vang', 'giong-nho'].includes(k)
     ).length;
@@ -68,7 +66,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         return (
             <div className="container py-20 text-center">
                 <h2 className="text-xl font-bold text-primary">Yêu cầu quá phức tạp</h2>
-                <p className="mt-4 text-muted-foreground">Vui lòng sử dụng ít bộ lọc hơn để có kết quả chính xác nhất.</p>
+                <p className="mt-4 text-muted-foreground">Vui lòng sử dụng ít bộ lọc hơn để có kết quả tốt nhất.</p>
             </div>
         );
     }

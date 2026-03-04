@@ -152,13 +152,14 @@ export default function ProductsAdminPage() {
 
     // 2. Detailed Filters
     const applyDetailedFilters = (filters: any) => {
-        const activeTags = Object.values(filters).flat() as string[];
-        if (activeTags.length === 0) return;
+        const activeFilterGroups = Object.keys(filters).filter(groupKey => filters[groupKey].length > 0);
+        if (activeFilterGroups.length === 0) return;
+        
         tempProducts = tempProducts.filter(p => {
             const productTags = new Set(p.tags || []);
-            return Object.keys(filters).every(groupKey => {
+            return activeFilterGroups.every(groupKey => {
                 const groupFilters = filters[groupKey] as string[];
-                return groupFilters.length === 0 || groupFilters.some(tag => productTags.has(tag));
+                return groupFilters.some(tag => productTags.has(tag));
             });
         });
     };
@@ -190,16 +191,16 @@ export default function ProductsAdminPage() {
   };
 
   const handleExport = () => {
-    if (!products || products.length === 0) {
+    if (!filteredProducts || filteredProducts.length === 0) {
         toast({
             variant: 'destructive',
             title: 'Không có dữ liệu',
-            description: 'Không có sản phẩm nào để xuất.',
+            description: 'Không có sản phẩm nào đang hiển thị để xuất.',
         });
         return;
     }
 
-    const dataToExport = products.map(prod => {
+    const dataToExport = filteredProducts.map(prod => {
         const row: any = {
             'ID': prod.id,
             'Tên sản phẩm': prod.nameVN,
@@ -234,8 +235,8 @@ export default function ProductsAdminPage() {
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
-    XLSX.writeFile(workbook, "san-pham.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Filtered Products");
+    XLSX.writeFile(workbook, `san-pham-da-loc-${new Date().getTime()}.xlsx`);
   };
 
   const renderFilterGroup = (
@@ -281,7 +282,7 @@ export default function ProductsAdminPage() {
         <h1 className="text-3xl font-bold">Quản lý Sản phẩm</h1>
         <div className="flex items-center flex-wrap justify-end gap-4">
             <Button variant="outline" size="sm" onClick={handleExport}>
-                <Download className="mr-2 h-4 w-4" /> Xuất Excel
+                <Download className="mr-2 h-4 w-4" /> Xuất Excel ({filteredProducts.length})
             </Button>
             <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isImporting}>
                 <FileUp className="mr-2 h-4 w-4" /> {isImporting ? 'Đang nhập...' : 'Nhập Excel'}

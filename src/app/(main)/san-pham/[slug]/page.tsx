@@ -22,7 +22,7 @@ async function getProduct(slug: string) {
   if (snapshot.empty) return null;
   const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
   
-  // Serialization fix: Chuyển đổi Firestore Timestamps sang dạng chuỗi/plain object cho Next.js 15
+  // Serialization fix: Convert Timestamps to strings for Next.js 15
   return JSON.parse(JSON.stringify(data)) as FullProduct;
 }
 
@@ -65,6 +65,5 @@ export default async function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Chuyển dữ liệu đã được làm sạch (serialized) để tránh lỗi "Only plain objects can be passed"
   return <ProductDetailView product={product} />;
 }
