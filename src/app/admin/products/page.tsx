@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Filter, Download, FileUp } from 'lucide-react';
+import { PlusCircle, Filter, Download, FileUp, X } from 'lucide-react';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/use-products';
 import { DataTable } from '@/components/admin/products/data-table';
@@ -28,6 +28,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useToast } from '@/hooks/use-toast';
 
 // Define filter types
 type WineFilters = {
@@ -59,6 +60,7 @@ export default function ProductsAdminPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all');
   const { importProducts, isImporting } = useImportProducts();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
   
   const [wineFilters, setWineFilters] = useState<WineFilters>({
     theoLoai: [],
@@ -187,6 +189,55 @@ export default function ProductsAdminPage() {
     setGiftSetFilters(prev => ({ ...prev, [group]: checked ? [...prev[group], tagId] : prev[group].filter(i => i !== tagId) }));
   };
 
+  const handleExport = () => {
+    if (!products || products.length === 0) {
+        toast({
+            variant: 'destructive',
+            title: 'Không có dữ liệu',
+            description: 'Không có sản phẩm nào để xuất.',
+        });
+        return;
+    }
+
+    const dataToExport = products.map(prod => {
+        const row: any = {
+            'ID': prod.id,
+            'Tên sản phẩm': prod.nameVN,
+            'Đường dẫn (slug)': prod.slug,
+            'Giá': prod.price,
+            'Mô tả giá': prod.priceDescription || '',
+            'Giá phụ': prod.secondaryPrice || '',
+            'Mô tả giá phụ': prod.secondaryPriceDescription || '',
+            'Trạng thái': prod.status === 'published' ? 'Đã xuất bản' : 'Bản nháp',
+            'Nổi bật': prod.isFeatured ? 'Có' : 'Không',
+            'Giá tốt': prod.isGoodPrice ? 'Có' : 'Không',
+            'Sản phẩm mới': prod.isNew ? 'Có' : 'Không',
+            'Lựa chọn tốt nhất': prod.bestChoice ? 'Có' : 'Không',
+            'Mô tả ngắn': prod.shortDescription || '',
+            'Mô tả chi tiết': prod.description || '',
+            'URL Ảnh bìa': prod.image?.url || '',
+            'URL Ảnh chi tiết': (prod.detailImages || []).map(img => img.url).join(','),
+            'Ngày tạo': prod.createdAt ? (typeof prod.createdAt.toDate === 'function' ? prod.createdAt.toDate().toISOString() : new Date(prod.createdAt).toISOString()) : '',
+        };
+
+        prod.attributes?.forEach(attr => {
+            row[attr.label] = attr.value;
+        });
+
+        if (categories && prod.tags) {
+            const tagNames = prod.tags.map(tagId => categories.find(c => c.id === tagId)?.name || tagId).join(', ');
+            row['Danh mục / Phân loại'] = tagNames;
+        }
+
+        return row;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+    XLSX.writeFile(workbook, "san-pham.xlsx");
+  };
+
   const renderFilterGroup = (
     title: string,
     groupKey: string,
@@ -229,7 +280,10 @@ export default function ProductsAdminPage() {
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">Quản lý Sản phẩm</h1>
         <div className="flex items-center flex-wrap justify-end gap-4">
-            <Button variant="outline" onClick={() => fileInputRef.current?.click()} disabled={isImporting}>
+            <Button variant="outline" size="sm" onClick={handleExport}>
+                <Download className="mr-2 h-4 w-4" /> Xuất Excel
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isImporting}>
                 <FileUp className="mr-2 h-4 w-4" /> {isImporting ? 'Đang nhập...' : 'Nhập Excel'}
             </Button>
             <input type="file" ref={fileInputRef} className="hidden" accept=".xlsx, .xls, .csv" onChange={async (e) => {
@@ -238,7 +292,7 @@ export default function ProductsAdminPage() {
             }} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button><PlusCircle className="mr-2 h-4 w-4" /> Thêm sản phẩm mới</Button>
+                <Button size="sm"><PlusCircle className="mr-2 h-4 w-4" /> Thêm sản phẩm mới</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {mainProductCategories.map((cat) => (
