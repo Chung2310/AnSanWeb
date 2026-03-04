@@ -61,6 +61,6 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  // Chuyền dữ liệu đã được làm sạch (serialized)
+  // Chuyển dữ liệu đã được làm sạch (serialized)
   return <PostDetailView post={post} />;
 }

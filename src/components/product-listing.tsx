@@ -121,7 +121,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const { categories } = useCategories();
   const searchParams = useSearchParams();
   
-  // FIX PHÂN TRANG: Lấy số trang trực tiếp từ URL
+  // NGUỒN SỰ THẬT DUY NHẤT: Lấy trang hiện tại từ URL
   const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {
@@ -170,7 +170,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
 
   const getInitialFilters = useMemo(() => {
     if (!initialCategory || !categories) return queryFilters || {};
-    
     let filters: ActiveFilters = queryFilters ? { ...queryFilters } : {};
 
     const findGroupAndLabel = (categoryId: string): { group: string, label: string } | null => {
@@ -178,9 +177,7 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
             if (group === "KHOẢNG GIÁ") continue;
             const options = staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[];
             const found = options.find(o => o.value === categoryId);
-            if (found) {
-                return { group, label: found.label };
-            }
+            if (found) return { group, label: found.label };
         }
         return null;
     };
@@ -190,13 +187,10 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         const filterInfo = findGroupAndLabel(current.id);
         if (filterInfo) {
             if (!filters[filterInfo.group]) filters[filterInfo.group] = [];
-            if (!filters[filterInfo.group].includes(filterInfo.label)) {
-                filters[filterInfo.group].push(filterInfo.label);
-            }
+            if (!filters[filterInfo.group].includes(filterInfo.label)) filters[filterInfo.group].push(filterInfo.label);
         }
         current = categories.find(c => c.id === current?.parentId);
     }
-    
     return filters;
   }, [initialCategory, categories, queryFilters]);
   
@@ -213,29 +207,18 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         const descendants = getDescendants(initialCategory.id, categories);
         const matchIds = new Set(descendants.map(d => d.id));
         const matchSlugs = new Set(descendants.map(d => d.slug));
-
-        productsToFilter = productsToFilter.filter(p =>
-            p.tags?.some(tag => matchIds.has(tag) || matchSlugs.has(tag))
-        );
+        productsToFilter = productsToFilter.filter(p => p.tags?.some(tag => matchIds.has(tag) || matchSlugs.has(tag)));
     }
     
-    const activeFilterGroups = Object.keys(activeFilters).filter(
-      (group) => activeFilters[group]?.length > 0
-    );
-
-    if (activeFilterGroups.length === 0) {
-      return productsToFilter;
-    }
+    const activeFilterGroups = Object.keys(activeFilters).filter((group) => activeFilters[group]?.length > 0);
+    if (activeFilterGroups.length === 0) return productsToFilter;
 
     const priceRanges = activeFilters["KHOẢNG GIÁ"]?.map(label => {
-      const option = (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label);
-      return option?.value;
+      return (staticFiltersData["KHOẢNG GIÁ"] || []).find(o => o.label === label)?.value;
     }).filter(Boolean) as [number, number][];
 
     if (priceRanges && priceRanges.length > 0) {
-      productsToFilter = productsToFilter.filter(p =>
-        priceRanges.some(range => p.price >= range[0] && p.price < range[1])
-      );
+      productsToFilter = productsToFilter.filter(p => priceRanges.some(range => p.price >= range[0] && p.price < range[1]));
     }
 
     const tagFilterGroups = activeFilterGroups.filter(g => g !== "KHOẢNG GIÁ");
@@ -244,126 +227,79 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
         return tagFilterGroups.every(group => {
           const activeLabels = activeFilters[group];
           if (!activeLabels || activeLabels.length === 0) return true;
-
           const idsToFilter = activeLabels.map(label => {
             const options = staticFiltersData[group as keyof typeof staticFiltersData] as { label: string, value: string }[];
-            const option = options.find(o => o.value === label);
-            return option?.value;
+            return options.find(o => o.label === label)?.value;
           }).filter(Boolean) as string[];
-
           if (idsToFilter.length === 0) return true;
           return p.tags?.some(tag => idsToFilter.includes(tag));
         });
       });
     }
-
     return productsToFilter;
   }, [initialProducts, initialCategory, categories, activeFilters, getDescendants]);
 
   const sortedProducts = useMemo(() => {
     let products = [...filteredProducts];
-
     switch (activeSort) {
-      case "GIÁ TĂNG DẦN":
-        products.sort((a, b) => a.price - b.price);
-        break;
-      case "GIÁ GIẢM DẦN":
-        products.sort((a, b) => b.price - a.price);
-        break;
-      case "MỚI NHẤT":
-        products.sort((a, b) => {
+      case "GIÁ TĂNG DẦN": products.sort((a, b) => a.price - b.price); break;
+      case "GIÁ GIẢM DẦN": products.sort((a, b) => b.price - a.price); break;
+      case "MỚI NHẤT": products.sort((a, b) => {
             const dateA = a.createdAt?.seconds ? new Date(a.createdAt.seconds * 1000).getTime() : 0;
             const dateB = b.createdAt?.seconds ? new Date(b.createdAt.seconds * 1000).getTime() : 0;
             return dateB - dateA;
-        });
-        break;
-      default:
-        break;
+        }); break;
     }
-
     return products;
   }, [filteredProducts, activeSort]);
 
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
 
   const paginatedProducts = useMemo(() => {
-    // FIX PHÂN TRANG: Luôn tính toán dựa trên số trang từ URL
-    return sortedProducts.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    );
+    return sortedProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   }, [sortedProducts, currentPage, itemsPerPage]);
 
-  const handleFilterChange = (newActiveFilters: ActiveFilters) => {
-    setActiveFilters(newActiveFilters);
-  };
-  
   const firstItemIndex = (currentPage - 1) * itemsPerPage + 1;
   const lastItemIndex = Math.min(currentPage * itemsPerPage, sortedProducts.length);
 
   return (
     <div className="bg-white text-black">
       {bannerData ? <CategoryBanner {...bannerData} /> : (
-         <div className="border-b border-t">
-            <div className="container flex h-16 items-center">
-                <h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1>
-            </div>
-         </div>
+         <div className="border-b border-t"><div className="container flex h-16 items-center"><h1 className="font-headline text-xl font-bold uppercase tracking-wider">{title}</h1></div></div>
       )}
-      
       <CategoryNav onCategorySelect={() => {}} selectedCategory={bannerData?.slug ?? null} />
-
       {categoryDescription && <CollapsibleSEODescription content={categoryDescription} />}
-      
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <SidebarFilter 
               products={initialProducts} 
-              onFilterChange={handleFilterChange}
+              onFilterChange={(newFilters) => setActiveFilters(newActiveFilters => ({...newActiveFilters, ...newFilters}))}
               isWineCategory={isWineCategory}
               isGiftSetCategory={isGiftSetCategory}
               isSpiritCategory={isSpiritCategory}
               activeFilters={activeFilters}
             />
           </div>
-
           <div className="lg:col-span-3 bg-[#f8f0e5] rounded-2xl p-6 md:p-10 shadow-lg mb-12">
             <div className="flex justify-between items-center mb-6 text-sm">
               <p className="font-bold text-gray-700">HIỂN THỊ {paginatedProducts.length > 0 ? firstItemIndex : 0}-{lastItemIndex} CỦA {sortedProducts.length} KẾT QUẢ</p>
               <div className="flex items-center gap-2">
-                <span className="uppercase font-semibold text-gray-500">Sắp xếp theo</span>
+                <span className="uppercase font-semibold text-gray-500">Sắp xếp</span>
                 {sortingOptions.map((opt) => (
-                  <Button
-                      key={opt}
-                      variant={activeSort === opt ? "outline" : "ghost"}
-                      onClick={() => setActiveSort(opt)}
+                  <Button key={opt} variant={activeSort === opt ? "outline" : "ghost"} onClick={() => setActiveSort(opt)}
                       className={`text-xs h-auto py-1 px-3 rounded-none ${activeSort === opt ? 'border-black bg-white' : 'border-transparent'}`}
-                  >
-                      {opt}
-                  </Button>
+                  > {opt} </Button>
                 ))}
               </div>
             </div>
             {paginatedProducts.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                    {paginatedProducts.map((product) => (
-                        <WineCard key={product.id} product={product} categories={categories} />
-                    ))}
+                    {paginatedProducts.map((product) => <WineCard key={product.id} product={product} categories={categories} />)}
                 </div>
-            ) : (
-                <div className="text-center py-20">
-                    <p className="text-lg text-muted-foreground">Không tìm thấy sản phẩm nào phù hợp.</p>
-                </div>
-            )}
-            
+            ) : <div className="text-center py-20"><p className="text-lg text-muted-foreground">Không tìm thấy sản phẩm nào phù hợp.</p></div>}
             <Suspense fallback={<div className="flex justify-center mt-12">Đang tải phân trang...</div>}>
-                <Paginator 
-                    totalPages={totalPages} 
-                    onPageChange={() => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }} 
-                />
+                <Paginator totalPages={totalPages} onPageChange={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
             </Suspense>
           </div>
         </div>
@@ -372,11 +308,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   );
 }
 
-
 export default function ProductListing(props: ProductListingProps) {
-    return (
-        <Suspense fallback={<div className="container py-20 text-center">Đang tải sản phẩm...</div>}>
-            <ProductListingContent {...props} />
-        </Suspense>
-    );
+    return <Suspense fallback={<div className="container py-20 text-center">Đang tải sản phẩm...</div>}><ProductListingContent {...props} /></Suspense>;
 }

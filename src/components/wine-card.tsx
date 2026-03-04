@@ -22,9 +22,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
-  // Logic trích xuất thông tin thông minh, đồng bộ với ProductDetailView
+  // Logic trích xuất thông tin thông minh, đồng bộ với ProductDetailView (Tránh văng trang Safari)
   const getAttribute = React.useCallback((labels: string[]): string => {
-    // 1. Ưu tiên tìm trong mảng attributes đã nhập
     if (product.attributes) {
       for (const label of labels) {
         const normalizedLabel = label.toLowerCase().trim();
@@ -33,15 +32,15 @@ export default function WineCard({ product, categories }: WineCardProps) {
       }
     }
     
-    // 2. Tự động quét trong mô tả nếu không có trong thuộc tính (Dùng Regex an toàn)
+    // Tự động quét trong mô tả (Chỉ chạy khi thực sự cần để tiết kiệm CPU iOS)
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
-        const text = fullText.replace(/<[^>]*>/g, ' '); // Loại bỏ HTML
+        const text = fullText.replace(/<[^>]*>/g, ' '); 
         for (const label of labels) {
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
             const match = text.match(regex);
             if (match && match[1]) {
-                const val = match[1].trim().split('.')[0].trim(); // Lấy câu đầu tiên cho gọn
+                const val = match[1].trim().split('.')[0].trim();
                 if (val && val.toLowerCase() !== 'n/a' && val.length < 50) return val;
             }
         }
@@ -81,14 +80,10 @@ export default function WineCard({ product, categories }: WineCardProps) {
     if (product.tags && categories) {
         const countryIds = wineMegaMenuData.theoQuocGia.map(item => item.category_id);
         const countryTag = product.tags.find(tagId => countryIds.includes(tagId));
-        if (countryTag) {
-            const cat = categoryMap.get(countryTag);
-            if (cat) return cat.name;
-        }
+        if (countryTag) return categoryMap.get(countryTag)?.name || 'Đang cập nhật';
     }
-    
-    const countryVal = getAttribute(['quốc gia', 'country', 'xuất xứ', 'vùng']);
-    return countryVal !== 'N/A' ? countryVal : 'Đang cập nhật';
+    const val = getAttribute(['quốc gia', 'country', 'xuất xứ', 'vùng']);
+    return val !== 'N/A' ? val : 'Đang cập nhật';
   }, [product.tags, categories, categoryMap, getAttribute]);
 
   const alcoholContent = React.useMemo(() => {
@@ -98,9 +93,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
 
   const capacityValue = React.useMemo(() => {
     const attr = getAttribute(['dung tích', 'thể tích', 'volume']);
-    if (attr === 'N/A' && cardInfo.isWine) return '750ml';
     return attr !== 'N/A' ? attr : '750ml';
-  }, [cardInfo.isWine, getAttribute]);
+  }, [getAttribute]);
 
   const giongNhoValue = React.useMemo(() => {
     if (product.tags && categories) {
@@ -146,7 +140,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
                     height={350}
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60} // Tối ưu RAM cho iPhone
+                    quality={60} // Tối ưu RAM Safari cho iPhone
                     priority={false}
                     loading="lazy"
                 />
@@ -157,51 +151,30 @@ export default function WineCard({ product, categories }: WineCardProps) {
             {cardInfo.mainCategoryName && (
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{cardInfo.mainCategoryName}</p>
             )}
-            
             <h3 className="font-montserrat text-sm md:text-base font-bold uppercase text-[#600e1c] line-clamp-2 min-h-[2.5rem] md:min-h-[3rem] transition-colors group-hover:opacity-80">
                 {product.nameVN}
             </h3>
-
             <div className="flex items-baseline gap-2 flex-wrap">
-                {hasDiscount && (
-                    <span className="text-xs text-gray-400 line-through">{formatPrice(originalPrice!)}</span>
-                )}
+                {hasDiscount && <span className="text-xs text-gray-400 line-through">{formatPrice(originalPrice!)}</span>}
                 <span className="text-base md:text-lg font-bold text-primary">{formatPrice(salePrice)}</span>
             </div>
-
             {(cardInfo.isWine || cardInfo.isSpirit) && (
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3 pt-2 border-t border-gray-100">
                     <div className="flex items-start gap-1.5">
-                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" />
-                        </div>
-                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={countryValue}>
-                            {countryValue}
-                        </span>
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5"><Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Qu%E1%BB%91c_gia_aoyqrn.png" alt="Quốc gia" fill className="object-contain" /></div>
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1">{countryValue}</span>
                     </div>
                     <div className="flex items-start gap-1.5">
-                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" />
-                        </div>
-                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={alcoholContent}>
-                            {alcoholContent}
-                        </span>
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5"><Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/T%E1%BB%B7_l%E1%BB%87_jal6sg.png" alt="Nồng độ" fill className="object-contain" /></div>
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1">{alcoholContent}</span>
                     </div>
                     <div className="flex items-start gap-1.5">
-                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" />
-                        </div>
-                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={capacityValue}>
-                            {capacityValue}
-                        </span>
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5"><Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Xu%E1%BA%A5t_x%E1%BB%A9_v8sysc.png" alt="Dung tích" fill className="object-contain" /></div>
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1">{capacityValue}</span>
                     </div>
                     <div className="flex items-start gap-1.5">
-                        <div className="relative w-4 h-4 shrink-0 mt-0.5">
-                            <Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" />
-                        </div>
-                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1" title={giongNhoValue}>
-                            {giongNhoValue}
-                        </span>
+                        <div className="relative w-4 h-4 shrink-0 mt-0.5"><Image src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1772180058/Gi%E1%BB%91ng_nho_bkeprd.png" alt="Giống nho" fill className="object-contain" /></div>
+                        <span className="text-[10px] md:text-[11px] text-gray-600 leading-tight line-clamp-1">{giongNhoValue}</span>
                     </div>
                 </div>
             )}

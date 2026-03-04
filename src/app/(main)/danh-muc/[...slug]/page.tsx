@@ -59,7 +59,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const slug = (await params).slug;
     const sParams = await searchParams;
 
-    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh quá tải
+    // Bảo vệ server: Giới hạn số lượng bộ lọc cùng lúc để tránh quá tải (Chống lỗi 500)
     const filterCount = Object.keys(sParams).filter(k => 
         k.startsWith('filter_') || ['nong-do', 'quoc-gia', 'loai-vang', 'giong-nho'].includes(k)
     ).length;
