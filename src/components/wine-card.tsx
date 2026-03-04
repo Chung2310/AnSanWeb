@@ -22,7 +22,6 @@ export default function WineCard({ product, categories }: WineCardProps) {
     return new Map(categories.map(c => [c.id, c]));
   }, [categories]);
 
-  // Logic trích xuất thông tin thông minh, đồng bộ với ProductDetailView (Tránh văng trang Safari)
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
@@ -32,7 +31,6 @@ export default function WineCard({ product, categories }: WineCardProps) {
       }
     }
     
-    // Tự động quét trong mô tả (Chỉ chạy khi thực sự cần để tiết kiệm CPU iOS)
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
         const text = fullText.replace(/<[^>]*>/g, ' '); 
@@ -140,8 +138,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
                     height={350}
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    quality={60} // Tối ưu RAM Safari cho iPhone
-                    priority={false}
+                    quality={60}
                     loading="lazy"
                 />
             </div>

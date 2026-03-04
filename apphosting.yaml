@@ -2,7 +2,6 @@
 # https://firebase.google.com/docs/app-hosting/configure
 
 runConfig:
-  # Tăng tài nguyên để xử lý các bộ lọc nặng và ngăn chặn lỗi 500
   minInstances: 2
   maxInstances: 10
   concurrency: 80
