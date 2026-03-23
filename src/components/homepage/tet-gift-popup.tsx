@@ -44,7 +44,7 @@ export default function TetGiftPopup() {
 
         <Link href="/danh-muc/bo-qua-tang" onClick={() => setIsOpen(false)}>
             <Image
-                src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1768899296/Banner_4_ds55j7.png"
+                src="https://res.cloudinary.com/dxukxjf6w/image/upload/v1774236454/Kh%C3%A1m_ph%C3%A1_axn4xt.jpg"
                 alt="Quà Tết AnSan"
                 width={800}
                 height={800}
