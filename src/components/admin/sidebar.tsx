@@ -14,7 +14,7 @@ const navLinks = [
   { href: '/admin/categories', label: 'Content Seo', icon: Tags },
   { href: '/admin/blog', label: 'Bài viết', icon: FileText },
   { href: '/admin/urls', label: 'Tất cả đường dẫn', icon: Link2 },
-  { href: '/admin/settings', label: 'Cài đặt App', icon: Settings },
+  { href: '/admin/settings', label: 'Cài đặt Popup', icon: Settings },
 ];
 
 export default function Sidebar() {
