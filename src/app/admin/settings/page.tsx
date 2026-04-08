@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -106,7 +107,7 @@ export default function SettingsAdminPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Cài đặt ứng dụng</h1>
+      <h1 className="text-3xl font-bold">Cài đặt Popup</h1>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-2xl">
