@@ -34,6 +34,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // User-creatable, admin-manageable collections
     match /contacts/{contactId} {
       allow read: if isAdmin();
