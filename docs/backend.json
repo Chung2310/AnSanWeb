@@ -81,6 +81,24 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "name", "email", "message", "createdAt"]
+    },
+    "AppConfig": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AppConfig",
+      "type": "object",
+      "description": "Stores global application configuration and settings.",
+      "properties": {
+        "id": { "type": "string" },
+        "popup": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "imageUrl": { "type": "string" },
+            "targetUrl": { "type": "string" },
+            "delay": { "type": "number" }
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -104,6 +122,10 @@
     "/contacts/{contactId}": {
       "schema": { "$ref": "#/entities/Contact" },
       "description": "Stores contact form submissions."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/AppConfig" },
+      "description": "Global application settings."
     }
   }
 }
