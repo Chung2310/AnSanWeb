@@ -203,7 +203,6 @@ export default function SettingsAdminPage() {
                             />
                           </div>
                         </FormControl>
-                        <FormDescription>Đường dẫn hình ảnh (Cloudinary, Firebase, v.v.)</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
