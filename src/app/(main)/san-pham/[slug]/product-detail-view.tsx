@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -36,11 +37,11 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         if (!description) return undefined;
         
         // Clean HTML: replace block tags with newlines first, then strip remaining tags
+        // Do NOT use .replace(/\s+/g, ' ') here as it collapses the newlines we need for stopping the regex
         const cleanText = description
             .replace(/<\/p>|<\/div>|<br\s*\/?>/gi, '\n')
             .replace(/<[^>]*>/g, ' ')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/\s+/g, ' ');
+            .replace(/&nbsp;/g, ' ');
 
         for (const keyword of keywords) {
             const regex = new RegExp(`(?:${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
@@ -48,7 +49,10 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
             if (match && match[1]) {
                 const val = match[1].trim().replace(/\.$/, '').trim();
                 // Heuristic: if extracted text is too long, it probably didn't find a natural stop
-                return val.length < 300 ? val : val.substring(0, 300) + '...';
+                // Tasting notes are usually short sentences or fragments
+                if (val.length > 0 && val.length < 250) {
+                    return val;
+                }
             }
         }
         return undefined;
@@ -57,7 +61,7 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
     const findAttr = (labels: string[]) => {
       if (product.attributes) {
         for (const label of labels) {
-          const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+          const found = product.attributes.find(a => a.label?.toLowerCase().trim() === label.toLowerCase().trim());
           if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
         }
       }
@@ -114,7 +118,7 @@ export default function ProductDetailView({ product }: { product: FullProduct })
   const getAttribute = React.useCallback((labels: string[]): string => {
     if (product.attributes) {
       for (const label of labels) {
-        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+        const found = product.attributes.find(a => a.label?.toLowerCase().trim() === label.toLowerCase().trim());
         if (found && found.value && found.value.toLowerCase() !== 'n/a' && found.value !== 'Đang cập nhật') return found.value;
       }
     }
@@ -129,7 +133,8 @@ export default function ProductDetailView({ product }: { product: FullProduct })
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
             const match = cleanText.match(regex);
             if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
-                 return match[1].trim().replace(/\.$/, '');
+                 const val = match[1].trim().replace(/\.$/, '');
+                 if (val.length < 150) return val;
             }
         }
     }

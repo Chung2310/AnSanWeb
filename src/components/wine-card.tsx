@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -34,6 +35,7 @@ export default function WineCard({ product, categories }: WineCardProps) {
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
         // Clean HTML for extraction: replace block endings with newlines to respect structure
+        // Do NOT use .replace(/\s+/g, ' ') here as it collapses the newlines we need for stopping the regex
         const text = fullText
             .replace(/<\/p>|<\/div>|<br\s*\/?>/gi, '\n')
             .replace(/<[^>]*>/g, ' ')
@@ -44,7 +46,8 @@ export default function WineCard({ product, categories }: WineCardProps) {
             const match = text.match(regex);
             if (match && match[1]) {
                 const val = match[1].trim().split('.')[0].trim();
-                if (val && val.toLowerCase() !== 'n/a' && val.length < 50) return val;
+                // If the extracted value is reasonably short, it's likely a correct match
+                if (val && val.toLowerCase() !== 'n/a' && val.length < 100) return val;
             }
         }
     }
