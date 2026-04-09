@@ -33,7 +33,12 @@ export default function WineCard({ product, categories }: WineCardProps) {
     
     const fullText = (product.shortDescription || '') + ' ' + (product.description || '');
     if (fullText.trim()) {
-        const text = fullText.replace(/<[^>]*>/g, ' '); 
+        // Clean HTML for extraction: replace block endings with newlines to respect structure
+        const text = fullText
+            .replace(/<\/p>|<\/div>|<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/&nbsp;/g, ' ');
+
         for (const label of labels) {
             const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
             const match = text.match(regex);
