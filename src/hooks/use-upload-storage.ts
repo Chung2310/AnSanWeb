@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { useFirebase } from '@/firebase';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useStorage } from '@/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuthStore } from '@/stores/auth-store';
 
 export function useUploadStorage() {
-  const { firebaseApp } = useFirebase();
+  const storage = useStorage();
   const { user } = useAuthStore();
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -17,7 +17,6 @@ export function useUploadStorage() {
 
     setIsUploading(true);
     setProgress(0);
-    const storage = getStorage(firebaseApp);
     const fileId = crypto.randomUUID();
     const storageRef = ref(storage, `${folder}/${fileId}-${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
