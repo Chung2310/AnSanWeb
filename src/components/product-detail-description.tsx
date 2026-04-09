@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
@@ -42,7 +41,6 @@ export default function ProductDetailDescription({ details }: { details: Product
         if (!isExpanded && sectionRef.current) {
             const timer = setTimeout(() => {
                 const rect = sectionRef.current!.getBoundingClientRect();
-                // Persistent Header height is approx 210px
                 if (rect.top < 0) {
                     window.scrollTo({
                         top: window.scrollY + rect.top - 210,
@@ -79,7 +77,7 @@ export default function ProductDetailDescription({ details }: { details: Product
                     {displayParagraphs.map((p, i) => (
                         <div 
                             key={`p1-${i}`} 
-                            className="mb-4 prose prose-neutral max-w-none prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
+                            className="mb-4 prose prose-neutral max-w-none prose-p:my-0 prose-li:my-0 prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
                             dangerouslySetInnerHTML={{ __html: p }}
                         ></div>
                     ))}
@@ -96,7 +94,7 @@ export default function ProductDetailDescription({ details }: { details: Product
                                 {allParagraphs.slice(2).map((p, i) => (
                                     <div 
                                         key={`p2-${i}`} 
-                                        className="mb-4 prose prose-neutral max-w-none prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
+                                        className="mb-4 prose prose-neutral max-w-none prose-p:my-0 prose-li:my-0 prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
                                         dangerouslySetInnerHTML={{ __html: p }}
                                     ></div>
                                 ))}

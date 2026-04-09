@@ -176,7 +176,7 @@ export default function RichTextEditor({ value, onChange, folder = 'content-imag
         StarterKit, 
         ImageExtension.configure({
             inline: false,
-            allowBase64: false, // Disable base64 to prevent large data URIs
+            allowBase64: false,
         }),
         TextAlign.configure({
             types: ['heading', 'paragraph'],
@@ -186,7 +186,7 @@ export default function RichTextEditor({ value, onChange, folder = 'content-imag
     editorProps: {
       attributes: {
         class: cn(
-          'prose dark:prose-invert',
+          'prose dark:prose-invert prose-p:my-0 prose-li:my-0 prose-headings:mb-4 prose-headings:mt-6',
           'min-h-[250px] w-full max-w-none rounded-b-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
         ),
       },

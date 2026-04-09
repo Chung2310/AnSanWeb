@@ -79,7 +79,7 @@ function CollapsibleSEODescription({ content }: { content: string }) {
 
     return (
         <div className="container pt-12 seo-container" ref={containerRef}>
-            <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none">
+            <div className="mx-auto border rounded-lg p-6 bg-secondary/30 text-gray-700 leading-relaxed prose prose-lg max-w-none prose-p:my-0 prose-li:my-0">
                  <div dangerouslySetInnerHTML={{ __html: descriptionInitial }} />
             
                 {isDescriptionLong && (
@@ -121,7 +121,6 @@ function ProductListingContent({ initialProducts, title, bannerData, itemsPerPag
   const { categories } = useCategories();
   const searchParams = useSearchParams();
   
-  // NGUỒN SỰ THẬT DUY NHẤT: Lấy trang hiện tại từ URL
   const currentPage = Number(searchParams.get('page')) || 1;
 
    const getDescendants = useCallback((parentId: string, allCats: Category[]): Category[] => {

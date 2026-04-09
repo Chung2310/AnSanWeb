@@ -40,7 +40,7 @@ export default function PostDetailView({ post }: { post: BlogPost }) {
                         
                         {post.content && (
                             <article 
-                                className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-neutral-700" 
+                                className="prose prose-lg max-w-none prose-p:my-0 prose-li:my-0 prose-headings:font-headline prose-headings:text-neutral-700" 
                                 style={{color: '#5a5a5a'}}
                                 dangerouslySetInnerHTML={{ __html: post.content }}
                             >
