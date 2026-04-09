@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Package, FileText, LogOut, Tags, Link2, Settings } from 'lucide-react';
+import { Home, Package, FileText, LogOut, Tags, Link2, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Logo from '../logo';
 import { useAuthStore } from '@/stores/auth-store';
@@ -19,7 +19,7 @@ const navLinks = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -28,7 +28,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-background text-foreground">
+    <aside className="w-64 flex-shrink-0 bg-background text-foreground border-r">
       <div className="flex h-full flex-col">
         <div className="flex h-24 items-center justify-center border-b">
           <Link href="/admin">
@@ -53,10 +53,22 @@ export default function Sidebar() {
             );
           })}
         </nav>
-        <div className="p-4">
+        
+        <div className="p-4 border-t space-y-4">
+          {user && (
+            <div className="px-3 py-2 bg-secondary/50 rounded-lg">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+                <User className="h-3 w-3" />
+                <span>Đang đăng nhập:</span>
+              </div>
+              <p className="text-[11px] font-bold truncate text-primary" title={user.email || ''}>
+                {user.email}
+              </p>
+            </div>
+          )}
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted"
           >
             <LogOut className="h-4 w-4" />
             Đăng xuất

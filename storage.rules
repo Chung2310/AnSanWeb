@@ -3,11 +3,12 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // Allow read access to everyone for all files.
+    // Cho phép mọi người đọc các tệp tin (hình ảnh sản phẩm, bài viết...)
     match /{allPaths=**} {
       allow read: if true;
-      // Allow write access only to the authenticated admin user.
-      // This includes create, update, and delete operations.
+      
+      // Chỉ cho phép ghi (tải lên, xóa, sửa) nếu đã đăng nhập và email là admin@ansan.com
+      // Lưu ý: Đảm bảo bạn đã đăng nhập đúng email này trong trang /login
       allow write: if request.auth != null && request.auth.token.email == 'admin@ansan.com';
     }
   }
