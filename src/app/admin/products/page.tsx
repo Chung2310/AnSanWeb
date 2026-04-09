@@ -200,10 +200,14 @@ export default function ProductsAdminPage() {
         return;
     }
 
+    const categoryMap = new Map(categories?.map(c => [c.id, c.name]));
+
     const dataToExport = filteredProducts.map(prod => {
-        // Extract the combined category string for display
-        const categoryAttr = prod.attributes?.find(a => a.label === 'Danh mục / Phân loại');
-        const categoryValue = categoryAttr ? categoryAttr.value : '';
+        // Dynamically compute category string from tags for Excel view
+        const categoryNames = prod.tags
+            ?.map(tagId => categoryMap.get(tagId))
+            .filter(Boolean) || [];
+        const categoryValue = categoryNames.join(', ');
 
         const row: any = {
             'ID': prod.id,
@@ -227,9 +231,7 @@ export default function ProductsAdminPage() {
         };
 
         prod.attributes?.forEach(attr => {
-            if (attr.label !== 'Danh mục / Phân loại') {
-                row[attr.label] = attr.value;
-            }
+            row[attr.label] = attr.value;
         });
 
         return row;

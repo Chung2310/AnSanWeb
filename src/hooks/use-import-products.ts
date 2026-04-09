@@ -29,7 +29,6 @@ export function useImportProducts() {
           throw new Error("Danh mục chưa được tải. Vui lòng thử lại.");
       }
 
-      // 1. Create a map for case-insensitive lookup
       const nameToIdMap = new Map<string, string>();
       const idToCategoryMap = new Map<string, Category>();
       
@@ -38,7 +37,6 @@ export function useImportProducts() {
         idToCategoryMap.set(c.id, c);
       });
 
-      // 2. Helper to get all ancestor IDs (to ensure Main Category ID is included)
       const getAllAncestorIds = (categoryId: string): string[] => {
         const ancestors: string[] = [];
         let current = idToCategoryMap.get(categoryId);
@@ -64,7 +62,6 @@ export function useImportProducts() {
           continue;
         }
 
-        // Parse price: extract only numbers if string contains units like "/chai"
         let price = 0;
         if (priceStr != null) {
             const sanitizedPrice = String(priceStr).replace(/[^0-9]/g, '');
@@ -74,7 +71,6 @@ export function useImportProducts() {
         const productId = row['ID'] ? String(row['ID']) : null;
         const productRef = productId ? doc(productsCollection, productId) : doc(productsCollection);
 
-        // 3. Process categories and map to IDs + ancestors
         const categoryColumnNames = [
             'Danh mục', 'Phân loại', 'Danh mục / Phân loại', 
             'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Quốc Gia',
@@ -82,7 +78,6 @@ export function useImportProducts() {
         ];
         
         const foundTagIds = new Set<string>();
-        const foundCategoryNames: string[] = [];
 
         categoryColumnNames.forEach(col => {
           if (row[col]) {
@@ -91,9 +86,6 @@ export function useImportProducts() {
               const id = nameToIdMap.get(name.toLowerCase());
               if (id) {
                 foundTagIds.add(id);
-                if (!foundCategoryNames.includes(name)) foundCategoryNames.push(name);
-                
-                // Add all ancestors to tags so the "Main Category" dropdown works correctly
                 getAllAncestorIds(id).forEach(ancestorId => foundTagIds.add(ancestorId));
               }
             });
@@ -102,7 +94,6 @@ export function useImportProducts() {
 
         const allTags = Array.from(foundTagIds);
 
-        // 4. Prepare base data
         const productData: any = {
           nameVN: nameVN,
           slug: row['Đường dẫn (slug)'] || row['Slug'] || slugify(nameVN, { lower: true, strict: true, locale: 'vi' }),
@@ -116,7 +107,6 @@ export function useImportProducts() {
           updatedAt: serverTimestamp(),
         };
 
-        // 5. Handle attributes - specifically adding the combined "Danh mục / Phân loại"
         const excludeKeys = [
             'ID', 'Tên sản phẩm', 'Tên', 'Đường dẫn (slug)', 'Slug', 'Giá', 'Giá bán',
             'Mô tả giá', 'Giá phụ', 'Giá gốc', 'Mô tả giá phụ', 'Trạng thái', 'status',
@@ -124,20 +114,9 @@ export function useImportProducts() {
             'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo', 'createdAt'
         ];
 
-        // Also exclude all columns we used for category mapping to avoid duplication
         const allExcludeKeys = [...excludeKeys, ...categoryColumnNames];
-
         const attributes: { label: string, value: string }[] = [];
 
-        // Add the special "Danh mục / Phân loại" attribute if we found categories
-        if (foundCategoryNames.length > 0) {
-            attributes.push({
-                label: 'Danh mục / Phân loại',
-                value: foundCategoryNames.join(', ')
-            });
-        }
-
-        // Add other columns as generic attributes
         Object.keys(row).forEach(key => {
             if (!allExcludeKeys.includes(key) && row[key] != null && String(row[key]).trim() !== '') {
                 attributes.push({ label: key, value: String(row[key]) });
@@ -146,7 +125,6 @@ export function useImportProducts() {
 
         productData.attributes = attributes;
 
-        // 6. Handle optional/meta fields
         if (row['Mô tả giá']) productData.priceDescription = row['Mô tả giá'];
         if (row['Mô tả ngắn']) productData.shortDescription = row['Mô tả ngắn'];
         if (row['Mô tả chi tiết']) productData.description = row['Mô tả chi tiết'];
