@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, useFieldArray, type Control } from 'react-hook-form';
@@ -50,6 +51,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { wineMegaMenuData, spiritsMegaMenuData, glasswareMegaMenuData, giftSetMegaMenuData } from '@/lib/mega-menu-data';
 import { Progress } from '@/components/ui/progress';
+import RichTextEditor from '@/components/admin/blog/rich-text-editor';
 
 const productAttributeSchema = z.object({
   label: z.string().min(1, 'Nhãn không được để trống'),
@@ -388,7 +390,19 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
                   </CardContent>
                 </Card>
 
-                <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Mô tả chi tiết</FormLabel><FormControl><Textarea placeholder="Mô tả chi tiết về sản phẩm..." {...field} rows={15} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="description" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mô tả chi tiết</FormLabel>
+                    <FormControl>
+                      <RichTextEditor
+                        value={field.value || ''}
+                        onChange={field.onChange}
+                        folder="product-description"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
               </CardContent>
             </Card>
 

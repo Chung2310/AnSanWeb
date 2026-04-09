@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ProductStructuredDetails } from "@/lib/types";
@@ -76,7 +77,11 @@ export default function ProductDetailDescription({ details }: { details: Product
                     <h3 className="font-bold text-lg mb-6">{title}</h3>
 
                     {displayParagraphs.map((p, i) => (
-                        <p key={`p1-${i}`} className="mb-4" dangerouslySetInnerHTML={{ __html: p.replace(/\n/g, '<br />') }}></p>
+                        <div 
+                            key={`p1-${i}`} 
+                            className="mb-4 prose prose-neutral max-w-none prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
+                            dangerouslySetInnerHTML={{ __html: p }}
+                        ></div>
                     ))}
 
                     <AnimatePresence initial={false}>
@@ -89,7 +94,11 @@ export default function ProductDetailDescription({ details }: { details: Product
                                 className="overflow-hidden"
                             >
                                 {allParagraphs.slice(2).map((p, i) => (
-                                    <p key={`p2-${i}`} className="mb-4" dangerouslySetInnerHTML={{ __html: p.replace(/\n/g, '<br />') }}></p>
+                                    <div 
+                                        key={`p2-${i}`} 
+                                        className="mb-4 prose prose-neutral max-w-none prose-img:rounded-lg prose-img:shadow-lg prose-headings:font-headline prose-headings:text-neutral-700" 
+                                        dangerouslySetInnerHTML={{ __html: p }}
+                                    ></div>
                                 ))}
 
                                 {detailList && detailList.length > 0 && (
