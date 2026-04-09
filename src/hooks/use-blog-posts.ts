@@ -13,7 +13,7 @@ export function useBlogPosts() {
   );
   
   const blogPostsQuery = useMemoFirebase(
-    () => blogPostsCollection && query(blogPostsCollection, orderBy('createdAt', 'desc')),
+    () => blogPostsCollection && query(blogPostsCollection, orderBy('updatedAt', 'desc')),
     [blogPostsCollection]
   );
 

@@ -14,7 +14,7 @@ export function useProducts() {
   );
   
   const productsQuery = useMemoFirebase(
-    () => productsCollection && query(productsCollection, orderBy('createdAt', 'desc')),
+    () => productsCollection && query(productsCollection, orderBy('updatedAt', 'desc')),
     [productsCollection]
   );
 
@@ -22,5 +22,3 @@ export function useProducts() {
 
   return { products, isLoading, error };
 }
-
-    
