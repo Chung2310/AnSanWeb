@@ -201,6 +201,10 @@ export default function ProductsAdminPage() {
     }
 
     const dataToExport = filteredProducts.map(prod => {
+        // Extract the combined category string for display
+        const categoryAttr = prod.attributes?.find(a => a.label === 'Danh mục / Phân loại');
+        const categoryValue = categoryAttr ? categoryAttr.value : '';
+
         const row: any = {
             'ID': prod.id,
             'Tên sản phẩm': prod.nameVN,
@@ -214,6 +218,7 @@ export default function ProductsAdminPage() {
             'Giá tốt': prod.isGoodPrice ? 'Có' : 'Không',
             'Sản phẩm mới': prod.isNew ? 'Có' : 'Không',
             'Lựa chọn tốt nhất': prod.bestChoice ? 'Có' : 'Không',
+            'Danh mục / Phân loại': categoryValue,
             'Mô tả ngắn': prod.shortDescription || '',
             'Mô tả chi tiết': prod.description || '',
             'URL Ảnh bìa': prod.image?.url || '',
@@ -222,13 +227,10 @@ export default function ProductsAdminPage() {
         };
 
         prod.attributes?.forEach(attr => {
-            row[attr.label] = attr.value;
+            if (attr.label !== 'Danh mục / Phân loại') {
+                row[attr.label] = attr.value;
+            }
         });
-
-        if (categories && prod.tags) {
-            const tagNames = prod.tags.map(tagId => categories.find(c => c.id === tagId)?.name || tagId).join(', ');
-            row['Danh mục / Phân loại'] = tagNames;
-        }
 
         return row;
     });
@@ -236,7 +238,7 @@ export default function ProductsAdminPage() {
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Filtered Products");
-    XLSX.writeFile(workbook, `san-pham-da-loc-${new Date().getTime()}.xlsx`);
+    XLSX.writeFile(workbook, `san-pham-ansan-${new Date().getTime()}.xlsx`);
   };
 
   const renderFilterGroup = (
