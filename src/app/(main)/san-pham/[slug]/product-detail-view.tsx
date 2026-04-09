@@ -34,23 +34,34 @@ const CompensationIcon = (props: React.SVGProps<SVGSVGElement>) => (
 const generateProductDetails = (product: FullProduct): ProductStructuredDetails => {
     const extractFromDescription = (description: string | undefined, ...keywords: string[]): string | undefined => {
         if (!description) return undefined;
+        
+        // Clean HTML: replace block tags with newlines first, then strip remaining tags
+        const cleanText = description
+            .replace(/<\/p>|<\/div>|<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\s+/g, ' ');
+
         for (const keyword of keywords) {
-            const regex = new RegExp(`(?:${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
-            const match = description.match(regex);
+            const regex = new RegExp(`(?:${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
+            const match = cleanText.match(regex);
             if (match && match[1]) {
-                return match[1].trim().replace(/\.$/, '').trim();
+                const val = match[1].trim().replace(/\.$/, '').trim();
+                // Heuristic: if extracted text is too long, it probably didn't find a natural stop
+                return val.length < 300 ? val : val.substring(0, 300) + '...';
             }
         }
         return undefined;
     };
     
-    const findAttr = (...labels: string[]) => {
-      if (!product.attributes) return undefined;
-      for (const label of labels) {
-        const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-        if (found && found.value) return found.value;
+    const findAttr = (labels: string[]) => {
+      if (product.attributes) {
+        for (const label of labels) {
+          const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
+          if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
+        }
       }
-      return undefined;
+      return extractFromDescription(product.description, ...labels);
     };
     
     const paragraphs = product.description ? [product.description] : [];
@@ -59,20 +70,20 @@ const generateProductDetails = (product: FullProduct): ProductStructuredDetails 
         title: product.nameVN,
         paragraphs: paragraphs,
         details: product.attributes || [],
-        brand: findAttr("thương hiệu"),
-        chillFiltered: findAttr("lọc lạnh"),
-        region: findAttr("vùng sản xuất", 'xuất xứ', 'vùng') || extractFromDescription(product.description, 'Xuất xứ', 'Vùng'),
-        caskType: findAttr("loại thùng"),
+        brand: findAttr(["thương hiệu", "brand"]),
+        chillFiltered: findAttr(["lọc lạnh", "chill filtered"]),
+        region: findAttr(["vùng sản xuất", 'xuất xứ', 'vùng', 'origin']),
+        caskType: findAttr(["loại thùng", "cask type"]),
         tastingNote: {
-            nose: extractFromDescription(product.description, 'Hương thơm', 'Mùi hương'),
-            palate: extractFromDescription(product.description, 'Vị giác', 'Vị', 'Hương vị thưởng thức'),
-            finish: extractFromDescription(product.description, 'Hậu vị'),
-            color: extractFromDescription(product.description, 'Màu sắc', 'của vang'),
+            nose: extractFromDescription(product.description, 'Hương thơm', 'Mùi hương', 'Nose'),
+            palate: extractFromDescription(product.description, 'Vị giác', 'Vị', 'Hương vị thưởng thức', 'Palate'),
+            finish: extractFromDescription(product.description, 'Hậu vị', 'Kết thúc', 'Finish'),
+            color: extractFromDescription(product.description, 'Màu sắc', 'của vang', 'Color'),
         },
-        conclusion: extractFromDescription(product.description, "kết luận"),
-        howToEnjoy: extractFromDescription(product.description, "cách thưởng thức", "Thưởng thức"),
-        foodPairing: extractFromDescription(product.description, "kết hợp món ăn"),
-        storage: extractFromDescription(product.description, "bảo quản")
+        conclusion: extractFromDescription(product.description, "kết luận", "Conclusion"),
+        howToEnjoy: extractFromDescription(product.description, "cách thưởng thức", "Thưởng thức", "How to enjoy"),
+        foodPairing: extractFromDescription(product.description, "kết hợp món ăn", "Food pairing"),
+        storage: extractFromDescription(product.description, "bảo quản", "Storage")
     };
 
     return details;
@@ -104,13 +115,19 @@ export default function ProductDetailView({ product }: { product: FullProduct })
     if (product.attributes) {
       for (const label of labels) {
         const found = product.attributes.find(a => a.label.toLowerCase().trim() === label.toLowerCase().trim());
-        if (found && found.value && found.value.toLowerCase() !== 'n/a') return found.value;
+        if (found && found.value && found.value.toLowerCase() !== 'n/a' && found.value !== 'Đang cập nhật') return found.value;
       }
     }
     if (product.description) {
+        // Clean HTML for extraction
+        const cleanText = product.description
+            .replace(/<\/p>|<\/div>|<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/&nbsp;/g, ' ');
+
         for (const label of labels) {
-            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*:\\s*([^•\\n]+)`, 'i');
-            const match = product.description.match(regex);
+            const regex = new RegExp(`(?:${label.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})\\s*[:\\-]?\\s*([^•\\n\\r]+)`, 'i');
+            const match = cleanText.match(regex);
             if (match && match[1] && match[1].trim().toLowerCase() !== 'n/a') {
                  return match[1].trim().replace(/\.$/, '');
             }
