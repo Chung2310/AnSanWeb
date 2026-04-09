@@ -109,6 +109,18 @@ export function useImportProducts() {
         if (!productId) {
             productData.id = productRef.id;
             productData.createdAt = serverTimestamp();
+        } else {
+            // If ID is provided, we still need to ensure it has a createdAt if it's a new doc
+            // But we use merge: true so we don't want to overwrite if it exists.
+            // A simple way is to check if row has 'Ngày tạo'
+            if (row['Ngày tạo']) {
+                try {
+                    productData.createdAt = new Date(row['Ngày tạo']);
+                } catch (e) {}
+            } else {
+                // We fallback to updatedAt for display if createdAt is missing
+                // productData.createdAt remains undefined to avoid overwriting existing docs
+            }
         }
 
         batch.set(productRef, productData, { merge: true });
