@@ -97,6 +97,19 @@
             "targetUrl": { "type": "string" },
             "delay": { "type": "number" }
           }
+        },
+        "heroBanners": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "imageUrl": { "type": "string" },
+              "label": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "href": { "type": "string" }
+            }
+          }
         }
       }
     }

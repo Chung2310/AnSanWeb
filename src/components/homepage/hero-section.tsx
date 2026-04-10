@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -7,8 +8,10 @@ import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { doc } from 'firebase/firestore';
 
-const heroSlides = [
+const defaultHeroSlides = [
     {
         imageId: 'hero-macallan',
         label: 'Master of Wine',
@@ -68,21 +71,40 @@ const slideVariants = {
 
 export default function HeroSection() {
     const [current, setCurrent] = useState(0);
+    const firestore = useFirestore();
+    const settingsRef = useMemoFirebase(() => doc(firestore, 'settings', 'general'), [firestore]);
+    const { data: settings } = useDoc(settingsRef);
+
+    const slides = React.useMemo(() => {
+        if (settings?.heroBanners && settings.heroBanners.length > 0) {
+            return settings.heroBanners;
+        }
+        
+        // Fallback to defaults with proper image URLs
+        return defaultHeroSlides.map(slide => {
+            const placeholder = PlaceHolderImages.find(img => img.id === (slide as any).imageId);
+            return {
+                ...slide,
+                imageUrl: placeholder?.imageUrl || ''
+            };
+        });
+    }, [settings]);
 
     useEffect(() => {
+        if (slides.length === 0) return;
         const timer = setTimeout(() => {
-            setCurrent((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1));
+            setCurrent((prev) => (prev >= slides.length - 1 ? 0 : prev + 1));
         }, 8000);
         return () => clearTimeout(timer);
-    }, [current]);
+    }, [current, slides.length]);
+
+    if (slides.length === 0) return null;
 
     return (
         <section className="relative w-full font-body h-[500px] lg:h-[450px] overflow-hidden">
             <div className="w-full h-full relative">
                 <AnimatePresence initial={false}>
-                    {heroSlides.map((slide, index) => {
-                        const image = PlaceHolderImages.find(img => img.id === slide.imageId);
-                        const linkProps = (slide as any).external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+                    {slides.map((slide: any, index: number) => {
                         const isActive = index === current;
                         return (
                             <motion.div
@@ -94,15 +116,14 @@ export default function HeroSection() {
                                 className="absolute inset-0"
                             >
                                 <div className="relative h-full w-full">
-                                    {image && (
+                                    {slide.imageUrl && (
                                         <Image
-                                            src={image.imageUrl}
-                                            alt={image.description}
+                                            src={slide.imageUrl}
+                                            alt={slide.title}
                                             fill
                                             className="object-cover"
                                             sizes="100vw"
                                             priority={isActive}
-                                            data-ai-hint={image.imageHint}
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/40" />
@@ -131,7 +152,7 @@ export default function HeroSection() {
                                                             size="lg"
                                                             className="mt-6 bg-transparent rounded-none transition-all hover:scale-105 border-white text-white hover:bg-white hover:text-black h-12 lg:h-11"
                                                         >
-                                                            <Link href={slide.href} {...linkProps}>TÌM HIỂU THÊM</Link>
+                                                            <Link href={slide.href || '#'}>TÌM HIỂU THÊM</Link>
                                                         </Button>
                                                     </motion.div>
                                                 </motion.div>
@@ -147,8 +168,8 @@ export default function HeroSection() {
             <div className="absolute bottom-6 lg:bottom-8 left-0 right-0 z-10">
                 <div className="container mx-auto max-w-screen-2xl px-4">
                     <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2 no-scrollbar">
-                        {heroSlides.map((slide, index) => (
-                            <div key={slide.label} className="flex items-center">
+                        {slides.map((slide: any, index: number) => (
+                            <div key={index} className="flex items-center">
                                 <Button
                                     onClick={() => setCurrent(index)}
                                     variant="ghost"
@@ -160,7 +181,7 @@ export default function HeroSection() {
                                 >
                                     {slide.label}
                                 </Button>
-                                {index < heroSlides.length - 1 && (
+                                {index < slides.length - 1 && (
                                     <div className="w-4 lg:w-8 h-px bg-white/50 mx-1 lg:mx-2 hidden sm:block"></div>
                                 )}
                             </div>
