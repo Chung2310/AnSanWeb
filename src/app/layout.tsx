@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     siteName: 'AnSan Wine & Spirit',
     images: [
       {
-        url: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/Gemini_Generated_Image_9ygro89ygro89ygr.png?alt=media&token=90e16f08-f69c-4cd3-8703-88e7b694261b',
+        url: 'https://res.cloudinary.com/dvncucl8n/image/upload/q_auto/f_auto/v1775805153/logo_3_vnvogx.webp',
         width: 1200,
         height: 630,
         alt: 'AnSan Wine & Spirit',
@@ -33,11 +33,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AnSan Wine & Spirit | World Class Whisky & Spirit',
     description: 'Đơn vị phân phối rượu vang và rượu mạnh uy tín hàng đầu Việt Nam.',
-    images: ['https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/Gemini_Generated_Image_9ygro89ygro89ygr.png?alt=media&token=90e16f08-f69c-4cd3-8703-88e7b694261b'],
+    images: ['https://res.cloudinary.com/dvncucl8n/image/upload/q_auto/f_auto/v1775805153/logo_3_vnvogx.webp'],
   },
   icons: {
-    icon: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
-    apple: 'https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/logo%20(1).webp?alt=media&token=6db8f7d6-c8ea-468b-86b7-6fa23b15012f',
+    icon: 'https://res.cloudinary.com/dvncucl8n/image/upload/q_auto/f_auto/v1775805153/logo_3_vnvogx.webp',
+    apple: 'https://res.cloudinary.com/dvncucl8n/image/upload/q_auto/f_auto/v1775805153/logo_3_vnvogx.webp',
   },
 };
 
