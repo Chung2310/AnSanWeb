@@ -6,8 +6,8 @@ GitHub Actions kiểm tra mã nguồn, build image bằng `Dockerfile`, đẩy i
 
 | Nhánh | Môi trường | Thư mục VPS | Cổng VPS | Cổng container |
 | --- | --- | --- | ---: | ---: |
-| `develop` | Staging | `/opt/ansanweb/staging` | `3006` | `3000` |
-| `production` | Production | `/opt/ansanweb/production` | `3006` | `3000` |
+| `develop` | Staging | `/opt/ansanweb/staging` | `3006` | `3006` |
+| `production` | Production | `/opt/ansanweb/production` | `3006` | `3006` |
 
 Nginx của mỗi môi trường trỏ tới `http://127.0.0.1:3006` trên VPS tương ứng. Hai môi trường không thể cùng bind cổng này trên một VPS.
 
@@ -62,7 +62,7 @@ npm run typecheck
 npm run build
 docker compose config
 docker build -t ansanweb:local .
-docker run --rm -p 3006:3000 --name ansanweb-local ansanweb:local
+docker run --rm -p 3006:3006 --name ansanweb-local ansanweb:local
 ```
 
 Ở terminal khác:

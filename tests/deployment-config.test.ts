@@ -17,6 +17,9 @@ test('Dockerfile builds a minimal non-root standalone Next.js image', async () =
   assert.match(dockerfile, /\.next\/static/);
   assert.match(dockerfile, /\/app\/public/);
   assert.match(dockerfile, /USER nextjs/);
+  assert.match(dockerfile, /PORT=3006/);
+  assert.match(dockerfile, /EXPOSE 3006/);
+  assert.match(dockerfile, /127\.0\.0\.1:3006\/api\/health/);
   assert.match(dockerfile, /HEALTHCHECK/);
   assert.match(dockerfile, /CMD \["node", "server\.js"\]/);
 });
@@ -26,8 +29,10 @@ test('Compose publishes the configured port and protects runtime availability', 
 
   assert.match(compose, /image: \$\{IMAGE_NAME[^}]*\}:\$\{IMAGE_TAG[^}]*\}/);
   assert.match(compose, /container_name: \$\{CONTAINER_NAME/);
-  assert.match(compose, /"\$\{HOST_PORT:-3006\}:3000"/);
+  assert.match(compose, /"\$\{HOST_PORT:-3006\}:3006"/);
   assert.match(compose, /restart: always/);
+  assert.match(compose, /PORT: 3006/);
+  assert.match(compose, /127\.0\.0\.1:3006\/api\/health/);
   assert.match(compose, /healthcheck:/);
   assert.match(compose, /max-size: "10m"/);
   assert.match(compose, /max-file: "3"/);

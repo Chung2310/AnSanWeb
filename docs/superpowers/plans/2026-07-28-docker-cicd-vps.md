@@ -4,7 +4,7 @@
 
 **Goal:** Build, validate, publish, and deploy AnSanWeb as a production Next.js Docker container through GitHub Actions.
 
-**Architecture:** A multi-stage Node 22 image consumes Next.js standalone output on internal port 3000. GitHub Actions validates changes, publishes immutable GHCR images, and deploys through environment-specific SSH credentials; both production and staging publish host port 3006 on their respective VPS.
+**Architecture:** A multi-stage Node 22 image consumes Next.js standalone output on internal port 3006. GitHub Actions validates changes, publishes immutable GHCR images, and deploys through environment-specific SSH credentials; both production and staging publish host port 3006 on their respective VPS.
 
 **Tech Stack:** Next.js 15, TypeScript 5, Node.js 22, npm, Docker BuildKit, Docker Compose v2, GitHub Actions, GHCR.
 
@@ -34,13 +34,13 @@
 
 **Files:** Create `tests/deployment-config.test.ts`, `.dockerignore`, `Dockerfile`, `docker-compose.yml`.
 
-**Interfaces:** Consumes standalone Next.js output and `/api/health`; produces an unprivileged image on port 3000 and Compose variables `IMAGE_NAME`, `IMAGE_TAG`, `CONTAINER_NAME`, `HOST_PORT`.
+**Interfaces:** Consumes standalone Next.js output and `/api/health`; produces an unprivileged image on port 3006 and Compose variables `IMAGE_NAME`, `IMAGE_TAG`, `CONTAINER_NAME`, `HOST_PORT`.
 
 - [ ] Write failing static contract tests for a multi-stage Node 22 Alpine image, standalone/static/public copies, `nextjs` user, healthcheck, parameterized Compose port/image, restart policy, and bounded logs.
 - [ ] Run `npm test`; expect missing deployment-file failures.
 - [ ] Implement cached multi-stage Dockerfile, secret-safe `.dockerignore`, and Compose defaulting host port to 3006.
 - [ ] Run `npm test`; expect all tests to pass.
-- [ ] Run `docker compose config`; expect port 3006 mapped to container port 3000.
+- [ ] Run `docker compose config`; expect port 3006 mapped to container port 3006.
 
 ### Task 3: GitHub Actions CI/CD
 
