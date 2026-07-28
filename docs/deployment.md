@@ -47,8 +47,8 @@ Nếu Genkit được gọi ở runtime, thêm `GOOGLE_GENAI_API_KEY=...` vào s
 ## Quy trình tự động
 
 - Pull request vào `develop` hoặc `production`: cài dependency, test, typecheck và build production.
-- Push/merge vào `develop`: build image SHA, đẩy GHCR, deploy staging ở cổng `3006`.
-- Push/merge vào `production`: build image SHA, đẩy GHCR, deploy production ở cổng `3006`.
+- Push/merge vào `develop`: build tag `develop` và SHA, rồi deploy tag `develop` ở cổng `3006`.
+- Push/merge vào `production`: build tag `production` và SHA, rồi deploy tag `production` ở cổng `3006`.
 - Deploy chỉ thành công khi container trả về healthy từ `GET /api/health`.
 
 Theo dõi tại tab **Actions** của GitHub. Khi deploy lỗi, workflow in trạng thái Compose và 100 dòng log gần nhất.
