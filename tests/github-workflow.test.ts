@@ -27,6 +27,7 @@ test('workflow publishes immutable images to GHCR', async () => {
   assert.match(workflow, /docker\/login-action@v3/);
   assert.match(workflow, /docker\/build-push-action@v6/);
   assert.match(workflow, /type=sha,format=long/);
+  assert.match(workflow, /IMAGE_TAG=\$\{GITHUB_REF_NAME\}/);
   assert.match(workflow, /cache-from: type=gha/);
   assert.match(workflow, /cache-to: type=gha,mode=max/);
 });

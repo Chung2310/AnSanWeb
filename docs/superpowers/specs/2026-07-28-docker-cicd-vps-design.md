@@ -56,10 +56,10 @@ For pushes, the image job runs only after CI succeeds. Docker Buildx builds the 
 
 Deployment runs only for push events after the image job succeeds:
 
-- `develop` uses staging secrets, `/opt/ansanweb/staging`, port `3006`, and the immutable image tag for that commit.
-- `production` uses production secrets, `/opt/ansanweb/production`, port `3006`, and the immutable image tag for that commit.
+- `develop` uses staging secrets, `/opt/ansanweb/staging`, port `3006`, and the `develop` branch image tag.
+- `production` uses production secrets, `/opt/ansanweb/production`, port `3006`, and the `production` branch image tag.
 
-The workflow copies `docker-compose.yml` to the target directory, creates `.env` from the environment-specific secret, authenticates Docker to GHCR, pulls the immutable image, recreates the service, waits for health, and prunes only dangling images. Concurrent deploys for the same branch are serialized so an older run cannot overtake a newer deployment.
+The workflow copies `docker-compose.yml` to the target directory, creates `.env` from the environment-specific secret, authenticates Docker to GHCR, pulls the current branch image, recreates the service, waits for health, and prunes only dangling images. Concurrent deploys for the same branch are serialized so an older run cannot overtake a newer deployment.
 
 ## Required GitHub Secrets
 
