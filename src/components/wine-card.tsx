@@ -9,7 +9,7 @@ import { wineMegaMenuData } from '@/lib/mega-menu-data';
 
 type WineCardProps = {
   product: Product;
-  categories: Category[] | null;
+  categories?: Category[] | null;
 };
 
 export default function WineCard({ product, categories }: WineCardProps) {

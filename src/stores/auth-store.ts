@@ -10,6 +10,7 @@ interface AuthState {
   isAuthLoading: boolean;
   logout: () => void;
   initializeAuthListener: (auth: Auth, firestore: Firestore) => () => void;
+  _internal: { auth: Auth | null; firestore: Firestore | null };
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -19,7 +20,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     // This is a placeholder. The actual logout logic will be handled
     // by the Firebase Auth instance.
-    const { auth } = (get() as any)._internal;
+    const { auth } = get()._internal;
     if (auth) {
       auth.signOut();
     }
