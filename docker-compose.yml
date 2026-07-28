@@ -4,20 +4,20 @@ services:
     container_name: ${CONTAINER_NAME:-ansanweb-production}
     restart: always
     ports:
-      - "${HOST_PORT:-3006}:3000"
+      - "${HOST_PORT:-3006}:3006"
     env_file:
       - path: .env
         required: false
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 3006
       HOSTNAME: 0.0.0.0
     healthcheck:
       test:
         - CMD
         - node
         - -e
-        - "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+        - "fetch('http://127.0.0.1:3006/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
       interval: 15s
       timeout: 5s
       start_period: 30s

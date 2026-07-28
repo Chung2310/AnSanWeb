@@ -25,9 +25,9 @@ The Dockerfile uses Node.js 22 Alpine and three focused stages:
 
 The runtime container:
 
-- runs with `NODE_ENV=production`, `HOSTNAME=0.0.0.0`, and port `3000`;
+- runs with `NODE_ENV=production`, `HOSTNAME=0.0.0.0`, and port `3006`;
 - runs as the unprivileged `nextjs` user;
-- exposes port `3000`;
+- exposes port `3006`;
 - includes a healthcheck against `/api/health` using Node's built-in HTTP APIs;
 - receives secrets only at runtime through an environment file and never copies `.env` into the image.
 
