@@ -60,7 +60,7 @@ const productAttributeSchema = z.object({
 
 const imageInfoSchema = z.object({
     url: z.string(),
-    path: z.string().optional(),
+    path: z.string(),
 });
 
 const preprocessPrice = (val: unknown) => {

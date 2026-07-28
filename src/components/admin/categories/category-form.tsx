@@ -89,9 +89,9 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
       parentToChildren.get(parentId)!.push(cat);
     });
 
-    const buildOptions = (parentId: string | null, level: number): JSX.Element[] => {
+    const buildOptions = (parentId: string | null, level: number): React.JSX.Element[] => {
       const children = parentToChildren.get(parentId) || [];
-      let options: JSX.Element[] = [];
+      let options: React.JSX.Element[] = [];
 
       children.sort((a, b) => a.name.localeCompare(b.name));
 

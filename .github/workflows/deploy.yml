@@ -1,0 +1,204 @@
+name: CI/CD Docker VPS
+
+on:
+  push:
+    branches: [develop, production]
+  pull_request:
+    branches: [develop, production]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    name: Test, typecheck and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build check
+        if: github.event_name == 'pull_request'
+        run: npm run build
+
+  build-image:
+    name: Build and publish image
+    if: github.event_name == 'push'
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set lowercase image name
+        shell: bash
+        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to VPS
+    if: github.event_name == 'push'
+    needs: build-image
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Check out deployment files
+        uses: actions/checkout@v4
+
+      - name: Set deployment image
+        shell: bash
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+          echo "IMAGE_TAG=sha-${GITHUB_SHA}" >> "$GITHUB_ENV"
+
+      - name: Copy Compose file to staging
+        if: github.ref_name == 'develop'
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          source: docker-compose.yml
+          target: /opt/ansanweb/staging
+
+      - name: Deploy staging
+        if: github.ref_name == 'develop'
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          TARGET_DIR: /opt/ansanweb/staging
+          HOST_PORT: 3006
+          CONTAINER_NAME: ansanweb-staging
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
+          script: |
+            set -eu
+            mkdir -p "$TARGET_DIR"
+            cd "$TARGET_DIR"
+            umask 077
+            printf '%s' "$ENV_FILE_CONTENT" > .env
+            printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG
+            docker compose pull
+            docker compose up -d --remove-orphans
+            CONTAINER_ID=$(docker compose ps -q ansanweb)
+            for attempt in $(seq 1 30); do
+              STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$CONTAINER_ID")
+              [ "$STATUS" = healthy ] && exit 0
+              [ "$STATUS" = unhealthy ] && break
+              sleep 5
+            done
+            docker compose ps
+            docker compose logs --tail=100
+            exit 1
+
+      - name: Copy Compose file to production
+        if: github.ref_name == 'production'
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST_PROD }}
+          username: ${{ secrets.SSH_USER_PROD }}
+          key: ${{ secrets.SSH_KEY_PROD }}
+          port: ${{ secrets.SSH_PORT_PROD || '22' }}
+          source: docker-compose.yml
+          target: /opt/ansanweb/production
+
+      - name: Deploy production
+        if: github.ref_name == 'production'
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          TARGET_DIR: /opt/ansanweb/production
+          HOST_PORT: 3006
+          CONTAINER_NAME: ansanweb-production
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_PROD }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.SSH_HOST_PROD }}
+          username: ${{ secrets.SSH_USER_PROD }}
+          key: ${{ secrets.SSH_KEY_PROD }}
+          port: ${{ secrets.SSH_PORT_PROD || '22' }}
+          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
+          script: |
+            set -eu
+            mkdir -p "$TARGET_DIR"
+            cd "$TARGET_DIR"
+            umask 077
+            printf '%s' "$ENV_FILE_CONTENT" > .env
+            printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG
+            docker compose pull
+            docker compose up -d --remove-orphans
+            CONTAINER_ID=$(docker compose ps -q ansanweb)
+            for attempt in $(seq 1 30); do
+              STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$CONTAINER_ID")
+              [ "$STATUS" = healthy ] && exit 0
+              [ "$STATUS" = unhealthy ] && break
+              sleep 5
+            done
+            docker compose ps
+            docker compose logs --tail=100
+            exit 1

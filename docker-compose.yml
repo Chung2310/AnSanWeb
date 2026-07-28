@@ -1,0 +1,29 @@
+services:
+  ansanweb:
+    image: ${IMAGE_NAME:-ghcr.io/chung2310/ansanweb}:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_NAME:-ansanweb-production}
+    restart: always
+    ports:
+      - "${HOST_PORT:-3006}:3000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
