@@ -31,7 +31,7 @@ The runtime container:
 - includes a healthcheck against `/api/health` using Node's built-in HTTP APIs;
 - receives secrets only at runtime through an environment file and never copies `.env` into the image.
 
-The Compose service is parameterized through `IMAGE_NAME`, `IMAGE_TAG`, `HOST_PORT`, and `CONTAINER_NAME`. It uses an always-restart policy and bounded JSON-file logs. It does not depend on the ERP external Docker network because Nginx will proxy to explicitly published host ports.
+The Compose service is parameterized through `IMAGE_NAME`, `IMAGE_TAG`, `HOST_PORT`, and `CONTAINER_NAME`. It uses an always-restart policy and bounded JSON-file logs. It integrates into the ERP external Docker network (`default_network`) by default to allow internal proxying and direct container-to-container service discovery, while still exposing the parameterized host port for development or legacy routing.
 
 ## Application Health Contract
 

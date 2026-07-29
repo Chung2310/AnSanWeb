@@ -126,12 +126,13 @@ jobs:
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE }}
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_NETWORK: default_network
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
-          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
+          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN,DOCKER_NETWORK
           script: |
             set -eu
             mkdir -p "$TARGET_DIR"
@@ -139,7 +140,8 @@ jobs:
             umask 077
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG
+            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG DOCKER_NETWORK
+            docker network create "${DOCKER_NETWORK}" 2>/dev/null || true
             docker compose pull
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
@@ -176,12 +178,13 @@ jobs:
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_PROD }}
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_NETWORK: default_network
         with:
           host: ${{ secrets.SSH_HOST_PROD }}
           username: ${{ secrets.SSH_USER_PROD }}
           key: ${{ secrets.SSH_KEY_PROD }}
           port: ${{ secrets.SSH_PORT_PROD || '22' }}
-          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
+          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN,DOCKER_NETWORK
           script: |
             set -eu
             mkdir -p "$TARGET_DIR"
@@ -189,7 +192,8 @@ jobs:
             umask 077
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG
+            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG DOCKER_NETWORK
+            docker network create "${DOCKER_NETWORK}" 2>/dev/null || true
             docker compose pull
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
