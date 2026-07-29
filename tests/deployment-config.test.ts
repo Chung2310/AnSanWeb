@@ -36,6 +36,11 @@ test('Compose publishes the configured port and protects runtime availability', 
   assert.match(compose, /healthcheck:/);
   assert.match(compose, /max-size: "10m"/);
   assert.match(compose, /max-file: "3"/);
+  assert.match(compose, /networks:/);
+  assert.match(compose, /- default_network/);
+  assert.match(compose, /default_network:/);
+  assert.match(compose, /name: \$\{DOCKER_NETWORK:-default_network\}/);
+  assert.match(compose, /external: true/);
 });
 
 test('Docker build context excludes local secrets and generated files', async () => {

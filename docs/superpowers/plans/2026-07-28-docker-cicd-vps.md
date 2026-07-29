@@ -4,7 +4,7 @@
 
 **Goal:** Build, validate, publish, and deploy AnSanWeb as a production Next.js Docker container through GitHub Actions.
 
-**Architecture:** A multi-stage Node 22 image consumes Next.js standalone output on internal port 3006. GitHub Actions validates changes, publishes immutable GHCR images, and deploys through environment-specific SSH credentials; both production and staging publish host port 3006 on their respective VPS.
+**Architecture:** A multi-stage Node 22 image consumes Next.js standalone output on internal port 3006. GitHub Actions validates changes, publishes branch and immutable SHA GHCR images, and deploys through environment-specific SSH credentials; both production and staging publish host port 3006 on their respective VPS.
 
 **Tech Stack:** Next.js 15, TypeScript 5, Node.js 22, npm, Docker BuildKit, Docker Compose v2, GitHub Actions, GHCR.
 
@@ -13,7 +13,7 @@
 - Reverse proxy, DNS, and TLS are outside this repository.
 - Production and staging each use host port `3006` on their respective VPS.
 - Secrets never enter Docker image layers or Git history.
-- Deployments use immutable commit-SHA image tags.
+- Deployments use the matching branch tag; immutable SHA tags remain available for rollback.
 - No commits, pushes, pull requests, or subagents without separate authorization.
 
 ---

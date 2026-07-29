@@ -9,7 +9,7 @@ GitHub Actions kiểm tra mã nguồn, build image bằng `Dockerfile`, đẩy i
 | `develop` | Staging | `/opt/ansanweb/staging` | `3006` | `3006` |
 | `production` | Production | `/opt/ansanweb/production` | `3006` | `3006` |
 
-Nginx của mỗi môi trường trỏ tới `http://127.0.0.1:3006` trên VPS tương ứng. Hai môi trường không thể cùng bind cổng này trên một VPS.
+Nginx của mỗi môi trường có thể trỏ tới `http://127.0.0.1:3006` trên VPS tương ứng. Ngoài ra, do AnSanWeb tham gia mạng nội bộ Docker `default_network` (giống hệ thống ERP), Nginx chạy trong cùng mạng này có thể proxy trực tiếp bằng container name (ví dụ: `http://ansanweb-staging:3006` hoặc `http://ansanweb-production:3006`) mà không phụ thuộc vào cổng host công khai.
 
 ## Chuẩn bị VPS
 
@@ -21,7 +21,12 @@ docker compose version
 docker run --rm hello-world
 ```
 
-Đảm bảo cổng `3006` chưa bị dịch vụ khác sử dụng trên mỗi VPS. Workflow tự tạo hai thư mục trong `/opt/ansanweb`; tài khoản SSH phải có quyền ghi vào `/opt` hoặc các thư mục phải được tạo và cấp quyền trước.
+### Mạng nội bộ Docker (default_network)
+Ứng dụng sử dụng mạng Docker dạng external có tên mặc định là `default_network` (có thể override bằng biến môi trường `DOCKER_NETWORK`). 
+- Trên VPS, mạng này cần tồn tại (thường đã có sẵn do hệ thống ERP sử dụng).
+- Nếu chưa có, workflow CI/CD sẽ tự động chạy lệnh `docker network create default_network || true` trước khi khởi động container để đảm bảo môi trường sẵn sàng.
+
+Đảm bảo cổng `3006` chưa bị dịch vụ khác sử dụng trên mỗi VPS (nếu vẫn sử dụng mapping port ra host). Workflow tự tạo hai thư mục trong `/opt/ansanweb`; tài khoản SSH phải có quyền ghi vào `/opt` hoặc các thư mục phải được tạo và cấp quyền trước.
 
 ## GitHub Secrets
 
@@ -47,8 +52,8 @@ Nếu Genkit được gọi ở runtime, thêm `GOOGLE_GENAI_API_KEY=...` vào s
 ## Quy trình tự động
 
 - Pull request vào `develop` hoặc `production`: cài dependency, test, typecheck và build production.
-- Push/merge vào `develop`: build image SHA, đẩy GHCR, deploy staging ở cổng `3006`.
-- Push/merge vào `production`: build image SHA, đẩy GHCR, deploy production ở cổng `3006`.
+- Push/merge vào `develop`: build tag `develop` và SHA, rồi deploy tag `develop` ở cổng `3006`.
+- Push/merge vào `production`: build tag `production` và SHA, rồi deploy tag `production` ở cổng `3006`.
 - Deploy chỉ thành công khi container trả về healthy từ `GET /api/health`.
 
 Theo dõi tại tab **Actions** của GitHub. Khi deploy lỗi, workflow in trạng thái Compose và 100 dòng log gần nhất.
