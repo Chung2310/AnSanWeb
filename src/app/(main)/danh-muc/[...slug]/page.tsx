@@ -13,7 +13,7 @@ type Props = {
 
 async function getCategory(slugParts: string[]) {
   const finalSlug = slugParts[slugParts.length - 1];
-  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001/api/v1';
+  const BACKEND_URL = process.env.INTERNAL_API_URL || 'http://127.0.0.1:3001/api/v1';
   try {
     const res = await fetch(`${BACKEND_URL}/categories/slug/${finalSlug}`, { cache: 'no-store' });
     if (!res.ok) return null;

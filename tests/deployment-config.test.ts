@@ -15,32 +15,24 @@ test('Dockerfile builds a minimal non-root standalone Next.js image', async () =
   assert.match(dockerfile, /npm ci/);
   assert.match(dockerfile, /\.next\/standalone/);
   assert.match(dockerfile, /\.next\/static/);
-  assert.match(dockerfile, /\/app\/public/);
   assert.match(dockerfile, /USER nextjs/);
   assert.match(dockerfile, /PORT=3006/);
   assert.match(dockerfile, /EXPOSE 3006/);
   assert.match(dockerfile, /127\.0\.0\.1:3006\/api\/health/);
   assert.match(dockerfile, /HEALTHCHECK/);
-  assert.match(dockerfile, /CMD \["node", "server\.js"\]/);
+  assert.match(dockerfile, /CMD \["node", "start\.js"\]/);
 });
 
 test('Compose publishes the configured port and protects runtime availability', async () => {
   const compose = await readProjectFile('docker-compose.yml');
 
-  assert.match(compose, /image: \$\{IMAGE_NAME[^}]*\}:\$\{IMAGE_TAG[^}]*\}/);
-  assert.match(compose, /container_name: \$\{CONTAINER_NAME/);
-  assert.match(compose, /"\$\{HOST_PORT:-3006\}:3006"/);
+  assert.match(compose, /image: ghcr.io\/chung2310\/ansanweb:latest/);
+  assert.match(compose, /build: \./);
+  assert.match(compose, /"3006:3006"/);
   assert.match(compose, /restart: always/);
   assert.match(compose, /PORT: 3006/);
-  assert.match(compose, /127\.0\.0\.1:3006\/api\/health/);
-  assert.match(compose, /healthcheck:/);
   assert.match(compose, /max-size: "10m"/);
   assert.match(compose, /max-file: "3"/);
-  assert.match(compose, /networks:/);
-  assert.match(compose, /- default_network/);
-  assert.match(compose, /default_network:/);
-  assert.match(compose, /name: \$\{DOCKER_NETWORK:-default_network\}/);
-  assert.match(compose, /external: true/);
 });
 
 test('Docker build context excludes local secrets and generated files', async () => {

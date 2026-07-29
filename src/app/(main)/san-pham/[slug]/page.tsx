@@ -12,7 +12,7 @@ type Props = {
 };
 
 async function getProduct(slug: string) {
-  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001/api/v1';
+  const BACKEND_URL = process.env.INTERNAL_API_URL || 'http://127.0.0.1:3001/api/v1';
   try {
     const res = await fetch(`${BACKEND_URL}/products/slug/${slug}`, { cache: 'no-store' });
     if (!res.ok) return null;

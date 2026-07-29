@@ -97,11 +97,10 @@ jobs:
       - name: Check out deployment files
         uses: actions/checkout@v4
 
-      - name: Set deployment image
-        shell: bash
+      - name: Set Staging Image Tag
+        if: github.ref_name == 'develop'
         run: |
-          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
-          echo "IMAGE_TAG=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+          sed -i 's/:latest/:develop/g' docker-compose.yml
 
       - name: Copy Compose file to staging
         if: github.ref_name == 'develop'
@@ -119,20 +118,15 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           TARGET_DIR: /opt/ansanweb/staging
-          HOST_PORT: 3006
-          CONTAINER_NAME: ansanweb-staging
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE }}
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_NETWORK: default_network
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
-          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN,DOCKER_NETWORK
+          envs: TARGET_DIR,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
           script: |
             set -eu
             mkdir -p "$TARGET_DIR"
@@ -140,8 +134,6 @@ jobs:
             umask 077
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG DOCKER_NETWORK
-            docker network create "${DOCKER_NETWORK}" 2>/dev/null || true
             docker compose pull
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
@@ -154,6 +146,11 @@ jobs:
             docker compose ps
             docker compose logs --tail=100
             exit 1
+
+      - name: Set Production Image Tag
+        if: github.ref_name == 'production'
+        run: |
+          sed -i 's/:latest/:production/g' docker-compose.yml
 
       - name: Copy Compose file to production
         if: github.ref_name == 'production'
@@ -171,20 +168,15 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           TARGET_DIR: /opt/ansanweb/production
-          HOST_PORT: 3006
-          CONTAINER_NAME: ansanweb-production
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
           ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_PROD }}
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_NETWORK: default_network
         with:
           host: ${{ secrets.SSH_HOST_PROD }}
           username: ${{ secrets.SSH_USER_PROD }}
           key: ${{ secrets.SSH_KEY_PROD }}
           port: ${{ secrets.SSH_PORT_PROD || '22' }}
-          envs: TARGET_DIR,HOST_PORT,CONTAINER_NAME,IMAGE_NAME,IMAGE_TAG,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN,DOCKER_NETWORK
+          envs: TARGET_DIR,ENV_FILE_CONTENT,REGISTRY_USER,REGISTRY_TOKEN
           script: |
             set -eu
             mkdir -p "$TARGET_DIR"
@@ -192,8 +184,6 @@ jobs:
             umask 077
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-            export HOST_PORT CONTAINER_NAME IMAGE_NAME IMAGE_TAG DOCKER_NETWORK
-            docker network create "${DOCKER_NETWORK}" 2>/dev/null || true
             docker compose pull
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
