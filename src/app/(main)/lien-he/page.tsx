@@ -17,9 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore } from "@/firebase";
-import { collection, serverTimestamp } from "firebase/firestore";
-import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { summarizeContactForm } from "@/ai/flows/contact-form-ai-summary";
 
 const formSchema = z.object({
@@ -30,7 +27,6 @@ const formSchema = z.object({
 
 export default function ContactPage() {
     const { toast } = useToast();
-    const firestore = useFirestore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,11 +39,10 @@ export default function ContactPage() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            // Save the message to Firestore
-            const contactsCol = collection(firestore, 'contacts');
-            addDocumentNonBlocking(contactsCol, {
+            // Save the message to Backend API
+            const { apiClient } = await import('@/lib/api-client');
+            await apiClient.post('/contacts', {
                 ...values,
-                createdAt: serverTimestamp(),
                 status: 'new'
             });
 

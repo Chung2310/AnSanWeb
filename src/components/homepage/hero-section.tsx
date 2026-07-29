@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -8,8 +7,7 @@ import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 
 const defaultHeroSlides = [
     {
@@ -49,7 +47,6 @@ const defaultHeroSlides = [
     },
 ];
 
-
 const containerVariants = {
     initial: {},
     animate: { transition: { staggerChildren: 0.3, delayChildren: 0.8 } },
@@ -68,12 +65,22 @@ const slideVariants = {
     exit: { opacity: 0, zIndex: 0, transition: { duration: 1.2, ease: 'easeIn' } }
 };
 
-
 export default function HeroSection() {
     const [current, setCurrent] = useState(0);
-    const firestore = useFirestore();
-    const settingsRef = useMemoFirebase(() => doc(firestore, 'settings', 'general'), [firestore]);
-    const { data: settings } = useDoc(settingsRef);
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        apiClient
+            .get('/settings/general')
+            .then((res) => {
+                if (res.data && res.data.value) {
+                    setSettings(res.data.value);
+                }
+            })
+            .catch((err) => {
+                console.error('Error fetching settings for hero banners:', err);
+            });
+    }, []);
 
     const slides = React.useMemo(() => {
         if (settings?.heroBanners && settings.heroBanners.length > 0) {

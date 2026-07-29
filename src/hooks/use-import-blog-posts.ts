@@ -1,15 +1,12 @@
-
 'use client';
 
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useFirebase } from '@/firebase';
-import { collection, doc, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import slugify from 'slugify';
 
 export function useImportBlogPosts() {
-  const { firestore } = useFirebase();
   const { toast } = useToast();
   const [isImporting, setIsImporting] = useState(false);
 
@@ -23,8 +20,7 @@ export function useImportBlogPosts() {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet) as any[];
 
-      const batch = writeBatch(firestore);
-      const blogPostsCollection = collection(firestore, 'blogPosts');
+      const blogPostsArray: any[] = [];
       let processedCount = 0;
       let skippedCount = 0;
 
@@ -36,34 +32,34 @@ export function useImportBlogPosts() {
           continue;
         }
 
-        const blogId = row['ID'] ? String(row['ID']) : doc(blogPostsCollection).id;
-        const blogRef = doc(blogPostsCollection, blogId);
+        const blogId = row['ID'] ? String(row['ID']) : undefined;
 
         const blogData: any = {
-            id: blogId,
-            title: title,
-            slug: row['Đường dẫn (slug)'] || slugify(title, { lower: true, strict: true, locale: 'vi' }),
-            author: row['Tác giả'] || 'AnSan',
-            excerpt: row['Mô tả ngắn'] || '',
-            content: row['Nội dung'] || '',
-            image: row['URL Ảnh'] ? { url: row['URL Ảnh'], path: '' } : null,
-            categories: row['Danh mục'] ? String(row['Danh mục']).split(',').map((c: string) => c.trim().toUpperCase()).filter(Boolean) : [],
-            updatedAt: serverTimestamp(),
+          title: title,
+          slug: row['Đường dẫn (slug)'] || slugify(title, { lower: true, strict: true, locale: 'vi' }),
+          author: row['Tác giả'] || 'AnSan',
+          excerpt: row['Mô tả ngắn'] || '',
+          content: row['Nội dung'] || '',
+          image: row['URL Ảnh'] ? { url: row['URL Ảnh'], path: '' } : null,
+          categories: row['Danh mục'] ? String(row['Danh mục']).split(',').map((c: string) => c.trim().toUpperCase()).filter(Boolean) : [],
         };
 
-        if (!row['ID']) {
-            blogData.createdAt = serverTimestamp();
-        } else if (row['Ngày tạo']) {
-            try {
-                blogData.createdAt = new Date(row['Ngày tạo']);
-            } catch (e) {}
+        if (blogId) {
+          blogData.id = blogId;
+          blogData._id = blogId;
+        }
+
+        if (row['Ngày tạo']) {
+          try {
+            blogData.createdAt = new Date(row['Ngày tạo']);
+          } catch (e) {}
         }
         
-        batch.set(blogRef, blogData, { merge: true });
+        blogPostsArray.push(blogData);
         processedCount++;
       }
 
-      await batch.commit();
+      await apiClient.post('/blog-posts/bulk', blogPostsArray);
 
       toast({
         title: 'Nhập hoàn tất!',
@@ -71,7 +67,7 @@ export function useImportBlogPosts() {
       });
 
     } catch (error) {
-      console.error("Error importing blog posts:", error);
+      console.error('Error importing blog posts:', error);
       toast({
         variant: 'destructive',
         title: 'Lỗi nhập dữ liệu',

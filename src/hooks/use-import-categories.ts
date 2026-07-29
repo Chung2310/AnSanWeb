@@ -1,15 +1,12 @@
-
 'use client';
 
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useFirebase } from '@/firebase';
-import { collection, doc, writeBatch } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import slugify from 'slugify';
 
 export function useImportCategories() {
-  const { firestore } = useFirebase();
   const { toast } = useToast();
   const [isImporting, setIsImporting] = useState(false);
 
@@ -23,8 +20,7 @@ export function useImportCategories() {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet) as any[];
 
-      const batch = writeBatch(firestore);
-      const categoriesCollection = collection(firestore, 'categories');
+      const categoriesArray: any[] = [];
       let processedCount = 0;
       let skippedCount = 0;
 
@@ -36,23 +32,26 @@ export function useImportCategories() {
           continue;
         }
 
-        const categoryId = row['id'] ? String(row['id']) : doc(categoriesCollection).id;
-        const categoryRef = doc(categoriesCollection, categoryId);
+        const categoryId = row['id'] ? String(row['id']) : undefined;
 
         const categoryData: any = {
-            id: categoryId,
-            name: name,
-            slug: row['slug'] || slugify(name, { lower: true, strict: true, locale: 'vi' }),
-            parentId: row['parentId'] || null,
-            description: row['description'] || '',
-            tags: row['tags'] ? String(row['tags']).split(',').map((t: string) => t.trim()).filter(Boolean) : [],
+          name: name,
+          slug: row['slug'] || slugify(name, { lower: true, strict: true, locale: 'vi' }),
+          parentId: row['parentId'] || null,
+          description: row['description'] || '',
+          tags: row['tags'] ? String(row['tags']).split(',').map((t: string) => t.trim()).filter(Boolean) : [],
         };
         
-        batch.set(categoryRef, categoryData, { merge: true });
+        if (categoryId) {
+          categoryData.id = categoryId;
+          categoryData._id = categoryId;
+        }
+
+        categoriesArray.push(categoryData);
         processedCount++;
       }
 
-      await batch.commit();
+      await apiClient.post('/categories/bulk', categoriesArray);
 
       toast({
         title: 'Nhập hoàn tất!',
@@ -60,7 +59,7 @@ export function useImportCategories() {
       });
 
     } catch (error) {
-      console.error("Error importing categories:", error);
+      console.error('Error importing categories:', error);
       toast({
         variant: 'destructive',
         title: 'Lỗi nhập dữ liệu',

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -22,12 +21,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { useFirebase } from '@/firebase';
+import { useAuthStore } from '@/stores/auth-store';
 
 const formSchema = z.object({
   email: z.string().email('Email không hợp lệ.'),
@@ -37,7 +32,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const { auth } = useFirebase();
+  const { login } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,48 +44,18 @@ export default function LoginPage() {
 
   const handleLogin = async (values: z.infer<typeof formSchema>) => {
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
+      await login(values.email, values.password);
 
       toast({
         title: 'Đăng nhập thành công!',
       });
       router.push('/admin');
     } catch (error: any) {
-      if (error.code === 'auth/user-not-found' && values.email === 'admin@ansan.com') {
-        try {
-          await createUserWithEmailAndPassword(
-            auth,
-            values.email,
-            values.password
-          );
-          toast({
-            title: 'Tài khoản admin đã được tạo. Đăng nhập thành công.',
-          });
-          router.push('/admin'); 
-        } catch (creationError: any) {
-          toast({
-            variant: 'destructive',
-            title: 'Lỗi tạo tài khoản admin',
-            description: creationError.message,
-          });
-        }
-      } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        toast({
-          variant: 'destructive',
-          title: 'Đăng nhập thất bại',
-          description: 'Sai mật khẩu hoặc tài khoản. Vui lòng thử lại.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Lỗi đăng nhập',
-          description: error.message,
-        });
-      }
+      toast({
+        variant: 'destructive',
+        title: 'Đăng nhập thất bại',
+        description: error.message || 'Sai mật khẩu hoặc tài khoản. Vui lòng thử lại.',
+      });
     }
   };
 

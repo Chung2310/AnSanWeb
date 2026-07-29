@@ -1,56 +1,40 @@
-
 'use client';
 
 import { useState } from 'react';
-import { useFirebase } from '@/firebase';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import type { BlogPost } from '@/lib/types';
 import { useAuthStore } from '@/stores/auth-store';
 
 export function useDeleteBlogPost() {
-  const { firestore, firebaseApp } = useFirebase();
   const { toast } = useToast();
   const { user } = useAuthStore();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const deleteBlogPost = async (post: BlogPost) => {
     if (!user || !post.id) {
-        toast({
-            variant: 'destructive',
-            title: 'Lỗi',
-            description: 'Không thể xóa bài viết. Vui lòng thử lại.',
-        });
-        return;
+      toast({
+        variant: 'destructive',
+        title: 'Lỗi',
+        description: 'Không thể xóa bài viết. Vui lòng đăng nhập lại.',
+      });
+      return;
     }
 
     setIsDeleting(true);
     try {
-      const storage = getStorage(firebaseApp);
-      
-      const imageDeletePromises: Promise<void>[] = [];
-      if (post.image?.path) {
-        const imageRef = ref(storage, post.image.path);
-        imageDeletePromises.push(deleteObject(imageRef).catch(e => console.error(`Failed to delete image ${post.image?.path}`, e)));
-      }
-
-      await Promise.all(imageDeletePromises);
-      
-      const postDocRef = doc(firestore, 'blogPosts', post.id);
-      await deleteDoc(postDocRef);
+      await apiClient.delete(`/blog-posts/${post.id}`);
 
       toast({
         title: 'Thành công',
-        description: `Bài viết "${post.title}" đã được xóa.`,
+        description: `Bài viết "${post.title}" đã được xóa thành công.`,
       });
-
-    } catch (error) {
-      console.error("Error deleting blog post:", error);
+    } catch (error: any) {
+      console.error('Error deleting blog post:', error);
       toast({
         variant: 'destructive',
         title: 'Lỗi',
-        description: 'Không thể xóa bài viết. Vui lòng thử lại.',
+        description: error.message || 'Không thể xóa bài viết. Vui lòng thử lại.',
       });
     } finally {
       setIsDeleting(false);

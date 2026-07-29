@@ -36,13 +36,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import type { FullProduct, ImageInfo, Category } from '@/lib/types';
 import { Trash, X, Upload } from 'lucide-react';
 import Image from 'next/image';
-import {
-  doc,
-  collection,
-  serverTimestamp,
-  setDoc,
-} from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { apiClient } from '@/lib/api-client';
 import slugify from 'slugify';
 import { useState, useMemo } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -142,7 +136,6 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
   const { startUpload, progress, isUploading } = useUploadStorage();
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(initialData?.image?.url || null);
@@ -309,7 +302,7 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-        const finalData: Omit<FullProduct, 'id' | 'createdAt' | 'updatedAt'> & { updatedAt: any, createdAt?: any, id?: string } = {
+        const finalData = {
             nameVN: data.nameVN,
             slug: data.slug,
             price: data.price,
@@ -327,19 +320,13 @@ export default function ProductForm({ initialData, preselectedCategoryId }: Prod
             priceDescription: data.priceDescription || '',
             secondaryPrice: data.secondaryPrice && data.secondaryPrice > 0 ? data.secondaryPrice : null,
             secondaryPriceDescription: data.secondaryPriceDescription || null,
-            updatedAt: serverTimestamp(),
         };
 
         if (initialData?.id) {
-            const productRef = doc(firestore, 'products', initialData.id);
-            const { id, createdAt, ...updateData } = finalData;
-            await setDoc(productRef, updateData, { merge: true });
+            await apiClient.put(`/products/${initialData.id}`, finalData);
             toast({ title: 'Thành công', description: 'Sản phẩm đã được cập nhật.' });
         } else {
-            const newDocRef = doc(collection(firestore, 'products'));
-            finalData.id = newDocRef.id;
-            finalData.createdAt = serverTimestamp();
-            await setDoc(newDocRef, finalData);
+            await apiClient.post('/products', finalData);
             toast({ title: 'Thành công', description: 'Sản phẩm đã được tạo.' });
         }
         router.push(getRedirectUrl());

@@ -5,21 +5,32 @@ import BlogForm from '@/components/admin/blog/blog-form';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import type { BlogPost } from '@/lib/types';
-import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export default function EditBlogPage() {
   const params = useParams();
   const blogId = params.blogId as string;
-  const firestore = useFirestore();
-  
-  const postRef = useMemoFirebase(
-    () => (blogId ? doc(firestore, 'blogPosts', blogId) : null),
-    [firestore, blogId]
-  );
-  
-  const { data: post, isLoading } = useDoc<BlogPost>(postRef);
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    if (!blogId) return;
+    setIsLoading(true);
+    apiClient
+      .get(`/blog-posts/${blogId}`)
+      .then((res) => {
+        if (res.data) {
+          setPost(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching blog post:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [blogId]);
 
   if (isLoading) {
     return (

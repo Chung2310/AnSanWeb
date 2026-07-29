@@ -1,23 +1,40 @@
 'use client';
 
-import { collection, query, orderBy } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 import type { Category } from '@/lib/types';
 
 export function useCategories() {
-  const firestore = useFirestore();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const categoriesCollection = useMemoFirebase(
-    () => collection(firestore, 'categories'),
-    [firestore]
-  );
-  
-  const categoriesQuery = useMemoFirebase(
-    () => categoriesCollection && query(categoriesCollection, orderBy('name', 'asc')),
-    [categoriesCollection]
-  );
+  useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    apiClient
+      .get('/categories?limit=100')
+      .then((res) => {
+        if (active) {
+          setCategories(res.data || []);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          setError(err);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
 
-  const { data: categories, isLoading, error } = useCollection<Category>(categoriesQuery);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return { categories, isLoading, error };
 }

@@ -2,15 +2,13 @@
 
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { useFirebase } from '@/firebase';
-import { collection, doc, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/lib/types';
 import { useCategories } from './use-categories';
 import slugify from 'slugify';
 
 export function useImportProducts() {
-  const { firestore } = useFirebase();
   const { toast } = useToast();
   const [isImporting, setIsImporting] = useState(false);
   const { categories } = useCategories();
@@ -26,7 +24,7 @@ export function useImportProducts() {
       const jsonData = XLSX.utils.sheet_to_json(worksheet) as any[];
 
       if (!categories) {
-          throw new Error("Danh mục chưa được tải. Vui lòng thử lại.");
+        throw new Error('Danh mục chưa được tải. Vui lòng thử lại.');
       }
 
       const nameToIdMap = new Map<string, string>();
@@ -47,8 +45,7 @@ export function useImportProducts() {
         return ancestors;
       };
 
-      const batch = writeBatch(firestore);
-      const productsCollection = collection(firestore, 'products');
+      const productsArray: any[] = [];
       let processedCount = 0;
       let skippedCount = 0;
 
@@ -64,17 +61,16 @@ export function useImportProducts() {
 
         let price = 0;
         if (priceStr != null) {
-            const sanitizedPrice = String(priceStr).replace(/[^0-9]/g, '');
-            price = parseInt(sanitizedPrice) || 0;
+          const sanitizedPrice = String(priceStr).replace(/[^0-9]/g, '');
+          price = parseInt(sanitizedPrice) || 0;
         }
 
-        const productId = row['ID'] ? String(row['ID']) : null;
-        const productRef = productId ? doc(productsCollection, productId) : doc(productsCollection);
+        const productId = row['ID'] ? String(row['ID']) : undefined;
 
         const categoryColumnNames = [
-            'Danh mục', 'Phân loại', 'Danh mục / Phân loại', 
-            'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Quốc Gia',
-            'Vùng', 'Giống nho', 'Loại quà tặng', 'Thương hiệu'
+          'Danh mục', 'Phân loại', 'Danh mục / Phân loại', 
+          'Danh mục chung', 'Loại rượu', 'Quốc gia', 'Quốc Gia',
+          'Vùng', 'Giống nho', 'Loại quà tặng', 'Thương hiệu'
         ];
         
         const foundTagIds = new Set<string>();
@@ -104,23 +100,27 @@ export function useImportProducts() {
           bestChoice: row['Lựa chọn tốt nhất'] === 'Có' || row['Lựa chọn tốt nhất'] === true || row['bestChoice'] === true,
           status: (row['Trạng thái'] === 'Đã xuất bản' || row['status'] === 'published') ? 'published' : 'draft',
           tags: allTags,
-          updatedAt: serverTimestamp(),
         };
 
+        if (productId) {
+          productData.id = productId;
+          productData._id = productId;
+        }
+
         const excludeKeys = [
-            'ID', 'Tên sản phẩm', 'Tên', 'Đường dẫn (slug)', 'Slug', 'Giá', 'Giá bán',
-            'Mô tả giá', 'Giá phụ', 'Giá gốc', 'Mô tả giá phụ', 'Trạng thái', 'status',
-            'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'isNew', 'Lựa chọn tốt nhất', 'bestChoice',
-            'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo', 'createdAt'
+          'ID', 'Tên sản phẩm', 'Tên', 'Đường dẫn (slug)', 'Slug', 'Giá', 'Giá bán',
+          'Mô tả giá', 'Giá phụ', 'Giá gốc', 'Mô tả giá phụ', 'Trạng thái', 'status',
+          'Nổi bật', 'Giá tốt', 'Sản phẩm mới', 'isNew', 'Lựa chọn tốt nhất', 'bestChoice',
+          'Mô tả ngắn', 'Mô tả chi tiết', 'URL Ảnh bìa', 'URL Ảnh chi tiết', 'Ngày tạo', 'createdAt'
         ];
 
         const allExcludeKeys = [...excludeKeys, ...categoryColumnNames];
         const attributes: { label: string, value: string }[] = [];
 
         Object.keys(row).forEach(key => {
-            if (!allExcludeKeys.includes(key) && row[key] != null && String(row[key]).trim() !== '') {
-                attributes.push({ label: key, value: String(row[key]) });
-            }
+          if (!allExcludeKeys.includes(key) && row[key] != null && String(row[key]).trim() !== '') {
+            attributes.push({ label: key, value: String(row[key]) });
+          }
         });
 
         productData.attributes = attributes;
@@ -131,8 +131,8 @@ export function useImportProducts() {
 
         const secondaryPriceVal = row['Giá phụ'] || row['Giá gốc'];
         if (secondaryPriceVal != null) {
-            const sanitized = String(secondaryPriceVal).replace(/[^0-9]/g, '');
-            productData.secondaryPrice = parseInt(sanitized) || null;
+          const sanitized = String(secondaryPriceVal).replace(/[^0-9]/g, '');
+          productData.secondaryPrice = parseInt(sanitized) || null;
         }
 
         if (row['Mô tả giá phụ']) productData.secondaryPriceDescription = row['Mô tả giá phụ'];
@@ -140,20 +140,17 @@ export function useImportProducts() {
         productData.image = (row['URL Ảnh bìa'] || row['Ảnh']) ? { url: String(row['URL Ảnh bìa'] || row['Ảnh']), path: '' } : null;
         productData.detailImages = row['URL Ảnh chi tiết'] ? String(row['URL Ảnh chi tiết']).split(',').map((url: string) => ({ url: url.trim(), path: '' })) : [];
 
-        if (!productId) {
-            productData.id = productRef.id;
-            productData.createdAt = serverTimestamp();
-        } else if (row['Ngày tạo'] || row['createdAt']) {
-            try {
-                productData.createdAt = new Date(row['Ngày tạo'] || row['createdAt']);
-            } catch (e) {}
+        if (row['Ngày tạo'] || row['createdAt']) {
+          try {
+            productData.createdAt = new Date(row['Ngày tạo'] || row['createdAt']);
+          } catch (e) {}
         }
 
-        batch.set(productRef, productData, { merge: true });
+        productsArray.push(productData);
         processedCount++;
       }
 
-      await batch.commit();
+      await apiClient.post('/products/bulk', productsArray);
 
       toast({
         title: 'Nhập hoàn tất!',
@@ -161,7 +158,7 @@ export function useImportProducts() {
       });
 
     } catch (error) {
-      console.error("Error importing products:", error);
+      console.error('Error importing products:', error);
       toast({
         variant: 'destructive',
         title: 'Lỗi nhập dữ liệu',
