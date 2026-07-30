@@ -1,8 +1,9 @@
 import Joi from 'joi';
 
+// Accept both MongoDB ObjectId (24 hex chars) and Firebase-style IDs (alphanumeric)
 export const objectIdSchema = Joi.string()
-  .pattern(/^[0-9a-fA-F]{24}$/)
-  .message('ID phải là định dạng MongoDB ObjectId 24 ký tự hợp lệ.');
+  .pattern(/^[0-9a-zA-Z_-]{1,128}$/)
+  .message('ID không hợp lệ.');
 
 export const idParamValidation = Joi.object({
   id: objectIdSchema.required(),
