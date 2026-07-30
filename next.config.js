@@ -15,14 +15,22 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: '*.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
+        pathname: '/**',
       },
     ],
     // Ưu tiên AVIF (nhỏ hơn 50% so với WebP), fallback WebP
