@@ -1,14 +1,20 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import next from 'next';
 import { assertSecurityEnv } from './config/env.ts';
 import { connectDB } from './config/database.ts';
 import { apiRouter } from './router/index.ts';
 import { swaggerRouter } from './swagger/index.ts';
+import { seedAdmin } from './service/admin-seed.service.ts';
 
-const PORT = process.env.BACKEND_PORT ? parseInt(process.env.BACKEND_PORT, 10) : 3001;
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
+
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3006;
 
 async function startServer() {
   // 1. Validate environment variables
@@ -21,10 +27,15 @@ async function startServer() {
 
   // 2. Connect to MongoDB
   await connectDB();
+  await seedAdmin();
+
+  // 3. Prepare Next.js
+  console.log('⏳ Khởi động Next.js app engine...');
+  await nextApp.prepare();
 
   const app = express();
 
-  // 3. Security Middlewares
+  // 4. Security Middlewares
   app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginResourcePolicy: false,
@@ -34,7 +45,7 @@ async function startServer() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // 4. CORS configuration
+  // 5. CORS configuration
   const allowedOrigins = process.env.LINK_COR
     ? process.env.LINK_COR.split(',')
     : ['http://localhost:3000', 'http://localhost:9002', 'http://localhost:3006'];
@@ -55,21 +66,26 @@ async function startServer() {
     })
   );
 
-  // 5. Register Swagger Documentation
+  // 6. Register Swagger Documentation
   app.use('/api-docs', swaggerRouter);
 
-  // 6. Request Logger
+  // 7. Request Logger
   app.use((req, res, next) => {
     const timestamp = new Date().toLocaleTimeString('vi-VN');
     console.log(`[Server ${timestamp}] ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
     next();
   });
 
-  // 7. Register API routes with prefix /api/v1/
+  // 8. Register API routes with prefix /api/v1/
   app.use('/api/v1', apiRouter);
 
-  // 8. Global Error Handler
-  app.use((err: any, req: express.Request, res: Response, next: express.NextFunction) => {
+  // 9. Fallback to Next.js handler
+  app.use((req, res) => {
+    return handle(req, res);
+  });
+
+  // 10. Global Error Handler
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error('❌ Lỗi hệ thống:', err);
     res.status(500).json({
       status: 'error',
@@ -79,7 +95,7 @@ async function startServer() {
   });
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 AnSanWeb Express Backend running on http://localhost:${PORT}`);
+    console.log(`🚀 Combined AnSanWeb Server running on http://localhost:${PORT}`);
     console.log(`📖 Swagger API Docs available at http://localhost:${PORT}/api-docs`);
   });
 }
