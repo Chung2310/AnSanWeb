@@ -27,7 +27,9 @@ export default function TetGiftPopup() {
         }
       })
       .catch((err) => {
-        console.error('Error fetching settings for popup:', err);
+        if (err?.status !== 404) {
+          console.error('Error fetching settings for popup:', err);
+        }
       });
   }, []);
 

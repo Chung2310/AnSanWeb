@@ -68,7 +68,9 @@ export default function SettingsAdminPage() {
         }
       })
       .catch((err) => {
-        console.error('Error fetching settings:', err);
+        if (err?.status !== 404) {
+          console.error('Error fetching settings:', err);
+        }
       })
       .finally(() => {
         setIsLoading(false);

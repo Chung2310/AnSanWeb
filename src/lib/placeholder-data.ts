@@ -772,17 +772,14 @@ export const sampleBlogPosts: BlogPost[] = [
     categories: ['NEWS'],
   },
   {
-    id: 'ycTwIHFTbWZe0lGYGJU6',
+    id: '10',
     author: 'AnSan',
-    title: 'RUOU VANG AN SAN',
-    slug: 'ruou-vang-an-san',
-    excerpt: 'installHook.js:1 Error fetching post or post not found: null overrideMethod @ installHook.js:1 installHook.js:1 Error fetching post or post not found: null overrideMethod @ installHook.js:1 ',
-    content: "<p>PLEASE CAREFULLY CHECK YOUR ARTICLE FOR WHY YOU CAN'T CREATE THE ARTICLE DETAILS PAGE EVEN AFTER CREATING THE ARTICLE. CHECK EVERYTHING.</p>",
+    title: 'CHIVAS 18 HỘP QUÀ SANG TRỌNG 2026',
+    slug: 'chivas-18-hop-qua-2026',
+    excerpt: 'Bộ quà tặng Chivas 18 năm phiên bản hộp quà 2026 – lựa chọn hoàn hảo cho các dịp lễ và tặng quà đặc biệt.',
+    content: '<p>Chivas Regal 18 năm là biểu tượng của sự sang trọng trong thế giới whisky. Phiên bản hộp quà 2026 là lựa chọn hoàn hảo cho những dịp đặc biệt.</p>',
     createdAt: new Date('2026-01-09T03:53:10.000Z'),
-    image: {
-      url: "https://firebasestorage.googleapis.com/v0/b/studio-8476793219-f7142.firebasestorage.app/o/blog%2F1c5cbd8d-1c27-41d0-a867-b2844e389fc1-RUOU-CHVAS-18-HOP-QUA-2026%20(1).jpg?alt=media&token=9bb18db1-dcfd-48ab-9d27-28d20111fd4d",
-      path: "blog/1c5cbd8d-1c27-41d0-a867-b2844e389fc1-RUOU-CHVAS-18-HOP-QUA-2026 (1).jpg"
-    },
+    image: getImage('hero-macallan'),
     categories: ['NEWS'],
   }
 ];

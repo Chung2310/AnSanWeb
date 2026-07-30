@@ -78,7 +78,9 @@ export default function HeroSection() {
                 }
             })
             .catch((err) => {
-                console.error('Error fetching settings for hero banners:', err);
+                if (err?.status !== 404) {
+                    console.error('Error fetching settings for hero banners:', err);
+                }
             });
     }, []);
 

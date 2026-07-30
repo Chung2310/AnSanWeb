@@ -1,10 +1,10 @@
-import Footer from '@/components/layout/footer';
+import dynamic from 'next/dynamic';
 import Header from '@/components/layout/header';
-import TetGiftPopup from '@/components/homepage/tet-gift-popup';
-import StickyBar from '@/components/layout/sticky-bar';
-import MobileActionBar from '@/components/layout/mobile-action-bar';
-import MobileBottomBar from '@/components/layout/mobile-bottom-bar';
-import ScrollToTopButton from '@/components/layout/scroll-to-top';
+import ClientOnlyWidgets from '@/components/layout/client-only-widgets';
+
+// Footer và các component phụ không cần thiết khi tải trang lần đầu
+// → dynamic import để tách chunk, giảm JS parse time ban đầu
+const Footer = dynamic(() => import('@/components/layout/footer'), { ssr: true });
 
 export default function MainLayout({
   children,
@@ -16,11 +16,7 @@ export default function MainLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <TetGiftPopup />
-      <StickyBar />
-      <MobileActionBar />
-      <MobileBottomBar />
-      <ScrollToTopButton />
+      <ClientOnlyWidgets />
     </div>
   );
 }
