@@ -11,6 +11,7 @@ export const validateRequest = (schema: Joi.ObjectSchema, target: 'body' | 'quer
 
     if (error) {
       const errorMessages = error.details.map((detail) => detail.message);
+      console.error(`❌ Validation failed for [${req.method} ${req.originalUrl}] on [${target}]:`, errorMessages);
       return res.status(400).json({
         status: 'error',
         message: 'Dữ liệu yêu cầu không hợp lệ.',
