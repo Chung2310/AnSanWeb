@@ -53,7 +53,6 @@ const BlogPostSchema = new Schema<IBlogPost>(
   },
   {
     timestamps: true,
-    collection: 'blogpost',
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
