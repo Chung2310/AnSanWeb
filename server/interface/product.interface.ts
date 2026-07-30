@@ -6,7 +6,7 @@ export interface IProductAttribute {
   value: string;
 }
 
-export interface IProduct extends Document {
+export interface IProduct extends Omit<Document, 'isNew'> {
   nameVN: string;
   slug: string;
   shortDescription?: string;

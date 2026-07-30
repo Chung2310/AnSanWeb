@@ -13,7 +13,7 @@ type UserModelLike = {
 
 export async function seedAdmin(
   model: UserModelLike = UserModel,
-  config: AdminSeedConfig = process.env,
+  config: AdminSeedConfig = process.env as AdminSeedConfig,
 ): Promise<void> {
   const email = config.ADMIN_EMAIL?.trim();
   const password = config.ADMIN_PASSWORD;

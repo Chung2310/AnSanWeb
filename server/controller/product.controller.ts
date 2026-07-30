@@ -19,7 +19,7 @@ export class ProductController {
 
   static async update(req: Request, res: Response) {
     try {
-      const product = await ProductService.update(req.params.id, req.body);
+      const product = await ProductService.update(String(req.params.id), req.body);
       if (!product) {
         return res.status(404).json({
           status: 'error',
@@ -40,7 +40,7 @@ export class ProductController {
 
   static async delete(req: Request, res: Response) {
     try {
-      const product = await ProductService.delete(req.params.id);
+      const product = await ProductService.delete(String(req.params.id));
       if (!product) {
         return res.status(404).json({
           status: 'error',
@@ -61,7 +61,7 @@ export class ProductController {
 
   static async getById(req: Request, res: Response) {
     try {
-      const product = await ProductService.getById(req.params.id);
+      const product = await ProductService.getById(String(req.params.id));
       if (!product) {
         return res.status(404).json({
           status: 'error',
@@ -82,7 +82,7 @@ export class ProductController {
 
   static async getBySlug(req: Request, res: Response) {
     try {
-      const product = await ProductService.getBySlug(req.params.slug);
+      const product = await ProductService.getBySlug(String(req.params.slug));
       if (!product) {
         return res.status(404).json({
           status: 'error',

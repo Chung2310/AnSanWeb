@@ -20,7 +20,7 @@ export class SettingController {
 
   static async getByKey(req: Request, res: Response) {
     try {
-      const setting = await SettingService.getByKey(req.params.key);
+      const setting = await SettingService.getByKey(String(req.params.key));
       if (!setting) {
         return res.status(404).json({
           status: 'error',

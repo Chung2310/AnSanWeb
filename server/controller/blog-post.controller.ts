@@ -19,7 +19,7 @@ export class BlogPostController {
 
   static async update(req: Request, res: Response) {
     try {
-      const post = await BlogPostService.update(req.params.id, req.body);
+      const post = await BlogPostService.update(String(req.params.id), req.body);
       if (!post) {
         return res.status(404).json({
           status: 'error',
@@ -40,7 +40,7 @@ export class BlogPostController {
 
   static async delete(req: Request, res: Response) {
     try {
-      const post = await BlogPostService.delete(req.params.id);
+      const post = await BlogPostService.delete(String(req.params.id));
       if (!post) {
         return res.status(404).json({
           status: 'error',
@@ -61,7 +61,7 @@ export class BlogPostController {
 
   static async getById(req: Request, res: Response) {
     try {
-      const post = await BlogPostService.getById(req.params.id);
+      const post = await BlogPostService.getById(String(req.params.id));
       if (!post) {
         return res.status(404).json({
           status: 'error',
@@ -82,7 +82,7 @@ export class BlogPostController {
 
   static async getBySlug(req: Request, res: Response) {
     try {
-      const post = await BlogPostService.getBySlug(req.params.slug);
+      const post = await BlogPostService.getBySlug(String(req.params.slug));
       if (!post) {
         return res.status(404).json({
           status: 'error',
