@@ -1,6 +1,13 @@
 import { BlogPostModel } from '../model/blog-post.model.ts';
 import { IBlogPost } from '../interface/blog-post.interface.ts';
 
+function mapDoc(doc: any): any {
+  if (!doc) return null;
+  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
+  obj.id = doc._id.toString();
+  return obj;
+}
+
 export class BlogPostService {
   static async create(data: any): Promise<IBlogPost> {
     const existing = await BlogPostModel.findOne({ slug: data.slug });
@@ -8,7 +15,7 @@ export class BlogPostService {
       throw new Error('Slug bài viết này đã tồn tại.');
     }
     const post = new BlogPostModel(data);
-    return await post.save();
+    return mapDoc(await post.save());
   }
 
   static async update(id: string, data: any): Promise<IBlogPost | null> {
@@ -18,7 +25,7 @@ export class BlogPostService {
         throw new Error('Slug bài viết này đã tồn tại.');
       }
     }
-    return await BlogPostModel.findByIdAndUpdate(id, data, { new: true });
+    return mapDoc(await BlogPostModel.findByIdAndUpdate(id, data, { new: true }));
   }
 
   static async delete(id: string): Promise<IBlogPost | null> {
@@ -26,11 +33,11 @@ export class BlogPostService {
   }
 
   static async getById(id: string): Promise<IBlogPost | null> {
-    return await BlogPostModel.findById(id);
+    return mapDoc(await BlogPostModel.findById(id));
   }
 
   static async getBySlug(slug: string): Promise<IBlogPost | null> {
-    return await BlogPostModel.findOne({ slug });
+    return mapDoc(await BlogPostModel.findOne({ slug }));
   }
 
   static async getList(query: any): Promise<{ data: IBlogPost[]; total: number; page: number; limit: number }> {
@@ -50,12 +57,12 @@ export class BlogPostService {
     }
 
     const total = await BlogPostModel.countDocuments(filter);
-    const data = await BlogPostModel.find(filter)
+    const docs = await BlogPostModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    return { data, total, page, limit };
+    return { data: docs.map(mapDoc), total, page, limit };
   }
 
   static async bulkUpsert(items: any[]): Promise<any> {

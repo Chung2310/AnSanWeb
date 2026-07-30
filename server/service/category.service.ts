@@ -1,6 +1,13 @@
 import { CategoryModel } from '../model/category.model.ts';
 import { ICategory } from '../interface/category.interface.ts';
 
+function mapDoc(doc: any): any {
+  if (!doc) return null;
+  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
+  obj.id = doc._id.toString();
+  return obj;
+}
+
 export class CategoryService {
   static async create(data: any): Promise<ICategory> {
     const existing = await CategoryModel.findOne({ slug: data.slug });
@@ -8,7 +15,7 @@ export class CategoryService {
       throw new Error('Slug danh mục này đã tồn tại.');
     }
     const category = new CategoryModel(data);
-    return await category.save();
+    return mapDoc(await category.save());
   }
 
   static async update(id: string, data: any): Promise<ICategory | null> {
@@ -18,7 +25,7 @@ export class CategoryService {
         throw new Error('Slug danh mục này đã tồn tại.');
       }
     }
-    return await CategoryModel.findByIdAndUpdate(id, data, { new: true });
+    return mapDoc(await CategoryModel.findByIdAndUpdate(id, data, { new: true }));
   }
 
   static async delete(id: string): Promise<ICategory | null> {
@@ -58,11 +65,11 @@ export class CategoryService {
   }
 
   static async getById(id: string): Promise<ICategory | null> {
-    return await CategoryModel.findById(id);
+    return mapDoc(await CategoryModel.findById(id));
   }
 
   static async getBySlug(slug: string): Promise<ICategory | null> {
-    return await CategoryModel.findOne({ slug });
+    return mapDoc(await CategoryModel.findOne({ slug }));
   }
 
   static async getList(query: any): Promise<{ data: ICategory[]; total: number; page: number; limit: number }> {
@@ -79,12 +86,12 @@ export class CategoryService {
     }
 
     const total = await CategoryModel.countDocuments(filter);
-    const data = await CategoryModel.find(filter)
+    const docs = await CategoryModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    return { data, total, page, limit };
+    return { data: docs.map(mapDoc), total, page, limit };
   }
 
   static async bulkUpsert(items: any[]): Promise<any> {

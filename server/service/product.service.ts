@@ -1,6 +1,13 @@
 import { ProductModel } from '../model/product.model.ts';
 import { IProduct } from '../interface/product.interface.ts';
 
+function mapDoc(doc: any): any {
+  if (!doc) return null;
+  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
+  obj.id = doc._id.toString();
+  return obj;
+}
+
 export class ProductService {
   static async create(data: any): Promise<IProduct> {
     const existing = await ProductModel.findOne({ slug: data.slug });
@@ -8,7 +15,7 @@ export class ProductService {
       throw new Error('Slug sản phẩm này đã tồn tại.');
     }
     const product = new ProductModel(data);
-    return await product.save();
+    return mapDoc(await product.save());
   }
 
   static async update(id: string, data: any): Promise<IProduct | null> {
@@ -18,7 +25,7 @@ export class ProductService {
         throw new Error('Slug sản phẩm này đã tồn tại.');
       }
     }
-    return await ProductModel.findByIdAndUpdate(id, data, { new: true });
+    return mapDoc(await ProductModel.findByIdAndUpdate(id, data, { new: true }));
   }
 
   static async delete(id: string): Promise<IProduct | null> {
@@ -26,11 +33,11 @@ export class ProductService {
   }
 
   static async getById(id: string): Promise<IProduct | null> {
-    return await ProductModel.findById(id);
+    return mapDoc(await ProductModel.findById(id));
   }
 
   static async getBySlug(slug: string): Promise<IProduct | null> {
-    return await ProductModel.findOne({ slug });
+    return mapDoc(await ProductModel.findOne({ slug }));
   }
 
   static async getList(query: any): Promise<{ data: IProduct[]; total: number; page: number; limit: number }> {
@@ -77,12 +84,12 @@ export class ProductService {
     }
 
     const total = await ProductModel.countDocuments(filter);
-    const data = await ProductModel.find(filter)
+    const docs = await ProductModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    return { data, total, page, limit };
+    return { data: docs.map(mapDoc), total, page, limit };
   }
 
   static async bulkUpsert(items: any[]): Promise<any> {
