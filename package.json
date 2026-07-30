@@ -6,7 +6,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "next dev --turbopack -p 9002",
+    "dev": "tsx watch server/server.ts",
     "backend:dev": "tsx watch server/server.ts",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
@@ -60,8 +60,6 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "express": "^5.2.1",
-    "firebase": "^11.9.1",
-    "firebase-admin": "^12.2.0",
     "framer-motion": "^11.5.7",
     "genkit": "^1.20.0",
     "helmet": "^8.3.0",
