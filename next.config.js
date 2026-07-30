@@ -2,7 +2,6 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   // Tắt warning về nhiều lockfile
   outputFileTracingRoot: path.join(__dirname, '../../'),
   typescript: {
