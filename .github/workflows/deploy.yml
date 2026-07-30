@@ -135,6 +135,7 @@ jobs:
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
             docker compose pull
+            docker network create default_network || true
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
             for attempt in $(seq 1 30); do
@@ -185,6 +186,7 @@ jobs:
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
             docker compose pull
+            docker network create default_network || true
             docker compose up -d --remove-orphans
             CONTAINER_ID=$(docker compose ps -q ansanweb)
             for attempt in $(seq 1 30); do

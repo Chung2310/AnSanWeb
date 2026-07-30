@@ -1,20 +1,4 @@
 services:
-  mongodb:
-    image: mongo:8
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER:-admin}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:?MONGODB_PASSWORD is required}
-    volumes:
-      - mongodb-data:/data/db
-    ports:
-      - "27017:27017"
-    healthcheck:
-      test: ["CMD-SHELL", "mongosh --quiet --username $$MONGO_INITDB_ROOT_USERNAME --password $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin --eval \"db.runCommand({ ping: 1 }).ok\" | grep 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   ansanweb:
     image: ghcr.io/chung2310/ansanweb:latest
     build: .
@@ -29,14 +13,13 @@ services:
       PORT: 3006
       HOSTNAME: 0.0.0.0
       INTERNAL_API_URL: http://127.0.0.1:3006/api/v1
-    depends_on:
-      mongodb:
-        condition: service_healthy
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
 
-volumes:
-  mongodb-data:
+networks:
+  default:
+    name: default_network
+    external: true
