@@ -3,9 +3,13 @@ import { IProduct } from '../interface/product.interface.ts';
 
 function mapDoc(doc: any): any {
   if (!doc) return null;
-  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
-  obj.id = doc._id.toString();
-  return obj;
+  // doc may be a lean plain object or a Mongoose Document
+  const raw = doc._doc ? { ...doc._doc } : { ...doc };
+  // Ensure id is always set from _id (handles both string Firebase IDs and ObjectId)
+  if (raw._id != null) {
+    raw.id = String(raw._id);
+  }
+  return raw;
 }
 
 export class ProductService {
@@ -33,11 +37,11 @@ export class ProductService {
   }
 
   static async getById(id: string): Promise<IProduct | null> {
-    return mapDoc(await ProductModel.findById(id));
+    return mapDoc(await ProductModel.findOne({ $or: [{ _id: id }, { id }] }).lean());
   }
 
   static async getBySlug(slug: string): Promise<IProduct | null> {
-    return mapDoc(await ProductModel.findOne({ slug }));
+    return mapDoc(await ProductModel.findOne({ slug }).lean());
   }
 
   static async getList(query: any): Promise<{ data: IProduct[]; total: number; page: number; limit: number }> {
@@ -87,7 +91,8 @@ export class ProductService {
     const docs = await ProductModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     return { data: docs.map(mapDoc), total, page, limit };
   }

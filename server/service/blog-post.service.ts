@@ -3,9 +3,11 @@ import { IBlogPost } from '../interface/blog-post.interface.ts';
 
 function mapDoc(doc: any): any {
   if (!doc) return null;
-  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
-  obj.id = doc._id.toString();
-  return obj;
+  const raw = doc._doc ? { ...doc._doc } : { ...doc };
+  if (raw._id != null) {
+    raw.id = String(raw._id);
+  }
+  return raw;
 }
 
 export class BlogPostService {
@@ -33,11 +35,11 @@ export class BlogPostService {
   }
 
   static async getById(id: string): Promise<IBlogPost | null> {
-    return mapDoc(await BlogPostModel.findById(id));
+    return mapDoc(await BlogPostModel.findOne({ $or: [{ _id: id }, { id }] }).lean());
   }
 
   static async getBySlug(slug: string): Promise<IBlogPost | null> {
-    return mapDoc(await BlogPostModel.findOne({ slug }));
+    return mapDoc(await BlogPostModel.findOne({ slug }).lean());
   }
 
   static async getList(query: any): Promise<{ data: IBlogPost[]; total: number; page: number; limit: number }> {
@@ -60,7 +62,8 @@ export class BlogPostService {
     const docs = await BlogPostModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     return { data: docs.map(mapDoc), total, page, limit };
   }

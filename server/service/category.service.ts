@@ -3,9 +3,11 @@ import { ICategory } from '../interface/category.interface.ts';
 
 function mapDoc(doc: any): any {
   if (!doc) return null;
-  const obj = doc.toObject ? doc.toObject({ virtuals: true }) : { ...doc };
-  obj.id = doc._id.toString();
-  return obj;
+  const raw = doc._doc ? { ...doc._doc } : { ...doc };
+  if (raw._id != null) {
+    raw.id = String(raw._id);
+  }
+  return raw;
 }
 
 export class CategoryService {
@@ -65,11 +67,11 @@ export class CategoryService {
   }
 
   static async getById(id: string): Promise<ICategory | null> {
-    return mapDoc(await CategoryModel.findById(id));
+    return mapDoc(await CategoryModel.findOne({ $or: [{ _id: id }, { id }] }).lean());
   }
 
   static async getBySlug(slug: string): Promise<ICategory | null> {
-    return mapDoc(await CategoryModel.findOne({ slug }));
+    return mapDoc(await CategoryModel.findOne({ slug }).lean());
   }
 
   static async getList(query: any): Promise<{ data: ICategory[]; total: number; page: number; limit: number }> {
@@ -89,7 +91,8 @@ export class CategoryService {
     const docs = await CategoryModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     return { data: docs.map(mapDoc), total, page, limit };
   }

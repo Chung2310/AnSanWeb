@@ -41,15 +41,7 @@ const CategorySchema = new Schema<ICategory>(
   },
   {
     timestamps: true,
-    toJSON: {
-      virtuals: true,
-      transform: (doc, ret) => {
-        if (doc._id) {
-          (ret as any).id = doc._id.toString();
-        }
-        return ret;
-      }
-    },
+    toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
