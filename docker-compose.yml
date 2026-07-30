@@ -7,6 +7,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:?MONGODB_PASSWORD is required}
     volumes:
       - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
     healthcheck:
       test: ["CMD-SHELL", "mongosh --quiet --username $$MONGO_INITDB_ROOT_USERNAME --password $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin --eval \"db.runCommand({ ping: 1 }).ok\" | grep 1"]
       interval: 10s
