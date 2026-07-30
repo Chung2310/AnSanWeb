@@ -1,7 +1,5 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { initializeFirebase } from '@/firebase/init';
-import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import type { FullProduct } from '@/lib/types';
 import ProductDetailView from './product-detail-view';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -14,16 +12,16 @@ type Props = {
 };
 
 async function getProduct(slug: string) {
-  const { firestore } = initializeFirebase();
-  const productsCol = collection(firestore, 'products');
-  const q = query(productsCol, where('slug', '==', slug), limit(1));
-  const snapshot = await getDocs(q);
-  
-  if (snapshot.empty) return null;
-  const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
-  
-  // Serialization fix: Convert Timestamps to strings for Next.js 15
-  return JSON.parse(JSON.stringify(data)) as FullProduct;
+    const BACKEND_URL = process.env.INTERNAL_API_URL || 'http://127.0.0.1:3006/api/v1';
+  try {
+    const res = await fetch(`${BACKEND_URL}/products/slug/${slug}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data as FullProduct;
+  } catch (err) {
+    console.error('Failed to getProduct:', err);
+    return null;
+  }
 }
 
 export async function generateMetadata(

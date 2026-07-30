@@ -1,6 +1,9 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  // Tắt warning về nhiều lockfile
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -8,15 +11,39 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
+    qualities: [70, 75, 80, 90],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
       },
     ],
-    deviceSizes: [640, 750, 828, 1080, 1200],
+    // Ưu tiên AVIF (nhỏ hơn 50% so với WebP), fallback WebP
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    formats: ['image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 7, // Cache ảnh 7 ngày
+  },
+  // Tree-shaking và optimize tốt hơn
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   async redirects() {
     return [

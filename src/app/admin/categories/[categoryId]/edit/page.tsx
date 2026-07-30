@@ -5,20 +5,32 @@ import CategoryForm from '@/components/admin/categories/category-form';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import type { Category } from '@/lib/types';
-import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export default function EditCategoryPage() {
   const params = useParams();
   const categoryId = params.categoryId as string;
-  const firestore = useFirestore();
-  
-  const categoryRef = useMemoFirebase(
-    () => (categoryId ? doc(firestore, 'categories', categoryId) : null),
-    [firestore, categoryId]
-  );
-  
-  const { data: category, isLoading } = useDoc<Category>(categoryRef);
+  const [category, setCategory] = useState<Category | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!categoryId) return;
+    setIsLoading(true);
+    apiClient
+      .get(`/categories/${categoryId}`)
+      .then((res) => {
+        if (res.data) {
+          setCategory(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching category:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [categoryId]);
 
   if (isLoading) {
     return (

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -18,8 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { apiClient } from '@/lib/api-client';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
 import { useEffect, useState } from 'react';
@@ -41,10 +39,8 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 
 export default function SettingsAdminPage() {
   const { toast } = useToast();
-  const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
-  const settingsRef = useMemoFirebase(() => doc(firestore, 'settings', 'general'), [firestore]);
-  const { data: settings, isLoading } = useDoc(settingsRef);
+  const [isLoading, setIsLoading] = useState(true);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const form = useForm<SettingsFormValues>({
@@ -60,13 +56,26 @@ export default function SettingsAdminPage() {
   });
 
   useEffect(() => {
-    if (settings) {
-      form.reset(settings as any);
-      if (settings.popup?.imageUrl) {
-        setImagePreview(settings.popup.imageUrl);
-      }
-    }
-  }, [settings, form]);
+    setIsLoading(true);
+    apiClient
+      .get('/settings/general')
+      .then((res) => {
+        if (res.data && res.data.value) {
+          form.reset(res.data.value);
+          if (res.data.value.popup?.imageUrl) {
+            setImagePreview(res.data.value.popup.imageUrl);
+          }
+        }
+      })
+      .catch((err) => {
+        if (err?.status !== 404) {
+          console.error('Error fetching settings:', err);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [form]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -86,10 +95,10 @@ export default function SettingsAdminPage() {
 
   const onSubmit = async (values: SettingsFormValues) => {
     try {
-      await setDoc(settingsRef, {
-        ...values,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
+      await apiClient.post('/settings', {
+        key: 'general',
+        value: values,
+      });
       toast({ title: 'Thành công', description: 'Đã cập nhật cài đặt ứng dụng.' });
     } catch (error) {
       console.error(error);

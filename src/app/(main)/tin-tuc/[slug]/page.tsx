@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import { initializeFirebase } from "@/firebase/init";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import type { BlogPost } from "@/lib/types";
 import PostDetailView from "./post-detail-view";
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -11,16 +9,16 @@ type Props = {
 };
 
 async function getPost(slug: string) {
-  const { firestore } = initializeFirebase();
-  const blogPostsCol = collection(firestore, 'blogPosts');
-  const q = query(blogPostsCol, where('slug', '==', slug), limit(1));
-  const snapshot = await getDocs(q);
-  
-  if (snapshot.empty) return null;
-  const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
-  
-  // Serialization fix: Chuyển đổi Firestore Timestamps sang Plain Object cho Next.js 15
-  return JSON.parse(JSON.stringify(data)) as BlogPost;
+    const BACKEND_URL = process.env.INTERNAL_API_URL || 'http://127.0.0.1:3006/api/v1';
+  try {
+    const res = await fetch(`${BACKEND_URL}/blog-posts/slug/${slug}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data as BlogPost;
+  } catch (err) {
+    console.error('Failed to getPost:', err);
+    return null;
+  }
 }
 
 export async function generateMetadata(

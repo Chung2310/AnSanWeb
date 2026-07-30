@@ -1,46 +1,78 @@
 'use client';
 
 import { create } from 'zustand';
-import { Auth, onAuthStateChanged, User } from 'firebase/auth';
-import { doc, getDoc, Firestore } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 
-interface AuthState {
-  user: User | null;
-  isAdmin: boolean;
-  isAuthLoading: boolean;
-  logout: () => void;
-  initializeAuthListener: (auth: Auth, firestore: Firestore) => () => void;
-  _internal: { auth: Auth | null; firestore: Firestore | null };
+interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+interface AuthState {
+  user: IUser | null;
+  isAdmin: boolean;
+  isAuthLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAdmin: false,
   isAuthLoading: true,
-  logout: () => {
-    // This is a placeholder. The actual logout logic will be handled
-    // by the Firebase Auth instance.
-    const { auth } = get()._internal;
-    if (auth) {
-      auth.signOut();
+
+  login: async (email, password) => {
+    try {
+      const response = await apiClient.post('/auth/login', { email, password });
+      const user = response.data;
+      const accessToken = response.accessToken;
+      
+      localStorage.setItem('accessToken', accessToken);
+      set({
+        user,
+        isAdmin: user.role === 'admin',
+        isAuthLoading: false,
+      });
+    } catch (error) {
+      set({ user: null, isAdmin: false, isAuthLoading: false });
+      throw error;
     }
   },
-  initializeAuthListener: (auth: Auth, firestore: Firestore) => {
-    set({ _internal: { auth, firestore } });
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Since firestore.rules now checks email, we can do the same on the client
-        const isAdmin = user.email === 'admin@ansan.com';
-        set({ user, isAdmin, isAuthLoading: false });
-      } else {
-        set({ user: null, isAdmin: false, isAuthLoading: false });
-      }
-    });
 
-    return unsubscribe;
+  logout: async () => {
+    try {
+      await apiClient.post('/auth/logout');
+    } catch (e) {
+      // ignore logout errors
+    } finally {
+      localStorage.removeItem('accessToken');
+      set({ user: null, isAdmin: false, isAuthLoading: false });
+    }
   },
-  _internal: {
-    auth: null,
-    firestore: null,
+
+  checkAuth: async () => {
+    set({ isAuthLoading: true });
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    if (!token) {
+      set({ user: null, isAdmin: false, isAuthLoading: false });
+      return;
+    }
+
+    try {
+      const response = await apiClient.get('/auth/me');
+      const user = response.data;
+      set({
+        user,
+        isAdmin: user.role === 'admin',
+        isAuthLoading: false,
+      });
+    } catch (error) {
+      localStorage.removeItem('accessToken');
+      set({ user: null, isAdmin: false, isAuthLoading: false });
+    }
   },
 }));
+

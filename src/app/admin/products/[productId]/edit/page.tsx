@@ -2,23 +2,35 @@
 
 import { useParams } from 'next/navigation';
 import ProductForm from '@/components/admin/products/product-form';
-import { useMemo } from 'react';
-import { doc } from 'firebase/firestore';
-import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import type { FullProduct } from '@/lib/types';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export default function EditProductPage() {
   const params = useParams();
   const productId = params.productId as string;
-  const firestore = useFirestore();
+  const [product, setProduct] = useState<FullProduct | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const productRef = useMemoFirebase(
-    () => doc(firestore, 'products', productId as string),
-    [firestore, productId]
-  );
-  const { data: product, isLoading } = useDoc<FullProduct>(productRef);
+  useEffect(() => {
+    if (!productId) return;
+    setIsLoading(true);
+    apiClient
+      .get(`/products/${productId}`)
+      .then((res) => {
+        if (res.data) {
+          setProduct(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching product:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [productId]);
 
   if (isLoading) {
     return (

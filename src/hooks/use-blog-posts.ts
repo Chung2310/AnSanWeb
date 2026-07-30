@@ -1,23 +1,40 @@
 'use client';
 
-import { collection, query, orderBy } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 import type { BlogPost } from '@/lib/types';
 
 export function useBlogPosts() {
-  const firestore = useFirestore();
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const blogPostsCollection = useMemoFirebase(
-    () => collection(firestore, 'blogPosts'),
-    [firestore]
-  );
-  
-  const blogPostsQuery = useMemoFirebase(
-    () => blogPostsCollection && query(blogPostsCollection, orderBy('updatedAt', 'desc')),
-    [blogPostsCollection]
-  );
+  useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    apiClient
+      .get('/blog-posts?limit=100')
+      .then((res) => {
+        if (active) {
+          setBlogPosts(res.data || []);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          setError(err);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
 
-  const { data: blogPosts, isLoading, error } = useCollection<BlogPost>(blogPostsQuery);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return { blogPosts, isLoading, error };
 }

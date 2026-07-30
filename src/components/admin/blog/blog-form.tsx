@@ -27,8 +27,7 @@ import { Progress } from '@/components/ui/progress';
 import slugify from 'slugify';
 import { useState } from 'react';
 import RichTextEditor from './rich-text-editor';
-import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { apiClient } from '@/lib/api-client';
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -57,7 +56,6 @@ export default function BlogForm({ initialData }: BlogFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image?.url || null);
   const [categoriesInput, setCategoriesInput] = useState(initialData?.categories.join(', ') || '');
@@ -120,31 +118,21 @@ export default function BlogForm({ initialData }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormValues) => {
     try {
-      const processedData: Partial<BlogPost> = {
-          ...data,
+      const processedData: any = {
+          title: data.title,
+          slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
+          author: data.author,
+          excerpt: data.excerpt,
           content: data.content || '',
           categories: categoriesInput.split(',').map(c => c.trim().toUpperCase()).filter(Boolean),
-          slug: data.slug || slugify(data.title, { lower: true, strict: true, locale: 'vi' }),
+          image: data.image || null,
       };
 
       if (initialData && initialData.id) {
-        const postRef = doc(firestore, 'blogPosts', initialData.id);
-        await updateDoc(postRef, {
-            ...processedData,
-            updatedAt: serverTimestamp(),
-        });
+        await apiClient.put(`/blog-posts/${initialData.id}`, processedData);
         toast({ title: 'Thành công', description: 'Bài viết đã được cập nhật.' });
       } else {
-        const collectionRef = collection(firestore, 'blogPosts');
-        const newDocRef = doc(collectionRef);
-        
-        processedData.id = newDocRef.id;
-
-        await setDoc(newDocRef, {
-            ...processedData,
-            createdAt: serverTimestamp(),
-        });
-
+        await apiClient.post('/blog-posts', processedData);
         toast({ title: 'Thành công', description: 'Bài viết đã được tạo.' });
       }
       router.push(getRedirectUrl());

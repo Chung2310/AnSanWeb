@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
-import { FirebaseClientProvider } from '@/firebase';
+import { AuthProvider } from '@/components/auth-provider';
+
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ruouvangansan.vn'),
@@ -61,9 +62,9 @@ export default function RootLayout({
           'min-h-screen bg-background font-body text-base text-foreground antialiased pb-20 lg:pb-0'
         )}
       >
-        <FirebaseClientProvider>
+        <AuthProvider>
           {children}
-        </FirebaseClientProvider>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

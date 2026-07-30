@@ -25,8 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category } from '@/lib/types';
 import slugify from 'slugify';
-import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { apiClient } from '@/lib/api-client';
 import { useCategories } from '@/hooks/use-categories';
 import RichTextEditor from '@/components/admin/blog/rich-text-editor';
 import { useMemo } from 'react';
@@ -50,7 +49,6 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const firestore = useFirestore();
   const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const form = useForm<CategoryFormValues>({
@@ -122,7 +120,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
   const onSubmit = async (data: CategoryFormValues) => {
     try {
         const finalData = {
-          ...data,
+          name: data.name,
           slug: data.slug || slugify(data.name, { lower: true, strict: true, locale: 'vi' }),
           parentId: data.parentId || null,
           description: data.description || '',
@@ -130,21 +128,10 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
         };
       
       if (initialData && initialData.id) {
-        const docRef = doc(firestore, 'categories', initialData.id);
-        await updateDoc(docRef, {
-            parentId: finalData.parentId,
-            description: finalData.description,
-            tags: finalData.tags
-        });
+        await apiClient.put(`/categories/${initialData.id}`, finalData);
         toast({ title: 'Thành công', description: 'Danh mục đã được cập nhật.' });
       } else {
-        const collectionRef = collection(firestore, 'categories');
-        const newDocRef = doc(collectionRef);
-        
-        await setDoc(newDocRef, {
-            ...finalData,
-            id: newDocRef.id,
-        });
+        await apiClient.post('/categories', finalData);
         toast({ title: 'Thành công', description: `Danh mục "${finalData.name}" đã được tạo.` });
       }
       router.push(getRedirectUrl());

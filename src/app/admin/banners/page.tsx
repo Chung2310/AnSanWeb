@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -17,11 +16,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { apiClient } from '@/lib/api-client';
 import Lottie from 'lottie-react';
 import loadingAnimation from '@/components/loading.json';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUploadStorage } from '@/hooks/use-upload-storage';
 import { Progress } from '@/components/ui/progress';
 import { Upload, X, ImageIcon, LayoutTemplate } from 'lucide-react';
@@ -43,10 +41,9 @@ type BannersFormValues = z.infer<typeof formSchema>;
 
 export default function BannersAdminPage() {
   const { toast } = useToast();
-  const firestore = useFirestore();
   const { startUpload, progress, isUploading } = useUploadStorage();
-  const settingsRef = useMemoFirebase(() => doc(firestore, 'settings', 'general'), [firestore]);
-  const { data: settings, isLoading } = useDoc(settingsRef);
+  const [isLoading, setIsLoading] = useState(true);
+  const [existingSetting, setExistingSetting] = useState<any>(null);
 
   const defaultBanners = [
     { label: 'Master of Wine', title: 'Master of Wine', href: '/danh-muc/ruou-vang', description: 'Hơn 2000 sản phẩm nhập khẩu chính hãng\n\nGiao hàng toàn quốc\n\nHotline: 0933.333.313', imageUrl: 'https://res.cloudinary.com/dxukxjf6w/image/upload/v1770450627/Banner_5_ef3phq.png' },
@@ -69,10 +66,24 @@ export default function BannersAdminPage() {
   });
 
   useEffect(() => {
-    if (settings && settings.heroBanners && settings.heroBanners.length === 5) {
-      form.reset({ heroBanners: settings.heroBanners });
-    }
-  }, [settings, form]);
+    setIsLoading(true);
+    apiClient
+      .get('/settings/general')
+      .then((res) => {
+        if (res.data) {
+          setExistingSetting(res.data.value || {});
+          if (res.data.value?.heroBanners && res.data.value.heroBanners.length === 5) {
+            form.reset({ heroBanners: res.data.value.heroBanners });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching settings:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [form]);
 
   const handleImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -91,10 +102,16 @@ export default function BannersAdminPage() {
 
   const onSubmit = async (values: BannersFormValues) => {
     try {
-      await setDoc(settingsRef, {
+      const mergedValue = {
+        ...existingSetting,
         heroBanners: values.heroBanners,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
+      };
+
+      await apiClient.post('/settings', {
+        key: 'general',
+        value: mergedValue,
+      });
+
       toast({ title: 'Thành công', description: 'Đã cập nhật danh sách banner đầu trang.' });
     } catch (error) {
       console.error(error);

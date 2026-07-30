@@ -1,24 +1,40 @@
 'use client';
 
-import { useMemo } from 'react';
-import { collection, query, orderBy } from 'firebase/firestore';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 import type { Product } from '@/lib/types';
 
 export function useProducts() {
-  const firestore = useFirestore();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const productsCollection = useMemoFirebase(
-    () => collection(firestore, 'products'),
-    [firestore]
-  );
-  
-  const productsQuery = useMemoFirebase(
-    () => productsCollection && query(productsCollection, orderBy('updatedAt', 'desc')),
-    [productsCollection]
-  );
+  useEffect(() => {
+    let active = true;
+    setIsLoading(true);
+    apiClient
+      .get('/products?limit=100') // fetch a large limit of products for client-side list/filter
+      .then((res) => {
+        if (active) {
+          setProducts(res.data || []);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          setError(err);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
 
-  const { data: products, isLoading, error } = useCollection<Product>(productsQuery);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return { products, isLoading, error };
 }

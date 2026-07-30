@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -13,14 +12,26 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { X } from 'lucide-react';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { apiClient } from '@/lib/api-client';
 
 export default function TetGiftPopup() {
   const [isOpen, setIsOpen] = useState(false);
-  const firestore = useFirestore();
-  const settingsRef = useMemoFirebase(() => doc(firestore, 'settings', 'general'), [firestore]);
-  const { data: settings } = useDoc(settingsRef);
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    apiClient
+      .get('/settings/general')
+      .then((res) => {
+        if (res.data && res.data.value) {
+          setSettings(res.data.value);
+        }
+      })
+      .catch((err) => {
+        if (err?.status !== 404) {
+          console.error('Error fetching settings for popup:', err);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     if (settings && settings.popup?.enabled) {

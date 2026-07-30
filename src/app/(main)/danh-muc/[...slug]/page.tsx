@@ -1,5 +1,3 @@
-import { initializeFirebase } from '@/firebase/init';
-import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import type { Category } from '@/lib/types';
 import CategoryPageContent from './category-page-content';
 import { Suspense } from 'react';
@@ -15,15 +13,16 @@ type Props = {
 
 async function getCategory(slugParts: string[]) {
   const finalSlug = slugParts[slugParts.length - 1];
-  const { firestore } = initializeFirebase();
-  const categoriesCol = collection(firestore, 'categories');
-  const q = query(categoriesCol, where('slug', '==', finalSlug), limit(1));
-  const snapshot = await getDocs(q);
-  
-  if (snapshot.empty) return null;
-  const data = { ...snapshot.docs[0].data(), id: snapshot.docs[0].id };
-  
-  return JSON.parse(JSON.stringify(data)) as Category;
+    const BACKEND_URL = process.env.INTERNAL_API_URL || 'http://127.0.0.1:3006/api/v1';
+  try {
+    const res = await fetch(`${BACKEND_URL}/categories/slug/${finalSlug}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data as Category;
+  } catch (err) {
+    console.error('Failed to getCategory:', err);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
