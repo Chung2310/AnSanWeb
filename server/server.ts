@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -9,6 +9,8 @@ import { connectDB } from './config/database.ts';
 import { apiRouter } from './router/index.ts';
 import { swaggerRouter } from './swagger/index.ts';
 import { seedAdmin } from './service/admin-seed.service.ts';
+import { apiNotFound } from './middleware/not-found.middleware.ts';
+import { errorMiddleware } from './middleware/error.middleware.ts';
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
@@ -78,6 +80,7 @@ async function startServer() {
 
   // 8. Register API routes with prefix /api/v1/
   app.use('/api/v1', apiRouter);
+  app.use('/api/v1', apiNotFound);
 
   // 9. Fallback to Next.js handler
   app.use((req, res) => {
@@ -85,14 +88,7 @@ async function startServer() {
   });
 
   // 10. Global Error Handler
-  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error('❌ Lỗi hệ thống:', err);
-    res.status(500).json({
-      status: 'error',
-      message: 'Có lỗi xảy ra trên hệ thống server.',
-      error: process.env.NODE_ENV === 'production' ? {} : err.message,
-    });
-  });
+  app.use(errorMiddleware);
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Combined AnSanWeb Server running on http://localhost:${PORT}`);
