@@ -1,5 +1,5 @@
 const API_BASE_URL = typeof window === 'undefined'
-  ? (process.env.INTERNAL_API_URL || 'http://127.0.0.1:3001/api/v1')
+  ? (process.env.INTERNAL_API_URL || 'http://127.0.0.1:3006/api/v1')
   : (process.env.NEXT_PUBLIC_API_URL || '/api/v1');
 
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
@@ -63,7 +63,9 @@ async function handleResponse(response: Response) {
     } catch (e) {
       // ignore
     }
-    throw new Error(errMsg);
+    const error = new Error(errMsg) as Error & { status?: number };
+    error.status = response.status;
+    throw error;
   }
   
   if (response.status === 204) return null;

@@ -19,8 +19,7 @@ ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     HOSTNAME=0.0.0.0 \
     PORT=3006 \
-    BACKEND_PORT=3001 \
-    INTERNAL_API_URL=http://127.0.0.1:3001/api/v1
+    INTERNAL_API_URL=http://127.0.0.1:3006/api/v1
 
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
