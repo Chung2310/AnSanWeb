@@ -41,6 +41,8 @@ const CategorySchema = new Schema<ICategory>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 

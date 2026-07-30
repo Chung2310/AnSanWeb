@@ -53,6 +53,8 @@ const BlogPostSchema = new Schema<IBlogPost>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
