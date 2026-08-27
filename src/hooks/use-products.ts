@@ -13,7 +13,7 @@ export function useProducts() {
     let active = true;
     setIsLoading(true);
     apiClient
-      .get('/products?limit=100') // fetch a large limit of products for client-side list/filter
+      .get('/products?limit=1000') // fetch a large limit of products for client-side list/filter
       .then((res) => {
         if (active) {
           setProducts(res.data || []);
