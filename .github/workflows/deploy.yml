@@ -182,19 +182,48 @@ jobs:
             set -eu
             mkdir -p "$TARGET_DIR"
             cd "$TARGET_DIR"
+            IMAGE_REF="ghcr.io/chung2310/ansanweb:production"
+            previous_container=$(docker compose -f docker-compose.yml ps -q ansanweb)
+            previous_image=""
+            if [ -n "$previous_container" ]; then
+              previous_image=$(docker inspect --format '{{.Image}}' "$previous_container")
+            fi
             umask 077
             printf '%s' "$ENV_FILE_CONTENT" > .env
             printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-            docker compose pull
+            df -h /
+            docker compose -f docker-compose.yml pull
+            expected_image=$(docker image inspect --format '{{.Id}}' "$IMAGE_REF")
             docker network create default_network || true
-            docker compose up -d --remove-orphans
-            CONTAINER_ID=$(docker compose ps -q ansanweb)
-            for attempt in $(seq 1 30); do
-              STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$CONTAINER_ID")
-              [ "$STATUS" = healthy ] && exit 0
-              [ "$STATUS" = unhealthy ] && break
-              sleep 5
-            done
-            docker compose ps
-            docker compose logs --tail=100
-            exit 1
+
+            rollback() {
+              if [ -n "$previous_image" ]; then
+                docker tag "$previous_image" "$IMAGE_REF"
+                docker compose -f docker-compose.yml up -d --no-deps --no-build ansanweb
+              fi
+            }
+            if ! docker compose -f docker-compose.yml up -d --no-build; then
+              rollback
+              exit 1
+            fi
+            CONTAINER_ID=$(docker compose -f docker-compose.yml ps -q ansanweb)
+            healthy=0
+            if [ -n "$CONTAINER_ID" ] && [ "$(docker inspect --format '{{.Image}}' "$CONTAINER_ID")" = "$expected_image" ]; then
+              for attempt in $(seq 1 45); do
+                if docker exec "$CONTAINER_ID" node -e 'Promise.all([fetch("http://127.0.0.1:3006/api/v1/health",{signal:AbortSignal.timeout(3000)}).then(async r=>{const d=await r.json();if(!r.ok||d.status!=="ok"||d.database!=="connected")throw Error("database unhealthy")}),fetch("http://127.0.0.1:3006/api/health",{signal:AbortSignal.timeout(3000)}).then(async r=>{if(!r.ok||(await r.json()).status!=="ok")throw Error("Next unhealthy")}),fetch("http://127.0.0.1:3006/",{signal:AbortSignal.timeout(5000)}).then(r=>{if(!r.ok)throw Error("frontend unhealthy")})]).catch(()=>process.exit(1))'; then
+                  healthy=1
+                  break
+                fi
+                sleep 2
+              done
+            fi
+            if [ "$healthy" != 1 ]; then
+              echo "AnSan health check failed; restoring the previous image."
+              rollback
+              exit 1
+            fi
+            echo "AnSan production image, frontend and database health checks passed."
+            if [ -n "$previous_image" ] && [ "$previous_image" != "$expected_image" ]; then
+              docker image rm "$previous_image" || echo "Previous image is still referenced; retaining it."
+            fi
+            df -h /
